@@ -1,4 +1,5 @@
-import { XIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 
 export default function Banner() {
   return (
@@ -7,17 +8,21 @@ export default function Banner() {
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
             <p className="font-medium text-white truncate">
-              <span>Check if you're eligible for the airdrop. Terms and conditions apply.</span>
+              <span>
+                Check if you're eligible for the airdrop. Terms and conditions
+                apply.
+              </span>
             </p>
           </div>
           <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
-            <a
-              href="#"
-              className="flex items-center justify-center px-4 py-2
+            <Link href={'/airdrop'} passHref>
+              <a
+                className="flex items-center justify-center px-4 py-2
               text-sm font-medium text-white hover:bg-white hover:rounded-md hover:text-[#BD0B00]"
-            >
-              Learn more
-            </a>
+              >
+                Learn more
+              </a>
+            </Link>
           </div>
           <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
             <button
@@ -32,5 +37,5 @@ export default function Banner() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,13 +1,13 @@
 import Layout from '@/components/Layout';
 import Dashboard from '@/components/Dashboard';
 
-export default function Index() {
+export default function Account() {
   return (
     <>
       <Layout>
         <Dashboard
-          main={<div>index</div>}
-          sidebarDetail={<div>indexDetail</div>}
+          main={<div>account</div>}
+          sidebarDetail={<div>searchDetail</div>}
         />
       </Layout>
     </>

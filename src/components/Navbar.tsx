@@ -4,6 +4,7 @@ import NavbarLogo from '@/components/NavbarLogo';
 import ConnectWalletButton from '@/components/ConnectWalletButton';
 import ChainMenuDropdown from '@/components/ChainMenuDropdown';
 import NavbarSearchInput from '@/components/NavbarSearchInput';
+import Link from 'next/link';
 
 export default function Navbar() {
   return (
@@ -15,38 +16,41 @@ export default function Navbar() {
               <div className="flex items-center px-2 lg:px-0">
                 <div className="flex-shrink-0">
                   <div className="block h-11 w-auto">
-                    <NavbarLogo />
+                    <Link href="/" passHref>
+                      <a rel="noopener noreferrer">
+                        <NavbarLogo />
+                      </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="hidden lg:block lg:ml-6">
                   <div className="flex space-x-4">
-                    <a
-                      href="#"
-                      className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Marketplace
-                    </a>
-                    <a
-                      href="#"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Data
-                    </a>
-                    <a
-                      href="#"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      DeFi
-                    </a>
+                    <Link href={'/marketplace'} passHref>
+                      <a className="text-gray-700 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                        Marketplace
+                      </a>
+                    </Link>
+                    <Link href={'/data'} passHref>
+                      <a className="text-gray-700 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                        Data
+                      </a>
+                    </Link>
+                    <Link href={'/defi'} passHref>
+                      <a className="text-gray-700 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                        De-fi
+                      </a>
+                    </Link>
                   </div>
                 </div>
               </div>
               <div className="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end">
-                <NavbarSearchInput/>
+                <NavbarSearchInput />
               </div>
               <div className="flex lg:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400
-                hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button
+                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-400
+                hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                >
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -58,9 +62,9 @@ export default function Navbar() {
               <div className="hidden lg:block">
                 <div className="flex items-center">
                   <div className="mr-3">
-                    <ChainMenuDropdown/>
+                    <ChainMenuDropdown />
                   </div>
-                  <ConnectWalletButton/>
+                  <ConnectWalletButton />
                 </div>
               </div>
             </div>
@@ -68,7 +72,6 @@ export default function Navbar() {
 
           <Disclosure.Panel className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
               <Disclosure.Button
                 as="a"
                 href="#"

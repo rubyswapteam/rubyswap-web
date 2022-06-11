@@ -1,23 +1,20 @@
 import DashboardSidebar from '@/components/DashboardSidebar';
-import { HomeIcon } from '@heroicons/react/solid';
+import { ChartBarIcon, CogIcon, FilterIcon, HomeIcon, SearchIcon, UserIcon, } from '@heroicons/react/solid';
 
 const sidebarNavigation = [
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
-  { name: 'Open', href: '#', icon: HomeIcon, current: true },
+  { name: 'Home', href: '/', icon: HomeIcon, current: true },
+  { name: 'Account', href: '/account', icon: UserIcon, current: true },
+  { name: 'Search', href: '/search', icon: SearchIcon, current: true },
+  { name: 'Filter', href: '/filter', icon: FilterIcon, current: true },
+  { name: 'Data', href: '/data', icon: ChartBarIcon, current: true },
+  { name: 'Settings', href: '/settings', icon: CogIcon, current: true },
 ];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Dashboard() {
+export default function Dashboard(props: any) {
   return (
     <>
       <div className="h-screen flex flex-col">
@@ -39,11 +36,11 @@ export default function Dashboard() {
               <h1 id="primary-heading" className="sr-only">
                 Home
               </h1>
-              mainContent
+              {props.main}
             </section>
             <aside className="hidden lg:block lg:flex-shrink-0 lg:order-first">
               <div className="h-full relative flex flex-col w-96 border-r border-gray-200 bg-white overflow-y-auto">
-                sidebarDetail
+                {props.sidebarDetail}
               </div>
             </aside>
           </main>
