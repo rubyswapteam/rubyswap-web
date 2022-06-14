@@ -1,16 +1,23 @@
 import { XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
+import { IBanner } from '@/types';
 
-export default function Banner() {
-  return (
+export default function Banner({
+  bannerExitClicked,
+  setBannerExitClicked,
+}: IBanner) {
+  const handleExitClicked = () => {
+    setBannerExitClicked(!bannerExitClicked);
+  };
+  return bannerExitClicked == false ? (
     <div className="bg-gradient-to-r from-[#BD0B00] to-[#92124F]">
       <div className="max-w-8xl mx-auto py-3 px-3 sm:px-6">
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
             <p className="font-medium text-white truncate">
               <span>
-                Check if you're eligible for the airdrop. Terms and conditions
-                apply.
+                Check if you&apos;re eligible for the airdrop. Terms and
+                conditions apply.
               </span>
             </p>
           </div>
@@ -31,11 +38,17 @@ export default function Banner() {
               focus:ring-white sm:-mr-2 text-white hover:text-[#BD0B00]"
             >
               <span className="sr-only">Dismiss</span>
-              <XIcon className="h-6 w-6" aria-hidden="true" />
+              <XIcon
+                onClick={() => handleExitClicked()}
+                className="h-6 w-6"
+                aria-hidden="true"
+              />
             </button>
           </div>
         </div>
       </div>
     </div>
+  ) : (
+    <></>
   );
 }
