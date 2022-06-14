@@ -1,5 +1,12 @@
 import DashboardSidebar from '@/components/DashboardSidebar';
-import { ChartBarIcon, CogIcon, FilterIcon, HomeIcon, SearchIcon, UserIcon, } from '@heroicons/react/solid';
+import {
+  ChartBarIcon,
+  CogIcon,
+  FilterIcon,
+  HomeIcon,
+  SearchIcon,
+  UserIcon,
+} from '@heroicons/react/solid';
 
 const sidebarNavigation = [
   { name: 'Home', href: '/', icon: HomeIcon, current: true },
@@ -17,7 +24,7 @@ function classNames(...classes: string[]) {
 export default function Dashboard(props: any) {
   return (
     <>
-      <div className="h-screen flex flex-col">
+      <div className="h-screen flex flex-col font-fontbiotif">
         <div className="min-h-0 flex-1 flex overflow-hidden">
           <nav
             aria-label="Sidebar"

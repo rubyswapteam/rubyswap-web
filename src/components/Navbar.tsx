@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <Disclosure as="nav" className="bg-white">
+    <Disclosure as="nav" className="bg-white font-fontbiotif">
       {({ open }) => (
         <>
           <div className="max-w-8xl mx-auto sm:px-6">

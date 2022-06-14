@@ -11,7 +11,7 @@ const DashboardSidebar: React.FC<Props> = ({
   classNames,
 }): JSX.Element => {
   return (
-    <div className="relative w-20 flex flex-col p-3 space-y-3">
+    <div className="relative w-20 flex flex-col p-3 space-y-3 font-fontbiotif">
       {sidebarNavigation.map((item: any) => (
         <Link href={item.href} key={item.key} passHref>
           <a
