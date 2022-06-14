@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { JSXElementConstructor, ReactChildren, ReactElement } from 'react';
+import {
+  JSXElementConstructor,
+  ReactChildren,
+  ReactElement,
+  useState,
+} from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Head from 'next/head';
@@ -14,6 +19,7 @@ export default function Layout({
     string | JSXElementConstructor<unknown>
   >;
 }) {
+  const [bannerExitClicked, setBannerExitClicked] = useState(false);
   return (
     <div>
       <Head>
@@ -45,7 +51,10 @@ export default function Layout({
       </Head>
       <div>
         <div className="bg-cover bg-gray-100 min-h-screen">
-          <Banner/>
+          <Banner
+            bannerExitClicked={bannerExitClicked}
+            setBannerExitClicked={setBannerExitClicked}
+          />
           <Navbar />
           <main>{children}</main>
           <Footer />
