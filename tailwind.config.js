@@ -12,6 +12,7 @@ module.exports = {
         circularstdbold: 'CircularStd-Bold, sans-serif',
         circularstdmedium: 'CircularStd-Medium, sans-serif',
         circularstdbook: 'CircularStd-Book, sans-serif',
+        fontbiotif: 'Biotif-Regular, sans-serif',
       },
     },
   },

@@ -76,7 +76,10 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#181824]" aria-labelledby="footer-heading">
+    <footer
+      className="bg-[#181824] font-fontbiotif"
+      aria-labelledby="footer-heading"
+    >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -85,7 +88,8 @@ export default function Footer() {
           <div className="space-y-8 xl:col-span-1">
             <FooterLogo />
             <div className="text-gray-500 text-base">
-              Ruby is the best NFT platform for cross-chain marketplace aggregation, data analysis and de-fi functionality.
+              Ruby is the best NFT platform for cross-chain marketplace
+              aggregation, data analysis and de-fi functionality.
             </div>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (

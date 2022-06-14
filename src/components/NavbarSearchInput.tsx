@@ -2,7 +2,7 @@ import { SearchIcon } from '@heroicons/react/solid';
 
 export default function NavbarSearchInput() {
   return (
-    <div className="flex-1 flex items-center justify-center px-2 lg:justify-end">
+    <div className="flex-1 flex items-center justify-center px-2 lg:justify-end font-fontbiotif">
       <div className="max-w-lg w-full lg:max-w-xs">
         <label htmlFor="search" className="sr-only">
           Search

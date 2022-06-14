@@ -3,14 +3,14 @@ import Link from 'next/link';
 
 export default function Banner() {
   return (
-    <div className="bg-gradient-to-r from-[#BD0B00] to-[#92124F]">
+    <div className="bg-gradient-to-r from-[#BD0B00] to-[#92124F] font-fontbiotif">
       <div className="max-w-8xl mx-auto py-3 px-3 sm:px-6">
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
             <p className="font-medium text-white truncate">
               <span>
-                Check if you're eligible for the airdrop. Terms and conditions
-                apply.
+                Check if you&apos;re eligible for the airdrop. Terms and
+                conditions apply.
               </span>
             </p>
           </div>
