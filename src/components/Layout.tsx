@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { JSXElementConstructor, ReactChildren, ReactElement } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import Head from 'next/head';
 import seo from '@/data/seo';
-import Banner from '@/components/Banner';
 
 export default function Layout({
   children,
@@ -44,11 +41,8 @@ export default function Layout({
         <link rel="apple-touch-icon" href={seo.linkIconAppleTouchIcon} />
       </Head>
       <div>
-        <div className="bg-cover bg-gray-100 min-h-screen">
-          <Banner/>
-          <Navbar />
+        <div className="bg-cover bg-white min-h-screen">
           <main>{children}</main>
-          <Footer />
         </div>
       </div>
     </div>
