@@ -1,7 +1,7 @@
 import { useNftProvider } from '@/contexts/NftProviderContext';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { INftCollection } from '@/utils/nftConsts';
+import { INftCollection } from '@/utils/nftUtils';
 import { StarIcon } from '@heroicons/react/outline';
 import React from 'react';
 import EthereumIcon from './EthereumIcon';
@@ -93,6 +93,7 @@ export default function TrendingNftCollectionTable() {
                                     <Link
                                       key={nftCollection.id}
                                       href={`/collection/${nftCollection.slug}`}
+                                      prefetch={false}
                                     >
                                       <tr
                                         className="hover:bg-gray-50 cursor-pointer"

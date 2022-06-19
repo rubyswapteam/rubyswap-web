@@ -1,7 +1,7 @@
 import { useNftProvider } from '@/contexts/NftProviderContext';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { INftSweepCollection } from '@/utils/nftConsts';
+import { INftSweepCollection } from '@/utils/nftUtils';
 import { StarIcon } from '@heroicons/react/outline';
 import EthereumIcon from './EthereumIcon';
 import dayjs from 'dayjs';

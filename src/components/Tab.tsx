@@ -29,7 +29,7 @@ const Tab: React.FC<Props> = ({ tabs }): JSX.Element => {
       <div className="hidden sm:block">
         <nav className="flex space-x-4" aria-label="Tabs">
           {tabs.map((tab: any) => (
-            <Link key={tab.name} href={tab.href}>
+            <Link key={tab.name} href={tab.href} prefetch={false}>
               <a
                 className={classNames(
                   tab.current
