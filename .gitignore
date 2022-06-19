@@ -19,8 +19,8 @@
 .DS_Store
 *.pem
 .idea
-yarn-lock
-package-lock
+yarn.lock
+package-lock.json
 
 # debug
 npm-debug.log*
