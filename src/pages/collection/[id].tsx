@@ -10,10 +10,6 @@ import CollectionProfileHeader from '@/components/CollectionProfileHeader';
 import StatsBoxList from '@/components/StatsBoxList';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import CollectionList from '@/components/CollectionList';
-import TrendingNftCollectionTable from '@/components/TrendingNftCollectionTable';
-import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
-import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTable';
-import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
 
 export default function Collection() {
   const router = useRouter();
@@ -90,7 +86,7 @@ export default function Collection() {
           <CollectionTitleHeader
             title={'New Listings'}
             buttonText={'See More'}
-            route={`/collection/${id}`}
+            route={`/collection/${id}?tab=listings`}
           />
           <CollectionList selectedNfts={nfts && nfts.slice(0, 4)} />
         </>
