@@ -1,4 +1,4 @@
-export const sampleSweeps = [
+export const SampleSweeps = [
   {
     transactionHash:
       '0xffde92b4fe0a3a48e84d111dad6598715e40061a6f2ebefc66f3b89b4bcecdf7',

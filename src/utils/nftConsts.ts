@@ -24,6 +24,19 @@ export interface INftCollection {
   owners: number | undefined | null;
 }
 
+export interface INftSweepCollection {
+  id: string;
+  collectionAddress: string;
+  image: string | undefined | null;
+  name: string | undefined | null;
+  chainId: number;
+  value: number | undefined | null;
+  sales: number | undefined | null;
+  buyer: string | undefined | null;
+  transaction: string | undefined | null;
+  timestamp: number | undefined | null;
+}
+
 export enum NftMarketplace {
   NFTRADE = 'nftrade',
   OPENSEA = 'opensea',
@@ -35,4 +48,18 @@ export enum NftChainId {
   ETHEREUM = 1,
   BINANCE_SMART_CHAIN = 56,
   AVALANCHE = 43114,
+}
+
+export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
+  if (!val) return '...';
+  if (length) {
+    return (
+      val.substring(0, length - 1) +
+      '...' +
+      val.substring(val.length - 4, val.length)
+    );
+  }
+  return (
+    val.substring(0, 5) + '...' + val.substring(val.length - 4, val.length)
+  );
 }

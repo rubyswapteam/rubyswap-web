@@ -5,14 +5,14 @@ import DashboardSidebar from './DashboardSidebar';
 import RefreshButton from '@/components/RefreshButton';
 
 const topNavigation = [
-  { name: 'Search', href: '#', current: true },
-  { name: 'Personal', href: '#', current: false },
-  { name: 'Wallet', href: '#', current: false },
-  { name: 'Notifications', href: '#', current: false },
-  { name: 'Listings', href: '#', current: false },
-  { name: 'Market', href: '#', current: false },
-  { name: 'Collections', href: '#', current: false },
-  { name: 'Minting', href: '#', current: false },
+  { name: 'Browse', href: '/', current: true },
+  // { name: 'Personal', href: '#', current: false },
+  // { name: 'Wallet', href: '#', current: false },
+  // { name: 'Notifications', href: '#', current: false },
+  // { name: 'Listings', href: '#', current: false },
+  // { name: 'Market', href: '#', current: false },
+  // { name: 'Collections', href: '#', current: false },
+  // { name: 'Minting', href: '#', current: false },
 ];
 
 const bottomNavigation = [

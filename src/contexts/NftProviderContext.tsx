@@ -7,8 +7,15 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { INft, INftCollection, NftChainId } from '@/utils/nftConsts';
-import { SampleTrendingNftCollection } from '@/data/sampleTrendingNftCollection';
+import {
+  getTrimmedAddressEllipsisMiddle,
+  INft,
+  INftCollection,
+  INftSweepCollection,
+  NftChainId,
+} from '@/utils/nftConsts';
+import { SampleTrending } from '@/data/sampleTrending';
+import { SampleSweeps } from '@/data/sampleSweeps';
 
 const NftProviderContext = React.createContext<any>({});
 
@@ -21,37 +28,68 @@ export const NftProvider = ({
   >;
 }) => {
   const [nfts] = useState<INft[] | null | undefined>();
-  const [nftCollections, setNftCollections] = useState<
+  const [trendingNftCollections, setTrendingNftCollections] = useState<
     INftCollection[] | null | undefined
+  >();
+  const [sweepNftCollections, setSweepNftCollections] = useState<
+    INftSweepCollection[] | null | undefined
   >();
 
   const fetchAllTrendingNftCollections = useCallback(async () => {
     const nftCollections = [];
-    for (let i = 0; i < SampleTrendingNftCollection.length; i++) {
+    for (let i = 0; i < SampleTrending.length; i++) {
       const nftCollection: INftCollection = {
-        id: SampleTrendingNftCollection[i]._id,
-        image: SampleTrendingNftCollection[i].imageUrl,
-        slug: SampleTrendingNftCollection[i].slug,
-        name: SampleTrendingNftCollection[i].name,
+        id: SampleTrending[i]._id,
+        image: SampleTrending[i].imageUrl,
+        slug: SampleTrending[i].slug,
+        name: SampleTrending[i].name,
         chainId: NftChainId.ETHEREUM,
-        oneDayVolume: SampleTrendingNftCollection[i].stats.one_day_volume,
-        floor: SampleTrendingNftCollection[i].stats.floor_price,
-        oneDaySales: SampleTrendingNftCollection[i].stats.one_day_sales,
-        oneDayAveragePrice: SampleTrendingNftCollection[i].stats.one_day_average_price,
-        owners: SampleTrendingNftCollection[i].stats.num_owners,
+        oneDayVolume: SampleTrending[i].stats.one_day_volume,
+        floor: SampleTrending[i].stats.floor_price,
+        oneDaySales: SampleTrending[i].stats.one_day_sales,
+        oneDayAveragePrice: SampleTrending[i].stats.one_day_average_price,
+        owners: SampleTrending[i].stats.num_owners,
       };
       nftCollections.push(nftCollection);
     }
-    setNftCollections(nftCollections);
+    setTrendingNftCollections(nftCollections);
+  }, []);
+
+  const fetchAllSweepNftCollections = useCallback(async () => {
+    const nftSweepCollections = [];
+    for (let i = 0; i < SampleSweeps.length; i++) {
+      const nftSweepCollection: INftSweepCollection = {
+        id: SampleSweeps[i].collections[0]._id,
+        collectionAddress: SampleSweeps[i].collectionsBought[0],
+        image: SampleSweeps[i].collections[0].imageUrl,
+        name: SampleSweeps[i].collections[0].name,
+        chainId: NftChainId.ETHEREUM,
+        value: SampleSweeps[i].totalEthSpent,
+        sales: SampleSweeps[i].numItemsBought,
+        buyer: getTrimmedAddressEllipsisMiddle(SampleSweeps[i].buyer),
+        transaction: getTrimmedAddressEllipsisMiddle(SampleSweeps[i].transactionHash),
+        timestamp: SampleSweeps[i].timestamp,
+      };
+      nftSweepCollections.push(nftSweepCollection);
+    }
+    setSweepNftCollections(nftSweepCollections);
   }, []);
 
   const contextValue = useMemo(
     () => ({
       nfts,
-      nftCollections,
+      trendingNftCollections,
       fetchAllTrendingNftCollections,
+      sweepNftCollections,
+      fetchAllSweepNftCollections,
     }),
-    [nfts, nftCollections, fetchAllTrendingNftCollections],
+    [
+      nfts,
+      trendingNftCollections,
+      fetchAllTrendingNftCollections,
+      sweepNftCollections,
+      fetchAllSweepNftCollections,
+    ],
   );
 
   return (

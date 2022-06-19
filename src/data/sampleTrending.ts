@@ -1,4 +1,4 @@
-export const SampleTrendingNftCollection = [
+export const SampleTrending = [
   {
     _id: '6278d7e444ccb61870c04122',
     slug: 'boredapeyachtclub',
