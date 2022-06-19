@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
 import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTable';
 import { rangeTabs } from '@/utils/nftUtils';
+import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
 
 export default function Index() {
   const router = useRouter();
@@ -27,6 +28,9 @@ export default function Index() {
     }
     if (tab === 'watchlist') {
       return <WatchlistNftCollectionTable />;
+    }
+    if (tab === 'owned') {
+      return <OwnedNftCollectionTable />;
     }
   }
 

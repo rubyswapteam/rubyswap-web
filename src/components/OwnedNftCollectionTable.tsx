@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function WatchlistNftCollectionTable() {
+export default function OwnedNftCollectionTable() {
   return (
     <>
       <div className="flex flex-col">

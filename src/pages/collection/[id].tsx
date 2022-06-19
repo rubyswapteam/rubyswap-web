@@ -9,7 +9,11 @@ import { useEffect } from 'react';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
 import StatsBoxList from '@/components/StatsBoxList';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
-import CollectionListRow from '@/components/CollectionListRow';
+import CollectionList from '@/components/CollectionList';
+import TrendingNftCollectionTable from '@/components/TrendingNftCollectionTable';
+import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
+import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTable';
+import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
 
 export default function Collection() {
   const router = useRouter();
@@ -77,6 +81,42 @@ export default function Collection() {
     },
   ];
 
+  function setBody() {
+    if (!tab) {
+      return (
+        <>
+          <CollectionAnnouncementBanner />
+          <StatsBoxList stats={stats} />
+          <CollectionTitleHeader
+            title={'New Listings'}
+            buttonText={'See More'}
+            route={`/collection/${id}`}
+          />
+          <CollectionList selectedNfts={nfts && nfts.slice(0, 4)} />
+        </>
+      );
+    }
+    if (tab == 'listings') {
+      return (
+        <>
+          <div className="-mt-6">
+            <CollectionList selectedNfts={nfts && nfts} />
+          </div>
+        </>
+      );
+    }
+  }
+
+  function setSecondaryTabs() {
+    if (!tab) {
+      return (
+        <>
+          <Tab tabs={rangeTabs(tab, range, `/collection/${id}`)} />
+        </>
+      );
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -91,21 +131,8 @@ export default function Collection() {
             />
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
-          secondaryTabs={
-            <Tab tabs={rangeTabs(tab, range, `/collection/${id}`)} />
-          }
-          body={
-            <>
-              <CollectionAnnouncementBanner />
-              <StatsBoxList stats={stats} />
-              <CollectionTitleHeader
-                title={'New Listings'}
-                buttonText={'See More'}
-                route={''}
-              />
-              <CollectionListRow selectedNfts={nfts && nfts.slice(0, 4)}/>
-            </>
-          }
+          secondaryTabs={setSecondaryTabs()}
+          body={setBody()}
         />
       </Layout>
     </>

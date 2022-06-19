@@ -8,12 +8,12 @@ interface Props {
   selectedNfts: INft[];
 }
 
-const CollectionListRow: React.FC<Props> = ({ selectedNfts }): JSX.Element => {
+const CollectionList: React.FC<Props> = ({ selectedNfts }): JSX.Element => {
   return (
     <div>
       <div className="mt-6 w-full flex flex-col items-start flex-1">
         {selectedNfts && (
-          <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 pb-6">
+          <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {selectedNfts.map((selectedNft: INft) => (
               <div className="group relative" key={selectedNft.id}>
                 <div
@@ -102,4 +102,4 @@ const CollectionListRow: React.FC<Props> = ({ selectedNfts }): JSX.Element => {
   );
 };
 
-export default CollectionListRow;
+export default CollectionList;
