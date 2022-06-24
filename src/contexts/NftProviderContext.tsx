@@ -98,6 +98,7 @@ export const NftProvider = ({
         oneDaySales: SampleTrending[i].stats.one_day_sales,
         oneDayAveragePrice: SampleTrending[i].stats.one_day_average_price,
         owners: SampleTrending[i].stats.num_owners,
+        isVerified: SampleTrending[i].isVerified,
       };
       nftCollections.push(nftCollection);
     }

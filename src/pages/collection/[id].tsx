@@ -31,26 +31,31 @@ export default function Collection() {
       name: 'Overview',
       href: `/collection/${id}`,
       current: tab == undefined,
+      border: true,
     },
     {
       name: 'Listings',
       href: `/collection/${id}?tab=listings`,
-      current: tab == `listings`,
+      current: tab == 'listings',
+      border: true,
     },
     {
       name: 'Updates',
       href: `/collection/${id}?tab=updates`,
-      current: tab == `updates`,
+      current: tab == 'updates',
+      border: true,
     },
     {
       name: 'Analytics',
       href: `/collection/${id}?tab=analytics`,
-      current: tab == `analytics`,
+      current: tab == 'analytics',
+      border: true,
     },
     {
       name: 'Traits',
       href: `/collection/${id}?tab=traits`,
-      current: tab == `traits`,
+      current: tab == 'traits',
+      border: true,
     },
   ];
 
@@ -107,7 +112,10 @@ export default function Collection() {
     if (!tab) {
       return (
         <>
-          <Tab tabs={rangeTabs(tab, range, `/collection/${id}`)} />
+          <Tab
+            tabs={rangeTabs(tab, range, `/collection/${id}`)}
+            condense={true}
+          />
         </>
       );
     }

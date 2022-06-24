@@ -11,9 +11,9 @@ const DashboardUserDropdown: React.FC<Props> = ({ address }): JSX.Element => {
     <>
       <button
         type="button"
-        className="w-full inline-flex justify-between items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        className="w-full inline-flex justify-between items-center px-2 py-2 border border-gray-300 shadow-sm text-xs leading-4 font-medium rounded-md text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
       >
-        <Logo height={20} width={20} />
+        <Logo height={15} width={15} />
         {address}
         <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
       </button>

@@ -160,7 +160,10 @@ export default function Dashboard(props: any) {
               </div>
               <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
                 <div className="mt-6 mb-6">{props.primaryTabs}</div>
-                <div className="w-full border-t dark:border-gray-700" />
+              </div>
+              <div className="border-t w-full"></div>
+              <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+                <div className="w-full" />
                 <div className="flex-1 flex justify-center lg:justify-end">
                   <div className="w-full">
                     <div className="sm:flex sm:items-center sm:justify-between mt-6 mb-6">

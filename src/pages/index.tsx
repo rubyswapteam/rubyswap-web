@@ -13,10 +13,25 @@ export default function Index() {
   const { tab, range } = router.query;
 
   const primaryTabs = [
-    { name: 'Trending', href: '/', current: !tab },
-    { name: 'Sweeps', href: '?tab=sweeps', current: tab == 'sweeps' },
-    { name: 'Watchlist', href: '?tab=watchlist', current: tab == 'watchlist' },
-    { name: 'Owned', href: '?tab=owned', current: tab == 'owned' },
+    { name: 'Trending', href: '/', current: !tab, border: true },
+    {
+      name: 'Sweeps',
+      href: '?tab=sweeps',
+      current: tab == 'sweeps',
+      border: true,
+    },
+    {
+      name: 'Watchlist',
+      href: '?tab=watchlist',
+      current: tab == 'watchlist',
+      border: true,
+    },
+    {
+      name: 'Owned',
+      href: '?tab=owned',
+      current: tab == 'owned',
+      border: true,
+    },
   ];
 
   function setBody() {
@@ -40,7 +55,7 @@ export default function Index() {
         <Dashboard
           title={'Browse'}
           primaryTabs={<Tab tabs={primaryTabs} />}
-          secondaryTabs={<Tab tabs={rangeTabs(tab, range)} />}
+          secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
           body={setBody()}
         />
       </Layout>
