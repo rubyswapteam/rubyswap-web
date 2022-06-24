@@ -7,7 +7,8 @@ import React from 'react';
 import EthereumIcon from './EthereumIcon';
 
 export default function TrendingNftCollectionTable() {
-  const { trendingNftCollections, fetchAllTrendingNftCollections } = useNftProvider();
+  const { trendingNftCollections, fetchAllTrendingNftCollections } =
+    useNftProvider();
 
   useEffect(() => {
     if (!trendingNftCollections) {
@@ -99,22 +100,22 @@ export default function TrendingNftCollectionTable() {
                                         className="hover:bg-gray-50 cursor-pointer"
                                         key={nftCollection.id}
                                       >
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-7 text-sm sm:pl-6">
+                                        <td className="whitespace-nowrap py-3 pl-4 pr-7 text-sm sm:pl-6">
                                           <div className="flex items-center">
                                             <StarIcon height={20} width={20} />
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap py-4 text-sm">
+                                        <td className="whitespace-nowrap py-3 text-sm">
                                           <div className="flex items-center">
                                             <img
-                                              className="h-12 w-12 rounded-full"
+                                              className="h-8 w-8 rounded-full"
                                               src={nftCollection.image}
                                               alt=""
                                             />
                                           </div>
                                         </td>
                                         <td className="whitespace-nowrap">
-                                          <div className="text-gray-900 flex items-center">
+                                          <div className="text-gray-900 flex items-center text-sm font-bold">
                                             {nftCollection.name}
                                             <img
                                               src="https://www.genie.xyz/svgs/verifiedBadge.svg"
@@ -127,7 +128,7 @@ export default function TrendingNftCollectionTable() {
                                             />
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                                           {nftCollection.chainId == 1 && (
                                             <>
                                               <EthereumIcon
@@ -137,7 +138,7 @@ export default function TrendingNftCollectionTable() {
                                             </>
                                           )}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.oneDayVolume?.toFixed(
                                               2,
@@ -154,7 +155,7 @@ export default function TrendingNftCollectionTable() {
                                             )}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 circularstdbook">
                                           <div className="flex items-center">
                                             <div className="flex items-center">
                                               {nftCollection.floor?.toFixed(2)}{' '}
@@ -171,7 +172,7 @@ export default function TrendingNftCollectionTable() {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 circularstdbook">
                                           <div className="flex items-center">
                                             <div className="flex items-center">
                                               {nftCollection.oneDayAveragePrice?.toFixed(
@@ -190,12 +191,12 @@ export default function TrendingNftCollectionTable() {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.oneDaySales}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.owners}
                                           </div>

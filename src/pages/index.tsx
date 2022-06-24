@@ -38,7 +38,7 @@ export default function Index() {
     <>
       <Layout>
         <Dashboard
-          title={`Browse`}
+          title={'Browse'}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={<Tab tabs={rangeTabs(tab, range)} />}
           body={setBody()}

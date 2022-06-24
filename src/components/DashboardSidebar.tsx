@@ -17,8 +17,8 @@ const DashboardSidebar: React.FC<Props> = ({
           <a
             className={classNames(
               item.current
-                ? 'bg-indigo-800 text-white'
-                : 'text-white hover:bg-indigo-600 hover:bg-opacity-75',
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-900 hover:bg-gray-100 hover:bg-opacity-75',
               'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
             )}
           >

@@ -7,13 +7,7 @@ module.exports = {
     './next.config.js',
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        circularstdbold: 'CircularStd-Bold, sans-serif',
-        circularstdmedium: 'CircularStd-Medium, sans-serif',
-        circularstdbook: 'CircularStd-Book, sans-serif',
-      },
-    },
+    extend: {},
   },
   plugins: [require('@tailwindcss/typography')],
 };

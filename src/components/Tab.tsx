@@ -27,15 +27,15 @@ const Tab: React.FC<Props> = ({ tabs }): JSX.Element => {
         </select>
       </div>
       <div className="hidden sm:block">
-        <nav className="flex space-x-4" aria-label="Tabs">
+        <nav className="flex space-x-3" aria-label="Tabs">
           {tabs.map((tab: any) => (
             <Link key={tab.name} href={tab.href} prefetch={false}>
               <a
                 className={classNames(
                   tab.current
-                    ? 'bg-gray-100 text-gray-700 border-2 border-gray-300'
-                    : 'text-gray-500 hover:text-gray-700 border-2 border-gray-300',
-                  'px-3 py-2 font-medium text-sm rounded-md',
+                    ? 'text-white bg-gradient-to-r from-red-600 to-pink-800 bg-gray-100 text-gray-700 border border-gray-300'
+                    : 'text-gray-500 hover:text-gray-700 border border-gray-300',
+                  'px-3 py-1 font-medium text-sm rounded-md',
                 )}
                 aria-current={tab.current ? 'page' : undefined}
               >
