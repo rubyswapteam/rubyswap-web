@@ -9,17 +9,17 @@ interface Props {
 
 const StatsBoxList: React.FC<Props> = ({ stats }): JSX.Element => {
   return (
-    <div>
+    <div className="px-4 sm:px-6 md:px-8">
       <dl className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-4">
         {stats.map((item: any) => (
           <div
             key={item.name}
-            className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+            className="text-center px-2 py-3 bg-white border-2 border-gray-100 rounded-lg overflow-hidden sm:p-4"
           >
-            <dt className="text-sm font-medium text-gray-500 truncate">
+            <dt className="text-sm font-medium truncate text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-800">
               {item.name}
             </dt>
-            <dd className="mt-1 text-3xl font-semibold text-gray-900">
+            <dd className="mt-1 text-2xl font-semibold text-gray-600">
               {item.value}
             </dd>
           </div>

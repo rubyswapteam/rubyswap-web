@@ -4,7 +4,7 @@ export interface INft {
   chainId: number;
   collectionName: string;
   contractAddress: string;
-  name: string;
+  name: string | null;
   image: string;
   imageAlt: string;
   price: number;
@@ -45,11 +45,11 @@ export interface INftSweepCollection {
 }
 
 export enum NftMarketplace {
-  NFTRADE = `nftrade`,
-  OPENSEA = `opensea`,
-  LOOKSRARE = `looksrare`,
-  SEAPORT = `seaport`,
-  X2Y2 = `x2y2`,
+  NFTRADE = 'nftrade',
+  OPENSEA = 'opensea',
+  LOOKSRARE = 'looksrare',
+  SEAPORT = 'seaport',
+  X2Y2 = 'x2y2',
 }
 
 export enum NftChainId {
@@ -59,60 +59,74 @@ export enum NftChainId {
 }
 
 export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
-  if (!val) return `...`;
+  if (!val) return '...';
   if (length) {
     return (
       val.substring(0, length - 1) +
-      `...` +
+      '...' +
       val.substring(val.length - 4, val.length)
     );
   }
   return (
-    val.substring(0, 5) + `...` + val.substring(val.length - 4, val.length)
+    val.substring(0, 5) + '...' + val.substring(val.length - 4, val.length)
   );
 }
 
 export const rangeTabs = (tab: any, range: any, route?: string) => {
   return [
     {
-      name: `5m`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=5m` : `${route ? route : ''}?range=5m`,
-      current: range == `5m`,
+      name: '5m',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=5m`
+        : `${route ? route : ''}?range=5m`,
+      current: range == '5m',
     },
     {
-      name: `15m`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=15m` : `${route ? route : ''}?range=15m`,
-      current: range == `15m`,
+      name: '15m',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=15m`
+        : `${route ? route : ''}?range=15m`,
+      current: range == '15m',
     },
     {
-      name: `30m`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=30m` : `${route ? route : ''}?range=30m`,
-      current: range == `30m`,
+      name: '30m',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=30m`
+        : `${route ? route : ''}?range=30m`,
+      current: range == '30m',
     },
     {
-      name: `1h`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=1h` : `${route ? route : ''}?range=1h`,
-      current: range == `1h`,
+      name: '1h',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=1h`
+        : `${route ? route : ''}?range=1h`,
+      current: range == '1h',
     },
     {
-      name: `6h`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=6h` : `${route ? route : ''}?range=6h`,
-      current: range == `6h`,
+      name: '6h',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=6h`
+        : `${route ? route : ''}?range=6h`,
+      current: range == '6h',
     },
     {
-      name: `24h`,
-      href: tab ? `${route ? route : ``}?tab=${tab}` : `/${route ? route : ''}`,
+      name: '24h',
+      href: tab ? `${route ? route : ''}?tab=${tab}` : `/${route ? route : ''}`,
       current: range == undefined,
     },
     {
-      name: `7d`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=7d` : `${route ? route : ''}?range=7d`,
-      current: range == `7d`,
+      name: '7d',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=7d`
+        : `${route ? route : ''}?range=7d`,
+      current: range == '7d',
     },
     {
-      name: `30d`,
-      href: tab ? `${route ? route : ``}?tab=${tab}&range=30d` : `${route ? route : ''}?range=30d`,
-      current: range == `30d`,
+      name: '30d',
+      href: tab
+        ? `${route ? route : ''}?tab=${tab}&range=30d`
+        : `${route ? route : ''}?range=30d`,
+      current: range == '30d',
     },
   ];
 };

@@ -19,7 +19,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
 }): JSX.Element => {
   return (
     <>
-      <div className="mb-4 border-b border-gray-200 md:mb-0 flex-col bg-white w-full bg-white z-5 pb-6">
+      <div className="mb-4 md:mb-0 flex-col bg-white w-full bg-white z-5 pb-6">
         <div className="flex flex-col md:flex-row items-start lg:items-center gap-2 justify-between">
           <div className="flex flex-col">
             <div className="flex items-center flex-shrink-1 truncate">

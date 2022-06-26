@@ -75,7 +75,7 @@ export const NftProvider = ({
         image: SampleNfts[i].imageUrl,
         chainId: NftChainId.ETHEREUM,
         imageAlt: SampleNfts[i].collectionName,
-        name: SampleNfts[i].collectionName,
+        name: SampleNfts[i].name,
         price: SampleNfts[i].currentBasePrice,
         marketplace: SampleNfts[i].marketplace as unknown as NftMarketplace,
       };

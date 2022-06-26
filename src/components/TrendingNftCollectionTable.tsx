@@ -18,7 +18,7 @@ export default function TrendingNftCollectionTable() {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col px-4 sm:px-6 md:px-8">
         <div className="sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full align-middle md:px-3 lg:px-4">
             <div className="md:rounded-lg">
@@ -97,10 +97,10 @@ export default function TrendingNftCollectionTable() {
                                       prefetch={false}
                                     >
                                       <tr
-                                        className="hover:bg-gray-50 cursor-pointer"
+                                        className="hover:bg-gray-50 cursor-pointer border-b border-gray-100"
                                         key={nftCollection.id}
                                       >
-                                        <td className="whitespace-nowrap py-3 pl-4 pr-7 text-sm sm:pl-6">
+                                        <td className="py-3 pl-4 pr-7 text-sm sm:pl-6">
                                           <div className="flex items-center">
                                             <StarIcon height={20} width={20} />
                                           </div>
@@ -117,7 +117,8 @@ export default function TrendingNftCollectionTable() {
                                         <td className="whitespace-nowrap">
                                           <div className="text-gray-900 flex items-center text-sm font-bold">
                                             {nftCollection.name}
-                                            {nftCollection.isVerified == true && (
+                                            {nftCollection.isVerified ==
+                                              true && (
                                               <img
                                                 src="https://www.genie.xyz/svgs/verifiedBadge.svg"
                                                 className="ml-1"
@@ -130,7 +131,7 @@ export default function TrendingNftCollectionTable() {
                                             )}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-bold text-gray-900">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900">
                                           {nftCollection.chainId == 1 && (
                                             <>
                                               <EthereumIcon
@@ -140,7 +141,7 @@ export default function TrendingNftCollectionTable() {
                                             </>
                                           )}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-bold text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.oneDayVolume?.toFixed(
                                               2,
@@ -157,7 +158,7 @@ export default function TrendingNftCollectionTable() {
                                             )}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-bold text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
                                           <div className="flex items-center">
                                             <div className="flex items-center">
                                               {nftCollection.floor?.toFixed(2)}{' '}
@@ -174,7 +175,7 @@ export default function TrendingNftCollectionTable() {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-bold text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
                                           <div className="flex items-center">
                                             <div className="flex items-center">
                                               {nftCollection.oneDayAveragePrice?.toFixed(
@@ -193,12 +194,12 @@ export default function TrendingNftCollectionTable() {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-bold text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.oneDaySales}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-bold text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.owners}
                                           </div>

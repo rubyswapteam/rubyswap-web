@@ -146,7 +146,7 @@ export default function SweepsNftCollectionTable() {
                                                   nftSweepCollection?.value /
                                                   Math.pow(10, 18)
                                                 ).toFixed(4)
-                                              : "0.0000"}{' '}
+                                              : '0.0000'}{' '}
                                             {nftSweepCollection.chainId ==
                                               1 && (
                                               <>

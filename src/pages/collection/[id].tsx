@@ -10,6 +10,8 @@ import CollectionProfileHeader from '@/components/CollectionProfileHeader';
 import StatsBoxList from '@/components/StatsBoxList';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import CollectionList from '@/components/CollectionList';
+import CollectionListSingleRow from '@/components/CollectionListSingleRow';
+import BreakHorizontal from '@/components/BreakHorizontal';
 
 export default function Collection() {
   const router = useRouter();
@@ -88,12 +90,22 @@ export default function Collection() {
         <>
           <CollectionAnnouncementBanner />
           <StatsBoxList stats={stats} />
+          <BreakHorizontal />
           <CollectionTitleHeader
             title={'New Listings'}
             buttonText={'See More'}
             route={`/collection/${id}?tab=listings`}
           />
-          <CollectionList selectedNfts={nfts && nfts.slice(0, 4)} />
+          <CollectionListSingleRow selectedNfts={nfts && nfts.slice(0, 10)} />
+          <BreakHorizontal />
+          <CollectionTitleHeader
+            title={'Recent Sales'}
+            buttonText={'See More'}
+            route={`/collection/${id}?tab=analytics`}
+          />
+          <CollectionListSingleRow
+            selectedNfts={nfts && [...nfts.slice(6, 10), ...nfts.slice(0, 6)]}
+          />
         </>
       );
     }

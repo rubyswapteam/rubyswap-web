@@ -2,7 +2,7 @@ import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline'
 
 export default function CollectionAnnouncementBanner() {
   return (
-    <div className="pb-2 sm:pb-5">
+    <div className="pb-2 sm:pb-5 px-4 sm:px-6 md:px-8">
       <div className="max-w-8xl mx-auto">
         <div className="p-2 rounded-lg bg-indigo-600 shadow-lg sm:p-3">
           <div className="flex items-center justify-between flex-wrap">

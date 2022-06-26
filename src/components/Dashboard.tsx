@@ -6,14 +6,19 @@ import RefreshButton from '@/components/RefreshButton';
 import DashboardUserDropdown from './DashboardUserDropdown';
 
 const topNavigation = [
-  { name: 'Browse', href: '/', current: true },
+  { name: 'Personal', header: true },
+  { name: 'Wallet', href: '/', current: false },
+  { name: 'Notifications', href: '/', current: false },
+  { name: 'Calendar', href: '/', current: false },
   // { name: 'Personal', href: '#', current: false },
   // { name: 'Wallet', href: '#', current: false },
   // { name: 'Notifications', href: '#', current: false },
   // { name: 'Listings', href: '#', current: false },
-  // { name: 'Market', href: '#', current: false },
-  // { name: 'Collections', href: '#', current: false },
-  // { name: 'Minting', href: '#', current: false },
+  { name: 'Market', header: true },
+  { name: 'Discover', href: '/', current: true },
+  { name: 'Collections', href: '/', current: false },
+  { name: 'Giveaways', href: '/', current: false },
+  { name: 'Minting', href: '/', current: false },
 ];
 
 const bottomNavigation = [
@@ -162,11 +167,11 @@ export default function Dashboard(props: any) {
                 <div className="mt-6 mb-6">{props.primaryTabs}</div>
               </div>
               <div className="border-t w-full"></div>
-              <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+              <div className="max-w-8xl mx-auto">
                 <div className="w-full" />
                 <div className="flex-1 flex justify-center lg:justify-end">
                   <div className="w-full">
-                    <div className="sm:flex sm:items-center sm:justify-between mt-6 mb-6">
+                    <div className="sm:flex sm:items-center sm:justify-between mt-6 mb-6 px-4 sm:px-6 md:px-8">
                       <div className="flex items-center">
                         <RefreshButton />
                       </div>
