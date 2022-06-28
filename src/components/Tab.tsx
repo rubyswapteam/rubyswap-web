@@ -28,7 +28,10 @@ const Tab: React.FC<Props> = ({ tabs, condense }): JSX.Element => {
         </select>
       </div>
       <div className="hidden sm:block">
-        <nav className={condense ? 'flex space-x-1' : 'flex space-x-3'} aria-label="Tabs">
+        <nav
+          className={condense ? 'flex space-x-1' : 'flex space-x-3'}
+          aria-label="Tabs"
+        >
           {tabs.map((tab: any) => (
             <Link key={tab.name} href={tab.href} prefetch={false}>
               <a

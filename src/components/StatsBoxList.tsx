@@ -2,8 +2,8 @@ import React from 'react';
 
 interface Props {
   stats: {
-    name: string,
-    value: string,
+    name: string;
+    value: string;
   }[];
 }
 
