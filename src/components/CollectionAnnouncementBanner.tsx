@@ -16,7 +16,7 @@ export default function CollectionAnnouncementBanner() {
               <p className="ml-3 font-medium text-white truncate">
                 <span className="md:hidden">We announced a new product!</span>
                 <span className="hidden md:inline">
-                  Big news! We're excited to announce a brand new product.
+                  Big news! We&apos;re excited to announce a brand new product.
                 </span>
               </p>
             </div>

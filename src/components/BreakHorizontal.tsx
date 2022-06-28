@@ -1,9 +1,5 @@
 import React from 'react';
 
-interface Props {}
-
-const BreakHorizontal: React.FC<Props> = (): JSX.Element => {
+export default function ChainMenuDropdown() {
   return <div className="w-full flex border border-gray-100 my-6"/>;
 };
-
-export default BreakHorizontal;
