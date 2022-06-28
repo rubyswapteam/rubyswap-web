@@ -6,6 +6,7 @@ import RefreshButton from '@/components/RefreshButton';
 import DashboardUserDropdown from './DashboardUserDropdown';
 
 const topNavigation = [
+  { name: 'Search', header: false, search: true },
   { name: 'Personal', header: true },
   { name: 'Wallet', href: '/', current: false },
   { name: 'Notifications', href: '/', current: false },
@@ -36,6 +37,7 @@ export default function Dashboard(props: any) {
 
   return (
     <>
+      {/* <SearchModal isOpen={false}> */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
@@ -187,6 +189,7 @@ export default function Dashboard(props: any) {
           </main>
         </div>
       </div>
+      {/* </SearchModal> */}
     </>
   );
 }

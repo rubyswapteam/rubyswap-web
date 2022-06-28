@@ -12,23 +12,39 @@ body {
 @layer base {
   /*noinspection ALL*/
   @font-face {
-    font-family: 'CircularStd-Bold';
-    src: url(/fonts/CircularStd-Bold.woff2) format('woff2');
+    font-family: 'Biotif';
+    weight: 300;
+    src: url(/assets/Biotif/Biotif Light.otf) format('otf');
   }
   /*noinspection ALL*/
   @font-face {
-    font-family: 'CircularStd-Medium';
-    src: url(/fonts/CircularStd-Medium.woff2) format('woff2');
+    font-family: 'Biotif';
+    weight: 400;
+    src: url(/assets/Biotif/Biotif Regular.otf) format('otf');
   }
   /*noinspection ALL*/
   @font-face {
-    font-family: 'CircularStd-Book';
-    src: url(/fonts/CircularStd-Book.woff2) format('woff2');
+    font-family: 'Biotif';
+    weight: 500;
+    src: url(/assets/Biotif/Biotif Medium.otf) format('otf');
   }
   /*noinspection ALL*/
   @font-face {
-    font-family: 'Aeonik-Regular';
-    src: url(/fonts/Aeonik-Regular.woff2) format('woff2');
+    font-family: 'Biotif';
+    weight: 600;
+    src: url(/assets/Biotif/Biotif SemiBold.otf) format('otf');
+  }
+  /*noinspection ALL*/
+  @font-face {
+    font-family: 'Biotif';
+    weight: 700;
+    src: url(/assets/Biotif/Biotif Bold.otf) format('otf');
+  }
+  /*noinspection ALL*/
+  @font-face {
+    font-family: 'Biotif';
+    weight: 900;
+    src: url(/assets/Biotif/Biotif Black.otf) format('otf');
   }
 }
 

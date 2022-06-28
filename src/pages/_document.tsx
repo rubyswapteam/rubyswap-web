@@ -4,12 +4,7 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <link href="../assets/Biotif/Biotif Bold.otf" rel="stylesheet" />
-        <link href="../assets/Biotif/Biotif Medium.otf" rel="stylesheet" />
-        <link href="../assets/Biotif/Biotif Regular.otf" rel="stylesheet" />
-        <link href="../assets/Biotif/Biotif SemiBold.otf" rel="stylesheet" />
-        <link href="../assets/Biotif/Biotif Black.otf" rel="stylesheet" />
-        <link href="../assets/Biotif/Biotif Light.otf" rel="stylesheet" />
+        <link href="/dist/output.css" rel="stylesheet"></link>
       </Head>
       <body>
         <Main />

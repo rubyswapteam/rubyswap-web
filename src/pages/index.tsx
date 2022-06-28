@@ -1,12 +1,13 @@
-import Layout from '@/components/Layout';
 import Dashboard from '@/components/Dashboard';
+import Layout from '@/components/Layout';
+import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
+import SearchModal from '@/components/SearchModal';
+import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
 import Tab from '@/components/Tab';
 import TrendingNftCollectionTable from '@/components/TrendingNftCollectionTable';
-import { useRouter } from 'next/router';
-import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
 import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTable';
 import { rangeTabs } from '@/utils/nftUtils';
-import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
+import { useRouter } from 'next/router';
 
 export default function Index() {
   const router = useRouter();

@@ -7,7 +7,11 @@ module.exports = {
     './next.config.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Biotif'],
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 };
