@@ -6,7 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "biotif";
+  font-family: 'biotif', serif;
 }
 
 @layer base {
@@ -51,7 +51,7 @@ body {
 .rectangle-logo {
   width: 24px;
   height: 24px;
-  background: linear-gradient(112.65deg, #BD0B00 6.08%, #92124F 63.2%), #FFFFFF;
+  background: linear-gradient(112.65deg, #bd0b00 6.08%, #92124f 63.2%), #ffffff;
   border-radius: 4px;
   flex: none;
   order: 0;

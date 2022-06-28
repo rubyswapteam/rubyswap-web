@@ -1,9 +1,8 @@
 import { useNftProvider } from '@/contexts/NftProviderContext';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { INftCollection } from '@/utils/nftUtils';
 import { StarIcon } from '@heroicons/react/outline';
-import React from 'react';
 import EthereumIcon from './EthereumIcon';
 
 export default function TrendingNftCollectionTable() {
