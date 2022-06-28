@@ -39,10 +39,9 @@ const Tab: React.FC<Props> = ({ tabs, condense }): JSX.Element => {
                   tab.current
                     ? 'text-white bg-gradient-to-r from-red-600 to-pink-800 bg-gray-100 text-gray-700'
                     : 'text-gray-500 hover:bg-gray-100',
-                  condense
-                    ? 'px-2 py-1 font-medium text-xs rounded-md'
-                    : 'px-2 py-1 font-medium text-sm rounded-md',
+                  condense ? 'text-xs rounded-md' : 'text-sm ',
                   tab.border ? 'border border-gray-300' : '',
+                  'px-2 py-1 font-medium self-center rounded-md',
                 )}
                 aria-current={tab.current ? 'page' : undefined}
               >

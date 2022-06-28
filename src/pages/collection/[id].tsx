@@ -12,12 +12,14 @@ import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import CollectionList from '@/components/CollectionList';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import BreakHorizontal from '@/components/BreakHorizontal';
+import CollectionUpdate from '../../components/CollectionUpdate';
 
 export default function Collection() {
   const router = useRouter();
   const { id, tab, range } = router.query;
   const { nftCollection, fetchNftCollection } = useNftProvider();
   const { nfts, fetchNfts } = useNftProvider();
+  const { collectionUpdates, fetchNftCollectionUpdates } = useNftProvider();
 
   useEffect(() => {
     if (!nftCollection) {
@@ -26,7 +28,10 @@ export default function Collection() {
     if (!nfts) {
       fetchNfts();
     }
-  }, [nftCollection, nfts]);
+    if (!collectionUpdates) {
+      fetchNftCollectionUpdates();
+    }
+  }, [nftCollection, nfts, collectionUpdates]);
 
   const primaryTabs = [
     {
@@ -114,6 +119,15 @@ export default function Collection() {
         <>
           <div className="-mt-6">
             <CollectionList selectedNfts={nfts && nfts} />
+          </div>
+        </>
+      );
+    }
+    if (tab == 'updates') {
+      return (
+        <>
+          <div className="-mt-6">
+            <CollectionUpdate collectionUpdates={collectionUpdates} />
           </div>
         </>
       );

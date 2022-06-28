@@ -31,6 +31,21 @@ export interface INftCollection {
   owners: number | undefined | null;
 }
 
+export interface INftCollectionUpdate {
+  id: string;
+  username: string;
+  userAddress: string;
+  posted: string;
+  collectionName: string;
+  imageUrl: string;
+  smallImageUrl: string;
+  holdersOnly: boolean;
+  updateType: string;
+  title: string;
+  message: string;
+  likes: number | null;
+}
+
 export interface INftSweepCollection {
   id: string;
   collectionAddress: string;

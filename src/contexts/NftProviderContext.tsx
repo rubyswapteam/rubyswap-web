@@ -12,6 +12,7 @@ import {
   INft,
   INftCollection,
   INftSweepCollection,
+  INftCollectionUpdate,
   NftChainId,
   NftMarketplace,
 } from '@/utils/nftUtils';
@@ -19,6 +20,8 @@ import { SampleTrending } from '@/data/sampleTrending';
 import { SampleSweeps } from '@/data/sampleSweeps';
 import { SampleCollection } from '@/data/sampleCollection';
 import { SampleNfts } from '@/data/sampleNfts';
+import { SampleCollectionUpdates } from '@/data/sampleCollectionUpdates';
+import { stringify } from 'querystring';
 
 const NftProviderContext = React.createContext<any>({});
 
@@ -31,6 +34,9 @@ export const NftProvider = ({
   >;
 }) => {
   const [nfts, setNfts] = useState<INft[] | null | undefined>();
+  const [collectionUpdates, setNftCollectionUpdates] = useState<
+    INftCollectionUpdate[] | null | undefined
+  >();
   const [trendingNftCollections, setTrendingNftCollections] = useState<
     INftCollection[] | null | undefined
   >();
@@ -62,6 +68,28 @@ export const NftProvider = ({
       supply: SampleCollection[0].stats.total_supply,
     };
     setNftCollection(nftCollection);
+  }, []);
+
+  const fetchNftCollectionUpdates = useCallback(async () => {
+    const collectionUpdates: INftCollectionUpdate[] = [];
+    for (let i = 0; i < SampleCollectionUpdates.length; i++) {
+      const collectionUpdate: INftCollectionUpdate = {
+        id: SampleCollectionUpdates[i].id,
+        username: SampleCollectionUpdates[i].username,
+        userAddress: SampleCollectionUpdates[i].userAddress,
+        posted: SampleCollectionUpdates[i].posted,
+        collectionName: SampleCollectionUpdates[i].collectionName,
+        imageUrl: SampleCollectionUpdates[i].imageUrl,
+        smallImageUrl: SampleCollectionUpdates[i].smallImageUrl,
+        holdersOnly: SampleCollectionUpdates[i].holdersOnly,
+        updateType: SampleCollectionUpdates[i].updateType,
+        title: SampleCollectionUpdates[i].title,
+        message: SampleCollectionUpdates[i].message,
+        likes: SampleCollectionUpdates[i].likes,
+      };
+      collectionUpdates.push(collectionUpdate);
+    }
+    setNftCollectionUpdates(collectionUpdates);
   }, []);
 
   const fetchNfts = useCallback(async () => {
@@ -139,6 +167,9 @@ export const NftProvider = ({
       nftCollection,
       setNftCollection,
       fetchNftCollection,
+      collectionUpdates,
+      fetchNftCollectionUpdates,
+      setNftCollectionUpdates,
     }),
     [
       nfts,
@@ -151,6 +182,9 @@ export const NftProvider = ({
       nftCollection,
       setNftCollection,
       fetchNftCollection,
+      collectionUpdates,
+      fetchNftCollectionUpdates,
+      setNftCollectionUpdates,
     ],
   );
 
