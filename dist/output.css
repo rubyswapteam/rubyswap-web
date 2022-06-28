@@ -424,7 +424,7 @@ video {
 
   weight: 300;
 
-  src: url(/assets/Biotif/Biotif Light.otf) format('otf');
+  src: url(/assets/Biotif/Biotif-Light.woff2) format('woff2');
 }
 
 /*noinspection ALL*/
@@ -434,7 +434,7 @@ video {
 
   weight: 400;
 
-  src: url(/assets/Biotif/Biotif Regular.otf) format('otf');
+  src: url(/assets/Biotif/Biotif-Regular.woff2) format('woff2');
 }
 
 /*noinspection ALL*/
@@ -444,7 +444,7 @@ video {
 
   weight: 500;
 
-  src: url(/assets/Biotif/Biotif Medium.otf) format('otf');
+  src: url(/assets/Biotif/Biotif-Medium.woff2) format('woff2');
 }
 
 /*noinspection ALL*/
@@ -454,7 +454,7 @@ video {
 
   weight: 600;
 
-  src: url(/assets/Biotif/Biotif SemiBold.otf) format('otf');
+  src: url(/assets/Biotif/Biotif-SemiBold.woff2) format('woff2');
 }
 
 /*noinspection ALL*/
@@ -464,7 +464,17 @@ video {
 
   weight: 700;
 
-  src: url(/assets/Biotif/Biotif Bold.otf) format('otf');
+  src: url(/assets/Biotif/Biotif-Bold.woff2) format('woff2');
+}
+
+/*noinspection ALL*/
+
+@font-face {
+  font-family: 'Biotif';
+
+  weight: 700;
+
+  src: url(/assets/Biotif/Biotif-ExtraBold.woff2) format('woff2');
 }
 
 /*noinspection ALL*/
@@ -474,7 +484,7 @@ video {
 
   weight: 900;
 
-  src: url(/assets/Biotif/Biotif Black.otf) format('otf');
+  src: url(/assets/Biotif/Biotif-Black.woff2) format('woff2');
 }
 
 *, ::before, ::after {
@@ -1627,13 +1637,13 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "biotif";
+  font-family: 'biotif', serif;
 }
 
 .rectangle-logo {
   width: 24px;
   height: 24px;
-  background: linear-gradient(112.65deg, #BD0B00 6.08%, #92124F 63.2%), #FFFFFF;
+  background: linear-gradient(112.65deg, #bd0b00 6.08%, #92124f 63.2%), #ffffff;
   border-radius: 4px;
   flex: none;
   order: 0;
