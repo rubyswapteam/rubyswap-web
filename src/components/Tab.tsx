@@ -39,7 +39,6 @@ const Tab: React.FC<Props> = ({ tabs, condense }): JSX.Element => {
                   tab.current
                     ? 'text-white bg-cover bg-theme-gradient bg-gray-100'
                     : 'text-gray-900 hover:bg-gray-100',
-                  // condense ? 'text-xs rounded-md' : 'text-sm ',
                   tab.border ? 'border border-gray-300' : '',
                   'text-xs px-2 py-1 font-medium self-center rounded-md',
                 )}

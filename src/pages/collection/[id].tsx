@@ -3,7 +3,7 @@ import Dashboard from '@/components/Dashboard';
 import Tab from '@/components/Tab';
 import { useRouter } from 'next/router';
 import CollectionAnnouncementBanner from '@/components/CollectionAnnouncementBanner';
-import { rangeTabs } from '@/utils/nftUtils';
+import { rangeMapping, rangeTabs } from '@/utils/nftUtils';
 import { useNftProvider } from '@/contexts/NftProviderContext';
 import { useEffect } from 'react';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
@@ -69,35 +69,47 @@ export default function Collection() {
   const refreshButtonTabs = [undefined, 'listings', 'analytics'];
   const rangeButtonsTabs = [undefined, 'analytics'];
 
-  const stats = [
-    {
-      name: 'Floor Price',
-      value: nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
-    },
-    {
-      name: '30 Day Volume',
-      value:
-        nftCollection?.thirtyDayVolume &&
-        `${(nftCollection?.thirtyDayVolume).toFixed(2)} ETH`,
-    },
-    {
-      name: 'Supply',
-      value: nftCollection?.count && `${nftCollection?.count}`,
-    },
-    {
-      name: 'Unique Ownership',
-      value: `${((nftCollection?.owners / nftCollection?.count) * 100).toFixed(
-        2,
-      )}%`,
-    },
-  ];
+  function getStats() {
+    const rng = range ? range?.toString() : '24h';
+    return [
+      {
+        name: 'Floor Price',
+        value: nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
+      },
+      {
+        name: `${rng} Volume`,
+        value:
+          nftCollection?.thirtyDayVolume &&
+          `${(nftCollection?.thirtyDayVolume).toFixed(2)} ETH`,
+      },
+      {
+        name: `${rng} Day Sales`,
+        value:
+          nftCollection?.thirtyDaySales && `${nftCollection?.thirtyDaySales}`,
+      },
+      {
+        name: 'Supply',
+        value: nftCollection?.count && `${nftCollection?.count}`,
+      },
+      {
+        name: 'Unique Ownership',
+        value: `${(
+          (nftCollection?.owners / nftCollection?.count) *
+          100,
+        )}%`,
+      },
+    ]
+  }
 
   function setBody() {
     if (!tab) {
       return (
         <>
-          <CollectionAnnouncementBanner />
-          <StatsBoxList stats={stats} />
+          <CollectionAnnouncementBanner
+            route={`/collection/${id}?tab=updates`}
+            message={collectionUpdates && collectionUpdates[0].title}
+          />
+          <StatsBoxList stats={getStats()} />
           <BreakHorizontal />
           <CollectionTitleHeader
             title={'New Listings'}

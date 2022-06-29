@@ -1,45 +1,25 @@
 import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 
-export default function CollectionAnnouncementBanner() {
+interface Props {
+  message: string;
+  route: string;
+}
+
+export default function CollectionAnnouncementBanner(props: Props) {
   return (
-    <div className="pb-2 sm:pb-5 px-4 sm:px-6 md:px-8">
-      <div className="max-w-8xl mx-auto">
-        <div className="p-2 rounded-lg bg-indigo-600 shadow-lg sm:p-3">
-          <div className="flex items-center justify-between flex-wrap">
-            <div className="w-0 flex-1 flex items-center">
-              <span className="flex p-2 rounded-lg bg-indigo-800">
-                <SpeakerphoneIcon
-                  className="h-6 w-6 text-white"
-                  aria-hidden="true"
-                />
-              </span>
-              <p className="ml-3 font-medium text-white truncate">
-                <span className="md:hidden">We announced a new product!</span>
-                <span className="hidden md:inline">
-                  Big news! We&apos;re excited to announce a brand new product.
-                </span>
-              </p>
-            </div>
-            <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
-              <a
-                href="#"
-                className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50"
-              >
-                See more
-              </a>
-            </div>
-            <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
-              <button
-                type="button"
-                className="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white"
-              >
-                <span className="sr-only">Dismiss</span>
-                <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
-              </button>
-            </div>
+    <Link href={props.route} passHref>
+      <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8 flex w-full text-sm cursor-pointer">
+        <div className="w-full mx-auto bg-gray-900 rounded-lg md:rounded-md px-4 md:pl-8 md:pr-2 py-2 md:flex items-center justify-between">
+          <div className="text-white md:max-w-xl">{props.message}</div>
+
+          <div className="py-2 md:py-0 text-center">
+            <a className="block md:inline-block px-4 py-2 rounded-full bg-gray-900 hover:bg-gray-800 text-white">
+              Read More &rarr;
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

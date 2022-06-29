@@ -10,7 +10,7 @@ interface Props {
 const StatsBoxList: React.FC<Props> = ({ stats }): JSX.Element => {
   return (
     <div className="px-4 sm:px-6 md:px-8">
-      <dl className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-4">
+      <dl className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-5">
         {stats.map((item: any) => (
           <div
             key={item.name}

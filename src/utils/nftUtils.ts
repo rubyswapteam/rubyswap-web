@@ -25,7 +25,10 @@ export interface INftCollection {
   oneDaySales: number | undefined | null;
   floor: number | undefined | null;
   oneDayAveragePrice: number | undefined | null;
-  thirtyDayVolume?: number;
+  sevenDayVolume?: number | undefined | null;
+  sevenDaySales?: number | undefined | null;
+  thirtyDaySales?: number | undefined | null;
+  thirtyDayVolume?: number | undefined | null;
   supply?: number;
   count?: number;
   owners: number | undefined | null;
@@ -73,6 +76,17 @@ export enum NftChainId {
   AVALANCHE = 43114,
 }
 
+export const rangeMapping = {
+  '5m': '5 minutes',
+  '15m': '15 minutes',
+  '30m': '30 minutes',
+  '1h': '1 hour',
+  '6h': '6 hour',
+  '24h': '24 hour',
+  '7d': '7 day',
+  '30d': '30 day',
+};
+
 export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
   if (!val) return '...';
   if (length) {
@@ -88,60 +102,26 @@ export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
 }
 
 export const rangeTabs = (tab: any, range: any, route?: string) => {
-  return [
-    {
-      name: '5m',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=5m`
-        : `${route ? route : ''}?range=5m`,
-      current: range == '5m',
-    },
-    {
-      name: '15m',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=15m`
-        : `${route ? route : ''}?range=15m`,
-      current: range == '15m',
-    },
-    {
-      name: '30m',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=30m`
-        : `${route ? route : ''}?range=30m`,
-      current: range == '30m',
-    },
-    {
-      name: '1h',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=1h`
-        : `${route ? route : ''}?range=1h`,
-      current: range == '1h',
-    },
-    {
-      name: '6h',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=6h`
-        : `${route ? route : ''}?range=6h`,
-      current: range == '6h',
-    },
-    {
-      name: '24h',
-      href: tab ? `${route ? route : ''}?tab=${tab}` : `/${route ? route : ''}`,
-      current: range == undefined,
-    },
-    {
-      name: '7d',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=7d`
-        : `${route ? route : ''}?range=7d`,
-      current: range == '7d',
-    },
-    {
-      name: '30d',
-      href: tab
-        ? `${route ? route : ''}?tab=${tab}&range=30d`
-        : `${route ? route : ''}?range=30d`,
-      current: range == '30d',
-    },
-  ];
+  const tabObj: { name: string; href: string; current: boolean }[] = [];
+  ['5m', '15m', '30m', '1h', '6h', '24h', '7d', '30d'].forEach((rng) => {
+    const activeHref = getRangeHref(tab, rng, route);
+    const activeTab = {
+      name: rng,
+      href: activeHref,
+      current: range == rng || (rng == '24h' && range == undefined),
+    };
+    tabObj.push(activeTab);
+  });
+  return tabObj;
 };
+
+
+
+function getRangeHref(tab: any, range: any, route?: string) {
+  const baseRoute = route || '';
+  const tabSuffix = tab ? `tab=${tab}` : '';
+  const rangeSuffix = range && range !== '24h' ? `range=${range}` : '';
+  const baseSuffix = tabSuffix || rangeSuffix ? '?' : '';
+  const conjunction = tabSuffix && rangeSuffix ? '&' : '';
+  return `${baseRoute}${baseSuffix}${tabSuffix}${conjunction}${rangeSuffix}`;
+}
