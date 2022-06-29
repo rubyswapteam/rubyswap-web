@@ -1,11 +1,11 @@
 export default function RefreshButton() {
   return (
     <>
-      <div className="hidden md:flex flex-shrink-0 items-center gap-1">
-        <div className="h-9 w-9 rounded-xl flex justify-center items-center cursor-pointer hover:bg-gray-50">
+      <div className="hidden md:flex flex-shrink-0 items-center gap-2 items-center">
+        <div className="border border-gray-200 h-8 w-8 rounded-lg flex justify-center items-center cursor-pointer hover:bg-gray-50">
           <svg
-            width="15"
-            height="15"
+            width="12"
+            height="12"
             viewBox="0 0 16 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@ export default function RefreshButton() {
           </svg>
         </div>
         <div className="flex flex-col flex-shrink-0">
-          <div className="font-medium md:whitespace-nowrap text-left text-sm text-gray-400">
+          <div className="font-medium md:whitespace-nowrap text-left text-xs text-gray-400">
             24 seconds ago
           </div>
         </div>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: [
@@ -9,7 +10,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Biotif'],
+        'sans': ['Biotif', ...defaultTheme.fontFamily.sans],
+      },
+      backgroundImage: {
+        'theme-gradient': "url('../assets/gradient/theme.svg')",
       },
     },
   },

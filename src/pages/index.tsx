@@ -1,6 +1,7 @@
 import Dashboard from '@/components/Dashboard';
 import Layout from '@/components/Layout';
 import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
+import RefreshButton from '@/components/RefreshButton';
 import SearchModal from '@/components/SearchModal';
 import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
 import Tab from '@/components/Tab';
@@ -58,6 +59,7 @@ export default function Index() {
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
           body={setBody()}
+          refresh={<RefreshButton />}
         />
       </Layout>
     </>

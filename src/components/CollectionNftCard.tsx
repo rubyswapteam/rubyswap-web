@@ -69,7 +69,7 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
             {selectedNft.collectionName}
           </div>
           <div className="px-2 pt-[2px] border border-gray-100 rounded-md hover:bg-gray-100 cursor-pointer">
-            <div className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-800">
+            <div className="text-[10px] font-bold text-transparent bg-clip-text bg-cover bg-theme-gradient">
               Details
             </div>
           </div>

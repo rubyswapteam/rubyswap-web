@@ -3,7 +3,7 @@ export const SampleCollectionUpdates = [
     id: '12jkjh4b21j45n',
     username: 'BigApe2014',
     userAddress: '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
-    posted: '2 days go',
+    posted: 1656456711,
     collectionName: 'Bored Ape Yacht Club',
     imageUrl:
       'https://lh3.googleusercontent.com/Wtd-gct78QeYzpOkv3y6ttQThAm3DMJ17ugBqw7qpTImhA1qV2IFHI33Cx2jfih3zyvREVUAFgYOXu-TAlmFTCOwQKUdlUWBUSlbWQ',
@@ -20,7 +20,7 @@ export const SampleCollectionUpdates = [
     id: 'j51bkb64k32j52',
     username: 'BigApe2014',
     userAddress: '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
-    posted: '5 days go',
+    posted: 1655471662,
     collectionName: 'Bored Ape Yacht Club',
     imageUrl:
       'https://lh3.googleusercontent.com/Wtd-gct78QeYzpOkv3y6ttQThAm3DMJ17ugBqw7qpTImhA1qV2IFHI33Cx2jfih3zyvREVUAFgYOXu-TAlmFTCOwQKUdlUWBUSlbWQ',
@@ -37,14 +37,14 @@ export const SampleCollectionUpdates = [
     id: 'jkp52oj2323d12',
     username: 'BigApe2014',
     userAddress: '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
-    posted: '5 days go',
+    posted: 1655093156,
     collectionName: 'Bored Ape Yacht Club',
     imageUrl:
       'https://lh3.googleusercontent.com/Wtd-gct78QeYzpOkv3y6ttQThAm3DMJ17ugBqw7qpTImhA1qV2IFHI33Cx2jfih3zyvREVUAFgYOXu-TAlmFTCOwQKUdlUWBUSlbWQ',
     smallImageUrl:
       'https://lh3.googleusercontent.com/Wtd-gct78QeYzpOkv3y6ttQThAm3DMJ17ugBqw7qpTImhA1qV2IFHI33Cx2jfih3zyvREVUAFgYOXu-TAlmFTCOwQKUdlUWBUSlbWQ=s250',
     holdersOnly: false,
-    updateType: 'Annoucement',
+    updateType: 'Event',
     title: 'AMA on the upcoming airdrop - The Otherside',
     message: `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <br /><br />Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br /><br />Make sure you stay notified!</p>`,
     likes: 1039,

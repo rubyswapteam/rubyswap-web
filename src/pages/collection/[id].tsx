@@ -13,6 +13,7 @@ import CollectionList from '@/components/CollectionList';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import BreakHorizontal from '@/components/BreakHorizontal';
 import CollectionUpdate from '../../components/CollectionUpdate';
+import RefreshButton from '@/components/RefreshButton';
 
 export default function Collection() {
   const router = useRouter();
@@ -65,6 +66,8 @@ export default function Collection() {
       border: true,
     },
   ];
+  const refreshButtonTabs = [undefined, 'listings', 'analytics'];
+  const rangeButtonsTabs = [undefined, 'analytics'];
 
   const stats = [
     {
@@ -134,8 +137,14 @@ export default function Collection() {
     }
   }
 
+  function setRefreshButton() {
+    if (refreshButtonTabs.includes(tab?.toString())) {
+      return <RefreshButton />;
+    }
+  }
+
   function setSecondaryTabs() {
-    if (!tab) {
+    if (rangeButtonsTabs.includes(tab?.toString())) {
       return (
         <>
           <Tab
@@ -162,6 +171,7 @@ export default function Collection() {
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
+          refresh={setRefreshButton()}
           body={setBody()}
         />
       </Layout>

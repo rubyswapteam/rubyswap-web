@@ -174,9 +174,9 @@ export default function Dashboard(props: any) {
                 <div className="flex-1 flex justify-center lg:justify-end">
                   <div className="w-full">
                     <div className="sm:flex sm:items-center sm:justify-between mt-6 mb-6 px-4 sm:px-6 md:px-8">
-                      <div className="flex items-center">
-                        <RefreshButton />
-                      </div>
+                      {props.refresh && (
+                        <div className="flex items-center">{props.refresh}</div>
+                      )}
                       {props.secondaryTabs && (
                         <div className="flex">{props.secondaryTabs}</div>
                       )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { INftCollectionUpdate } from '../utils/nftUtils';
 import { Switch } from '@headlessui/react';
+import moment from 'moment';
 
 interface Props {
   collectionUpdates: INftCollectionUpdate[];
@@ -14,7 +15,7 @@ export default function CollectionUpdate(props: Props) {
   const [enabled, setEnabled] = useState(false);
   return (
     <div>
-      <Switch.Group as="div" className="flex items-center m-5">
+      <Switch.Group as="div" className="flex items-center mx-5">
         <Switch
           checked={enabled}
           onChange={setEnabled}
@@ -36,34 +37,39 @@ export default function CollectionUpdate(props: Props) {
         </Switch.Label>
       </Switch.Group>
       {props.collectionUpdates.map((update: INftCollectionUpdate) => (
-        <div
-          className="border border-gray-200 p-4 m-5 rounded-lg"
-          key={update.id}
-        >
-          <div className="justify-between w-full flex mb-5">
-            <div className="flex items-center">
-              <img
-                className="h-10 w-10 rounded-full my-auto"
-                src={update.smallImageUrl}
-              />
-              <a className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-800 mx-3">
-                {update.username || update.userAddress}
-              </a>
-              <a className="text-sm font-medium text-gray-400">
-                {update.posted}
-              </a>
+        <div key={update.id}>
+          {(!enabled || update.holdersOnly) && (
+            <div className="border border-gray-200 p-4 m-5 rounded-lg text-sm">
+              <div className="justify-between w-full flex mb-5">
+                <div className="flex items-center">
+                  <img
+                    className="h-10 w-10 rounded-full my-auto"
+                    src={update.smallImageUrl}
+                  />
+                  <a className="text-sm font-medium text-transparent bg-clip-text bg-cover bg-theme-gradient mx-3">
+                    {update.username || update.userAddress}
+                  </a>
+                  <a className="text-sm font-medium text-gray-400">
+                    {moment
+                      .unix(update.posted)
+                      .local()
+                      .startOf('seconds')
+                      .fromNow()}
+                  </a>
+                </div>
+                <div className="py-0.5 px-2 rounded-md bg-gray-100 self-center">
+                  {update.updateType}
+                </div>
+              </div>
+              <div className="font-bold mb-3">{update.title}</div>
+              <div dangerouslySetInnerHTML={{ __html: update.message }}></div>
+              <div className="mt-5">
+                <div className="py-2 px-2 rounded-md bg-gray-100 self-center inline cursor-pointer hover:bg-gray-200">
+                  {'👍'} {update.likes}
+                </div>
+              </div>
             </div>
-            <div className="py-0.5 px-2 rounded-md bg-gray-100 self-center">
-              {update.updateType}
-            </div>
-          </div>
-          <div className="font-bold mb-3">{update.title}</div>
-          <div dangerouslySetInnerHTML={{ __html: update.message }}></div>
-          <div className="mt-5">
-            <div className="py-2 px-2 rounded-md bg-gray-100 self-center inline cursor-pointer hover:bg-gray-200">
-              {'👍'} {update.likes}
-            </div>
-          </div>
+          )}
         </div>
       ))}
     </div>

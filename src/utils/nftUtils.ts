@@ -35,7 +35,7 @@ export interface INftCollectionUpdate {
   id: string;
   username: string;
   userAddress: string;
-  posted: string;
+  posted: number;
   collectionName: string;
   imageUrl: string;
   smallImageUrl: string;
