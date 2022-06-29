@@ -424,7 +424,7 @@ video {
 
   font-weight: 300;
 
-  src: "url('../public/fonts/Biotif-Light.woff2')" format('woff2');
+  src: url('/fonts/Biotif-Light.woff2') format('woff2');
 }
 
 /*noinspection ALL*/
@@ -434,7 +434,7 @@ video {
 
   font-weight: 400;
 
-  src: "url('../public/fonts/Biotif-Regular.woff2')" format('woff2');
+  src: url('/fonts/Biotif-Regular.woff2') format('woff2');
 }
 
 /*noinspection ALL*/
@@ -444,7 +444,7 @@ video {
 
   font-weight: 500;
 
-  src: "url('../public/fonts/Biotif-Medium.woff2')" format('woff2');
+  src: url('/fonts/Biotif-Medium.woff2') format('woff2');
 }
 
 /*noinspection ALL*/
@@ -454,7 +454,7 @@ video {
 
   font-weight: 600;
 
-  src: "url('../public/fonts/Biotif-SemiBold.woff2')" format('woff2');
+  src: url('/fonts/Biotif-SemiBold.woff2') format('woff2');
 }
 
 /*noinspection ALL*/
@@ -464,7 +464,7 @@ video {
 
   font-weight: 700;
 
-  src: "url('../public/fonts/Biotif-Bold.woff2')" format('woff2');
+  src: url('/fonts/Biotif-Bold.woff2') format('woff2');
 }
 
 /*noinspection ALL*/
@@ -474,7 +474,7 @@ video {
 
   font-weight: 700;
 
-  src: "url('../public/fonts/Biotif-ExtraBold.woff2')" format('woff2');
+  src: url('/fonts/Biotif-ExtraBold.woff2') format('woff2');
 }
 
 /*noinspection ALL*/
@@ -484,7 +484,7 @@ video {
 
   font-weight: 900;
 
-  src: "url('../public/fonts/Biotif-Black.woff2')" format('woff2');
+  src: url('/fonts/Biotif-Black.woff2') format('woff2');
 }
 
 *, ::before, ::after {
