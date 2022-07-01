@@ -3,8 +3,8 @@ import React from 'react';
 
 interface Props {
   title: string;
-  buttonText: string;
-  route: string;
+  buttonText?: string;
+  route?: string;
 }
 
 const CollectionTitleHeader: React.FC<Props> = ({
@@ -21,15 +21,17 @@ const CollectionTitleHeader: React.FC<Props> = ({
           </h3>
         </div>
         <div className="ml-4 mt-2 flex-shrink-0">
-          <Link href={route} passHref>
-            <a
-              className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm
+          {buttonText && (
+            <Link href={route} passHref>
+              <a
+                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm
               font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
               focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              {buttonText}
-            </a>
-          </Link>
+              >
+                {buttonText}
+              </a>
+            </Link>
+          )}
         </div>
       </div>
     </div>

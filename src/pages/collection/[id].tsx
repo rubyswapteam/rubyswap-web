@@ -14,6 +14,8 @@ import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import BreakHorizontal from '@/components/BreakHorizontal';
 import CollectionUpdate from '../../components/CollectionUpdate';
 import RefreshButton from '@/components/RefreshButton';
+import SalesHistoryChart from '@/components/SalesHistoryChart';
+import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 
 export default function Collection() {
   const router = useRouter();
@@ -110,6 +112,10 @@ export default function Collection() {
             message={collectionUpdates && collectionUpdates[0].title}
           />
           <StatsBoxList stats={getStats()} />
+          <div className='flex mx-5'>
+          <div className='w-full mr-2 mt-5 rounded-xl overflow-hidden'><SalesHistoryChart></SalesHistoryChart></div>
+          <div className='w-full ml-2 mt-5 rounded-xl overflow-hidden'><AveragePriceVolumeChart></AveragePriceVolumeChart></div>
+          </div>
           <BreakHorizontal />
           <CollectionTitleHeader
             title={'New Listings'}
@@ -144,6 +150,21 @@ export default function Collection() {
           <div className="-mt-6">
             <CollectionUpdate collectionUpdates={collectionUpdates} />
           </div>
+        </>
+      );
+    }
+    if (tab == 'analytics') {
+      return (
+        <>
+        <div className='px-5'>
+          <CollectionTitleHeader
+            title={'Summary Stats'}
+          />
+          <StatsBoxList stats={getStats()} />
+          <BreakHorizontal />
+          <div className='w-full mt-5 rounded-xl overflow-hidden'><SalesHistoryChart chart = {{height: '30%'}} /></div>
+          <div className='w-full mt-5 rounded-xl overflow-hidden'><AveragePriceVolumeChart chart = {{height: '30%'}} Ï/></div>
+        </div>
         </>
       );
     }

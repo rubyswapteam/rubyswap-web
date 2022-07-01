@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { INftCollection } from '@/utils/nftUtils';
 import { StarIcon } from '@heroicons/react/outline';
 import EthereumIcon from './EthereumIcon';
+import { Transition } from '@headlessui/react';
 
 export default function TrendingNftCollectionTable() {
   const { trendingNftCollections, fetchAllTrendingNftCollections } =
@@ -114,7 +115,7 @@ export default function TrendingNftCollectionTable() {
                                           </div>
                                         </td>
                                         <td className="whitespace-nowrap">
-                                          <div className="text-gray-900 flex items-center text-sm font-bold">
+                                          <div className="text-gray-900 flex items-center text-sm font-semibold">
                                             {nftCollection.name}
                                             {nftCollection.isVerified ==
                                               true && (
