@@ -21,7 +21,7 @@ const CollectionTitleHeader: React.FC<Props> = ({
           </h3>
         </div>
         <div className="ml-4 mt-2 flex-shrink-0">
-          {buttonText && (
+          {buttonText && route && (
             <Link href={route} passHref>
               <a
                 className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm
