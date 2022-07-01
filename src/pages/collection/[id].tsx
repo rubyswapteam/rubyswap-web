@@ -1,21 +1,21 @@
-import Layout from '@/components/Layout';
-import Dashboard from '@/components/Dashboard';
-import Tab from '@/components/Tab';
-import { useRouter } from 'next/router';
+import BreakHorizontal from '@/components/BreakHorizontal';
 import CollectionAnnouncementBanner from '@/components/CollectionAnnouncementBanner';
-import { rangeMapping, rangeTabs } from '@/utils/nftUtils';
-import { useNftProvider } from '@/contexts/NftProviderContext';
-import { useEffect } from 'react';
-import CollectionProfileHeader from '@/components/CollectionProfileHeader';
-import StatsBoxList from '@/components/StatsBoxList';
-import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import CollectionList from '@/components/CollectionList';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
-import BreakHorizontal from '@/components/BreakHorizontal';
-import CollectionUpdate from '../../components/CollectionUpdate';
+import CollectionProfileHeader from '@/components/CollectionProfileHeader';
+import CollectionTitleHeader from '@/components/CollectionTitleHeader';
+import Dashboard from '@/components/Dashboard';
+import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
 import SalesHistoryChart from '@/components/SalesHistoryChart';
+import StatsBoxList from '@/components/StatsBoxList';
+import Tab from '@/components/Tab';
+import { useNftProvider } from '@/contexts/NftProviderContext';
+import { rangeTabs } from '@/utils/nftUtils';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
+import CollectionUpdate from '../../components/CollectionUpdate';
 
 export default function Collection() {
   const router = useRouter();
@@ -110,7 +110,7 @@ export default function Collection() {
             message={collectionUpdates && collectionUpdates[0].title}
           />
           <StatsBoxList stats={getStats()} />
-          <div className="flex mx-5">
+          <div className="flex mx-8">
             <div className="w-full mr-2 mt-5 rounded-xl overflow-hidden">
               <SalesHistoryChart></SalesHistoryChart>
             </div>
