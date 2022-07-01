@@ -76,7 +76,8 @@ export default function Collection() {
     return [
       {
         name: 'Floor Price',
-        value: nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
+        value:
+          nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
       },
       {
         name: `${rng} Volume`,
@@ -95,12 +96,9 @@ export default function Collection() {
       },
       {
         name: 'Unique Ownership',
-        value: `${(
-          (nftCollection?.owners / nftCollection?.count) *
-          100,
-        )}%`,
+        value: `${(nftCollection?.owners / nftCollection?.count) * 100}%`,
       },
-    ]
+    ];
   }
 
   function setBody() {
@@ -112,9 +110,13 @@ export default function Collection() {
             message={collectionUpdates && collectionUpdates[0].title}
           />
           <StatsBoxList stats={getStats()} />
-          <div className='flex mx-5'>
-          <div className='w-full mr-2 mt-5 rounded-xl overflow-hidden'><SalesHistoryChart></SalesHistoryChart></div>
-          <div className='w-full ml-2 mt-5 rounded-xl overflow-hidden'><AveragePriceVolumeChart></AveragePriceVolumeChart></div>
+          <div className="flex mx-5">
+            <div className="w-full mr-2 mt-5 rounded-xl overflow-hidden">
+              <SalesHistoryChart></SalesHistoryChart>
+            </div>
+            <div className="w-full ml-2 mt-5 rounded-xl overflow-hidden">
+              <AveragePriceVolumeChart></AveragePriceVolumeChart>
+            </div>
           </div>
           <BreakHorizontal />
           <CollectionTitleHeader
@@ -156,15 +158,17 @@ export default function Collection() {
     if (tab == 'analytics') {
       return (
         <>
-        <div className='px-5'>
-          <CollectionTitleHeader
-            title={'Summary Stats'}
-          />
-          <StatsBoxList stats={getStats()} />
-          <BreakHorizontal />
-          <div className='w-full mt-5 rounded-xl overflow-hidden'><SalesHistoryChart chart = {{height: '30%'}} /></div>
-          <div className='w-full mt-5 rounded-xl overflow-hidden'><AveragePriceVolumeChart chart = {{height: '30%'}} Ï/></div>
-        </div>
+          <div className="px-5">
+            <CollectionTitleHeader title={'Summary Stats'} />
+            <StatsBoxList stats={getStats()} />
+            <BreakHorizontal />
+            <div className="w-full mt-5 rounded-xl overflow-hidden">
+              <SalesHistoryChart chart={{ height: '30%' }} />
+            </div>
+            <div className="w-full mt-5 rounded-xl overflow-hidden">
+              <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
+            </div>
+          </div>
         </>
       );
     }
