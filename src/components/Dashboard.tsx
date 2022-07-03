@@ -1,8 +1,7 @@
-import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { Fragment, useState } from 'react';
 import DashboardSidebar from './DashboardSidebar';
-import RefreshButton from '@/components/RefreshButton';
 import DashboardUserDropdown from './DashboardUserDropdown';
 
 const topNavigation = [
@@ -11,13 +10,9 @@ const topNavigation = [
   { name: 'Wallet', href: '/', current: false },
   { name: 'Notifications', href: '/', current: false },
   { name: 'Calendar', href: '/', current: false },
-  // { name: 'Personal', href: '#', current: false },
-  // { name: 'Wallet', href: '#', current: false },
-  // { name: 'Notifications', href: '#', current: false },
-  // { name: 'Listings', href: '#', current: false },
   { name: 'Market', header: true },
-  { name: 'Discover', href: '/', current: true },
-  { name: 'Collections', href: '/', current: false },
+  { name: 'Discover', href: '/discover', current: false },
+  { name: 'Collections', href: '/', current: true },
   { name: 'Giveaways', href: '/', current: false },
   { name: 'Minting', href: '/', current: false },
 ];
