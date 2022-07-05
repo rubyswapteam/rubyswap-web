@@ -2,7 +2,7 @@ export default function RefreshButton() {
   return (
     <>
       <div className="hidden md:flex flex-shrink-0 items-center gap-2 items-center">
-        <div className="border border-gray-200 h-8 w-8 rounded-lg flex justify-center items-center cursor-pointer hover:bg-gray-50">
+        <div className="drop-shadow bg-white h-8 w-8 rounded-lg flex justify-center items-center cursor-pointer hover:bg-gray-50">
           <svg
             width="12"
             height="12"

@@ -7,14 +7,13 @@ interface Props {
   route?: string;
 }
 
-const CollectionTitleHeader: React.FC<Props> = ({
+const AnalyticsSectionHeader: React.FC<Props> = ({
   title,
   buttonText,
   route,
 }): JSX.Element => {
   return (
-    <div className="mt-2 py-5 px-4 sm:px-6 md:px-8">
-      {/* <div className="mt-2 bg-white py-5 px-4 sm:px-6 md:px-8"> */}
+    <div className="mt-2 bg-white py-5 px-4 sm:px-6 md:px-8">
       <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
         <div className="ml-4 mt-2">
           <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -39,4 +38,4 @@ const CollectionTitleHeader: React.FC<Props> = ({
   );
 };
 
-export default CollectionTitleHeader;
+export default AnalyticsSectionHeader;

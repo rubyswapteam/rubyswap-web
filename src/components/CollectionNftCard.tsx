@@ -11,16 +11,16 @@ interface Props {
 const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
   return (
     <div className="group relative">
-      <div className={'border-2 border-gray-100 p-2 rounded-xl text-sm'}>
+      <div className={'drop-shadow-md p-2 rounded-xl text-sm bg-white'}>
         <div
           className={
-            'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden group-hover:opacity-75 lg:h-50 lg:aspect-none cursor-pointer'
+            'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer'
           }
         >
           <img
             src={selectedNft.image}
             alt={selectedNft.imageAlt}
-            className="w-full h-full object-center object-cover rounded-xl"
+            className="w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl"
           />
           <a
             target="_blank"
@@ -53,7 +53,7 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
               </div>
             )}
           </a>
-          <div className="absolute right-2 top-2 w-5 h-5 flex items-center justify-center group-hover:opacity-100 duration-200 transition opacity-0">
+          <div className="absolute right-2 top-2 w-5 h-5 flex items-center justify-center group-hover:opacity-100 transition-opacity duration-200 transition opacity-0">
             <div className="absolute opacity-20 rounded-full w-full h-full left-0 top-0 bg-white" />
             <div className="w-3 h-3">
               <PlusIcon />
@@ -68,7 +68,7 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
           <div className="text-[10px] font-bold">
             {selectedNft.collectionName}
           </div>
-          <div className="px-2 pt-[2px] border border-gray-100 rounded-md hover:bg-gray-100 cursor-pointer">
+          <div className="px-2 pt-[2px] border border-gray-100 rounded-md transition-colors hover:bg-gray-100 cursor-pointer">
             <div className="text-[10px] font-bold text-transparent bg-clip-text bg-cover bg-theme-gradient">
               Details
             </div>

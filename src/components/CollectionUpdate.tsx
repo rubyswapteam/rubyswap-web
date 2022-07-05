@@ -16,7 +16,7 @@ export default function CollectionUpdate(props: Props) {
   const [enabled, setEnabled] = useState(false);
   return (
     <div>
-      <Switch.Group as="div" className="flex items-center mx-5">
+      <Switch.Group as="div" className="flex items-center">
         <Switch
           checked={enabled}
           onChange={setEnabled}
@@ -48,7 +48,7 @@ export default function CollectionUpdate(props: Props) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="border border-gray-200 p-4 m-5 rounded-lg text-sm overflow-hidden">
+          <div className="bg-white drop-shadow-md p-4 my-8 rounded-lg text-sm overflow-hidden">
             <div className="justify-between w-full flex mb-5">
               <div className="flex items-center">
                 <img

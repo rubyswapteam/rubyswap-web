@@ -109,7 +109,9 @@ export default function Collection() {
             route={`/collection/${id}?tab=updates`}
             message={collectionUpdates && collectionUpdates[0].title}
           />
-          <StatsBoxList stats={getStats()} />
+          <div className="my-8">
+            <StatsBoxList stats={getStats()} />
+          </div>
           <div className="flex mx-8">
             <div className="w-full mr-2 mt-5 rounded-xl overflow-hidden">
               <SalesHistoryChart></SalesHistoryChart>
@@ -118,22 +120,26 @@ export default function Collection() {
               <AveragePriceVolumeChart></AveragePriceVolumeChart>
             </div>
           </div>
-          <BreakHorizontal />
-          <CollectionTitleHeader
-            title={'New Listings'}
-            buttonText={'See More'}
-            route={`/collection/${id}?tab=listings`}
-          />
-          <CollectionListSingleRow selectedNfts={nfts && nfts.slice(0, 10)} />
-          <BreakHorizontal />
-          <CollectionTitleHeader
-            title={'Recent Sales'}
-            buttonText={'See More'}
-            route={`/collection/${id}?tab=analytics`}
-          />
-          <CollectionListSingleRow
-            selectedNfts={nfts && [...nfts.slice(6, 10), ...nfts.slice(0, 6)]}
-          />
+          {/* <BreakHorizontal /> */}
+          <div className="my-8 my-14">
+            <CollectionTitleHeader
+              title={'New Listings'}
+              buttonText={'See More'}
+              route={`/collection/${id}?tab=listings`}
+            />
+            <CollectionListSingleRow selectedNfts={nfts && nfts.slice(0, 10)} />
+          </div>
+          {/* <BreakHorizontal /> */}
+          <div className="mb-8 my-14">
+            <CollectionTitleHeader
+              title={'Recent Sales'}
+              buttonText={'See More'}
+              route={`/collection/${id}?tab=analytics`}
+            />
+            <CollectionListSingleRow
+              selectedNfts={nfts && [...nfts.slice(6, 10), ...nfts.slice(0, 6)]}
+            />
+          </div>
         </>
       );
     }
@@ -149,7 +155,7 @@ export default function Collection() {
     if (tab == 'updates') {
       return (
         <>
-          <div className="-mt-6">
+          <div className="px-4 sm:px-6 md:px-8">
             <CollectionUpdate collectionUpdates={collectionUpdates} />
           </div>
         </>
@@ -158,15 +164,17 @@ export default function Collection() {
     if (tab == 'analytics') {
       return (
         <>
-          <div className="px-5">
+          <div>
             <CollectionTitleHeader title={'Summary Stats'} />
             <StatsBoxList stats={getStats()} />
             <BreakHorizontal />
-            <div className="w-full mt-5 rounded-xl overflow-hidden">
-              <SalesHistoryChart chart={{ height: '30%' }} />
-            </div>
-            <div className="w-full mt-5 rounded-xl overflow-hidden">
-              <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
+            <div className="px-4 sm:px-6 md:px-8">
+              <div className="w-full mt-5 rounded-xl overflow-hidden">
+                <SalesHistoryChart chart={{ height: '30%' }} />
+              </div>
+              <div className="w-full mt-5 rounded-xl overflow-hidden">
+                <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
+              </div>
             </div>
           </div>
         </>
