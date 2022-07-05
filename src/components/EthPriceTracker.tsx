@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import EthereumIcon from './EthereumIcon';
 
 export function EthPriceTracker() {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [item, setItem] = useState([]);
 
@@ -17,9 +17,9 @@ export function EthPriceTracker() {
           setIsLoaded(true);
           setItem(result.ethereum.usd);
         },
-        (error) => {
+        (error: { message: string }) => {
           setIsLoaded(true);
-          setError(error);
+          setError(error.message);
         },
       );
   };
@@ -34,7 +34,7 @@ export function EthPriceTracker() {
 
   return (
     <div className="my-4 p-2 text-xs font-medium text-gray-600">
-      {error && <div>Error: {error.message}</div>}
+      {error && <div>Error: {error}</div>}
       {!error && !isLoaded && <div>Loading...</div>}
       {!error && isLoaded && (
         <div className="flex items-center">
