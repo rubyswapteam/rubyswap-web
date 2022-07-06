@@ -32,6 +32,9 @@ function classNames(...classes: string[]) {
 
 export default function Dashboard(props: any) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const bannerStyle = props?.banner
+    ? `linear-gradient(rgba(256, 256, 256, 0.92), rgba(256, 256, 256, 0.92)), url('${props?.banner}')`
+    : '';
 
   return (
     <>
@@ -164,10 +167,9 @@ export default function Dashboard(props: any) {
           <main className="flex-1">
             <div className="">
               <div
-                className="py-6 "
+                className="py-6 bg-gray-50"
                 style={{
-                  backgroundImage:
-                    "linear-gradient(rgba(256, 256, 256, 0.9), rgba(256, 256, 256, 0.9)), url('https://lh3.googleusercontent.com/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs=s2500')",
+                  backgroundImage: `${bannerStyle}`,
                 }}
               >
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
@@ -179,7 +181,7 @@ export default function Dashboard(props: any) {
                   <div className="mt-6 mb-6">{props.primaryTabs}</div>
                 </div>
               </div>
-              <div className="border-t w-full"></div>
+              {/* <div className="border-t w-full"></div> */}
               <div className="max-w-8xl mx-auto">
                 <div className="w-full" />
                 <div className="flex-1 flex justify-center lg:justify-end">

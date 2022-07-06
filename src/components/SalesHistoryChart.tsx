@@ -55,9 +55,9 @@ export default function SalesHistoryChart(props: any) {
         zoomType: 'xy',
         style: {
           fontFamily: 'Biotif',
-          color: '#ffffff',
+          color: '#07062C',
         },
-        backgroundColor: '#07062C',
+        backgroundColor: '#ffffff',
         height: props.chart?.height || '60%',
         marginLeft: 80,
         marginRight: 40,
@@ -70,12 +70,12 @@ export default function SalesHistoryChart(props: any) {
           labels: {
             padding: 15,
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
           title: {
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
         },
@@ -84,12 +84,12 @@ export default function SalesHistoryChart(props: any) {
         {
           labels: {
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
           title: {
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
         },
@@ -97,26 +97,26 @@ export default function SalesHistoryChart(props: any) {
       title: {
         text: 'Sales History',
         style: {
-          color: '#ffffff',
+          color: '#07062C',
         },
         y: 40,
       },
       series: [
         {
           name: 'Sales',
-          color: '#F2C94C80',
+          color: '#33333399',
           data: allocatedPrices,
         },
       ],
       legend: {
         itemStyle: {
-          color: '#FFFFFF',
+          color: '#07062C',
         },
         itemHoverStyle: {
-          color: '#FFFFFF',
+          color: '#07062C',
         },
         itemHiddenStyle: {
-          color: '#FFFFFF',
+          color: '#07062C',
         },
       },
       plotOptions: {

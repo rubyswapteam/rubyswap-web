@@ -105,19 +105,23 @@ export default function Collection() {
     if (!tab) {
       return (
         <>
-          <CollectionAnnouncementBanner
-            route={`/collection/${id}?tab=updates`}
-            message={collectionUpdates && collectionUpdates[0].title}
-          />
-          <div className="my-8">
-            <StatsBoxList stats={getStats()} />
+          <div className="my-4">
+            <CollectionAnnouncementBanner
+              route={`/collection/${id}?tab=updates`}
+              message={collectionUpdates && collectionUpdates[0].title}
+            />
           </div>
-          <div className="flex mx-8">
-            <div className="w-full mr-2 mt-5 rounded-xl overflow-hidden">
-              <SalesHistoryChart></SalesHistoryChart>
+          <div className="py-8 bg-gray-100 w-full">
+            <div className="my-8">
+              <StatsBoxList stats={getStats()} />
             </div>
-            <div className="w-full ml-2 mt-5 rounded-xl overflow-hidden">
-              <AveragePriceVolumeChart></AveragePriceVolumeChart>
+            <div className="flex mx-8">
+              <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                <SalesHistoryChart></SalesHistoryChart>
+              </div>
+              <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                <AveragePriceVolumeChart></AveragePriceVolumeChart>
+              </div>
             </div>
           </div>
           {/* <BreakHorizontal /> */}
@@ -218,6 +222,7 @@ export default function Collection() {
           secondaryTabs={setSecondaryTabs()}
           refresh={setRefreshButton()}
           body={setBody()}
+          banner={nftCollection?.bannerImage}
         />
       </Layout>
     </>

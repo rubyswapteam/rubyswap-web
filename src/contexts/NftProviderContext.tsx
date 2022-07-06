@@ -55,6 +55,7 @@ export const NftProvider = ({
       description: SampleCollection[0].description,
       isVerified: SampleCollection[0].isVerified,
       image: SampleCollection[0].imageUrl,
+      bannerImage: SampleCollection[0].banner_image_url,
       slug: SampleCollection[0].slug,
       name: SampleCollection[0].name,
       chainId: NftChainId.ETHEREUM,

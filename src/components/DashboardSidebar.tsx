@@ -35,7 +35,7 @@ const DashboardSidebar: React.FC<Props> = ({
                 item.current
                   ? 'bg-gray-100 text-gray-900'
                   : 'text-gray-900 hover:bg-gray-100 hover:bg-opacity-75',
-                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md my-1',
               )}
             >
               {item.name}

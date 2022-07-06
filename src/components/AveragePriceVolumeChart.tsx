@@ -80,7 +80,7 @@ export default function AveragePriceVolumeChart(props: any) {
           fontFamily: 'Biotif',
           color: '#ffffff',
         },
-        backgroundColor: '#07062C',
+        backgroundColor: '#ffffff',
         height: props.chart?.height || '60%',
         marginLeft: 80,
         marginRight: 70,
@@ -93,12 +93,12 @@ export default function AveragePriceVolumeChart(props: any) {
           labels: {
             padding: 15,
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
           title: {
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
         },
@@ -107,26 +107,26 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           labels: {
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
           title: {
             text: 'Average price',
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
         },
         {
           labels: {
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
           title: {
             text: 'Total Volume',
             style: {
-              color: '#ffffff',
+              color: '#07062C',
             },
           },
           opposite: true,
@@ -135,7 +135,7 @@ export default function AveragePriceVolumeChart(props: any) {
       title: {
         text: 'Average Price and Volume',
         style: {
-          color: '#ffffff',
+          color: '#07062C',
         },
         y: 40,
       },
@@ -148,12 +148,20 @@ export default function AveragePriceVolumeChart(props: any) {
           tooltip: {
             valueSuffix: ' ETH',
           },
+          color: '#333333',
         },
         {
           name: 'Average Price',
           type: 'spline',
           data: allocatedPrices.averagePrice,
-          color: '#FFFFFF',
+          color: 'rgb(70, 115, 250)',
+          // color: {
+          //   linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+          //   stops: [
+          //     [0, '#bd0b00'],
+          //     [1, '#92124f'],
+          //   ],
+          // },
           tooltip: {
             valueSuffix: ' ETH',
           },
@@ -161,37 +169,13 @@ export default function AveragePriceVolumeChart(props: any) {
       ],
       legend: {
         itemStyle: {
-          color: '#FFFFFF',
+          color: '#07062C',
         },
         itemHoverStyle: {
-          color: '#FFFFFF',
+          color: '#07062C',
         },
         itemHiddenStyle: {
-          color: '#FFFFFF',
-        },
-      },
-      plotOptions: {
-        scatter: {
-          marker: {
-            radius: 5,
-            states: {
-              hover: {
-                enabled: true,
-                lineColor: 'rgb(100,100,100)',
-              },
-            },
-          },
-          states: {
-            hover: {
-              marker: {
-                enabled: false,
-              },
-            },
-          },
-          tooltip: {
-            headerFormat: '<b>Sale Price</b><br>',
-            pointFormat: '{point.y} ETH',
-          },
+          color: '#07062C',
         },
       },
     };

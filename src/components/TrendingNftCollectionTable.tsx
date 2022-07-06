@@ -32,55 +32,55 @@ export default function TrendingNftCollectionTable() {
                             <tr>
                               <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6 w-[5%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6 w-[5%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 &nbsp;
                               </th>
                               <th
                                 scope="col"
-                                className="py-3.5 text-left text-sm text-gray-900 w-[5%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold py-3.5 text-left text-sm text-gray-900 w-[5%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 &nbsp;
                               </th>
                               <th
                                 scope="col"
-                                className="py-3.5 pr-3 text-left text-sm text-gray-900 w-[25%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 w-[25%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Collection
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[15%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[15%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Chain
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Volume
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Floor
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Average Price
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Sales
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                                className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
                               >
                                 Owners
                               </th>
@@ -97,10 +97,10 @@ export default function TrendingNftCollectionTable() {
                                       prefetch={false}
                                     >
                                       <tr
-                                        className="hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+                                        className="hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100"
                                         key={nftCollection.id}
                                       >
-                                        <td className="py-3 pl-4 pr-7 text-sm sm:pl-6">
+                                        <td className="py-5 pl-4 pr-7 text-sm sm:pl-6">
                                           <div className="flex items-center">
                                             <StarIcon height={20} width={20} />
                                           </div>
@@ -115,8 +115,8 @@ export default function TrendingNftCollectionTable() {
                                           </div>
                                         </td>
                                         <td className="whitespace-nowrap">
-                                          <div className="text-gray-900 flex items-center text-sm font-semibold">
-                                            {nftCollection.name}
+                                          <div className="text-gray-700 flex items-center text-sm font-medium">
+                                            <div className="pt-1">{nftCollection.name}</div>
                                             {nftCollection.isVerified ==
                                               true && (
                                               <img
@@ -131,43 +131,49 @@ export default function TrendingNftCollectionTable() {
                                             )}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700">
                                           {nftCollection.chainId == 1 && (
                                             <>
                                               <EthereumIcon
-                                                width={18}
-                                                height={18}
+                                                width={16}
+                                                height={16}
                                               />
                                             </>
                                           )}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
                                           <div className="flex items-center">
-                                            {nftCollection.oneDayVolume?.toFixed(
-                                              2,
-                                            )}{' '}
+                                            <div className="pt-1">
+                                              {nftCollection.oneDayVolume?.toFixed(
+                                                2,
+                                              )}{' '}
+                                            </div>
                                             {nftCollection.chainId == 1 && (
                                               <>
                                                 <div className="pl-1">
                                                   <EthereumIcon
-                                                    width={18}
-                                                    height={18}
+                                                    width={16}
+                                                    height={16}
                                                   />
                                                 </div>
                                               </>
                                             )}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
                                           <div className="flex items-center">
                                             <div className="flex items-center">
-                                              {nftCollection.floor?.toFixed(2)}{' '}
+                                              <div className="pt-1">
+                                                {nftCollection.floor?.toFixed(
+                                                  2,
+                                                )}{' '}
+                                              </div>
                                               {nftCollection.chainId == 1 && (
                                                 <>
                                                   <div className="pl-1">
                                                     <EthereumIcon
-                                                      width={18}
-                                                      height={18}
+                                                      width={16}
+                                                      height={16}
                                                     />
                                                   </div>
                                                 </>
@@ -175,18 +181,20 @@ export default function TrendingNftCollectionTable() {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
                                           <div className="flex items-center">
                                             <div className="flex items-center">
-                                              {nftCollection.oneDayAveragePrice?.toFixed(
-                                                2,
-                                              )}{' '}
+                                              <div className="pt-1">
+                                                {nftCollection.oneDayAveragePrice?.toFixed(
+                                                  2,
+                                                )}{' '}
+                                              </div>
                                               {nftCollection.chainId == 1 && (
                                                 <>
                                                   <div className="pl-1">
                                                     <EthereumIcon
-                                                      width={18}
-                                                      height={18}
+                                                      width={16}
+                                                      height={16}
                                                     />
                                                   </div>
                                                 </>
@@ -194,12 +202,12 @@ export default function TrendingNftCollectionTable() {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.oneDaySales}
                                           </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-900 circularstdbook">
+                                        <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
                                           <div className="flex items-center">
                                             {nftCollection.owners}
                                           </div>

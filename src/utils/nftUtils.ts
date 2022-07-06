@@ -18,6 +18,7 @@ export interface INftCollection {
   description?: string;
   isVerified?: boolean;
   image: string | undefined | null;
+  bannerImage?: string | undefined | null;
   slug: string | undefined | null;
   name: string | undefined | null;
   chainId: number;

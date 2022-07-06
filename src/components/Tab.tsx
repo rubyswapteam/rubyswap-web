@@ -39,7 +39,7 @@ const Tab: React.FC<Props> = ({ tabs, condense }): JSX.Element => {
                   tab.current
                     ? 'text-white bg-cover bg-theme-gradient bg-gray-100'
                     : 'text-gray-900 hover:bg-gray-100',
-                  tab.border ? 'bg-white drop-shadow' : 'bg-white drop-shadow',
+                  tab.border ? 'bg-white drop-shadow' : 'bg-white drop-shadow text-xs',
                   'text-sm px-3 py-1 font-medium self-center rounded-md',
                 )}
                 aria-current={tab.current ? 'page' : undefined}
