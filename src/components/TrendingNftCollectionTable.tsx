@@ -116,7 +116,9 @@ export default function TrendingNftCollectionTable() {
                                         </td>
                                         <td className="whitespace-nowrap">
                                           <div className="text-gray-700 flex items-center text-sm font-medium">
-                                            <div className="pt-1">{nftCollection.name}</div>
+                                            <div className="pt-1">
+                                              {nftCollection.name}
+                                            </div>
                                             {nftCollection.isVerified ==
                                               true && (
                                               <img
