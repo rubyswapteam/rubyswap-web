@@ -1,15 +1,21 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
+
 exports.__esModule = true;
+
 var react_1 = require('@headlessui/react');
+
 var react_2 = require('react');
+
 function Index() {
   var baseUrl = 'https://rubyappxyz.s3.eu-west-2.amazonaws.com/';
   var images = ['collections', 'overview', 'listings'];
   var count = react_2.useRef(-2);
+
   var _a = react_2.useState(''),
     image = _a[0],
     setImage = _a[1];
+
   react_2.useEffect(function () {
     count.current = (count.current + 1) % 3;
     setImage(images[count.current]);
@@ -95,7 +101,9 @@ function Index() {
           }),
           React.createElement(
             'div',
-            { className: 'text-base pt-1' },
+            {
+              className: 'text-base pt-1',
+            },
             'Coming Soon',
           ),
         ),
@@ -115,4 +123,5 @@ function Index() {
     ),
   );
 }
+
 exports['default'] = Index;
