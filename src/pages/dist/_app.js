@@ -14,6 +14,6 @@ exports.__esModule = true;
 require("../styles/globals.css");
 function App(_a) {
     var Component = _a.Component, pageProps = _a.pageProps;
-    return (React.createElement(Component, __assign({}, pageProps)));
+    return React.createElement(Component, __assign({}, pageProps));
 }
 exports["default"] = App;

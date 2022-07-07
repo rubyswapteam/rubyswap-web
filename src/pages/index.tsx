@@ -1,6 +1,5 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
 import { Transition } from '@headlessui/react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Index() {
   const baseUrl = 'https://rubyappxyz.s3.eu-west-2.amazonaws.com/';
