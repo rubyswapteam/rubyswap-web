@@ -6,7 +6,6 @@ module.exports = {
     './src/pages/**/*.{js,jsx,ts,tsx}',
     './src/components/**/*.{js,jsx,ts,tsx}',
     './next.config.js',
-    './node_modules/flowbite/**/*.js',
   ],
   theme: {
     extend: {
@@ -39,5 +38,4 @@ module.exports = {
       },
     },
   },
-  plugins: [require('flowbite/plugin')],
 };
