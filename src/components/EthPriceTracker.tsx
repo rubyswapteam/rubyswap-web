@@ -16,6 +16,7 @@ export function EthPriceTracker() {
         (result) => {
           setIsLoaded(true);
           setItem(result.ethereum.usd);
+          setError('');
         },
         (error: { message: string }) => {
           setIsLoaded(true);

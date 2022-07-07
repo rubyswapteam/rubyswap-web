@@ -15,6 +15,7 @@ export function GasTracker() {
         (result) => {
           setIsLoaded(true);
           setItem(result.result.SafeGasPrice);
+          setError('');
         },
         (error: { message: string }) => {
           setIsLoaded(true);
