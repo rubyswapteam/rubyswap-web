@@ -18,14 +18,14 @@ export default function TrendingNftCollectionTable() {
 
   return (
     <>
-      <div className="flex flex-col px-4 sm:px-6 md:px-8">
-        <div className="sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full align-middle md:px-3 lg:px-4">
+      <div className="flex flex-col">
+        <div className="">
+          <div className="inline-block min-w-full align-middle">
             <div className="md:rounded-lg">
               {trendingNftCollections && (
                 <div className="mt-1 flex flex-col">
-                  <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                  <div className="">
+                    <div className="inline-block min-w-full py-2 align-middle">
                       <div className=" md:rounded-lg">
                         <table className="min-w-full border-separate border-spacing-0">
                           <thead>

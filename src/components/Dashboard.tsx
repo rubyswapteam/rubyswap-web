@@ -6,32 +6,50 @@ import DashboardUserDropdown from './DashboardUserDropdown';
 import { EthPriceTracker } from './EthPriceTracker';
 import { GasTracker } from './GasTracker';
 import DashboardSidebarBottom from './DashboardSidebarBottom';
-
-const topNavigation = [
-  { name: 'Search', header: false, search: true },
-  { name: 'Personal', header: true },
-  { name: 'Wallet', href: '/', current: false },
-  { name: 'Notifications', href: '/', current: false },
-  { name: 'Calendar', href: '/', current: false },
-  { name: 'Market', header: true },
-  { name: 'Discover', href: '/discover', current: false },
-  { name: 'Collections', href: '/', current: true },
-  { name: 'Giveaways', href: '/', current: false },
-  { name: 'Minting', href: '/', current: false },
-];
-
-const bottomNavigation = [
-  { name: 'Settings', href: '#', current: false },
-  { name: 'Updates', href: '#', current: false },
-  { name: 'Contact', href: '#', current: false },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { useRouter } from 'next/router';
 
 export default function Dashboard(props: any) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const router = useRouter();
+  const { id, tab, range } = router.query;
+  const childRoute = () => {
+    return router.route.split('/')[1];
+  };
+  console.log(router.route.split('/')[1]);
+  console.log(id);
+
+  const topNavigation = [
+    { name: 'Search', header: false, search: true },
+    { name: 'Personal', header: true },
+    {
+      name: 'Wallet',
+      href: '/wallet/0x2EF1630993bC569a18F8C406ab720E2d040E155A',
+      current: childRoute() == 'wallet',
+    },
+    { name: 'Notifications', href: '/', current: false },
+    { name: 'Calendar', href: '/', current: false },
+    { name: 'Market', header: true },
+    { name: 'Discover', href: '/', current: false },
+    {
+      name: 'Collections',
+      href: '/',
+      current: childRoute() == 'collection' || childRoute() == 'a',
+    },
+    { name: 'Giveaways', href: '/', current: false },
+    { name: 'Minting', href: '/', current: false },
+  ];
+
+  const bottomNavigation = [
+    { name: 'Settings', href: '#', current: false },
+    { name: 'Updates', href: '#', current: false },
+    { name: 'Contact', href: '#', current: false },
+  ];
+
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(' ');
+  }
+
   const bannerStyle = props?.banner
     ? `linear-gradient(rgba(256, 256, 256, 0.92), rgba(256, 256, 256, 0.92)), url('${props?.banner}')`
     : '';
@@ -120,12 +138,12 @@ export default function Dashboard(props: any) {
           </Dialog>
         </Transition.Root>
 
-        <div className="hidden md:flex md:w-56 md:flex-col md:fixed md:inset-y-0">
-          <div className="flex-1 flex flex-col px-5 py-2 min-h-0 bg-white drop-shadow">
+        <div className="hidden md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 drop-shadow z-50">
+          <div className="flex-1 flex flex-col px-5 py-2 min-h-0 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <nav className="mt-0 flex-1 px-2">
                 <div className="mb-5">
-                  <DashboardUserDropdown address="0xe2e....459b" />
+                  <DashboardUserDropdown address="0x2ef....155a" />
                 </div>
                 <DashboardSidebar
                   sidebarNavigation={topNavigation}
@@ -165,9 +183,9 @@ export default function Dashboard(props: any) {
             </button>
           </div>
           <main className="flex-1">
-            <div className="">
+            <div className="h-screen flex-col flex">
               <div
-                className="py-6 bg-gray-50"
+                className="py-6 bg-gray-50 z-10"
                 style={{
                   backgroundImage: `${bannerStyle}`,
                 }}
@@ -182,19 +200,23 @@ export default function Dashboard(props: any) {
                 </div>
               </div>
               {/* <div className="border-t w-full"></div> */}
-              <div className="max-w-8xl mx-auto">
+              <div className="max-w-8xl mx-auto grow w-full">
                 <div className="w-full" />
                 <div className="flex-1 flex justify-center lg:justify-end">
-                  <div className="w-full">
-                    <div className="sm:flex sm:items-center sm:justify-between mt-6 mb-6 px-4 sm:px-6 md:px-8">
-                      {props.refresh && (
-                        <div className="flex items-center">{props.refresh}</div>
-                      )}
-                      {props.secondaryTabs && (
-                        <div className="flex">{props.secondaryTabs}</div>
-                      )}
+                  {(props.refresh || props.secondaryTabs) && (
+                    <div className="w-full">
+                      <div className="sm:flex sm:items-center sm:justify-between mt-6 mb-6 px-4 sm:px-6 md:px-8">
+                        {props.refresh && (
+                          <div className="flex items-center">
+                            {props.refresh}
+                          </div>
+                        )}
+                        {props.secondaryTabs && (
+                          <div className="flex">{props.secondaryTabs}</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
                 {props.body}
               </div>

@@ -3,6 +3,8 @@ import { INft, NftMarketplace } from '@/utils/nftUtils';
 import OpenSeaIcon from '@/components/OpenseaIcon';
 import PlusIcon from '@/components/PlusIcon';
 import EthereumIcon from '@/components/EthereumIcon';
+import X2Y2Icon from './X2Y2Icon';
+import LooksRareIcon from './LooksRareIcon';
 
 interface Props {
   selectedNft: INft;
@@ -34,12 +36,12 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
             )}
             {selectedNft.marketplace === NftMarketplace.LOOKSRARE && (
               <div className="rounded-full">
-                <OpenSeaIcon height={20} width={20} />
+                <LooksRareIcon height={20} width={20} />
               </div>
             )}
             {selectedNft.marketplace === NftMarketplace.X2Y2 && (
               <div className="rounded-full">
-                <OpenSeaIcon height={20} width={20} />
+                <X2Y2Icon height={20} width={20} />
               </div>
             )}
             {selectedNft.marketplace === NftMarketplace.NFTRADE && (

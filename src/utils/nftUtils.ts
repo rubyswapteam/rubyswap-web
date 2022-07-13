@@ -1,14 +1,14 @@
 export interface INft {
-  id: string;
+  id?: string;
   tokenId: string;
-  chainId: number;
+  chainId?: number;
   collectionName: string;
   contractAddress: string;
   name: string | null;
   image: string;
-  imageAlt: string;
-  price: number;
-  marketplace: string | NftMarketplace;
+  imageAlt?: string;
+  price?: number;
+  marketplace?: string | NftMarketplace;
 }
 
 export interface INftCollection {

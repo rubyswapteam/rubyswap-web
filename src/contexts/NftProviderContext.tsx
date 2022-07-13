@@ -14,14 +14,12 @@ import {
   INftSweepCollection,
   INftCollectionUpdate,
   NftChainId,
-  NftMarketplace,
 } from '@/utils/nftUtils';
 import { SampleTrending } from '@/data/sampleTrending';
 import { SampleSweeps } from '@/data/sampleSweeps';
 import { SampleCollection } from '@/data/sampleCollection';
 import { SampleNfts } from '@/data/sampleNfts';
 import { SampleCollectionUpdates } from '@/data/sampleCollectionUpdates';
-import { stringify } from 'querystring';
 
 const NftProviderContext = React.createContext<any>({});
 
@@ -109,7 +107,7 @@ export const NftProvider = ({
         imageAlt: SampleNfts[i].collectionName,
         name: SampleNfts[i].name,
         price: SampleNfts[i].currentBasePrice,
-        marketplace: SampleNfts[i].marketplace as unknown as NftMarketplace,
+        marketplace: SampleNfts[i].market,
       };
       nfts.push(nft);
     }

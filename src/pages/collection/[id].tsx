@@ -113,7 +113,10 @@ export default function Collection() {
           </div>
           <div className="py-8 bg-gray-100 w-full">
             <div className="my-8">
-              <StatsBoxList stats={getStats()} />
+              <StatsBoxList
+                stats={getStats()}
+                route={`/collection/${id}?tab=analytics`}
+              />
             </div>
             <div className="flex mx-8">
               <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
@@ -159,7 +162,7 @@ export default function Collection() {
     if (tab == 'updates') {
       return (
         <>
-          <div className="px-4 sm:px-6 md:px-8">
+          <div className="mt-6 px-4 sm:px-6 md:px-8">
             <CollectionUpdate collectionUpdates={collectionUpdates} />
           </div>
         </>
@@ -170,7 +173,10 @@ export default function Collection() {
         <>
           <div>
             <CollectionTitleHeader title={'Summary Stats'} />
-            <StatsBoxList stats={getStats()} />
+            <StatsBoxList
+              stats={getStats()}
+              route={`/collection/${id}?tab=analytics`}
+            />
             <BreakHorizontal />
             <div className="px-4 sm:px-6 md:px-8">
               <div className="w-full mt-5 rounded-xl overflow-hidden">

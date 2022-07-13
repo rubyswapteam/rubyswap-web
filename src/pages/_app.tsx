@@ -1,12 +1,15 @@
 import '../styles/globals.css';
 import { AppProps } from 'next/app';
 import { NftProvider } from '@/contexts/NftProviderContext';
+import { WalletProvider } from '@/contexts/WalletProvider';
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <NftProvider>
-      <Component {...pageProps} />
-    </NftProvider>
+    <WalletProvider>
+      <NftProvider>
+        <Component {...pageProps} />
+      </NftProvider>
+    </WalletProvider>
   );
 }
 
