@@ -15,7 +15,7 @@ import UserProfileHeader from '../../components/UserProfileHeader';
 import {
   useWalletProvider,
   WalletProvider,
-} from '../../contexts/WalletProvider';
+} from '../../contexts/WalletProviderContext';
 
 export default function Collection() {
   const router = useRouter();

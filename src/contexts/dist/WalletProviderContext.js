@@ -141,12 +141,17 @@ exports.WalletProvider = function (_a) {
             var filteredNfts = userNfts.rawData.filter(function (x) { return x.contract.address === contractAddress; });
             var nfts_1 = [];
             filteredNfts === null || filteredNfts === void 0 ? void 0 : filteredNfts.forEach(function (nft) {
-                var _a;
+                var _a, _b, _c;
                 var newNFT = {
                     tokenId: Number(nft.id.tokenId).toString(),
                     collectionName: collectionNames[contractAddress],
                     contractAddress: contractAddress,
-                    image: ((_a = nft === null || nft === void 0 ? void 0 : nft.media[0]) === null || _a === void 0 ? void 0 : _a.gateway) || nft.metadata.image,
+                    image: optimisedImageLinks([
+                        (_a = nft === null || nft === void 0 ? void 0 : nft.media[0]) === null || _a === void 0 ? void 0 : _a.raw,
+                        (_b = nft === null || nft === void 0 ? void 0 : nft.media[0]) === null || _b === void 0 ? void 0 : _b.gateway,
+                        (_c = nft === null || nft === void 0 ? void 0 : nft.media[0]) === null || _c === void 0 ? void 0 : _c.thumbnail,
+                        nft.metadata.image,
+                    ]),
                     chainId: nftUtils_1.NftChainId.ETHEREUM,
                     imageAlt: nft.title + ' - ' + nft.description,
                     name: nft.title || '#'.concat(Number(nft.id.tokenId).toString())
@@ -155,6 +160,20 @@ exports.WalletProvider = function (_a) {
             });
             setActiveNfts(nfts_1);
         }
+    }
+    function optimisedImageLinks(links) {
+        var scores = links.map(function (link) {
+            var score = 0;
+            link && link.length > 1 ? score++ : (score = -100);
+            if (!(link === null || link === void 0 ? void 0 : link.includes('ipfs')))
+                score++;
+            if (!(link === null || link === void 0 ? void 0 : link.includes('https://ipfs.io')))
+                score++;
+            return score;
+        });
+        console.log.apply(console, scores);
+        var index = scores.findIndex(function (score) { return score == Math.max.apply(Math, scores); });
+        return links[index];
     }
     var fetchUserNftsByCollection = react_1.useCallback(function (user, contract) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {

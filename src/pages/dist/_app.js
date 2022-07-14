@@ -13,10 +13,10 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 require("../styles/globals.css");
 var NftProviderContext_1 = require("@/contexts/NftProviderContext");
-var WalletProvider_1 = require("@/contexts/WalletProvider");
+var WalletProviderContext_1 = require("@/contexts/WalletProviderContext");
 function App(_a) {
     var Component = _a.Component, pageProps = _a.pageProps;
-    return (React.createElement(WalletProvider_1.WalletProvider, null,
+    return (React.createElement(WalletProviderContext_1.WalletProvider, null,
         React.createElement(NftProviderContext_1.NftProvider, null,
             React.createElement(Component, __assign({}, pageProps)))));
 }

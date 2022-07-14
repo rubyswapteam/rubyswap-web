@@ -32,7 +32,7 @@ export const WalletProvider = ({
     if (!collectionNames[contractAddress]) {
       axios
         .get(
-          `https://eth-mainnet.g.alchemy.com/nft/v2/demo/getContractMetadata/?contractAddress=${contractAddress}`,
+          `https://eth-mainnet.g.alchemy.com/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getContractMetadata/?contractAddress=${contractAddress}`,
         )
         .then((contractRes) => {
           activeMapping[contractAddress] =
@@ -50,7 +50,7 @@ export const WalletProvider = ({
       };
       await axios
         .get(
-          `https://eth-mainnet.alchemyapi.io/nft/v2/demo/getNFTs/?owner=${user}`,
+          `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}`,
         )
         .then(async (res) => {
           userNfts.rawData = res.data.ownedNfts;
@@ -85,6 +85,7 @@ export const WalletProvider = ({
 
   function getCollectionNfts(contractAddress: string) {
     if (userNfts) {
+      setActiveNfts([]);
       const filteredNfts = userNfts.rawData.filter(
         (x) => x.contract.address === contractAddress,
       );
@@ -94,7 +95,12 @@ export const WalletProvider = ({
           tokenId: Number(nft.id.tokenId).toString(),
           collectionName: collectionNames[contractAddress],
           contractAddress: contractAddress,
-          image: nft?.media[0]?.gateway || nft.metadata.image,
+          image: optimisedImageLinks([
+            nft?.media[0]?.raw,
+            nft?.media[0]?.gateway,
+            nft?.media[0]?.thumbnail,
+            nft.metadata.image,
+          ]),
           chainId: NftChainId.ETHEREUM,
           imageAlt: nft.title + ' - ' + nft.description,
           name: nft.title || '#'.concat(Number(nft.id.tokenId).toString()),
@@ -105,11 +111,24 @@ export const WalletProvider = ({
     }
   }
 
+  function optimisedImageLinks(links: string[]) {
+    const scores = links.map((link) => {
+      let score = 0;
+      link && link.length > 1 ? score++ : (score = -100);
+      if (!link?.includes('ipfs')) score++;
+      if (!link?.includes('https://ipfs.io')) score++;
+      return score;
+    });
+    console.log(...scores);
+    const index = scores.findIndex((score) => score == Math.max(...scores));
+    return links[index];
+  }
+
   const fetchUserNftsByCollection = useCallback(
     async (user: string, contract: string) => {
       axios
         .get(
-          `https://eth-mainnet.alchemyapi.io/nft/v2/demo/getNFTs/?owner=${user}&contractAddresses[]=${contract}`,
+          `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}&contractAddresses[]=${contract}`,
         )
         .then((res) => {
           const userNfts = res.data.ownedNfts;
@@ -122,7 +141,7 @@ export const WalletProvider = ({
   const fetchUserNftCollections = useCallback(async (user: string) => {
     axios
       .get(
-        `https://eth-mainnet.alchemyapi.io/nft/v2/demo/getNFTs/?owner=${user}&withMetadata=False`,
+        `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}&withMetadata=False`,
       )
       .then((res) => {
         const userNfts = res.data.ownedNfts;

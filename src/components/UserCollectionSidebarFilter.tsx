@@ -1,6 +1,3 @@
-import { useWalletProvider } from '@/contexts/WalletProvider';
-import { useEffect, useState } from 'react';
-
 interface Props {
   userNfts?: any;
   collectionNames?: any;
