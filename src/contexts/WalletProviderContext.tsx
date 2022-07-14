@@ -10,6 +10,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { addAbortSignal } from 'stream';
 
 const WalletProviderContext = React.createContext<any>({});
 
@@ -89,6 +90,21 @@ export const WalletProvider = ({
               }
 
               await fetchCollectionNames(activeContract);
+            });
+            summary.sort((a, b) => {
+              if (
+                collectionNames[a.contract]?.toLowerCase() <
+                collectionNames[b.contract]?.toLowerCase()
+              ) {
+                return -1;
+              }
+              if (
+                collectionNames[a.contract]?.toLowerCase() >
+                collectionNames[b.contract]?.toLowerCase()
+              ) {
+                return 1;
+              }
+              return 0;
             });
             userNfts.summary = summary;
           })

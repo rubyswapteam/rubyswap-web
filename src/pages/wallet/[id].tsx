@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarFilter';
 import UserProfileHeader from '../../components/UserProfileHeader';
+import RightArrow from '../../components/RightArrow';
 import {
   useWalletProvider,
   WalletProvider,
@@ -69,8 +70,16 @@ export default function Collection() {
       return (
         <div className="flex w-full justify-between flex-col h-full">
           <div className="flex w-full justify-between flex-row h-full">
-            {!activeNfts && <div className="w-9/12" />}
-            {activeNfts && (
+            {activeNfts.length == 0 && (
+              <div className="w-9/12">
+                {' '}
+                <div className="items-center mt-[30vh] justify-center mx-auto text-gray-500 flex">
+                  <div className="pt-1 mr-2">Please select a collection</div>
+                  <RightArrow height={16} width={16} />
+                </div>
+              </div>
+            )}
+            {activeNfts.length != 0 && (
               <div className="w-9/12">
                 <CollectionList selectedNfts={activeNfts} />
               </div>

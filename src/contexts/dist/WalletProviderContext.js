@@ -127,6 +127,16 @@ exports.WalletProvider = function (_a) {
                                         }); })];
                                 case 1:
                                     _a.sent();
+                                    summary.sort(function (a, b) {
+                                        var _a, _b, _c, _d;
+                                        if (((_a = collectionNames[a.contract]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) < ((_b = collectionNames[b.contract]) === null || _b === void 0 ? void 0 : _b.toLowerCase())) {
+                                            return -1;
+                                        }
+                                        if (((_c = collectionNames[a.contract]) === null || _c === void 0 ? void 0 : _c.toLowerCase()) > ((_d = collectionNames[b.contract]) === null || _d === void 0 ? void 0 : _d.toLowerCase())) {
+                                            return 1;
+                                        }
+                                        return 0;
+                                    });
                                     userNfts.summary = summary;
                                     return [2 /*return*/];
                             }

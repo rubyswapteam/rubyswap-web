@@ -1,5 +1,6 @@
 import { INft, NftChainId } from '@/utils/nftUtils';
 import axios from 'axios';
+import { ethers } from 'ethers';
 import React, {
   JSXElementConstructor,
   ReactChildren,
