@@ -76,69 +76,79 @@ exports.WalletProvider = function (_a) {
         });
     }); }, []);
     var fetchUserNfts = function (user) { return __awaiter(void 0, void 0, void 0, function () {
-        var userNfts_1;
+        var pageKey, counter, userNfts;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!user) return [3 /*break*/, 2];
-                    userNfts_1 = {
-                        rawData: [],
-                        summary: undefined
+                    pageKey = '';
+                    counter = 0;
+                    userNfts = {
+                        ownedNfts: [],
+                        summary: [],
+                        totalCount: 0
                     };
-                    return [4 /*yield*/, axios_1["default"]
-                            .get("https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=" + user)
-                            .then(function (res) { return __awaiter(void 0, void 0, void 0, function () {
-                            var summary;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        userNfts_1.rawData = res.data.ownedNfts;
-                                        summary = [];
-                                        return [4 /*yield*/, userNfts_1.rawData.forEach(function (element) { return __awaiter(void 0, void 0, void 0, function () {
-                                                var activeContract, index;
-                                                return __generator(this, function (_a) {
-                                                    switch (_a.label) {
-                                                        case 0:
-                                                            activeContract = element.contract.address;
-                                                            index = summary.findIndex(function (collection) {
-                                                                return collection.contract == activeContract;
+                    if (!user) return [3 /*break*/, 4];
+                    _a.label = 1;
+                case 1: return [4 /*yield*/, axios_1["default"]
+                        .get("https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=" + user + pageKey)
+                        .then(function (res) { return __awaiter(void 0, void 0, void 0, function () {
+                        var summary;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    Array.prototype.push.apply(userNfts.ownedNfts, res.data.ownedNfts);
+                                    userNfts.totalCount = res.data.totalCount;
+                                    pageKey = res.data.pageKey ? '&pageKey=' + res.data.pageKey : '';
+                                    summary = userNfts.summary;
+                                    return [4 /*yield*/, res.data.ownedNfts.forEach(function (element) { return __awaiter(void 0, void 0, void 0, function () {
+                                            var activeContract, index;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0:
+                                                        activeContract = element.contract.address;
+                                                        index = summary.findIndex(function (collection) {
+                                                            return collection.contract == activeContract;
+                                                        });
+                                                        if (index !== -1) {
+                                                            summary[index].count++;
+                                                        }
+                                                        else {
+                                                            summary.push({
+                                                                contract: activeContract,
+                                                                count: 1
                                                             });
-                                                            if (index !== -1) {
-                                                                summary[index].count = summary[index].count + 1;
-                                                            }
-                                                            else {
-                                                                summary.push({
-                                                                    contract: activeContract,
-                                                                    count: 1
-                                                                });
-                                                            }
-                                                            return [4 /*yield*/, fetchCollectionNames(activeContract)];
-                                                        case 1:
-                                                            _a.sent();
-                                                            return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); })];
-                                    case 1:
-                                        _a.sent();
-                                        userNfts_1.summary = summary;
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); })["finally"](function () {
-                            setUserNfts(__assign({}, userNfts_1));
-                        })];
-                case 1:
+                                                        }
+                                                        return [4 /*yield*/, fetchCollectionNames(activeContract)];
+                                                    case 1:
+                                                        _a.sent();
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); })];
+                                case 1:
+                                    _a.sent();
+                                    userNfts.summary = summary;
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); })["finally"](function () {
+                        setUserNfts(__assign({}, userNfts));
+                    })];
+                case 2:
                     _a.sent();
-                    _a.label = 2;
-                case 2: return [2 /*return*/];
+                    counter++;
+                    _a.label = 3;
+                case 3:
+                    if (pageKey !== '') return [3 /*break*/, 1];
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     }); };
     function getCollectionNfts(contractAddress) {
         if (userNfts) {
             setActiveNfts([]);
-            var filteredNfts = userNfts.rawData.filter(function (x) { return x.contract.address === contractAddress; });
+            var filteredNfts = userNfts.ownedNfts.filter(function (x) { return x.contract.address === contractAddress; });
             var nfts_1 = [];
             filteredNfts === null || filteredNfts === void 0 ? void 0 : filteredNfts.forEach(function (nft) {
                 var _a, _b, _c;
@@ -173,7 +183,7 @@ exports.WalletProvider = function (_a) {
         });
         console.log.apply(console, scores);
         var index = scores.findIndex(function (score) { return score == Math.max.apply(Math, scores); });
-        return links[index];
+        return links[index].replace('ipfs://', 'https://ipfs.io/ipfs/');
     }
     var fetchUserNftsByCollection = react_1.useCallback(function (user, contract) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {

@@ -21,7 +21,11 @@ export const WalletProvider = ({
     string | JSXElementConstructor<unknown>
   >;
 }) => {
-  const [userNfts, setUserNfts] = useState<{ rawData: any[]; summary: any }>();
+  const [userNfts, setUserNfts] = useState<{
+    ownedNfts: any[];
+    summary: any;
+    totalCount: number;
+  }>();
   const [collectionNames, setCollectionNames] = useState<any>({});
   const [userNftCollections, setUserNftCollections] = useState<any[]>();
   const [userNftsByCollection, setUserNftsByCollection] = useState<any[]>();
@@ -43,50 +47,63 @@ export const WalletProvider = ({
   }, []);
 
   const fetchUserNfts = async (user: string) => {
+    let pageKey = '';
+    let counter = 0;
+    const userNfts: {
+      ownedNfts: any[];
+      summary: any[];
+      totalCount: number;
+    } = {
+      ownedNfts: [],
+      summary: [],
+      totalCount: 0,
+    };
     if (user) {
-      const userNfts: { rawData: any[]; summary: any } = {
-        rawData: [],
-        summary: undefined,
-      };
-      await axios
-        .get(
-          `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}`,
-        )
-        .then(async (res) => {
-          userNfts.rawData = res.data.ownedNfts;
+      do {
+        await axios
+          .get(
+            `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}${pageKey}`,
+          )
+          .then(async (res) => {
+            Array.prototype.push.apply(userNfts.ownedNfts, res.data.ownedNfts);
+            userNfts.totalCount = res.data.totalCount;
+            pageKey = res.data.pageKey ? '&pageKey=' + res.data.pageKey : '';
 
-          const summary: { contract: string; count: number }[] = [];
+            const summary: { contract: string; count: number }[] =
+              userNfts.summary;
 
-          await userNfts.rawData.forEach(async (element: any) => {
-            const activeContract = element.contract.address;
-            const index = summary.findIndex(
-              (collection: { contract: string; count: number }) => {
-                return collection.contract == activeContract;
-              },
-            );
-            if (index !== -1) {
-              summary[index].count = summary[index].count + 1;
-            } else {
-              summary.push({
-                contract: activeContract,
-                count: 1,
-              });
-            }
+            await res.data.ownedNfts.forEach(async (element: any) => {
+              const activeContract = element.contract.address;
+              const index = summary.findIndex(
+                (collection: { contract: string; count: number }) => {
+                  return collection.contract == activeContract;
+                },
+              );
+              if (index !== -1) {
+                summary[index].count++;
+              } else {
+                summary.push({
+                  contract: activeContract,
+                  count: 1,
+                });
+              }
 
-            await fetchCollectionNames(activeContract);
+              await fetchCollectionNames(activeContract);
+            });
+            userNfts.summary = summary;
+          })
+          .finally(() => {
+            setUserNfts({ ...userNfts });
           });
-          userNfts.summary = summary;
-        })
-        .finally(() => {
-          setUserNfts({ ...userNfts });
-        });
+        counter++;
+      } while (pageKey !== '');
     }
   };
 
   function getCollectionNfts(contractAddress: string) {
     if (userNfts) {
       setActiveNfts([]);
-      const filteredNfts = userNfts.rawData.filter(
+      const filteredNfts = userNfts.ownedNfts.filter(
         (x) => x.contract.address === contractAddress,
       );
       const nfts: INft[] = [];
@@ -121,7 +138,7 @@ export const WalletProvider = ({
     });
     console.log(...scores);
     const index = scores.findIndex((score) => score == Math.max(...scores));
-    return links[index];
+    return links[index].replace('ipfs://', 'https://ipfs.io/ipfs/');
   }
 
   const fetchUserNftsByCollection = useCallback(
