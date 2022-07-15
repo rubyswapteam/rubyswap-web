@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import { withCoalescedInvoke } from 'next/dist/lib/coalesced-function';
 
 const Web3ProviderContext = React.createContext<any>({});
 
@@ -42,6 +43,8 @@ export const Web3Provider = ({
 
   const [provider, setProvider] = useState<any>(undefined);
   const [activeWallet, setActiveWallet] = useState<any>(undefined);
+  const [ethBalance, setEthBalance] = useState<string | undefined>(undefined);
+
   useEffect(() => {
     if (provider) {
       setListener();
@@ -60,7 +63,6 @@ export const Web3Provider = ({
       );
       setProvider(web3ModalProvider);
       setActiveWallet((web3ModalProvider.provider as any).selectedAddress);
-      console.log(provider);
     } catch (error) {
       console.error(error);
     }
@@ -68,9 +70,17 @@ export const Web3Provider = ({
 
   function setListener() {
     provider.provider.on('accountsChanged', (accounts: any[]) => {
-      console.log('listener called');
       setActiveWallet(accounts[0]);
     });
+  }
+
+  function fetchEthBalance(address: string) {
+    if (provider && provider.provider) {
+      provider.getBalance(address).then((balance: ethers.BigNumberish) => {
+        const balanceInEth = ethers.utils.formatEther(balance);
+        setEthBalance(balanceInEth);
+      });
+    }
   }
 
   const contextValue = useMemo(
@@ -80,8 +90,16 @@ export const Web3Provider = ({
       connectWallet,
       activeWallet,
       setActiveWallet,
+      fetchEthBalance,
     }),
-    [provider, setProvider, connectWallet, activeWallet, setActiveWallet],
+    [
+      provider,
+      setProvider,
+      connectWallet,
+      activeWallet,
+      setActiveWallet,
+      fetchEthBalance,
+    ],
   );
 
   return (

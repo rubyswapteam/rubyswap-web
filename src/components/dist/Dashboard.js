@@ -13,10 +13,11 @@ var ConnectWalletButton_1 = require("./ConnectWalletButton");
 var Web3ProviderContext_1 = require("../contexts/Web3ProviderContext");
 function Dashboard(props) {
     var router = router_1.useRouter();
+    var id = router.query.id;
     var parentRoute = function () {
         return router.route.split('/')[1];
     };
-    var _a = Web3ProviderContext_1.useWeb3Provider(), provider = _a.provider, connectWallet = _a.connectWallet, activeWallet = _a.activeWallet;
+    var _a = Web3ProviderContext_1.useWeb3Provider(), provider = _a.provider, connectWallet = _a.connectWallet, activeWallet = _a.activeWallet, fetchEthBalance = _a.fetchEthBalance;
     var _b = react_2.useState(false), sidebarOpen = _b[0], setSidebarOpen = _b[1];
     var condensedWalletName = function () {
         return activeWallet
@@ -59,6 +60,9 @@ function Dashboard(props) {
     }
     var bannerStyle = (props === null || props === void 0 ? void 0 : props.banner) ? "linear-gradient(rgba(256, 256, 256, 0.92), rgba(256, 256, 256, 0.92)), url('" + (props === null || props === void 0 ? void 0 : props.banner) + "')"
         : '';
+    react_2.useEffect(function () {
+        id ? fetchEthBalance(id) : '';
+    }, [id]);
     return (React.createElement(React.Fragment, null,
         React.createElement("div", null,
             React.createElement(react_1.Transition.Root, { show: sidebarOpen, as: react_2.Fragment },

@@ -12,10 +12,13 @@ import { useWeb3Provider } from '../contexts/Web3ProviderContext';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
+  const { id } = router.query;
+
   const parentRoute = () => {
     return router.route.split('/')[1];
   };
-  const { provider, connectWallet, activeWallet } = useWeb3Provider();
+  const { provider, connectWallet, activeWallet, fetchEthBalance } =
+    useWeb3Provider();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const condensedWalletName = () => {
@@ -60,6 +63,10 @@ export default function Dashboard(props: any) {
   const bannerStyle = props?.banner
     ? `linear-gradient(rgba(256, 256, 256, 0.92), rgba(256, 256, 256, 0.92)), url('${props?.banner}')`
     : '';
+
+  useEffect(() => {
+    id ? fetchEthBalance(id) : '';
+  }, [id]);
 
   return (
     <>

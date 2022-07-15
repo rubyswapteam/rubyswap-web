@@ -64,6 +64,7 @@ exports.Web3Provider = function (_a) {
     };
     var _b = react_1.useState(undefined), provider = _b[0], setProvider = _b[1];
     var _c = react_1.useState(undefined), activeWallet = _c[0], setActiveWallet = _c[1];
+    var _d = react_1.useState(undefined), ethBalance = _d[0], setEthBalance = _d[1];
     react_1.useEffect(function () {
         if (provider) {
             setListener();
@@ -86,7 +87,6 @@ exports.Web3Provider = function (_a) {
                         web3ModalProvider = new ethers_1.ethers.providers.Web3Provider(web3ModalInstance);
                         setProvider(web3ModalProvider);
                         setActiveWallet(web3ModalProvider.provider.selectedAddress);
-                        console.log(provider);
                         return [3 /*break*/, 3];
                     case 2:
                         error_1 = _a.sent();
@@ -99,17 +99,32 @@ exports.Web3Provider = function (_a) {
     }
     function setListener() {
         provider.provider.on('accountsChanged', function (accounts) {
-            console.log('listener called');
             setActiveWallet(accounts[0]);
         });
+    }
+    function fetchEthBalance(address) {
+        if (provider && provider.provider) {
+            provider.getBalance(address).then(function (balance) {
+                var balanceInEth = ethers_1.ethers.utils.formatEther(balance);
+                setEthBalance(balanceInEth);
+            });
+        }
     }
     var contextValue = react_1.useMemo(function () { return ({
         provider: provider,
         setProvider: setProvider,
         connectWallet: connectWallet,
         activeWallet: activeWallet,
-        setActiveWallet: setActiveWallet
-    }); }, [provider, setProvider, connectWallet, activeWallet, setActiveWallet]);
+        setActiveWallet: setActiveWallet,
+        fetchEthBalance: fetchEthBalance
+    }); }, [
+        provider,
+        setProvider,
+        connectWallet,
+        activeWallet,
+        setActiveWallet,
+        fetchEthBalance,
+    ]);
     return (react_1["default"].createElement(Web3ProviderContext.Provider, { value: contextValue }, children));
 };
 exports.useWeb3Provider = function () { return react_1.useContext(Web3ProviderContext); };
