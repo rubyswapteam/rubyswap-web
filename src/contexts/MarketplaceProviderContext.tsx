@@ -20,34 +20,34 @@ export const MarketplaceProvider = ({
   >;
 }) => {
   const [userTrades, setUserTrades] = useState<any>({});
-  const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
+  // const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
 
   const getUserTrades = useCallback(
     async (user: string, collection?: string) => {
-      let sales = {};
-      let purchases = {};
-      const contractString = collection ? '=' + collection : '';
-      axios
-        .get(
-          `https://api.x2y2.org/v1/events?type=sale&from_address=${user}&to_address&contract${contractString}`,
-          {
-            headers: { 'X-API-KEY': x2y2Token },
-          },
-        )
-        .then((res) => {
-          sales = res;
-        });
-      axios
-        .get(
-          `https://api.x2y2.org/v1/events?type=sale&from_address&to_address=${user}&contract${contractString}`,
-          {
-            headers: { 'X-API-KEY': x2y2Token },
-          },
-        )
-        .then((res) => {
-          purchases = res;
-        });
-      setUserTrades({ sales: sales, purchases: purchases });
+      // let sales = {};
+      // let purchases = {};
+      // const contractString = collection ? '=' + collection : '';
+      // axios
+      //   .get(
+      //     `https://api.x2y2.org/v1/events?type=sale&from_address=${user}&to_address&contract${contractString}`,
+      //     {
+      //       headers: { 'X-API-KEY': x2y2Token },
+      //     },
+      //   )
+      //   .then((res) => {
+      //     sales = res;
+      //   });
+      // axios
+      //   .get(
+      //     `https://api.x2y2.org/v1/events?type=sale&from_address&to_address=${user}&contract${contractString}`,
+      //     {
+      //       headers: { 'X-API-KEY': x2y2Token },
+      //     },
+      //   )
+      //   .then((res) => {
+      //     purchases = res;
+      //   });
+      // setUserTrades({ sales: sales, purchases: purchases });
     },
     [],
   );
