@@ -27,7 +27,9 @@ export const WalletProvider = ({
     summary: any;
     totalCount: number;
   }>();
-  const [collectionNames, setCollectionNames] = useState<any>({});
+  const [collectionNames, setCollectionNames] = useState<{
+    [key: string]: string;
+  }>({});
   const [userNftCollections, setUserNftCollections] = useState<any[]>();
   const [userNftsByCollection, setUserNftsByCollection] = useState<any[]>();
   const [activeNfts, setActiveNfts] = useState<{

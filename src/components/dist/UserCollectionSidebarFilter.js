@@ -9,7 +9,10 @@ function UserCollectionSidebarFilter(props) {
             React.createElement("div", { className: "flex justify-between p-2 mt-2 rounded-md hover:bg-gray-50 cursor-pointer" },
                 React.createElement("div", { className: "font-semibold" }, "Collections"),
                 React.createElement("div", null, (_b = props.userNfts) === null || _b === void 0 ? void 0 : _b.totalCount)), (_d = (_c = props === null || props === void 0 ? void 0 : props.userNfts) === null || _c === void 0 ? void 0 : _c.summary) === null || _d === void 0 ? void 0 :
-            _d.map(function (nft) { return (React.createElement("div", { key: nft.contract }, props.collectionNames && props.collectionNames[nft.contract] && (React.createElement("div", { className: "flex justify-between p-2 mt-1 rounded-md hover:bg-gray-50 cursor-pointer", onClick: function () { return props.getCollectionNfts(nft.contract); } },
+            _d.map(function (nft) { return (React.createElement("div", { key: nft.contract }, props.collectionNames && props.collectionNames[nft.contract] && (React.createElement("div", { className: 'flex justify-between p-2 mt-1 rounded-md cursor-pointer' +
+                    (props.activeCollection == nft.contract
+                        ? ' bg-blue-50'
+                        : ' hover:bg-gray-50'), onClick: function () { return props.getCollectionNfts(nft.contract); } },
                 React.createElement("div", { className: "" }, props.collectionNames[nft.contract]),
                 React.createElement("div", null, nft.count))))); }))));
 }

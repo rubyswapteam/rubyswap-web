@@ -2,8 +2,9 @@ import { useState } from 'react';
 
 interface Props {
   userNfts?: any;
-  collectionNames?: any;
+  collectionNames?: { [key: string]: string };
   getCollectionNfts: any;
+  activeCollection: string;
 }
 
 export default function UserCollectionSidebarFilter(props: Props) {
@@ -20,7 +21,12 @@ export default function UserCollectionSidebarFilter(props: Props) {
           <div key={nft.contract}>
             {props.collectionNames && props.collectionNames[nft.contract] && (
               <div
-                className="flex justify-between p-2 mt-1 rounded-md hover:bg-gray-50 cursor-pointer"
+                className={
+                  'flex justify-between p-2 mt-1 rounded-md cursor-pointer' +
+                  (props.activeCollection == nft.contract
+                    ? ' bg-blue-50'
+                    : ' hover:bg-gray-50')
+                }
                 onClick={() => props.getCollectionNfts(nft.contract)}
               >
                 <div className="">{props.collectionNames[nft.contract]}</div>

@@ -66,7 +66,7 @@ export default function Collection() {
       return (
         <div className="flex w-full justify-between flex-col h-inherit">
           <div className="flex w-full justify-between flex-row h-inherit">
-            {activeNfts.length == 0 && (
+            {activeNfts.nfts.length == 0 && (
               <div className="w-full">
                 {' '}
                 <div className="items-center mt-[30vh] justify-center mx-auto text-gray-500 flex">
@@ -75,10 +75,11 @@ export default function Collection() {
                 </div>
               </div>
             )}
-            {activeNfts.length != 0 && (
-              <CollectionList selectedNfts={activeNfts} />
+            {activeNfts.nfts.length != 0 && (
+              <CollectionList selectedNfts={activeNfts.nfts} />
             )}
             <UserCollectionSidebarFilter
+              activeCollection={activeNfts.collection}
               userNfts={userNfts}
               collectionNames={collectionNames}
               getCollectionNfts={getCollectionNfts}
