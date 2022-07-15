@@ -10,15 +10,12 @@ var LooksRareIcon_1 = require("./LooksRareIcon");
 var react_loading_skeleton_1 = require("react-loading-skeleton");
 require("react-loading-skeleton/dist/skeleton.css");
 var CollectionNftCard = function (_a) {
-    // const [isLoading, setIsLoading] = useState(true);
     var selectedNft = _a.selectedNft;
-    // function onLoad() {
-    //   setTimeout(() => setIsLoading(false), 1000);
-    // }
+    var _b = react_1.useState(true), isLoading = _b[0], setIsLoading = _b[1];
     return (react_1["default"].createElement("div", { className: "group relative" },
         react_1["default"].createElement("div", { className: 'drop-shadow-md p-2 rounded-xl text-sm bg-white' },
             react_1["default"].createElement("div", { className: 'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer' },
-                (react_1["default"].createElement("img", { src: selectedNft.image, alt: selectedNft.imageAlt, className: "w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl" })) || react_1["default"].createElement(react_loading_skeleton_1["default"], null),
+                (react_1["default"].createElement("img", { src: selectedNft.image, alt: selectedNft.imageAlt, className: "w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl", style: { display: isLoading ? 'none' : 'block' }, onLoadStart: function () { return setIsLoading(true); }, onLoad: function () { return setIsLoading(false); } })) || react_1["default"].createElement(react_loading_skeleton_1["default"], null),
                 react_1["default"].createElement("a", { target: "_blank", rel: "_ noreferrer", className: "absolute left-3 top-3 w-12 h-12" },
                     selectedNft.marketplace === nftUtils_1.NftMarketplace.OPENSEA && (react_1["default"].createElement("div", { className: "rounded-full" },
                         react_1["default"].createElement(OpenseaIcon_1["default"], { height: 20, width: 20 }))),

@@ -14,6 +14,7 @@ import RightArrow from '../../components/RightArrow';
 import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarFilter';
 import UserProfileHeader from '../../components/UserProfileHeader';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
+import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 
 export default function Collection() {
   const router = useRouter();
@@ -53,7 +54,10 @@ export default function Collection() {
     getCollectionNfts,
   } = useWalletProvider();
 
+  const { userTrades, getUserTrades } = useMarketplaceProvider();
+
   useEffect(() => {
+    id ? getUserTrades(id) : '';
     fetchUserNfts(id?.toString());
     setActiveNfts({ collection: '', nfts: [] });
   }, [id]);

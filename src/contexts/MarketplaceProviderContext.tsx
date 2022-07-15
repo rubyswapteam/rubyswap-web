@@ -1,4 +1,3 @@
-import { INft, NftChainId } from '@/utils/nftUtils';
 import axios from 'axios';
 import React, {
   JSXElementConstructor,
@@ -6,11 +5,9 @@ import React, {
   ReactElement,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
-import { addAbortSignal } from 'stream';
 
 const MarketplaceProviderContext = React.createContext<any>({});
 
@@ -22,35 +19,46 @@ export const MarketplaceProvider = ({
     string | JSXElementConstructor<unknown>
   >;
 }) => {
-  const [userNfts, setUserNfts] = useState<{
-    ownedNfts: any[];
-    summary: any;
-    totalCount: number;
-  }>();
-  const [collectionNames, setCollectionNames] = useState<any>({});
+  const [userTrades, setUserTrades] = useState<any>({});
+  const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
 
-  const fetchUserSales = useCallback(async (contractAddress: string) => {
-    const activeMapping = collectionNames;
-    if (!collectionNames[contractAddress]) {
+  const getUserTrades = useCallback(
+    async (user: string, collection?: string) => {
+      let sales = {};
+      let purchases = {};
+      const contractString = collection ? '=' + collection : '';
       axios
         .get(
-          `https://eth-mainnet.g.alchemy.com/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getContractMetadata/?contractAddress=${contractAddress}`,
+          `https://api.x2y2.org/v1/events?type=sale&from_address=${user}&to_address&contract${contractString}`,
+          {
+            headers: { 'X-API-KEY': x2y2Token },
+          },
         )
-        .then((contractRes) => {
-          activeMapping[contractAddress] =
-            contractRes.data.contractMetadata.name?.trim();
-          setCollectionNames({ ...activeMapping });
+        .then((res) => {
+          sales = res;
         });
-    }
-  }, []);
+      axios
+        .get(
+          `https://api.x2y2.org/v1/events?type=sale&from_address&to_address=${user}&contract${contractString}`,
+          {
+            headers: { 'X-API-KEY': x2y2Token },
+          },
+        )
+        .then((res) => {
+          purchases = res;
+        });
+      setUserTrades({ sales: sales, purchases: purchases });
+    },
+    [],
+  );
 
   const contextValue = useMemo(
     () => ({
-      userNfts,
-      setUserNfts,
-      fetchCollectionNames,
+      userTrades,
+      setUserTrades,
+      getUserTrades,
     }),
-    [userNfts, setUserNfts, fetchCollectionNames],
+    [userTrades, setUserTrades, getUserTrades],
   );
 
   return (

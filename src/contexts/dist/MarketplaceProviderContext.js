@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -53,29 +42,37 @@ var react_1 = require("react");
 var MarketplaceProviderContext = react_1["default"].createContext({});
 exports.MarketplaceProvider = function (_a) {
     var children = _a.children;
-    var _b = react_1.useState(), userNfts = _b[0], setUserNfts = _b[1];
-    var _c = react_1.useState({}), collectionNames = _c[0], setCollectionNames = _c[1];
-    var fetchUserSales = react_1.useCallback(function (contractAddress) { return __awaiter(void 0, void 0, void 0, function () {
-        var activeMapping;
+    var _b = react_1.useState({}), userTrades = _b[0], setUserTrades = _b[1];
+    var x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
+    var getUserTrades = react_1.useCallback(function (user, collection) { return __awaiter(void 0, void 0, void 0, function () {
+        var sales, purchases, contractString;
         return __generator(this, function (_a) {
-            activeMapping = collectionNames;
-            if (!collectionNames[contractAddress]) {
-                axios_1["default"]
-                    .get("https://eth-mainnet.g.alchemy.com/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getContractMetadata/?contractAddress=" + contractAddress)
-                    .then(function (contractRes) {
-                    var _a;
-                    activeMapping[contractAddress] = (_a = contractRes.data.contractMetadata.name) === null || _a === void 0 ? void 0 : _a.trim();
-                    setCollectionNames(__assign({}, activeMapping));
-                });
-            }
+            sales = {};
+            purchases = {};
+            contractString = collection ? '=' + collection : '';
+            axios_1["default"]
+                .get("https://api.x2y2.org/v1/events?type=sale&from_address=" + user + "&to_address&contract" + contractString, {
+                headers: { 'X-API-KEY': x2y2Token }
+            })
+                .then(function (res) {
+                sales = res;
+            });
+            axios_1["default"]
+                .get("https://api.x2y2.org/v1/events?type=sale&from_address&to_address=" + user + "&contract" + contractString, {
+                headers: { 'X-API-KEY': x2y2Token }
+            })
+                .then(function (res) {
+                purchases = res;
+            });
+            setUserTrades({ sales: sales, purchases: purchases });
             return [2 /*return*/];
         });
     }); }, []);
     var contextValue = react_1.useMemo(function () { return ({
-        userNfts: userNfts,
-        setUserNfts: setUserNfts,
-        fetchCollectionNames: fetchCollectionNames
-    }); }, [userNfts, setUserNfts, fetchCollectionNames]);
+        userTrades: userTrades,
+        setUserTrades: setUserTrades,
+        getUserTrades: getUserTrades
+    }); }, [userTrades, setUserTrades, getUserTrades]);
     return (react_1["default"].createElement(MarketplaceProviderContext.Provider, { value: contextValue }, children));
 };
 exports.useMarketplaceProvider = function () {

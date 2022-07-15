@@ -13,11 +13,7 @@ interface Props {
 }
 
 const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
-  // const [isLoading, setIsLoading] = useState(true);
-
-  // function onLoad() {
-  //   setTimeout(() => setIsLoading(false), 1000);
-  // }
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="group relative">
@@ -32,8 +28,9 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
               src={selectedNft.image}
               alt={selectedNft.imageAlt}
               className="w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl"
-              // style={{ display: isLoading ? 'none' : 'block' }}
-              // onLoad={onLoad}
+              style={{ display: isLoading ? 'none' : 'block' }}
+              onLoadStart={() => setIsLoading(true)}
+              onLoad={() => setIsLoading(false)}
             />
           ) || <Skeleton />}
           <a
