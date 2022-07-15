@@ -1,6 +1,6 @@
 exports.handler = async () => {
   return {
-    body: "test",
-    statusCode: 200
-  }
-}
+    body: 'test',
+    statusCode: 200,
+  };
+};
