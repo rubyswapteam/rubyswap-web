@@ -27,8 +27,8 @@ const X2Y2Icon: React.FC<Props> = ({ width, height }): JSX.Element => {
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M14.2 10C14.2 12.3196 12.3196 14.2 10 14.2C7.6804 14.2 5.8 12.3196 5.8 10C5.8 7.6804 7.6804 5.8 10 5.8C12.3196 5.8 14.2 7.6804 14.2 10ZM12.8 10C12.8 11.5464 11.5464 12.8 10 12.8C8.4536 12.8 7.2 11.5464 7.2 10C7.2 8.4536 8.4536 7.2 10 7.2C11.5464 7.2 12.8 8.4536 12.8 10Z"
         fill="white"
       />

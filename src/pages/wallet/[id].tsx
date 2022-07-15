@@ -22,25 +22,25 @@ export default function Collection() {
   const primaryTabs = [
     {
       name: 'Assets',
-      href: `/wallet/${id}`,
+      href: id ? `/wallet/${id}` : '/',
       current: tab == undefined,
       border: true,
     },
     {
       name: 'Listings',
-      href: `/wallet/${id}?tab=listings`,
+      href: id ? `/wallet/${id}?tab=listings` : '/',
       current: tab == 'listings',
       border: true,
     },
     {
       name: 'Portfolio',
-      href: `/wallet/${id}?tab=portfolio`,
+      href: id ? `/wallet/${id}?tab=portfolio` : '/',
       current: tab == 'updates',
       border: true,
     },
     {
       name: 'Analytics',
-      href: `/wallet/${id}?tab=analytics`,
+      href: id ? `/wallet/${id}?tab=analytics` : '/',
       current: tab == 'analytics',
       border: true,
     },

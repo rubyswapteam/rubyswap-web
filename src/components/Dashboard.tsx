@@ -12,7 +12,7 @@ import { useWeb3Provider } from '../contexts/Web3ProviderContext';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, tab, range } = router.query;
 
   const parentRoute = () => {
     return router.route.split('/')[1];
