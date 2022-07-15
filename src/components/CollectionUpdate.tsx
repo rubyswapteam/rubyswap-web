@@ -15,7 +15,7 @@ function classNames(...classes: string[]) {
 export default function CollectionUpdate(props: Props) {
   const [enabled, setEnabled] = useState(false);
   return (
-    <div>
+    <div className="px-4 sm:px-6 md:px-8 pb-80">
       <Switch.Group as="div" className="flex items-center">
         <Switch
           checked={enabled}

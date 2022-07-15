@@ -46,6 +46,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 exports.useWalletProvider = exports.WalletProvider = void 0;
 var nftUtils_1 = require("@/utils/nftUtils");
@@ -58,7 +65,10 @@ exports.WalletProvider = function (_a) {
     var _c = react_1.useState({}), collectionNames = _c[0], setCollectionNames = _c[1];
     var _d = react_1.useState(), userNftCollections = _d[0], setUserNftCollections = _d[1];
     var _e = react_1.useState(), userNftsByCollection = _e[0], setUserNftsByCollection = _e[1];
-    var _f = react_1.useState([]), activeNfts = _f[0], setActiveNfts = _f[1];
+    var _f = react_1.useState({
+        collection: '',
+        nfts: []
+    }), activeNfts = _f[0], setActiveNfts = _f[1];
     var fetchCollectionNames = react_1.useCallback(function (contractAddress) { return __awaiter(void 0, void 0, void 0, function () {
         var activeMapping;
         return __generator(this, function (_a) {
@@ -67,8 +77,8 @@ exports.WalletProvider = function (_a) {
                 axios_1["default"]
                     .get("https://eth-mainnet.g.alchemy.com/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getContractMetadata/?contractAddress=" + contractAddress)
                     .then(function (contractRes) {
-                    activeMapping[contractAddress] =
-                        contractRes.data.contractMetadata.name;
+                    var _a;
+                    activeMapping[contractAddress] = (_a = contractRes.data.contractMetadata.name) === null || _a === void 0 ? void 0 : _a.trim();
                     setCollectionNames(__assign({}, activeMapping));
                 });
             }
@@ -76,12 +86,11 @@ exports.WalletProvider = function (_a) {
         });
     }); }, []);
     var fetchUserNfts = function (user) { return __awaiter(void 0, void 0, void 0, function () {
-        var pageKey, counter, userNfts;
+        var pageKey, userNfts;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     pageKey = '';
-                    counter = 0;
                     userNfts = {
                         ownedNfts: [],
                         summary: [],
@@ -128,16 +137,16 @@ exports.WalletProvider = function (_a) {
                                 case 1:
                                     _a.sent();
                                     summary.sort(function (a, b) {
-                                        var _a, _b, _c, _d;
-                                        if (((_a = collectionNames[a.contract]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) < ((_b = collectionNames[b.contract]) === null || _b === void 0 ? void 0 : _b.toLowerCase())) {
+                                        var _a, _b;
+                                        var nameA = (_a = collectionNames[a.contract]) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+                                        var nameB = (_b = collectionNames[b.contract]) === null || _b === void 0 ? void 0 : _b.toLowerCase();
+                                        if (nameA < nameB)
                                             return -1;
-                                        }
-                                        if (((_c = collectionNames[a.contract]) === null || _c === void 0 ? void 0 : _c.toLowerCase()) > ((_d = collectionNames[b.contract]) === null || _d === void 0 ? void 0 : _d.toLowerCase())) {
+                                        if (nameA > nameB)
                                             return 1;
-                                        }
                                         return 0;
                                     });
-                                    userNfts.summary = summary;
+                                    userNfts.summary = __spreadArrays(summary);
                                     return [2 /*return*/];
                             }
                         });
@@ -146,7 +155,6 @@ exports.WalletProvider = function (_a) {
                     })];
                 case 2:
                     _a.sent();
-                    counter++;
                     _a.label = 3;
                 case 3:
                     if (pageKey !== '') return [3 /*break*/, 1];
@@ -157,7 +165,7 @@ exports.WalletProvider = function (_a) {
     }); };
     function getCollectionNfts(contractAddress) {
         if (userNfts) {
-            setActiveNfts([]);
+            setActiveNfts({ collection: '', nfts: [] });
             var filteredNfts = userNfts.ownedNfts.filter(function (x) { return x.contract.address === contractAddress; });
             var nfts_1 = [];
             filteredNfts === null || filteredNfts === void 0 ? void 0 : filteredNfts.forEach(function (nft) {
@@ -178,7 +186,7 @@ exports.WalletProvider = function (_a) {
                 };
                 nfts_1.push(newNFT);
             });
-            setActiveNfts(nfts_1);
+            setActiveNfts({ collection: contractAddress, nfts: nfts_1 });
         }
     }
     function optimisedImageLinks(links) {

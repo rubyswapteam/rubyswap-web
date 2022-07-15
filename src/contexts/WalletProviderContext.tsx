@@ -30,7 +30,13 @@ export const WalletProvider = ({
   const [collectionNames, setCollectionNames] = useState<any>({});
   const [userNftCollections, setUserNftCollections] = useState<any[]>();
   const [userNftsByCollection, setUserNftsByCollection] = useState<any[]>();
-  const [activeNfts, setActiveNfts] = useState<INft[]>([]);
+  const [activeNfts, setActiveNfts] = useState<{
+    collection: string;
+    nfts: INft[];
+  }>({
+    collection: '',
+    nfts: [],
+  });
 
   const fetchCollectionNames = useCallback(async (contractAddress: string) => {
     const activeMapping = collectionNames;
@@ -41,7 +47,7 @@ export const WalletProvider = ({
         )
         .then((contractRes) => {
           activeMapping[contractAddress] =
-            contractRes.data.contractMetadata.name;
+            contractRes.data.contractMetadata.name?.trim();
           setCollectionNames({ ...activeMapping });
         });
     }
@@ -49,7 +55,6 @@ export const WalletProvider = ({
 
   const fetchUserNfts = async (user: string) => {
     let pageKey = '';
-    let counter = 0;
     const userNfts: {
       ownedNfts: any[];
       summary: any[];
@@ -92,33 +97,24 @@ export const WalletProvider = ({
               await fetchCollectionNames(activeContract);
             });
             summary.sort((a, b) => {
-              if (
-                collectionNames[a.contract]?.toLowerCase() <
-                collectionNames[b.contract]?.toLowerCase()
-              ) {
-                return -1;
-              }
-              if (
-                collectionNames[a.contract]?.toLowerCase() >
-                collectionNames[b.contract]?.toLowerCase()
-              ) {
-                return 1;
-              }
+              const nameA = collectionNames[a.contract]?.toLowerCase();
+              const nameB = collectionNames[b.contract]?.toLowerCase();
+              if (nameA < nameB) return -1;
+              if (nameA > nameB) return 1;
               return 0;
             });
-            userNfts.summary = summary;
+            userNfts.summary = [...summary];
           })
           .finally(() => {
             setUserNfts({ ...userNfts });
           });
-        counter++;
       } while (pageKey !== '');
     }
   };
 
   function getCollectionNfts(contractAddress: string) {
     if (userNfts) {
-      setActiveNfts([]);
+      setActiveNfts({ collection: '', nfts: [] });
       const filteredNfts = userNfts.ownedNfts.filter(
         (x) => x.contract.address === contractAddress,
       );
@@ -140,7 +136,7 @@ export const WalletProvider = ({
         };
         nfts.push(newNFT);
       });
-      setActiveNfts(nfts);
+      setActiveNfts({ collection: contractAddress, nfts: nfts });
     }
   }
 

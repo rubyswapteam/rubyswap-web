@@ -10,13 +10,10 @@ import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
+import RightArrow from '../../components/RightArrow';
 import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarFilter';
 import UserProfileHeader from '../../components/UserProfileHeader';
-import RightArrow from '../../components/RightArrow';
-import {
-  useWalletProvider,
-  WalletProvider,
-} from '../../contexts/WalletProviderContext';
+import { useWalletProvider } from '../../contexts/WalletProviderContext';
 
 export default function Collection() {
   const router = useRouter();
@@ -52,14 +49,13 @@ export default function Collection() {
     fetchUserNfts,
     collectionNames,
     activeNfts,
+    setActiveNfts,
     getCollectionNfts,
   } = useWalletProvider();
 
   useEffect(() => {
-    const isMounted = true;
-    if (isMounted) {
-      fetchUserNfts(id?.toString());
-    }
+    fetchUserNfts(id?.toString());
+    setActiveNfts({ collection: '', nfts: [] });
   }, [id]);
 
   const refreshButtonTabs: (string | undefined)[] = [];
@@ -68,10 +64,10 @@ export default function Collection() {
   function setBody() {
     if (!tab) {
       return (
-        <div className="flex w-full justify-between flex-col h-full">
-          <div className="flex w-full justify-between flex-row h-full">
+        <div className="flex w-full justify-between flex-col h-inherit">
+          <div className="flex w-full justify-between flex-row h-inherit">
             {activeNfts.length == 0 && (
-              <div className="w-9/12">
+              <div className="w-full">
                 {' '}
                 <div className="items-center mt-[30vh] justify-center mx-auto text-gray-500 flex">
                   <div className="pt-1 mr-2">Please select a collection</div>
@@ -80,9 +76,7 @@ export default function Collection() {
               </div>
             )}
             {activeNfts.length != 0 && (
-              <div className="w-9/12">
-                <CollectionList selectedNfts={activeNfts} />
-              </div>
+              <CollectionList selectedNfts={activeNfts} />
             )}
             <UserCollectionSidebarFilter
               userNfts={userNfts}
@@ -96,7 +90,7 @@ export default function Collection() {
     if (tab == 'analytics') {
       return (
         <>
-          <div>
+          <div className="h-inherit overflow-scroll pb-80">
             <CollectionTitleHeader title={'Summary Stats'} />
             <BreakHorizontal />
             <div className="px-4 sm:px-6 md:px-8">

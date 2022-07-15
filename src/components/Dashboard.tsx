@@ -1,31 +1,38 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardUserDropdown from './DashboardUserDropdown';
 import { EthPriceTracker } from './EthPriceTracker';
 import { GasTracker } from './GasTracker';
 import DashboardSidebarBottom from './DashboardSidebarBottom';
 import { useRouter } from 'next/router';
+import ConnectWalletButton from './ConnectWalletButton';
+import { useWeb3Provider } from '../contexts/Web3ProviderContext';
 
 export default function Dashboard(props: any) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const router = useRouter();
-  const { id, tab, range } = router.query;
-  const childRoute = () => {
+  const parentRoute = () => {
     return router.route.split('/')[1];
   };
-  console.log(router.route.split('/')[1]);
-  console.log(id);
+  const { provider, connectWallet, activeWallet } = useWeb3Provider();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const condensedWalletName = () => {
+    return activeWallet
+      ? activeWallet.substring(0, 4) +
+          '...' +
+          activeWallet.substring(activeWallet.length - 4)
+      : '';
+  };
 
   const topNavigation = [
     { name: 'Search', header: false, search: true },
     { name: 'Personal', header: true },
     {
       name: 'Wallet',
-      href: '/wallet/0x2EF1630993bC569a18F8C406ab720E2d040E155A',
-      current: childRoute() == 'wallet',
+      href: activeWallet ? `/wallet/${activeWallet}` : '/',
+      current: parentRoute() == 'wallet',
     },
     { name: 'Notifications', href: '/', current: false },
     { name: 'Calendar', href: '/', current: false },
@@ -34,7 +41,7 @@ export default function Dashboard(props: any) {
     {
       name: 'Collections',
       href: '/',
-      current: childRoute() == 'collection' || childRoute() == 'a',
+      current: parentRoute() == 'collection' || parentRoute() == 'a',
     },
     { name: 'Giveaways', href: '/', current: false },
     { name: 'Minting', href: '/', current: false },
@@ -143,7 +150,12 @@ export default function Dashboard(props: any) {
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <nav className="mt-0 flex-1 px-2">
                 <div className="mb-5">
-                  <DashboardUserDropdown address="0x2ef....155a" />
+                  {!provider && (
+                    <ConnectWalletButton connectWallet={connectWallet} />
+                  )}
+                  {provider && (
+                    <DashboardUserDropdown address={condensedWalletName()} />
+                  )}
                 </div>
                 <DashboardSidebar
                   sidebarNavigation={topNavigation}
@@ -183,7 +195,7 @@ export default function Dashboard(props: any) {
             </button>
           </div>
           <main className="flex-1">
-            <div className="h-screen flex-col flex">
+            <div className={'h-screen overflow-hidden flex-col flex'}>
               <div
                 className="py-6 bg-gray-50 z-10"
                 style={{
@@ -200,7 +212,7 @@ export default function Dashboard(props: any) {
                 </div>
               </div>
               {/* <div className="border-t w-full"></div> */}
-              <div className="max-w-8xl mx-auto grow w-full">
+              <div className="max-w-8xl mx-auto grow w-full h-inherit">
                 <div className="w-full" />
                 <div className="flex-1 flex justify-center lg:justify-end">
                   {(props.refresh || props.secondaryTabs) && (

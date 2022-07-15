@@ -10,10 +10,13 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Biotif', ...defaultTheme.fontFamily.sans],
+        sans: ['Biotif', ...defaultTheme.fontFamily.sans],
       },
       backgroundImage: {
         'theme-gradient': "url('../assets/gradient/theme.svg')",
+      },
+      height: {
+        inherit: 'inherit',
       },
     },
   },

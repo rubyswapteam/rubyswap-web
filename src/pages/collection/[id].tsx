@@ -104,7 +104,7 @@ export default function Collection() {
   function setBody() {
     if (!tab) {
       return (
-        <>
+        <div className="h-inherit overflow-scroll pb-80">
           <div className="my-4">
             <CollectionAnnouncementBanner
               route={`/collection/${id}?tab=updates`}
@@ -147,22 +147,22 @@ export default function Collection() {
               selectedNfts={nfts && [...nfts.slice(6, 10), ...nfts.slice(0, 6)]}
             />
           </div>
-        </>
+        </div>
       );
     }
     if (tab == 'listings') {
       return (
-        <>
-          <div className="-mt-6">
-            <CollectionList selectedNfts={nfts && nfts} />
-          </div>
-        </>
+        // <>
+        //   <div className="-mt-6">
+        <CollectionList selectedNfts={nfts && nfts} />
+        //   </div>
+        // </>
       );
     }
     if (tab == 'updates') {
       return (
         <>
-          <div className="mt-6 px-4 sm:px-6 md:px-8">
+          <div className="mt-6 h-inherit overflow-scroll">
             <CollectionUpdate collectionUpdates={collectionUpdates} />
           </div>
         </>
@@ -170,24 +170,22 @@ export default function Collection() {
     }
     if (tab == 'analytics') {
       return (
-        <>
-          <div>
-            <CollectionTitleHeader title={'Summary Stats'} />
-            <StatsBoxList
-              stats={getStats()}
-              route={`/collection/${id}?tab=analytics`}
-            />
-            <BreakHorizontal />
-            <div className="px-4 sm:px-6 md:px-8">
-              <div className="w-full mt-5 rounded-xl overflow-hidden">
-                <SalesHistoryChart chart={{ height: '30%' }} />
-              </div>
-              <div className="w-full mt-5 rounded-xl overflow-hidden">
-                <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
-              </div>
+        <div className="h-inherit overflow-scroll pb-80">
+          <CollectionTitleHeader title={'Summary Stats'} />
+          <StatsBoxList
+            stats={getStats()}
+            route={`/collection/${id}?tab=analytics`}
+          />
+          <BreakHorizontal />
+          <div className="px-4 sm:px-6 md:px-8">
+            <div className="w-full mt-5 rounded-xl overflow-hidden">
+              <SalesHistoryChart chart={{ height: '30%' }} />
+            </div>
+            <div className="w-full mt-5 rounded-xl overflow-hidden">
+              <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
             </div>
           </div>
-        </>
+        </div>
       );
     }
   }

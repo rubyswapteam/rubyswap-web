@@ -1,15 +1,15 @@
-export default function ConnectWalletButton() {
+interface Props {
+  connectWallet: any;
+}
+
+export default function ConnectWalletButton(props: Props) {
   return (
-    <div className="flex items-center hidden lg:flex">
-      <div className="flex-shrink-0">
-        <div
-          className="border-2 p-0.5 h-10 border-gray-300 dark:border-gray-600 cursor-pointer rounded-xl flex
-        justify-center items-center hover:border-gray-500 hover:shadow text-sm font-bold text-gray-700
-        dark:text-gray-100 px-3"
-        >
-          Connect Wallet
-        </div>
-      </div>
-    </div>
+    <button
+      type="button"
+      className="w-full inline-flex items-center px-2 py-2 border border-gray-300 shadow-sm text-xs text-center justify-center leading-4 font-medium rounded-md text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+      onClick={() => props.connectWallet()}
+    >
+      Connect Wallet
+    </button>
   );
 }

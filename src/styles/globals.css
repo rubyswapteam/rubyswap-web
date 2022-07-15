@@ -72,3 +72,17 @@ html {
 .highcharts-credits {
   display: none !important;
 }
+
+.web3modal-modal-lightbox {
+  z-index: 100 !important;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

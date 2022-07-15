@@ -9,22 +9,29 @@ var EthPriceTracker_1 = require("./EthPriceTracker");
 var GasTracker_1 = require("./GasTracker");
 var DashboardSidebarBottom_1 = require("./DashboardSidebarBottom");
 var router_1 = require("next/router");
+var ConnectWalletButton_1 = require("./ConnectWalletButton");
+var Web3ProviderContext_1 = require("../contexts/Web3ProviderContext");
 function Dashboard(props) {
-    var _a = react_2.useState(false), sidebarOpen = _a[0], setSidebarOpen = _a[1];
     var router = router_1.useRouter();
-    var _b = router.query, id = _b.id, tab = _b.tab, range = _b.range;
-    var childRoute = function () {
+    var parentRoute = function () {
         return router.route.split('/')[1];
     };
-    console.log(router.route.split('/')[1]);
-    console.log(id);
+    var _a = Web3ProviderContext_1.useWeb3Provider(), provider = _a.provider, connectWallet = _a.connectWallet, activeWallet = _a.activeWallet;
+    var _b = react_2.useState(false), sidebarOpen = _b[0], setSidebarOpen = _b[1];
+    var condensedWalletName = function () {
+        return activeWallet
+            ? activeWallet.substring(0, 4) +
+                '...' +
+                activeWallet.substring(activeWallet.length - 4)
+            : '';
+    };
     var topNavigation = [
         { name: 'Search', header: false, search: true },
         { name: 'Personal', header: true },
         {
             name: 'Wallet',
-            href: '/wallet/0x2EF1630993bC569a18F8C406ab720E2d040E155A',
-            current: childRoute() == 'wallet'
+            href: activeWallet ? "/wallet/" + activeWallet : '/',
+            current: parentRoute() == 'wallet'
         },
         { name: 'Notifications', href: '/', current: false },
         { name: 'Calendar', href: '/', current: false },
@@ -33,7 +40,7 @@ function Dashboard(props) {
         {
             name: 'Collections',
             href: '/',
-            current: childRoute() == 'collection' || childRoute() == 'a'
+            current: parentRoute() == 'collection' || parentRoute() == 'a'
         },
         { name: 'Giveaways', href: '/', current: false },
         { name: 'Minting', href: '/', current: false },
@@ -80,7 +87,8 @@ function Dashboard(props) {
                     React.createElement("div", { className: "flex-1 flex flex-col pt-5 pb-4 overflow-y-auto" },
                         React.createElement("nav", { className: "mt-0 flex-1 px-2" },
                             React.createElement("div", { className: "mb-5" },
-                                React.createElement(DashboardUserDropdown_1["default"], { address: "0x2ef....155a" })),
+                                !provider && (React.createElement(ConnectWalletButton_1["default"], { connectWallet: connectWallet })),
+                                provider && (React.createElement(DashboardUserDropdown_1["default"], { address: condensedWalletName() }))),
                             React.createElement(DashboardSidebar_1["default"], { sidebarNavigation: topNavigation, classNames: classNames }))),
                     React.createElement("div", { className: "flex-shrink-0 flex mb-3" },
                         React.createElement("div", { className: "flex-shrink-0 w-full group block" },
@@ -97,7 +105,7 @@ function Dashboard(props) {
                         React.createElement("span", { className: "sr-only" }, "Open sidebar"),
                         React.createElement(outline_1.MenuIcon, { className: "h-6 w-6", "aria-hidden": "true" }))),
                 React.createElement("main", { className: "flex-1" },
-                    React.createElement("div", { className: "h-screen flex-col flex" },
+                    React.createElement("div", { className: 'h-screen overflow-hidden flex-col flex' },
                         React.createElement("div", { className: "py-6 bg-gray-50 z-10", style: {
                                 backgroundImage: "" + bannerStyle
                             } },
@@ -105,7 +113,7 @@ function Dashboard(props) {
                                 React.createElement("h1", { className: "text-2xl font-semibold text-gray-900" }, props.title)),
                             React.createElement("div", { className: "max-w-8xl mx-auto px-4 sm:px-6 md:px-8" },
                                 React.createElement("div", { className: "mt-6 mb-6" }, props.primaryTabs))),
-                        React.createElement("div", { className: "max-w-8xl mx-auto grow w-full" },
+                        React.createElement("div", { className: "max-w-8xl mx-auto grow w-full h-inherit" },
                             React.createElement("div", { className: "w-full" }),
                             React.createElement("div", { className: "flex-1 flex justify-center lg:justify-end" }, (props.refresh || props.secondaryTabs) && (React.createElement("div", { className: "w-full" },
                                 React.createElement("div", { className: "sm:flex sm:items-center sm:justify-between mt-6 mb-6 px-4 sm:px-6 md:px-8" },

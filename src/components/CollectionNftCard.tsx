@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { INft, NftMarketplace } from '@/utils/nftUtils';
 import OpenSeaIcon from '@/components/OpenseaIcon';
 import PlusIcon from '@/components/PlusIcon';
 import EthereumIcon from '@/components/EthereumIcon';
 import X2Y2Icon from './X2Y2Icon';
 import LooksRareIcon from './LooksRareIcon';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
   selectedNft: INft;
 }
 
 const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
+  // const [isLoading, setIsLoading] = useState(true);
+
+  // function onLoad() {
+  //   setTimeout(() => setIsLoading(false), 1000);
+  // }
+
   return (
     <div className="group relative">
       <div className={'drop-shadow-md p-2 rounded-xl text-sm bg-white'}>
@@ -19,11 +27,15 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
             'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer'
           }
         >
-          <img
-            src={selectedNft.image}
-            alt={selectedNft.imageAlt}
-            className="w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl"
-          />
+          {(
+            <img
+              src={selectedNft.image}
+              alt={selectedNft.imageAlt}
+              className="w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl"
+              // style={{ display: isLoading ? 'none' : 'block' }}
+              // onLoad={onLoad}
+            />
+          ) || <Skeleton />}
           <a
             target="_blank"
             rel="_ noreferrer"

@@ -38,7 +38,11 @@ export default function Index() {
 
   function setBody() {
     if (!tab) {
-      return <TrendingNftCollectionTable />;
+      return (
+        <div className="h-inherit overflow-scroll pb-60">
+          <TrendingNftCollectionTable />;
+        </div>
+      );
     }
     if (tab === 'sweeps') {
       return <SweepsNftCollectionTable />;

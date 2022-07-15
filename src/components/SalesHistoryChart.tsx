@@ -12,7 +12,9 @@ export default function SalesHistoryChart(props: any) {
     const daysUnix = [];
 
     for (let i = daysRequired; i >= 1; i--) {
-      const date = moment().subtract(i, 'days').format('DD/MM/YYYY');
+      const date = moment([2022, 6, 1]) //Force the date for now.
+        .subtract(i, 'days')
+        .format('DD/MM/YYYY');
       days.push(date);
       const unixDate =
         +new Date(
