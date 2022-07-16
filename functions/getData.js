@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 
 const headers = {
-  'content-type': 'application/json',
-  'Access-Control-Allow-Origin': '*',
+  // 'content-type': 'application/json',
+  // 'Access-Control-Allow-Origin': '*',
   'X-API-KEY': '38d74028-ca13-48df-ab81-bdfa4f3ab834',
 };
 
