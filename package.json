@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start-api": "netlify-lambda serve functions"
+    "start-api": "netlify-lambda serve functions",
+    "netlify": "npm run build && npm run export"
   },
   "dependencies": {
     "@alch/alchemy-sdk": "^1.0.8",
