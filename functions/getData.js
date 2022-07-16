@@ -14,8 +14,7 @@ const API_ENDPOINT =
 export async function handler() {
   try {
     const response = await fetch(API_ENDPOINT, headers);
-    const data = await response.json();
-    return { statusCode: 200, body: JSON.stringify({ data }) };
+    return { statusCode: 200, body: response };
   } catch (error) {
     console.log(error);
     return {

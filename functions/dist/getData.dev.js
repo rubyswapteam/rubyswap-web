@@ -18,7 +18,7 @@ var headers = {
 var API_ENDPOINT = 'https://api.x2y2.org/v1/events?type=sale&from_address&to_address=0x2ef1630993bc569a18f8c406ab720e2d040e155a&contract';
 
 function handler() {
-  var response, data;
+  var response;
   return regeneratorRuntime.async(function handler$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -29,20 +29,13 @@ function handler() {
 
         case 3:
           response = _context.sent;
-          _context.next = 6;
-          return regeneratorRuntime.awrap(response.json());
-
-        case 6:
-          data = _context.sent;
           return _context.abrupt("return", {
             statusCode: 200,
-            body: JSON.stringify({
-              data: data
-            })
+            body: response
           });
 
-        case 10:
-          _context.prev = 10;
+        case 7:
+          _context.prev = 7;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0);
           return _context.abrupt("return", {
@@ -52,10 +45,10 @@ function handler() {
             })
           });
 
-        case 14:
+        case 11:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 10]]);
+  }, null, null, [[0, 7]]);
 }
