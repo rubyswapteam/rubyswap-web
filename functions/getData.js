@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
 
+// const fetch = require('node-fetch');
+
 const headers = {
   // 'content-type': 'application/json',
   // 'Access-Control-Allow-Origin': '*',

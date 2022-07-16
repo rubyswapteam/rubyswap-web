@@ -9,6 +9,7 @@ var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+// const fetch = require('node-fetch');
 var headers = {
   // 'content-type': 'application/json',
   // 'Access-Control-Allow-Origin': '*',
