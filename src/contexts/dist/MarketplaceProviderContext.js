@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.useMarketplaceProvider = exports.MarketplaceProvider = void 0;
+var axios_1 = require("axios");
 var react_1 = require("react");
 var MarketplaceProviderContext = react_1["default"].createContext({});
 exports.MarketplaceProvider = function (_a) {
@@ -45,6 +46,15 @@ exports.MarketplaceProvider = function (_a) {
     // const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
     var getUserTrades = react_1.useCallback(function (user, collection) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
+            // let sales = {};
+            // let purchases = {};
+            // const contractString = collection ? '=' + collection : '';
+            axios_1["default"]
+                .get('https://rubynft.netlify.app/.netlify/functions/getData')
+                .then(function (res) {
+                // sales = res;
+                setUserTrades({ i: res });
+            });
             return [2 /*return*/];
         });
     }); }, []);

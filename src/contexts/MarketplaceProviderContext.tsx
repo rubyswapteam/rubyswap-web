@@ -27,16 +27,18 @@ export const MarketplaceProvider = ({
       // let sales = {};
       // let purchases = {};
       // const contractString = collection ? '=' + collection : '';
-      // axios
-      //   .get(
-      //     `https://api.x2y2.org/v1/events?type=sale&from_address=${user}&to_address&contract${contractString}`,
-      //     {
-      //       headers: { 'X-API-KEY': x2y2Token },
-      //     },
-      //   )
-      //   .then((res) => {
-      //     sales = res;
-      //   });
+      axios
+        .get(
+          'https://rubynft.netlify.app/.netlify/functions/getData',
+          // `https://api.x2y2.org/v1/events?type=sale&from_address=${user}&to_address&contract${contractString}`,
+          // {
+          //   headers: { 'X-API-KEY': x2y2Token },
+          // },
+        )
+        .then((res) => {
+          // sales = res;
+          setUserTrades({ i: res });
+        });
       // axios
       //   .get(
       //     `https://api.x2y2.org/v1/events?type=sale&from_address&to_address=${user}&contract${contractString}`,
