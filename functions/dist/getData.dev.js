@@ -11,14 +11,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 // const fetch = require('node-fetch');
 var headers = {
-  // 'content-type': 'application/json',
+  'content-type': 'application/json',
   // 'Access-Control-Allow-Origin': '*',
   'X-API-KEY': '38d74028-ca13-48df-ab81-bdfa4f3ab834'
 };
 var API_ENDPOINT = 'https://api.x2y2.org/v1/events?type=sale&from_address&to_address=0x2ef1630993bc569a18f8c406ab720e2d040e155a&contract';
 
 function handler() {
-  var response;
+  var response, data;
   return regeneratorRuntime.async(function handler$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -29,13 +29,18 @@ function handler() {
 
         case 3:
           response = _context.sent;
+          _context.next = 6;
+          return regeneratorRuntime.awrap(response.json());
+
+        case 6:
+          data = _context.sent;
           return _context.abrupt("return", {
             statusCode: 200,
-            body: response
+            body: JSON.stringify(data)
           });
 
-        case 7:
-          _context.prev = 7;
+        case 10:
+          _context.prev = 10;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0);
           return _context.abrupt("return", {
@@ -45,10 +50,10 @@ function handler() {
             })
           });
 
-        case 11:
+        case 14:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 10]]);
 }
