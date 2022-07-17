@@ -60,10 +60,7 @@ exports.MarketplaceProvider = function (_a) {
                         //   setUserTrades(res.data);
                         // });
                         console.log(API_URL);
-                        return [4 /*yield*/, fetch(API_URL, {
-                                mode: 'no-cors',
-                                method: 'GET'
-                            })];
+                        return [4 /*yield*/, fetch(API_URL)];
                     case 1:
                         res = _a.sent();
                         console.log(res);
