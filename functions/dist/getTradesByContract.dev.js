@@ -10,12 +10,12 @@ var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var headers = {
-  'content-type': 'application/json',
-  'X-API-Key': '38d74028-ca13-48df-ab81-bdfa4f3ab834',
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
-  'Access-Control-Allow-Credentials': true
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Methods': '*',
+  'Access-Control-Max-Age': '2592000',
+  'Access-Control-Allow-Credentials': 'true'
 };
 
 function handler(event) {

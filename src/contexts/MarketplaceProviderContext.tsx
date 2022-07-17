@@ -30,7 +30,11 @@ export const MarketplaceProvider = ({
     //   setUserTrades(res.data);
     // });
     console.log(API_URL);
-    const res = await fetch(API_URL);
+    const res = await fetch(API_URL, {
+      mode: 'no-cors',
+      method: 'GET',
+    });
+    console.log(res);
     // const result = await res.json();
     setUserTrades(res);
     // console.log(result);
