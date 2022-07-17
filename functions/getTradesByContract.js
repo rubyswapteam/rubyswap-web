@@ -3,6 +3,9 @@ import fetch from 'node-fetch';
 const headers = {
   'content-type': 'application/json',
   'X-API-Key': '38d74028-ca13-48df-ab81-bdfa4f3ab834',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
 };
 
 export async function handler(event) {

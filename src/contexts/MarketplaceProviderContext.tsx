@@ -3,7 +3,6 @@ import React, {
   JSXElementConstructor,
   ReactChildren,
   ReactElement,
-  useCallback,
   useContext,
   useMemo,
   useState,
@@ -19,15 +18,22 @@ export const MarketplaceProvider = ({
     string | JSXElementConstructor<unknown>
   >;
 }) => {
-  const [userTrades, setUserTrades] = useState<any>({});
+  const [userTrades, setUserTrades] = useState<any>(undefined);
   // const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
 
-  async function getUserTrades() {
-    const res = await fetch(
-      'https://next-boilerplate-html.netlify.app/.netlify/functions/dataapi',
-    );
-    const result = await res.json();
-    console.log(result);
+  async function getUserTrades(from = '', to = '', contract = '') {
+    const from_address = from != undefined ? '=' + from : '';
+    const to_address = to != undefined ? '=' + to : '';
+    const contract_address = contract != undefined ? '=' + contract : '';
+    const API_URL = `https://rubynft.netlify.app/.netlify/functions/getTradesByContract?from${from_address}&to${to_address}&contract${contract_address}`;
+    // axios.get(API_URL).then((res) => {
+    //   setUserTrades(res.data);
+    // });
+    console.log(API_URL);
+    const res = await fetch(API_URL);
+    // const result = await res.json();
+    setUserTrades(res);
+    // console.log(result);
   }
 
   // const getUserTrades = useCallback(
