@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 
 const headers = {
+  'X-API-Key': '38d74028-ca13-48df-ab81-bdfa4f3ab834',
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
     'Origin, X-Requested-With, Content-Type, Accept',
