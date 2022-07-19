@@ -2,7 +2,6 @@ import Dashboard from '@/components/Dashboard';
 import Layout from '@/components/Layout';
 import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
 import RefreshButton from '@/components/RefreshButton';
-import SearchModal from '@/components/SearchModal';
 import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
 import Tab from '@/components/Tab';
 import TrendingNftCollectionTable from '@/components/TrendingNftCollectionTable';

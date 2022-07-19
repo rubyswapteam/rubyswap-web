@@ -65,7 +65,7 @@ export default function Dashboard(props: any) {
     : '';
 
   useEffect(() => {
-    id ? fetchEthBalance(id) : '';
+    id && parentRoute() == 'wallet' ? fetchEthBalance(id) : '';
   }, [id]);
 
   return (
