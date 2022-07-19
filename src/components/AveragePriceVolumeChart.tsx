@@ -2,7 +2,7 @@ import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
 import { useState } from 'react';
-import { SampleTxns } from '../data/sampleTransactions';
+import { SampleTxns } from '../data/dummy-data/sampleTransactions';
 
 export default function AveragePriceVolumeChart(props: any) {
   const [chartOptions, setChartOptions] = useState(getOptions(14));
@@ -62,8 +62,6 @@ export default function AveragePriceVolumeChart(props: any) {
       totalVolume.push(roundData(volume));
       averagePrice.push(roundData(price));
     });
-
-    console.log({ price: averagePrice, volume: totalVolume });
 
     return { averagePrice: averagePrice, volume: totalVolume };
   }

@@ -54,6 +54,7 @@ export interface INftSweepCollection {
   id: string;
   collectionAddress: string;
   image: string | undefined | null;
+  isVerified?: boolean;
   name: string | undefined | null;
   chainId: number;
   value: number | undefined | null;

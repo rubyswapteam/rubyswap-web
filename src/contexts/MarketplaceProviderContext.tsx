@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ethers } from 'ethers';
 import React, {
   JSXElementConstructor,
   ReactChildren,
@@ -21,51 +22,44 @@ export const MarketplaceProvider = ({
   const [userTrades, setUserTrades] = useState<any>(undefined);
   // const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
 
-  async function getUserTrades(from = '', to = '', contract = '') {
-    const from_address = from != undefined ? '=' + from : '';
-    const to_address = to != undefined ? '=' + to : '';
+  async function getUserTrades(user = '', contract = '') {
+    const user_address = user != undefined ? '=' + user : '';
     const contract_address = contract != undefined ? '=' + contract : '';
-    const API_URL = `https://rubynft.netlify.app/.netlify/functions/getTradesByContract?from${from_address}&to${to_address}&contract${contract_address}`;
-    // axios.get(API_URL).then((res) => {
-    //   setUserTrades(res.data);
-    // });
-    console.log(API_URL);
-    const res = await fetch(API_URL);
-    console.log(res);
-    // const result = await res.json();
-    setUserTrades(res);
-    // console.log(result);
-  }
+    // const API_URL = `https://rubynft.netlify.app/.netlify/functions/getTradesByContract?from${from_address}&to${to_address}&contract${contract_address}`;
+    const salesUrl = `/.netlify/functions/getTradesByContract?from${user_address}&to&contract${contract_address}`;
+    const purchasesUrl = `/.netlify/functions/getTradesByContract?from&to${user_address}&contract${contract_address}`;
 
-  // const getUserTrades = useCallback(
-  // async (user: string, collection?: string) => {
-  // let sales = {};
-  // let purchases = {};
-  // const contractString = collection ? '=' + collection : '';
-  // axios
-  // .get(
-  // `https://api.x2y2.org/v1/events?type=sale&from_address=${user}&to_address&contract${contractString}`,
-  // {
-  //   headers: { 'X-API-KEY': x2y2Token },
-  // },
-  // )
-  // .then((res) => {
-  // sales = res;
-  // });
-  // axios
-  //   .get(
-  //     `https://api.x2y2.org/v1/events?type=sale&from_address&to_address=${user}&contract${contractString}`,
-  //     {
-  //       headers: { 'X-API-KEY': x2y2Token },
-  //     },
-  //   )
-  //   .then((res) => {
-  //     purchases = res;
-  //   });
-  // setUserTrades({ sales: sales, purchases: purchases });
-  // },
-  // [],
-  // );
+    const salesRaw = await (
+      await fetch(salesUrl, { method: 'GET', redirect: 'follow' })
+    ).json();
+    const purchasesRaw = await (
+      await fetch(purchasesUrl, { method: 'GET', redirect: 'follow' })
+    ).json();
+
+    const sales = salesRaw.data.map((sale: any) => {
+      return {
+        timestamp: sale.order.updated_at,
+        price: ethers.utils.formatEther(sale.order.price),
+        contract: sale.token.contract,
+        tokenId: sale.token.token_id,
+        txn: sale.tx,
+      };
+    });
+
+    console.log(salesRaw.data);
+
+    const purchases = purchasesRaw.data.map((sale: any) => {
+      return {
+        timestamp: sale.order.updated_at,
+        price: ethers.utils.formatEther(sale.order.price),
+        contract: sale.token.contract,
+        tokenId: sale.token.token_id,
+        txn: sale.tx,
+      };
+    });
+
+    setUserTrades({ sales: sales, purchases: purchases });
+  }
 
   const contextValue = useMemo(
     () => ({

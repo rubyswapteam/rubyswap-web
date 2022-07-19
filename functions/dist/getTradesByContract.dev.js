@@ -28,7 +28,7 @@ function handler(event) {
           from = event.queryStringParameters.from != undefined ? '&from_address=' + event.queryStringParameters.from : '';
           to = event.queryStringParameters.to != undefined ? '&to_address=' + event.queryStringParameters.to : '';
           contract = event.queryStringParameters.contract != undefined ? '&contract=' + event.queryStringParameters.contract : '';
-          API_ENDPOINT = 'https://api.x2y2.org/v1/events?type=sale' + from + to + contract;
+          API_ENDPOINT = 'https://api.x2y2.org/v1/events?type=sale&limit=200' + from + to + contract;
           console.log(API_ENDPOINT);
           _context.prev = 5;
           _context.next = 8;

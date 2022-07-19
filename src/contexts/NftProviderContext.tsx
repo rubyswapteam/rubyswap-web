@@ -15,11 +15,11 @@ import {
   INftCollectionUpdate,
   NftChainId,
 } from '@/utils/nftUtils';
-import { SampleTrending } from '@/data/sampleTrending';
-import { SampleSweeps } from '@/data/sampleSweeps';
-import { SampleCollection } from '@/data/sampleCollection';
-import { SampleNfts } from '@/data/sampleNfts';
-import { SampleCollectionUpdates } from '@/data/sampleCollectionUpdates';
+import { SampleTrending } from '@/data/dummy-data/sampleTrending';
+import { SampleSweeps } from '@/data/dummy-data/sampleSweeps';
+import { SampleCollection } from '@/data/dummy-data/sampleCollection';
+import { SampleNfts } from '@/data/dummy-data/sampleNfts';
+import { SampleCollectionUpdates } from '@/data/dummy-data/sampleCollectionUpdates';
 
 const NftProviderContext = React.createContext<any>({});
 
@@ -142,6 +142,7 @@ export const NftProvider = ({
         id: SampleSweeps[i].collections[0]._id,
         collectionAddress: SampleSweeps[i].collectionsBought[0],
         image: SampleSweeps[i].collections[0].imageUrl,
+        isVerified: SampleSweeps[i].collections[0].isVerified,
         name: SampleSweeps[i].collections[0].name,
         chainId: NftChainId.ETHEREUM,
         value: SampleSweeps[i].totalEthSpent,

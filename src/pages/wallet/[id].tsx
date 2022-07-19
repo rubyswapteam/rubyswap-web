@@ -8,13 +8,16 @@ import SalesHistoryChart from '@/components/SalesHistoryChart';
 import Tab from '@/components/Tab';
 import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import RightArrow from '../../components/RightArrow';
 import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarFilter';
 import UserProfileHeader from '../../components/UserProfileHeader';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
+import UserTradeHistoryChart from '@/components/UserTradeHistoryChart';
+import UserAnalyticsMarketplaceFilter from '@/components/UserAnalyticsMarketplaceFilter';
+import X2Y2Icon from '@/components/X2Y2Icon';
 
 export default function Collection() {
   const router = useRouter();
@@ -54,13 +57,73 @@ export default function Collection() {
     getCollectionNfts,
   } = useWalletProvider();
 
+  const marketplaceOptions = [
+    {
+      name: 'X2Y2',
+      icon: (
+        <div
+          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+          aria-hidden="true"
+        >
+          <X2Y2Icon></X2Y2Icon>
+        </div>
+      ),
+    },
+  ];
+
+  const marketplaceDropdownDefault = {
+    name: 'Marketplace',
+    icon: undefined,
+  };
+
+  const tradeOptions = [
+    {
+      name: 'Purchases',
+    },
+    {
+      name: 'Sales',
+    },
+  ];
+
+  const tradeDropdownDefault = {
+    name: 'Trades',
+  };
+
+  const timePeriodOptions = [
+    {
+      name: 'Purchases',
+    },
+    {
+      name: 'Sales',
+    },
+  ];
+
+  const timePeriodDropdownDefault = {
+    name: 'Trades',
+  };
+
+  const contractOptions: {
+    name: string;
+    icon?: any | undefined;
+  }[] = [];
+  Object.keys(collectionNames).forEach((name) => {
+    contractOptions.push({ name: name });
+  });
+
+  console.log(Object.values(collectionNames));
+  console.log(contractOptions);
+
+  const contractDropdownDefault = {
+    name: 'Collections',
+  };
+
   const { userTrades, getUserTrades } = useMarketplaceProvider();
 
   useEffect(() => {
     id ? getUserTrades(id) : '';
     fetchUserNfts(id?.toString());
     setActiveNfts({ collection: '', nfts: [] });
-  }, [id]);
+  }, [id?.toString()]);
 
   const refreshButtonTabs: (string | undefined)[] = [];
   const rangeButtonsTabs: (string | undefined)[] = [];
@@ -96,14 +159,29 @@ export default function Collection() {
       return (
         <>
           <div className="h-inherit overflow-scroll pb-80">
-            <CollectionTitleHeader title={'Summary Stats'} />
-            <BreakHorizontal />
-            <div className="px-4 sm:px-6 md:px-8">
-              <div className="w-full mt-5 rounded-xl overflow-hidden">
-                <SalesHistoryChart chart={{ height: '30%' }} />
+            <div className="flex justify-between px-4 sm:px-6 md:px-8">
+              <CollectionTitleHeader title={'Summary Stats'} />
+              <div className="flex gap-x-2">
+                <UserAnalyticsMarketplaceFilter
+                  options={marketplaceOptions}
+                  defaultValue={marketplaceDropdownDefault}
+                />
+                <UserAnalyticsMarketplaceFilter
+                  options={tradeOptions}
+                  defaultValue={tradeDropdownDefault}
+                />
+                <UserAnalyticsMarketplaceFilter
+                  options={contractOptions}
+                  defaultValue={contractDropdownDefault}
+                />
               </div>
+            </div>
+            <div className="px-4 sm:px-6 md:px-8 py-20 bg-gray-50">
               <div className="w-full mt-5 rounded-xl overflow-hidden">
-                <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
+                <UserTradeHistoryChart
+                  chart={{ height: '30%' }}
+                  userTrades={userTrades}
+                />
               </div>
             </div>
           </div>

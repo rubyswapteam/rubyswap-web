@@ -25,7 +25,7 @@ export async function handler(event) {
       ? '&contract=' + event.queryStringParameters.contract
       : '';
   const API_ENDPOINT =
-    'https://api.x2y2.org/v1/events?type=sale' + from + to + contract;
+    'https://api.x2y2.org/v1/events?type=sale&limit=200' + from + to + contract;
 
   console.log(API_ENDPOINT);
   try {

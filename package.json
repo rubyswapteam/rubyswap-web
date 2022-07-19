@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "server": "ntl dev",
     "build": "next build",
     "export": "next export",
     "start": "next start",

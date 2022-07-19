@@ -19,105 +19,107 @@ export default function SweepsNftCollectionTable() {
   }, [sweepNftCollections]);
 
   return (
-    <>
-      <div className="flex flex-col">
-        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full align-middle md:px-3 lg:px-4">
-            <div className="overflow-hidden md:rounded-lg">
-              {sweepNftCollections && (
-                <div className="mt-1 flex flex-col">
-                  <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                      <div className="overflow-hidden md:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-100">
-                          <thead>
-                            <tr>
-                              <th
-                                scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6 w-[5%]"
-                              >
-                                &nbsp;
-                              </th>
-                              <th
-                                scope="col"
-                                className="py-3.5 text-left text-sm text-gray-900 w-[5%]"
-                              >
-                                &nbsp;
-                              </th>
-                              <th
-                                scope="col"
-                                className="py-3.5 pr-3 text-left text-sm text-gray-900 w-[20%]"
-                              >
-                                Collection
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%]"
-                              >
-                                Chain
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%]"
-                              >
-                                Value
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%]"
-                              >
-                                Sales
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%]"
-                              >
-                                Buyer
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%]"
-                              >
-                                Transaction
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-3 py-3.5 text-left text-sm text-gray-900 w-[10%]"
-                              >
-                                Date
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-100 bg-white">
-                            {sweepNftCollections.map(
-                              (nftSweepCollection: INftSweepCollection) =>
-                                nftSweepCollection.image && (
-                                  <React.Fragment key={nftSweepCollection.id}>
-                                    <Link
-                                      key={nftSweepCollection.id}
-                                      href={`/collection/${nftSweepCollection.collectionAddress}`}
+    <div className="flex flex-col">
+      <div className="">
+        <div className="inline-block min-w-full align-middle">
+          <div className="md:rounded-lg">
+            {sweepNftCollections && (
+              <div className="mt-1 flex flex-col">
+                <div className="">
+                  <div className="inline-block min-w-full py-2 align-middle">
+                    <div className=" md:rounded-lg">
+                      <table className="min-w-full border-separate border-spacing-0">
+                        <thead>
+                          <tr>
+                            <th
+                              scope="col"
+                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6 w-[5%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              &nbsp;
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold py-3.5 text-left text-sm text-gray-900 w-[5%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              &nbsp;
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 w-[25%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Collection
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[15%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Chain
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Value
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Sales
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Buyer
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Transactions
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                            >
+                              Date
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 bg-white">
+                          {sweepNftCollections.map(
+                            (nftCollection: INftSweepCollection, i: number) =>
+                              nftCollection.image && (
+                                <React.Fragment key={i}>
+                                  <Link
+                                    key={nftCollection.id}
+                                    href={`/collection/${nftCollection.collectionAddress}`}
+                                  >
+                                    <tr
+                                      className="hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100"
+                                      key={nftCollection.id}
                                     >
-                                      <tr
-                                        className="hover:bg-gray-50 cursor-pointer"
-                                        key={nftSweepCollection.id}
-                                      >
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-7 text-sm sm:pl-6">
-                                          <div className="flex items-center">
-                                            <StarIcon height={20} width={20} />
+                                      <td className="py-5 pl-4 pr-7 text-sm sm:pl-6">
+                                        <div className="flex items-center">
+                                          <StarIcon height={20} width={20} />
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap py-3 text-sm">
+                                        <div className="flex items-center">
+                                          <img
+                                            className="h-8 w-8 rounded-full"
+                                            src={nftCollection.image}
+                                            alt=""
+                                          />
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap">
+                                        <div className="text-gray-700 flex items-center text-sm font-medium">
+                                          <div className="pt-1">
+                                            {nftCollection.name}
                                           </div>
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 text-sm">
-                                          <div className="flex items-center">
-                                            <img
-                                              className="h-12 w-12 rounded-full"
-                                              src={nftSweepCollection.image}
-                                              alt=""
-                                            />
-                                          </div>
-                                        </td>
-                                        <td className="whitespace-nowrap">
-                                          <div className="text-gray-900 flex items-center">
-                                            {nftSweepCollection.name}
+                                          {nftCollection.isVerified == true && (
                                             <img
                                               src="https://www.genie.xyz/svgs/verifiedBadge.svg"
                                               className="ml-1"
@@ -127,79 +129,83 @@ export default function SweepsNftCollectionTable() {
                                               }}
                                               alt="verified badge"
                                             />
-                                          </div>
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                          {nftSweepCollection.chainId == 1 && (
-                                            <>
-                                              <EthereumIcon
-                                                width={16}
-                                                height={16}
-                                              />
-                                            </>
                                           )}
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                          <div className="flex items-center">
-                                            {nftSweepCollection?.value
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700">
+                                        {nftCollection.chainId == 1 && (
+                                          <>
+                                            <EthereumIcon
+                                              width={16}
+                                              height={16}
+                                            />
+                                          </>
+                                        )}
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
+                                        <div className="flex items-center">
+                                          <div className="pt-1">
+                                            {nftCollection?.value
                                               ? (
-                                                  nftSweepCollection?.value /
+                                                  nftCollection?.value /
                                                   Math.pow(10, 18)
                                                 ).toFixed(4)
                                               : '0.0000'}{' '}
-                                            {nftSweepCollection.chainId ==
-                                              1 && (
-                                              <>
-                                                <div className="pl-1">
-                                                  <EthereumIcon
-                                                    width={18}
-                                                    height={18}
-                                                  />
-                                                </div>
-                                              </>
-                                            )}
                                           </div>
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                          <div className="flex items-center">
-                                            {nftSweepCollection.sales}
+                                          {nftCollection.chainId == 1 && (
+                                            <>
+                                              <div className="pl-1">
+                                                <EthereumIcon
+                                                  width={16}
+                                                  height={16}
+                                                />
+                                              </div>
+                                            </>
+                                          )}
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
+                                        <div className="flex items-center">
+                                          <div className="pt-1">
+                                            {nftCollection.sales}
                                           </div>
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                          <div className="flex items-center">
-                                            {nftSweepCollection.buyer}
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
+                                        <div className="flex items-center">
+                                          <div className="pt-1">
+                                            {nftCollection.buyer}
                                           </div>
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                          <div className="flex items-center">
-                                            {nftSweepCollection.transaction}
-                                          </div>
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                          <div className="flex items-center">
-                                            {dayjs(
-                                              Number(
-                                                nftSweepCollection.timestamp,
-                                              ) * 1000,
-                                            ).fromNow()}
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    </Link>
-                                  </React.Fragment>
-                                ),
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
+                                        <div className="flex items-center">
+                                          {nftCollection.transaction}
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
+                                        <div className="flex items-center">
+                                          {dayjs(
+                                            Number(nftCollection.timestamp) *
+                                              1000,
+                                          ).fromNow()}
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </Link>
+                                </React.Fragment>
+                              ),
+                          )}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
