@@ -71,6 +71,7 @@ html {
 
 .highcharts-credits {
   display: none !important;
+  opacity: 0;
 }
 
 .web3modal-modal-lightbox {

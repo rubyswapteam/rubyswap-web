@@ -128,11 +128,17 @@ export default function UserTradeHistoryChart(props: any) {
           name: 'Sales',
           color: '#33333399',
           data: trades?.sales,
+          marker: {
+            symbol: 'circle',
+          },
         },
         {
           name: 'Purchases',
           color: 'rgb(59, 130, 246)',
           data: trades?.purchases,
+          marker: {
+            symbol: 'circle',
+          },
         },
       ],
       legend: {

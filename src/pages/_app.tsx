@@ -1,10 +1,9 @@
-import '../styles/globals.css';
-import { AppProps } from 'next/app';
+import { MarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
 import { NftProvider } from '@/contexts/NftProviderContext';
 import { WalletProvider } from '@/contexts/WalletProviderContext';
-import { Web3Provider } from '../contexts/Web3ProviderContext';
-import { MarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
-import SearchModal from '../components/SearchModal';
+import { Web3Provider } from '@/contexts/Web3ProviderContext';
+import { AppProps } from 'next/app';
+import '../styles/globals.css';
 
 function App({ Component, pageProps }: AppProps) {
   return (

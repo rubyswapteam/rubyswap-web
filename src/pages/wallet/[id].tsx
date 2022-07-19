@@ -1,23 +1,22 @@
-import BreakHorizontal from '@/components/BreakHorizontal';
 import CollectionList from '@/components/CollectionList';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import Dashboard from '@/components/Dashboard';
 import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
-import SalesHistoryChart from '@/components/SalesHistoryChart';
 import Tab from '@/components/Tab';
+import UserAnalyticsMarketplaceFilter from '@/components/UserAnalyticsMarketplaceFilter';
+import UserTradeHistoryChart from '@/components/UserTradeHistoryChart';
+import X2Y2Icon from '@/components/X2Y2Icon';
 import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
-import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
+import { useEffect } from 'react';
+import LooksRareIcon from '../../components/LooksRareIcon';
+import OpenSeaIcon from '../../components/OpenseaIcon';
 import RightArrow from '../../components/RightArrow';
 import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarFilter';
 import UserProfileHeader from '../../components/UserProfileHeader';
-import { useWalletProvider } from '../../contexts/WalletProviderContext';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
-import UserTradeHistoryChart from '@/components/UserTradeHistoryChart';
-import UserAnalyticsMarketplaceFilter from '@/components/UserAnalyticsMarketplaceFilter';
-import X2Y2Icon from '@/components/X2Y2Icon';
+import { useWalletProvider } from '../../contexts/WalletProviderContext';
 
 export default function Collection() {
   const router = useRouter();
@@ -65,7 +64,29 @@ export default function Collection() {
           className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
           aria-hidden="true"
         >
-          <X2Y2Icon></X2Y2Icon>
+          <X2Y2Icon />
+        </div>
+      ),
+    },
+    {
+      name: 'Looksrare',
+      icon: (
+        <div
+          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+          aria-hidden="true"
+        >
+          <LooksRareIcon />
+        </div>
+      ),
+    },
+    {
+      name: 'Opensea',
+      icon: (
+        <div
+          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+          aria-hidden="true"
+        >
+          <OpenSeaIcon />
         </div>
       ),
     },
@@ -106,8 +127,14 @@ export default function Collection() {
     name: string;
     icon?: any | undefined;
   }[] = [];
-  Object.keys(collectionNames).forEach((name) => {
-    contractOptions.push({ name: name });
+  Object.values(
+    collectionNames as {
+      [key: string]: string;
+    },
+  ).forEach((name) => {
+    if (name) {
+      contractOptions.push({ name: name });
+    }
   });
 
   console.log(Object.values(collectionNames));

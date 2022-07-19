@@ -91,6 +91,7 @@ export const Web3Provider = ({
       activeWallet,
       setActiveWallet,
       fetchEthBalance,
+      ethBalance,
     }),
     [
       provider,
@@ -99,6 +100,7 @@ export const Web3Provider = ({
       activeWallet,
       setActiveWallet,
       fetchEthBalance,
+      ethBalance,
     ],
   );
 

@@ -38,6 +38,7 @@
     "@headlessui/react": "^1.6.5",
     "@heroicons/react": "1.0.5",
     "@netlify/plugin-nextjs": "^4.0.0-rc.2",
+    "@next/eslint-plugin-next": "^12.2.2",
     "@tailwindcss/aspect-ratio": "0.4.0",
     "@tailwindcss/forms": "0.4.0",
     "@tailwindcss/line-clamp": "0.3.0",
