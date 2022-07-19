@@ -41,8 +41,8 @@ const UserAnalyticsMarketplaceFilter: React.FC<Props> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 mt-2 whitespace-nowrap max-h-80 overflow-scroll min-w-56 grow max-w-100 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50">
-          <div className="py-1">
+        <Menu.Items className="origin-top-right absolute right-0 mt-2 whitespace-nowrap overflow-scroll min-w-56 grow max-w-100 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50">
+          <div className="py-1 max-h-80">
             {options.map((option) => (
               <Menu.Item key={option.name}>
                 {({ active }) => (
