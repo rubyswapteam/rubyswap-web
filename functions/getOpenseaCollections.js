@@ -11,9 +11,16 @@ const headers = {
 };
 
 export async function handler(event) {
+  const assetOwner =
+    event.queryStringParameters.assetOwner != undefined
+      ? '&asset_owner=' + event.queryStringParameters.assetOwner
+      : '';
+  const offset =
+    event.queryStringParameters.offset != undefined
+      ? '&offset=' + event.queryStringParameters.offset
+      : '';
   const API_ENDPOINT =
-    'https://api.opensea.io/api/v1/collection/' +
-    event.queryStringParameters.slug;
+    'https://api.opensea.io/api/v1/collections?limit=300' + assetOwner + offset;
 
   try {
     const response = await fetch(API_ENDPOINT, { headers: headers });
