@@ -18,8 +18,10 @@ import {
 import { SampleTrending } from '@/data/dummy-data/sampleTrending';
 import { SampleSweeps } from '@/data/dummy-data/sampleSweeps';
 import { SampleCollection } from '@/data/dummy-data/sampleCollection';
+import { SampleCollectionOS } from '@/data/dummy-data/sampleCollectionOS';
 import { SampleNfts } from '@/data/dummy-data/sampleNfts';
 import { SampleCollectionUpdates } from '@/data/dummy-data/sampleCollectionUpdates';
+import Collection from '../pages/wallet/[id]';
 
 const NftProviderContext = React.createContext<any>({});
 
@@ -48,26 +50,30 @@ export const NftProvider = ({
   const fetchNftCollection = useCallback(async () => {
     const nftCollection: INftCollection = {
       id: SampleCollection[0]._id,
-      contractAddress: SampleCollection[0].addresses[0].address,
-      contractAddressStandard: SampleCollection[0].addresses[0].standard,
-      description: SampleCollection[0].description,
-      isVerified: SampleCollection[0].isVerified,
-      image: SampleCollection[0].imageUrl,
-      bannerImage: SampleCollection[0].banner_image_url,
-      slug: SampleCollection[0].slug,
-      name: SampleCollection[0].name,
+      contractAddress:
+        SampleCollectionOS.collection.primary_asset_contracts[0].address,
+      tokenStandard:
+        SampleCollectionOS.collection.primary_asset_contracts[0].schema_name,
+      description: SampleCollectionOS.collection.description,
+      isVerified:
+        SampleCollectionOS.collection.safelist_request_status == 'verified',
+      image: SampleCollectionOS.collection.image_url,
+      bannerImage: SampleCollectionOS.collection.banner_image_url,
+      slug: SampleCollectionOS.collection.slug,
+      name: SampleCollectionOS.collection.name,
       chainId: NftChainId.ETHEREUM,
-      oneDayVolume: SampleCollection[0].stats.one_day_volume,
-      oneDaySales: SampleCollection[0].stats.one_day_sales,
-      oneDayAveragePrice: SampleCollection[0].stats.one_day_average_price,
-      sevenDayVolume: SampleCollection[0].stats.seven_day_volume,
-      sevenDaySales: SampleCollection[0].stats.seven_day_sales,
-      thirtyDaySales: SampleCollection[0].stats.thirty_day_sales,
-      thirtyDayVolume: SampleCollection[0].stats.thirty_day_volume,
-      floor: SampleCollection[0].stats.floor_price,
-      owners: SampleCollection[0].stats.num_owners,
-      count: SampleCollection[0].stats.count,
-      supply: SampleCollection[0].stats.total_supply,
+      oneDayVolume: SampleCollectionOS.collection.stats.one_day_volume,
+      oneDaySales: SampleCollectionOS.collection.stats.one_day_sales,
+      oneDayAveragePrice:
+        SampleCollectionOS.collection.stats.one_day_average_price,
+      sevenDayVolume: SampleCollectionOS.collection.stats.seven_day_volume,
+      sevenDaySales: SampleCollectionOS.collection.stats.seven_day_sales,
+      thirtyDaySales: SampleCollectionOS.collection.stats.thirty_day_sales,
+      thirtyDayVolume: SampleCollectionOS.collection.stats.thirty_day_volume,
+      floor: SampleCollectionOS.collection.stats.floor_price,
+      owners: SampleCollectionOS.collection.stats.num_owners,
+      count: SampleCollectionOS.collection.stats.count,
+      supply: SampleCollectionOS.collection.stats.total_supply,
     };
     setNftCollection(nftCollection);
   }, []);

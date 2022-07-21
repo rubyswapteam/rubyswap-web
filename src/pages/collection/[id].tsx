@@ -96,7 +96,10 @@ export default function Collection() {
       },
       {
         name: 'Unique Ownership',
-        value: `${(nftCollection?.owners / nftCollection?.count) * 100}%`,
+        value: `${(
+          (nftCollection?.owners / nftCollection?.count) *
+          100
+        ).toFixed(2)}%`,
       },
     ];
   }
@@ -127,22 +130,24 @@ export default function Collection() {
               </div>
             </div>
           </div>
-          {/* <BreakHorizontal /> */}
-          <div className="my-8 my-14">
-            <CollectionTitleHeader
-              title={'New Listings'}
-              buttonText={'See More'}
-              route={`/collection/${id}?tab=listings`}
-            />
+          <div className="my-14">
+            <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
+              <CollectionTitleHeader
+                title={'New Listings'}
+                buttonText={'See More'}
+                route={`/collection/${id}?tab=listings`}
+              />
+            </div>
             <CollectionListSingleRow selectedNfts={nfts && nfts.slice(0, 10)} />
           </div>
-          {/* <BreakHorizontal /> */}
-          <div className="mb-8 my-14">
-            <CollectionTitleHeader
-              title={'Recent Sales'}
-              buttonText={'See More'}
-              route={`/collection/${id}?tab=analytics`}
-            />
+          <div className="my-14">
+            <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
+              <CollectionTitleHeader
+                title={'Recent Sales'}
+                buttonText={'See More'}
+                route={`/collection/${id}?tab=analytics`}
+              />
+            </div>
             <CollectionListSingleRow
               selectedNfts={nfts && [...nfts.slice(6, 10), ...nfts.slice(0, 6)]}
             />

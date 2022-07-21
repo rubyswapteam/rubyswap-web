@@ -137,6 +137,35 @@ export default function Collection() {
     }
   });
 
+  function getStats() {
+    const rng = range ? range?.toString() : '24h';
+    return [
+      {
+        name: 'Total Buys',
+        value: '0',
+        // nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
+      },
+      {
+        name: `${rng} Volume`,
+        value: '',
+        // nftCollection?.thirtyDayVolume &&
+        // `${(nftCollection?.thirtyDayVolume).toFixed(2)} ETH`,
+      },
+      {
+        name: `${rng} Day Sales`,
+        value: '',
+      },
+      {
+        name: 'Supply',
+        value: '',
+      },
+      {
+        name: 'Unique Ownership',
+        value: '',
+      },
+    ];
+  }
+
   console.log(Object.values(collectionNames));
   console.log(contractOptions);
 

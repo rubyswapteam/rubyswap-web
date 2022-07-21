@@ -14,7 +14,7 @@ export interface INft {
 export interface INftCollection {
   id: string;
   contractAddress?: string;
-  contractAddressStandard?: string;
+  tokenStandard?: string;
   description?: string;
   isVerified?: boolean;
   image: string | undefined | null;
