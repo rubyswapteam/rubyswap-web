@@ -12,7 +12,7 @@ export interface INft {
 }
 
 export interface INftCollection {
-  id: string;
+  id?: string;
   contractAddress?: string;
   tokenStandard?: string;
   description?: string;
@@ -116,8 +116,6 @@ export const rangeTabs = (tab: any, range: any, route?: string) => {
   });
   return tabObj;
 };
-
-
 
 function getRangeHref(tab: any, range: any, route?: string) {
   const baseRoute = route || '';

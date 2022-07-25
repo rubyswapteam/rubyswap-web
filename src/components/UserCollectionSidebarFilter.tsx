@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface Props {
   userNfts?: any;
   collectionNames?: { [key: string]: string };
@@ -8,7 +6,6 @@ interface Props {
 }
 
 export default function UserCollectionSidebarFilter(props: Props) {
-  const [summary, setSummary] = useState<any>(props?.userNfts?.summary);
 
   return (
     <>

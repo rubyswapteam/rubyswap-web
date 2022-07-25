@@ -1,3 +1,4 @@
+import { useMarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/solid';
 import React, { Fragment, useState } from 'react';
@@ -10,6 +11,8 @@ export interface DropdownOption {
 interface Props {
   options: DropdownOption[];
   defaultValue: DropdownOption;
+  filter: string;
+  collectionNames: any;
 }
 
 function classNames(...classes: string[]) {
@@ -19,8 +22,23 @@ function classNames(...classes: string[]) {
 const UserAnalyticsMarketplaceFilter: React.FC<Props> = ({
   options,
   defaultValue,
+  filter,
+  collectionNames,
 }): JSX.Element => {
+  const { applyTradeFilters } = useMarketplaceProvider();
   const [activeName, setActiveName] = useState<DropdownOption>(defaultValue);
+
+  function getContractFromCollection(name: string) {
+    return Object.keys(collectionNames).find(
+      (contract) => collectionNames[contract] == name,
+    );
+  }
+
+  function getFilter(option: DropdownOption) {
+    return filter == 'contract'
+      ? { [filter]: getContractFromCollection(option.name) }
+      : { [filter]: option.name };
+  }
 
   return !!options ? (
     <Menu as="div" className="relative inline-block text-left self-center">
@@ -54,6 +72,7 @@ const UserAnalyticsMarketplaceFilter: React.FC<Props> = ({
                     )}
                     onClick={() => {
                       setActiveName(option);
+                      applyTradeFilters(undefined, getFilter(option));
                     }}
                   >
                     {option.icon}
@@ -74,6 +93,7 @@ const UserAnalyticsMarketplaceFilter: React.FC<Props> = ({
                   )}
                   onClick={() => {
                     setActiveName(defaultValue);
+                    applyTradeFilters(undefined, { [filter]: '' });
                   }}
                 >
                   <TrashIcon

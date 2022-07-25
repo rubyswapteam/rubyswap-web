@@ -4,7 +4,7 @@ import Dashboard from '@/components/Dashboard';
 import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
 import Tab from '@/components/Tab';
-import UserAnalyticsMarketplaceFilter from '@/components/UserAnalyticsMarketplaceFilter';
+import UserAnalyticsMarketplaceFilter from '@/components/UserAnalyticsFilter';
 import UserTradeHistoryChart from '@/components/UserTradeHistoryChart';
 import X2Y2Icon from '@/components/X2Y2Icon';
 import { rangeTabs } from '@/utils/nftUtils';
@@ -69,7 +69,7 @@ export default function Collection() {
       ),
     },
     {
-      name: 'Looksrare',
+      name: 'LooksRare',
       icon: (
         <div
           className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
@@ -97,32 +97,6 @@ export default function Collection() {
     icon: undefined,
   };
 
-  const tradeOptions = [
-    {
-      name: 'Purchases',
-    },
-    {
-      name: 'Sales',
-    },
-  ];
-
-  const tradeDropdownDefault = {
-    name: 'Trades',
-  };
-
-  const timePeriodOptions = [
-    {
-      name: 'Purchases',
-    },
-    {
-      name: 'Sales',
-    },
-  ];
-
-  const timePeriodDropdownDefault = {
-    name: 'Trades',
-  };
-
   const contractOptions: {
     name: string;
     icon?: any | undefined;
@@ -137,43 +111,12 @@ export default function Collection() {
     }
   });
 
-  function getStats() {
-    const rng = range ? range?.toString() : '24h';
-    return [
-      {
-        name: 'Total Buys',
-        value: '0',
-        // nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
-      },
-      {
-        name: `${rng} Volume`,
-        value: '',
-        // nftCollection?.thirtyDayVolume &&
-        // `${(nftCollection?.thirtyDayVolume).toFixed(2)} ETH`,
-      },
-      {
-        name: `${rng} Day Sales`,
-        value: '',
-      },
-      {
-        name: 'Supply',
-        value: '',
-      },
-      {
-        name: 'Unique Ownership',
-        value: '',
-      },
-    ];
-  }
-
-  console.log(Object.values(collectionNames));
-  console.log(contractOptions);
-
   const contractDropdownDefault = {
     name: 'Collections',
   };
 
-  const { userTrades, getUserTrades } = useMarketplaceProvider();
+  const { userTrades, userTradesFiltered, getUserTrades } =
+    useMarketplaceProvider();
 
   useEffect(() => {
     id ? getUserTrades(id) : '';
@@ -221,14 +164,14 @@ export default function Collection() {
                 <UserAnalyticsMarketplaceFilter
                   options={marketplaceOptions}
                   defaultValue={marketplaceDropdownDefault}
-                />
-                <UserAnalyticsMarketplaceFilter
-                  options={tradeOptions}
-                  defaultValue={tradeDropdownDefault}
+                  filter={'marketplace'}
+                  collectionNames={collectionNames}
                 />
                 <UserAnalyticsMarketplaceFilter
                   options={contractOptions}
                   defaultValue={contractDropdownDefault}
+                  filter={'contract'}
+                  collectionNames={collectionNames}
                 />
               </div>
             </div>
@@ -236,7 +179,7 @@ export default function Collection() {
               <div className="w-full mt-5 rounded-xl overflow-hidden">
                 <UserTradeHistoryChart
                   chart={{ height: '30%' }}
-                  userTrades={userTrades}
+                  userTrades={userTradesFiltered || userTrades}
                 />
               </div>
             </div>

@@ -16,13 +16,20 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import CollectionUpdate from '../../components/CollectionUpdate';
+import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 
 export default function Collection() {
   const router = useRouter();
   const { id, tab, range } = router.query;
-  const { nftCollection, fetchNftCollection } = useNftProvider();
-  const { nfts, fetchNfts } = useNftProvider();
-  const { collectionUpdates, fetchNftCollectionUpdates } = useNftProvider();
+  const {
+    nfts,
+    fetchNfts,
+    nftCollection,
+    fetchNftCollection,
+    collectionUpdates,
+    fetchNftCollectionUpdates,
+  } = useNftProvider();
+  const { activeCollection, getCollectionBySlugOS } = useMarketplaceProvider();
 
   useEffect(() => {
     if (!nftCollection) {
@@ -35,6 +42,18 @@ export default function Collection() {
       fetchNftCollectionUpdates();
     }
   }, [nftCollection, nfts, collectionUpdates]);
+
+  useEffect(() => {
+    console.log(id);
+    if (
+      !activeCollection ||
+      !activeCollection.collection ||
+      activeCollection.collection.slug.toString().toLowerCase() !==
+        id?.toString().toLowerCase()
+    ) {
+      getCollectionBySlugOS(id);
+    }
+  }, [id]);
 
   const primaryTabs = [
     {
@@ -77,27 +96,29 @@ export default function Collection() {
       {
         name: 'Floor Price',
         value:
-          nftCollection?.floor && `${(nftCollection?.floor).toFixed(2)} ETH`,
+          activeCollection?.floor &&
+          `${(activeCollection?.floor).toFixed(2)} ETH`,
       },
       {
         name: `${rng} Volume`,
         value:
-          nftCollection?.thirtyDayVolume &&
-          `${(nftCollection?.thirtyDayVolume).toFixed(2)} ETH`,
+          activeCollection?.thirtyDayVolume &&
+          `${(activeCollection?.thirtyDayVolume).toFixed(2)} ETH`,
       },
       {
         name: `${rng} Day Sales`,
         value:
-          nftCollection?.thirtyDaySales && `${nftCollection?.thirtyDaySales}`,
+          activeCollection?.thirtyDaySales &&
+          `${activeCollection?.thirtyDaySales}`,
       },
       {
         name: 'Supply',
-        value: nftCollection?.count && `${nftCollection?.count}`,
+        value: activeCollection?.count && `${activeCollection?.count}`,
       },
       {
         name: 'Unique Ownership',
         value: `${(
-          (nftCollection?.owners / nftCollection?.count) *
+          (activeCollection?.owners / activeCollection?.count) *
           100
         ).toFixed(2)}%`,
       },
@@ -176,12 +197,15 @@ export default function Collection() {
     if (tab == 'analytics') {
       return (
         <div className="h-inherit overflow-scroll pb-80">
-          <CollectionTitleHeader title={'Summary Stats'} />
-          <StatsBoxList
-            stats={getStats()}
-            route={`/collection/${id}?tab=analytics`}
-          />
-          <BreakHorizontal />
+          <div className="pb-4">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+              <CollectionTitleHeader title={'Summary Stats'} />
+            </div>
+            <StatsBoxList
+              stats={getStats()}
+              route={`/collection/${id}?tab=analytics`}
+            />
+          </div>
           <div className="px-4 sm:px-6 md:px-8">
             <div className="w-full mt-5 rounded-xl overflow-hidden">
               <SalesHistoryChart chart={{ height: '30%' }} />
@@ -220,18 +244,18 @@ export default function Collection() {
         <Dashboard
           title={
             <CollectionProfileHeader
-              image={nftCollection?.image}
-              name={nftCollection?.name}
-              items={nftCollection?.supply}
-              floor={nftCollection?.floor}
-              oneDayVolume={nftCollection?.oneDayVolume}
+              image={activeCollection?.image}
+              name={activeCollection?.name}
+              items={activeCollection?.supply}
+              floor={activeCollection?.floor}
+              oneDayVolume={activeCollection?.oneDayVolume}
             />
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
           refresh={setRefreshButton()}
           body={setBody()}
-          banner={nftCollection?.bannerImage}
+          banner={activeCollection?.bannerImage}
         />
       </Layout>
     </>
