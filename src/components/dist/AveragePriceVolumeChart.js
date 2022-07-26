@@ -128,7 +128,7 @@ function AveragePriceVolumeChart(props) {
                     name: 'Volume',
                     type: 'column',
                     yAxis: 1,
-                    data: trades.volume,
+                    data: trades === null || trades === void 0 ? void 0 : trades.volume,
                     tooltip: {
                         valueSuffix: ' ETH'
                     },
@@ -137,7 +137,7 @@ function AveragePriceVolumeChart(props) {
                 {
                     name: 'Average Price',
                     type: 'spline',
-                    data: trades.averagePrice,
+                    data: trades === null || trades === void 0 ? void 0 : trades.averagePrice,
                     color: 'rgb(70, 115, 250)',
                     // color: {
                     //   linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
