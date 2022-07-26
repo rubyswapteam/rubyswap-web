@@ -1,24 +1,35 @@
+import { Transition } from '@headlessui/react';
 import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
-import { useState } from 'react';
-import { SampleTxns } from '../data/dummy-data/sampleTransactions';
+import { useEffect, useState } from 'react';
 
 export default function AveragePriceVolumeChart(props: any) {
-  const [chartOptions, setChartOptions] = useState(getOptions(14));
+  const [daysRequired, setDaysRequired] = useState({ days: 60, trim: 5 });
+  const [isShowing, setIsShowing] = useState(false);
+  const [chartOptions, setChartOptions] = useState(undefined as any);
+
+  useEffect(() => {
+    setChartOptions(reset());
+  }, [props.data, daysRequired]);
 
   function roundData(x: number) {
     return Math.round((x + Number.EPSILON) * 100) / 100;
   }
 
-  function getPreviousDays(daysRequired: number) {
+  function reset() {
+    const dates = getPreviousDays(daysRequired.days, daysRequired.trim);
+    const trades = manipulateData(dates, daysRequired.trim);
+    const newOptions = getOptions(dates.days, trades);
+    return newOptions;
+  }
+
+  function getPreviousDays(daysRequired: number, trim: number) {
     const days = [];
     const daysUnix = [];
 
-    for (let i = daysRequired; i >= 1; i--) {
-      const date = moment([2022, 5, 30]) //Force the date for now.
-        .subtract(i, 'days')
-        .format('DD/MM/YYYY');
+    for (let i = daysRequired; i >= 0; i = i - 1 * trim) {
+      const date = moment().subtract(i, 'days').format('DD/MM/YYYY');
       days.push(date);
       const unixDate =
         +new Date(
@@ -32,26 +43,22 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   function manipulateData(
-    rawData: any,
     dates: { days: string[]; daysUnix: number[] },
+    trim: number,
   ) {
-    const price = rawData[0].prices;
-    const timestamps = rawData[0].timestamps;
+    if (!props.data) return;
     const minimumDate = Math.min(...dates.daysUnix);
-    const priceTime = timestamps.map(function (x: any, i: number) {
-      return [x, price[i]];
-    });
-    const priceTimeFiltered = priceTime.filter((x: number[]) => {
-      return x[0] > minimumDate;
-    });
-    const priceTimeAdj = priceTimeFiltered.map((x: number[]) => {
-      return [(x[0] - minimumDate) / 86400, x[1]];
-    });
+    const trades = props.data
+      .filter((trade: any) => trade.timestamp > minimumDate)
+      .map((trade: any) => [
+        (trade.timestamp - minimumDate) / 86400 / trim,
+        Number(trade.price),
+      ]);
 
     const totalVolume: number[] = [];
     const averagePrice: number[] = [];
     dates.days.forEach((x, i) => {
-      const filteredPriceTime = priceTimeAdj.filter(
+      const filteredPriceTime = trades.filter(
         (x: number[]) => Math.floor(x[0]) == i,
       );
       const volume = filteredPriceTime.reduce(
@@ -62,14 +69,15 @@ export default function AveragePriceVolumeChart(props: any) {
       totalVolume.push(roundData(volume));
       averagePrice.push(roundData(price));
     });
+    setIsShowing(true);
 
     return { averagePrice: averagePrice, volume: totalVolume };
   }
 
-  function getOptions(daysRequired: number) {
-    const dateArray = getPreviousDays(daysRequired);
-    const allocatedPrices = manipulateData(SampleTxns, dateArray);
-
+  function getOptions(
+    dates: any[],
+    trades?: { averagePrice: number[]; volume: number[] },
+  ) {
     const options = {
       chart: {
         type: 'series',
@@ -86,7 +94,7 @@ export default function AveragePriceVolumeChart(props: any) {
       },
       xAxis: [
         {
-          categories: dateArray.days,
+          categories: dates,
           crosshair: true,
           labels: {
             padding: 15,
@@ -142,7 +150,7 @@ export default function AveragePriceVolumeChart(props: any) {
           name: 'Volume',
           type: 'column',
           yAxis: 1,
-          data: allocatedPrices.volume,
+          data: trades.volume,
           tooltip: {
             valueSuffix: ' ETH',
           },
@@ -151,7 +159,7 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           name: 'Average Price',
           type: 'spline',
-          data: allocatedPrices.averagePrice,
+          data: trades.averagePrice,
           color: 'rgb(70, 115, 250)',
           // color: {
           //   linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
@@ -182,9 +190,20 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   return (
-    <HighchartsReact
-      highcharts={HighCharts}
-      options={chartOptions}
-    ></HighchartsReact>
+    <Transition
+      show={isShowing}
+      as="div"
+      enter="transition ease-out duration-1000"
+      enterFrom="transform opacity-0 scale-95 -translate-y-6"
+      enterTo="transform opacity-100 scale-100 translate-y-0"
+      leave="transition ease-in duration-150"
+      leaveFrom="transform opacity-100 scale-100 translate-y-0"
+      leaveTo="transform opacity-0 scale-95 -translate-y-6"
+    >
+      <HighchartsReact
+        highcharts={HighCharts}
+        options={chartOptions}
+      ></HighchartsReact>
+    </Transition>
   );
 }

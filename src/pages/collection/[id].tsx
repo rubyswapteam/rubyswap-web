@@ -29,7 +29,12 @@ export default function Collection() {
     collectionUpdates,
     fetchNftCollectionUpdates,
   } = useNftProvider();
-  const { activeCollection, getCollectionBySlugOS } = useMarketplaceProvider();
+  const {
+    activeCollection,
+    getCollectionBySlugOS,
+    collectionTrades,
+    getCollectionTrades,
+  } = useMarketplaceProvider();
 
   useEffect(() => {
     if (!nftCollection) {
@@ -51,7 +56,8 @@ export default function Collection() {
       activeCollection.collection.slug.toString().toLowerCase() !==
         id?.toString().toLowerCase()
     ) {
-      getCollectionBySlugOS(id);
+      getCollectionBySlugOS(id, true);
+      // getCollectionTrades();
     }
   }, [id]);
 
@@ -144,10 +150,18 @@ export default function Collection() {
             </div>
             <div className="flex mx-8">
               <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                <SalesHistoryChart></SalesHistoryChart>
+                {collectionTrades && (
+                  <SalesHistoryChart
+                    data={collectionTrades}
+                  ></SalesHistoryChart>
+                )}
               </div>
               <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                <AveragePriceVolumeChart></AveragePriceVolumeChart>
+                {collectionTrades && (
+                  <AveragePriceVolumeChart
+                    data={collectionTrades}
+                  ></AveragePriceVolumeChart>
+                )}
               </div>
             </div>
           </div>
@@ -208,10 +222,20 @@ export default function Collection() {
           </div>
           <div className="px-4 sm:px-6 md:px-8">
             <div className="w-full mt-5 rounded-xl overflow-hidden">
-              <SalesHistoryChart chart={{ height: '30%' }} />
+              {collectionTrades && (
+                <SalesHistoryChart
+                  chart={{ height: '30%' }}
+                  data={collectionTrades}
+                ></SalesHistoryChart>
+              )}
             </div>
             <div className="w-full mt-5 rounded-xl overflow-hidden">
-              <AveragePriceVolumeChart chart={{ height: '30%' }} Ï />
+              {collectionTrades && (
+                <AveragePriceVolumeChart
+                  chart={{ height: '30%' }}
+                  data={collectionTrades}
+                ></AveragePriceVolumeChart>
+              )}
             </div>
           </div>
         </div>

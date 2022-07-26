@@ -21,18 +21,17 @@ export const MarketplaceProvider = ({
   >;
 }) => {
   const [userTrades, setUserTrades] = useState<any>(undefined);
+  const [collectionTrades, setCollectionTrades] = useState<any>(undefined);
   const [userTradesFiltered, setUserTradesFiltered] = useState<any>(undefined);
   const [tradeFilters, setTradeFilters] = useState<any>({
     marketplace: '',
     contract: '',
   });
   const [activeCollection, setActiveCollection] = useState<any>(undefined);
-  // const x2y2Token = '38d74028-ca13-48df-ab81-bdfa4f3ab834';
 
   async function getTradesX2Y2(user = '', contract = '') {
     const user_address = user != undefined ? '=' + user : '';
     const contract_address = contract != undefined ? '=' + contract : '';
-    // const API_URL = `https://rubynft.netlify.app/.netlify/functions/getTradesByContract?from${from_address}&to${to_address}&contract${contract_address}`;
     const salesUrl = `/.netlify/functions/getTradesX2Y2?from${user_address}&to&contract${contract_address}`;
     const purchasesUrl = `/.netlify/functions/getTradesX2Y2?from&to${user_address}&contract${contract_address}`;
 
@@ -54,8 +53,6 @@ export const MarketplaceProvider = ({
       };
     });
 
-    // console.log(salesRaw.data);
-
     const purchases = purchasesRaw.data.map((purchase: any) => {
       return {
         timestamp: purchase.order.updated_at,
@@ -70,16 +67,57 @@ export const MarketplaceProvider = ({
     return { sales: sales, purchases: purchases };
   }
 
+  async function getCollectionTradesX2Y2(contract = '') {
+    const contract_address =
+      !!contract && contract.length > 1 ? contract : undefined;
+    if (!contract_address) return;
+
+    let cursor = '';
+    let resArr: any[] = [];
+    let isFinished = false;
+
+    console.log(contract_address);
+
+    do {
+      const url = `/.netlify/functions/getTradesX2Y2?contract=${contract_address}${cursor}`;
+
+      console.log(url);
+      const res = await (
+        await fetch(url, { method: 'GET', redirect: 'follow' })
+      ).json();
+
+      if (!res.data) return;
+
+      let filteredResultArray = [];
+
+      filteredResultArray = res.data.map((trade: any) => {
+        return {
+          timestamp: trade.order.updated_at,
+          price: ethers.utils.formatEther(trade.order.price),
+          contract: trade.token.contract,
+          tokenId: trade.token.token_id,
+          txn: trade.tx,
+          marketplace: 'X2Y2',
+        };
+      });
+      resArr = [...resArr, ...filteredResultArray];
+
+      if (res.next && res.next.length > 1) {
+        cursor = '&cursor=' + res.next;
+      } else {
+        isFinished = true;
+      }
+    } while (!isFinished);
+
+    return resArr;
+  }
+
   async function getTradesLooksRare(user = '', contract = '') {
     const user_address = user != undefined ? '=' + user : '';
     const contract_address =
       contract && contract.length > 1 ? '&contract=' + contract : '';
-    const salesUrl = `/.netlify/functions/getTradesLooksRare?${
-      user ? 'from' + user_address : ''
-    }${contract_address}`;
-    const purchasesUrl = `/.netlify/functions/getTradesLooksRare?${
-      user ? 'to' + user_address : ''
-    }${user_address}${contract_address}`;
+    const salesUrl = `/.netlify/functions/getTradesLooksRare?from${user_address}${contract_address}`;
+    const purchasesUrl = `/.netlify/functions/getTradesLooksRare?to${user_address}${contract_address}`;
 
     const salesRaw = await (
       await fetch(salesUrl, { method: 'GET', redirect: 'follow' })
@@ -94,7 +132,7 @@ export const MarketplaceProvider = ({
     if (salesRaw.data) {
       sales = salesRaw.data?.map((sale: any) => {
         return {
-          timestamp: sale.createdAt,
+          timestamp: moment(sale.createdAt).unix(),
           price: ethers.utils.formatEther(sale.order.price),
           contract: sale.collection.address,
           tokenId: sale.token.tokenId,
@@ -120,21 +158,62 @@ export const MarketplaceProvider = ({
     return { sales: sales, purchases: purchases };
   }
 
+  async function getCollectionTradesLooksRare(contract = '') {
+    const contract_address =
+      !!contract && contract.length > 1 ? contract : undefined;
+    if (!contract_address) return;
+
+    const url = `/.netlify/functions/getTradesLooksRare?contract=${contract_address}`;
+
+    const res = await (
+      await fetch(url, { method: 'GET', redirect: 'follow' })
+    ).json();
+
+    let filteredResultArray = [];
+
+    if (res.data) {
+      filteredResultArray = res.data?.map((trade: any) => {
+        return {
+          timestamp: moment(trade.createdAt).unix(),
+          price: ethers.utils.formatEther(trade.order.price),
+          contract: trade.collection.address,
+          tokenId: trade.token.tokenId,
+          txn: trade.hash,
+          marketplace: 'LooksRare',
+        };
+      });
+    }
+
+    return filteredResultArray;
+  }
+
   async function getUserTrades(user = '', contract = '') {
-    const [x2y2res, looksRes] = await Promise.all([
-      getTradesX2Y2(user, contract),
-      getTradesLooksRare(user, contract),
-    ]);
+    // const [x2y2res, looksRes] = await Promise.all([
+    const x2y2res = await getTradesX2Y2(user, contract);
+    const looksRes = await getTradesLooksRare(user, contract);
+    // ]);
     const aggregateTrades = getAggregateTrades(x2y2res, looksRes);
     setUserTrades(aggregateTrades);
     applyTradeFilters(aggregateTrades, tradeFilters);
   }
 
-  async function getCollectionTrades(user = '', contract = '') {
+  async function getCollectionTrades(collection = '') {
+    console.log('getCollectionTrades');
+    // console.log(!collection);
+    // console.log(!collection.contractAddress);
+    // if (!collection || !collection.contractAddress) return;
+    if (!collection) return;
+    console.log('callAPIs');
     const [x2y2res, looksRes] = await Promise.all([
-      getTradesX2Y2(user, contract),
-      getTradesLooksRare(user, contract),
+      getCollectionTradesX2Y2(collection),
+      getCollectionTradesLooksRare(collection),
     ]);
+    let trades: any[] = [];
+    if (x2y2res) trades = [...trades, ...x2y2res];
+    if (looksRes) trades = [...trades, ...looksRes];
+
+    console.log(trades);
+    setCollectionTrades(trades);
   }
 
   function applyTradeFilters(
@@ -183,39 +262,46 @@ export const MarketplaceProvider = ({
     return { sales: userSales, purchases: userPurchases };
   }
 
-  async function getCollectionBySlugOS(slug: string) {
+  async function getCollectionBySlugOS(slug = '', getTrades = false) {
     const collectionRaw = await (
       await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
         method: 'GET',
         redirect: 'follow',
       })
     ).json();
-    const nftCollection: INftCollection = {
-      contractAddress:
-        collectionRaw.collection.primary_asset_contracts[0].address,
-      tokenStandard:
-        collectionRaw.collection.primary_asset_contracts[0].schema_name,
-      description: collectionRaw.collection.description,
-      isVerified:
-        collectionRaw.collection.safelist_request_status == 'verified',
-      image: collectionRaw.collection.image_url,
-      bannerImage: collectionRaw.collection.banner_image_url,
-      slug: collectionRaw.collection.slug,
-      name: collectionRaw.collection.name,
-      chainId: NftChainId.ETHEREUM,
-      oneDayVolume: collectionRaw.collection.stats.one_day_volume,
-      oneDaySales: collectionRaw.collection.stats.one_day_sales,
-      oneDayAveragePrice: collectionRaw.collection.stats.one_day_average_price,
-      sevenDayVolume: collectionRaw.collection.stats.seven_day_volume,
-      sevenDaySales: collectionRaw.collection.stats.seven_day_sales,
-      thirtyDaySales: collectionRaw.collection.stats.thirty_day_sales,
-      thirtyDayVolume: collectionRaw.collection.stats.thirty_day_volume,
-      floor: collectionRaw.collection.stats.floor_price,
-      owners: collectionRaw.collection.stats.num_owners,
-      count: collectionRaw.collection.stats.count,
-      supply: collectionRaw.collection.stats.total_supply,
-    };
-    setActiveCollection(nftCollection);
+    if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
+      const nftCollection: INftCollection = {
+        contractAddress:
+          collectionRaw.collection.primary_asset_contracts[0].address,
+        tokenStandard:
+          collectionRaw.collection.primary_asset_contracts[0].schema_name,
+        description: collectionRaw.collection.description,
+        isVerified:
+          collectionRaw.collection.safelist_request_status == 'verified',
+        image: collectionRaw.collection.image_url,
+        bannerImage: collectionRaw.collection.banner_image_url,
+        slug: collectionRaw.collection.slug,
+        name: collectionRaw.collection.name,
+        chainId: NftChainId.ETHEREUM,
+        oneDayVolume: collectionRaw.collection.stats.one_day_volume,
+        oneDaySales: collectionRaw.collection.stats.one_day_sales,
+        oneDayAveragePrice:
+          collectionRaw.collection.stats.one_day_average_price,
+        sevenDayVolume: collectionRaw.collection.stats.seven_day_volume,
+        sevenDaySales: collectionRaw.collection.stats.seven_day_sales,
+        thirtyDaySales: collectionRaw.collection.stats.thirty_day_sales,
+        thirtyDayVolume: collectionRaw.collection.stats.thirty_day_volume,
+        floor: collectionRaw.collection.stats.floor_price,
+        owners: collectionRaw.collection.stats.num_owners,
+        count: collectionRaw.collection.stats.count,
+        supply: collectionRaw.collection.stats.total_supply,
+      };
+      setActiveCollection(nftCollection);
+      if (getTrades)
+        getCollectionTrades(
+          collectionRaw.collection.primary_asset_contracts[0].address,
+        );
+    }
   }
 
   const contextValue = useMemo(
@@ -230,6 +316,8 @@ export const MarketplaceProvider = ({
       setUserTradesFiltered,
       activeCollection,
       getCollectionBySlugOS,
+      collectionTrades,
+      getCollectionTrades,
     }),
     [
       userTrades,
@@ -242,6 +330,8 @@ export const MarketplaceProvider = ({
       setUserTradesFiltered,
       activeCollection,
       getCollectionBySlugOS,
+      collectionTrades,
+      getCollectionTrades,
     ],
   );
 

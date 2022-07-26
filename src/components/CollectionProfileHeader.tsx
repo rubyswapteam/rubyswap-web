@@ -21,7 +21,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
     <>
       <div className="mb-4 md:mb-0 flex-col w-full z-5 pb-6">
         <div className="flex flex-col md:flex-row items-start lg:items-center gap-2 justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col bg-white p-4 rounded drop-shadow-md">
             <div className="flex items-center flex-shrink-1 truncate">
               <div className="flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
                 <img

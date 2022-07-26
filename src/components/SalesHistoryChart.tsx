@@ -1,20 +1,31 @@
+import { Transition } from '@headlessui/react';
 import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
-import { useState } from 'react';
-import { SampleTxns } from '../data/dummy-data/sampleTransactions';
+import { useEffect, useState } from 'react';
 
 export default function SalesHistoryChart(props: any) {
-  const [chartOptions, setChartOptions] = useState(getOptions(14));
+  const [daysRequired, setDaysRequired] = useState({ days: 60, trim: 5 });
+  const [chartOptions, setChartOptions] = useState(undefined as any);
+  const [isShowing, setIsShowing] = useState(false);
 
-  function getPreviousDays(daysRequired: number) {
+  useEffect(() => {
+    setChartOptions(reset());
+  }, [props.data, daysRequired]);
+
+  function reset() {
+    const dates = getPreviousDays(daysRequired.days, daysRequired.trim);
+    const trades = manipulateData(dates, daysRequired.trim);
+    const newOptions = getOptions(dates.days, trades);
+    return newOptions;
+  }
+
+  function getPreviousDays(daysRequired: number, trim: number) {
     const days = [];
     const daysUnix = [];
 
-    for (let i = daysRequired; i >= 1; i--) {
-      const date = moment([2022, 6, 1]) //Force the date for now.
-        .subtract(i, 'days')
-        .format('DD/MM/YYYY');
+    for (let i = daysRequired; i >= 0; i = i - 1 * trim) {
+      const date = moment().subtract(i, 'days').format('DD/MM/YYYY');
       days.push(date);
       const unixDate =
         +new Date(
@@ -28,29 +39,26 @@ export default function SalesHistoryChart(props: any) {
   }
 
   function manipulateData(
-    rawData: any,
     dates: { days: string[]; daysUnix: number[] },
+    trim: number,
   ) {
-    const price = rawData[0].prices;
-    const timestamps = rawData[0].timestamps;
+    if (!props.data) return;
     const minimumDate = Math.min(...dates.daysUnix);
-    const priceTime = timestamps.map(function (x: any, i: number) {
-      return [x, price[i]];
-    });
-    const priceTimeFiltered = priceTime.filter((x: number[]) => {
-      return x[0] > minimumDate;
-    });
-    const priceTimeAdj = priceTimeFiltered.map((x: number[]) => {
-      return [(x[0] - minimumDate) / 86400, x[1]];
-    });
+    const trades = props.data
+      .filter((trade: any) => trade.timestamp > minimumDate)
+      .map((trade: any) => [
+        (trade.timestamp - minimumDate) / 86400 / trim,
+        Number(trade.price),
+      ]);
+    if (trades.length > 0) {
+      setIsShowing(true);
+    }
 
-    return priceTimeAdj;
+    console.log(trades);
+    return trades;
   }
 
-  function getOptions(daysRequired: number) {
-    const dateArray = getPreviousDays(daysRequired);
-    const allocatedPrices = manipulateData(SampleTxns, dateArray);
-
+  function getOptions(dates: any[], trades: any[]) {
     const options = {
       chart: {
         type: 'scatter',
@@ -67,7 +75,7 @@ export default function SalesHistoryChart(props: any) {
       },
       xAxis: [
         {
-          categories: dateArray.days,
+          categories: dates,
           crosshair: true,
           labels: {
             padding: 15,
@@ -107,7 +115,7 @@ export default function SalesHistoryChart(props: any) {
         {
           name: 'Sales',
           color: '#33333399',
-          data: allocatedPrices,
+          data: trades,
         },
       ],
       legend: {
@@ -151,9 +159,20 @@ export default function SalesHistoryChart(props: any) {
   }
 
   return (
-    <HighchartsReact
-      highcharts={HighCharts}
-      options={chartOptions}
-    ></HighchartsReact>
+    <Transition
+      show={isShowing}
+      as="div"
+      enter="transition ease-out duration-1000"
+      enterFrom="transform opacity-0 scale-95 -translate-y-6"
+      enterTo="transform opacity-100 scale-100 translate-y-0"
+      leave="transition ease-in duration-150"
+      leaveFrom="transform opacity-100 scale-100 translate-y-0"
+      leaveTo="transform opacity-0 scale-95 -translate-y-6"
+    >
+      <HighchartsReact
+        highcharts={HighCharts}
+        options={chartOptions}
+      ></HighchartsReact>
+    </Transition>
   );
 }

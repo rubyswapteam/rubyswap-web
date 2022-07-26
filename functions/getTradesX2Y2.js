@@ -24,10 +24,18 @@ export async function handler(event) {
     event.queryStringParameters.contract != undefined
       ? '&contract=' + event.queryStringParameters.contract
       : '';
+  const cursor =
+    event.queryStringParameters.cursor != undefined &&
+    event.queryStringParameters.cursor.length > 1
+      ? '&cursor=' + event.queryStringParameters.cursor
+      : '';
   const API_ENDPOINT =
-    'https://api.x2y2.org/v1/events?type=sale&limit=200' + from + to + contract;
+    'https://api.x2y2.org/v1/events?type=sale&limit=200' +
+    from +
+    to +
+    contract +
+    cursor;
 
-  console.log(API_ENDPOINT);
   try {
     const response = await fetch(API_ENDPOINT, { headers: headers });
     const data = await response.json();
