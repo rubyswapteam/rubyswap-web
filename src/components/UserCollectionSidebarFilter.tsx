@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default function UserCollectionSidebarFilter(props: Props) {
-
   return (
     <>
       <div className="bg-white flex-col h-inherit overflow-scroll w-[20vw] px-3 pt-5 float-right drop-shadow z-0 text-sm pb-60">
