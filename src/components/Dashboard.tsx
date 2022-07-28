@@ -61,7 +61,7 @@ export default function Dashboard(props: any) {
   }
 
   const bannerStyle = props?.banner
-    ? `linear-gradient(rgba(256, 256, 256, 0.8), rgba(256, 256, 256, 0.85)), url('${props?.banner}')`
+    ? `linear-gradient(rgba(256, 256, 256, 0.3), rgba(256, 256, 256, 0.7)), url('${props?.banner}')`
     : '';
 
   useEffect(() => {

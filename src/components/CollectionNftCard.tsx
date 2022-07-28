@@ -10,9 +10,15 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
   selectedNft: INft;
+  collectionName?: string;
+  chainId?: number;
 }
 
-const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
+const CollectionNftCard: React.FC<Props> = ({
+  selectedNft,
+  collectionName,
+  chainId,
+}): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
@@ -77,7 +83,7 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
         </div>
         <div className="justify-between flex py-2 mb-2 border-b border-gray-50">
           <div className="text-[10px] font-bold">
-            {selectedNft.collectionName}
+            {collectionName || selectedNft.collectionName}
           </div>
           <div className="px-2 pt-[2px] border border-gray-100 rounded-md transition-colors hover:bg-gray-100 cursor-pointer">
             <div className="text-[10px] font-bold text-transparent bg-clip-text bg-cover bg-theme-gradient">
@@ -90,12 +96,8 @@ const CollectionNftCard: React.FC<Props> = ({ selectedNft }): JSX.Element => {
             {selectedNft.name || '#'.concat(selectedNft.tokenId)}
           </div>
           <div className="flex place-items-center">
-            <div className="pt-1">
-              {selectedNft?.price
-                ? (selectedNft?.price / Math.pow(10, 18)).toFixed(1)
-                : '0.0'}{' '}
-            </div>
-            {selectedNft.chainId == 1 && (
+            <div className="pt-1">{selectedNft.price}</div>
+            {(chainId == 1 || selectedNft.chainId == 1) && (
               <>
                 <EthereumIcon width={12} height={12} />
               </>

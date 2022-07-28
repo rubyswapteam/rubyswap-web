@@ -23,6 +23,7 @@ export const MarketplaceProvider = ({
   const [userTrades, setUserTrades] = useState<any>(undefined);
   const [collectionTrades, setCollectionTrades] = useState<any>(undefined);
   const [userTradesFiltered, setUserTradesFiltered] = useState<any>(undefined);
+  const [recentTrades, setRecentTrades] = useState<any>(undefined);
   const [tradeFilters, setTradeFilters] = useState<any>({
     marketplace: '',
     contract: '',
@@ -98,6 +99,9 @@ export const MarketplaceProvider = ({
           tokenId: trade.token.token_id,
           txn: trade.tx,
           marketplace: 'X2Y2',
+          from: trade.from_address,
+          to: trade.to_address,
+          chainId: 1,
         };
       });
       resArr = [...resArr, ...filteredResultArray];
@@ -180,6 +184,9 @@ export const MarketplaceProvider = ({
           tokenId: trade.token.tokenId,
           txn: trade.hash,
           marketplace: 'LooksRare',
+          from: trade.from,
+          to: trade.to,
+          chainId: 1,
         };
       });
     }
@@ -197,13 +204,10 @@ export const MarketplaceProvider = ({
     applyTradeFilters(aggregateTrades, tradeFilters);
   }
 
-  async function getCollectionTrades(collection = '') {
-    console.log('getCollectionTrades');
-    // console.log(!collection);
-    // console.log(!collection.contractAddress);
-    // if (!collection || !collection.contractAddress) return;
+  async function getCollectionTrades(
+    collection = activeCollection?.contractAddress,
+  ) {
     if (!collection) return;
-    console.log('callAPIs');
     const [x2y2res, looksRes] = await Promise.all([
       getCollectionTradesX2Y2(collection),
       getCollectionTradesLooksRare(collection),
@@ -212,8 +216,67 @@ export const MarketplaceProvider = ({
     if (x2y2res) trades = [...trades, ...x2y2res];
     if (looksRes) trades = [...trades, ...looksRes];
 
-    console.log(trades);
     setCollectionTrades(trades);
+
+    const recentTrades = trades
+      .sort((a, b) => a.timestamp - b.timestamp)
+      .slice(-10);
+
+    for (let i = 0; i < recentTrades.length; i++) {
+      const trade = recentTrades[i];
+      if (!trade.image) {
+        const url = `/.netlify/functions/getNftLooksRare?contract=${trade.contract}&tokenId=${trade.tokenId}`;
+        const tokenMetadata = await (
+          await fetch(url, { method: 'GET', redirect: 'follow' })
+        ).json();
+        console.log(tokenMetadata);
+        recentTrades[i] = {
+          ...trade,
+          ...{
+            image: tokenMetadata.data?.imageURI,
+            name: tokenMetadata.data?.name,
+          },
+        };
+      }
+    }
+    setRecentTrades(recentTrades);
+
+    // while (index < trades.length) {
+    //   promiseArray.push(
+    //     await fetch(dbPostUrl, {
+    //       method: 'POST',
+    //       body: JSON.stringify(trades.slice(index, index + size)),
+    //       redirect: 'follow',
+    //     }).then((response) => response.json()),
+    //   );
+    //   index += size;
+    // }
+    // Promise.all(promiseArray);
+
+    // const test = await fetch(dbPostUrl, {
+    //   method: 'POST',
+    //   body: JSON.stringify(trades.splice(-200)),
+    //   redirect: 'follow',
+    // });
+    const dbPostUrl = '/.netlify/functions/postSaleHistoryToDb';
+    const promiseArray: any[] = [];
+    let index = 0;
+    const size = 10;
+    const loopLimit = trades.length / size + 1;
+    for (let i = 1; i < loopLimit + 1; i++) {
+      console.log(trades.slice(size * (i - 1), size * i));
+      // setTimeout(function timer() {
+      promiseArray.push(
+        fetch(dbPostUrl, {
+          method: 'POST',
+          body: JSON.stringify(trades.slice(size * (i - 1), size * i)),
+          redirect: 'follow',
+        }).then((response) => response.json()),
+      );
+      index += size;
+      // }, i * 1000);
+    }
+    Promise.all(promiseArray);
   }
 
   function applyTradeFilters(
@@ -295,6 +358,7 @@ export const MarketplaceProvider = ({
         owners: collectionRaw.collection.stats.num_owners,
         count: collectionRaw.collection.stats.count,
         supply: collectionRaw.collection.stats.total_supply,
+        traits: collectionRaw.collection.traits,
       };
       setActiveCollection(nftCollection);
       if (getTrades)
@@ -318,6 +382,7 @@ export const MarketplaceProvider = ({
       getCollectionBySlugOS,
       collectionTrades,
       getCollectionTrades,
+      recentTrades,
     }),
     [
       userTrades,
@@ -332,6 +397,7 @@ export const MarketplaceProvider = ({
       getCollectionBySlugOS,
       collectionTrades,
       getCollectionTrades,
+      recentTrades,
     ],
   );
 

@@ -1,4 +1,3 @@
-import BreakHorizontal from '@/components/BreakHorizontal';
 import CollectionAnnouncementBanner from '@/components/CollectionAnnouncementBanner';
 import CollectionList from '@/components/CollectionList';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
@@ -17,6 +16,8 @@ import { useEffect } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import CollectionUpdate from '../../components/CollectionUpdate';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
+import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
+import RightArrow from '../../components/RightArrow';
 
 export default function Collection() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export default function Collection() {
     getCollectionBySlugOS,
     collectionTrades,
     getCollectionTrades,
+    recentTrades,
   } = useMarketplaceProvider();
 
   useEffect(() => {
@@ -57,7 +59,6 @@ export default function Collection() {
         id?.toString().toLowerCase()
     ) {
       getCollectionBySlugOS(id, true);
-      // getCollectionTrades();
     }
   }, [id]);
 
@@ -173,7 +174,11 @@ export default function Collection() {
                 route={`/collection/${id}?tab=listings`}
               />
             </div>
-            <CollectionListSingleRow selectedNfts={nfts && nfts.slice(0, 10)} />
+            <CollectionListSingleRow
+              selectedNfts={recentTrades}
+              collectionName={activeCollection?.name}
+              chainId={activeCollection?.chainId}
+            />
           </div>
           <div className="my-14">
             <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
@@ -184,7 +189,9 @@ export default function Collection() {
               />
             </div>
             <CollectionListSingleRow
-              selectedNfts={nfts && [...nfts.slice(6, 10), ...nfts.slice(0, 6)]}
+              selectedNfts={recentTrades}
+              collectionName={activeCollection?.name}
+              chainId={activeCollection?.chainId}
             />
           </div>
         </div>
@@ -220,23 +227,52 @@ export default function Collection() {
               route={`/collection/${id}?tab=analytics`}
             />
           </div>
-          <div className="px-4 sm:px-6 md:px-8">
-            <div className="w-full mt-5 rounded-xl overflow-hidden">
-              {collectionTrades && (
-                <SalesHistoryChart
-                  chart={{ height: '30%' }}
-                  data={collectionTrades}
-                ></SalesHistoryChart>
-              )}
+          <div className="bg-gray-50 py-10 my-10">
+            <div className="flex w-full px-4 sm:px-6 md:px-8">
+              <div className="w-full my-10 rounded-xl overflow-hidden mr-8">
+                {collectionTrades && (
+                  <SalesHistoryChart
+                    data={collectionTrades}
+                  ></SalesHistoryChart>
+                )}
+              </div>
+              <div className="w-full my-10 rounded-xl overflow-hidden">
+                {collectionTrades && (
+                  <AveragePriceVolumeChart
+                    data={collectionTrades}
+                  ></AveragePriceVolumeChart>
+                )}
+              </div>
             </div>
-            <div className="w-full mt-5 rounded-xl overflow-hidden">
-              {collectionTrades && (
-                <AveragePriceVolumeChart
-                  chart={{ height: '30%' }}
-                  data={collectionTrades}
-                ></AveragePriceVolumeChart>
-              )}
+          </div>
+          <div className="w-full my-10 rounded-xl overflow-hidden">
+            {activeCollection && activeCollection.contractAddress && (
+              <iframe
+                className="w-full h-[50vh]"
+                src={`https://app.bubblemaps.io/eth/token/${activeCollection.contractAddress}?theme=gemxyz`}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+    if (tab == 'traits') {
+      return (
+        <div className="flex w-full justify-between flex-col h-inherit">
+          <div className="flex w-full justify-between flex-row h-inherit">
+            {/* {activeNfts.nfts.length == 0 && ( */}
+            <div className="w-full">
+              {' '}
+              <div className="items-center mt-[30vh] justify-center mx-auto text-gray-500 flex">
+                <div className="pt-1 mr-2">Please select a trait</div>
+                <RightArrow height={16} width={16} />
+              </div>
             </div>
+            {/* )} */}
+            {/* {activeNfts.nfts.length != 0 && ( */}
+            {/* <CollectionList selectedNfts={activeNfts.nfts} /> */}
+            {/* )} */}
+            <TraitsSidebarFilter traits={activeCollection?.traits} />
           </div>
         </div>
       );

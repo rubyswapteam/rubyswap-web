@@ -8,7 +8,7 @@ var CollectionProfileHeader = function (_a) {
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement("div", { className: "mb-4 md:mb-0 flex-col w-full z-5 pb-6" },
             react_1["default"].createElement("div", { className: "flex flex-col md:flex-row items-start lg:items-center gap-2 justify-between" },
-                react_1["default"].createElement("div", { className: "flex flex-col bg-white p-4 rounded drop-shadow-md" },
+                react_1["default"].createElement("div", { className: "flex flex-col bg-white/75 p-4 rounded drop-shadow-md" },
                     react_1["default"].createElement("div", { className: "flex items-center flex-shrink-1 truncate" },
                         react_1["default"].createElement("div", { className: "flex-shrink-0 flex items-center justify-center bg-blue rounded-full" },
                             react_1["default"].createElement("img", { className: "h-12 w-12 rounded-full", src: image, alt: name })),

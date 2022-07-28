@@ -2,7 +2,7 @@ export interface INft {
   id?: string;
   tokenId: string;
   chainId?: number;
-  collectionName: string;
+  collectionName?: string;
   contractAddress: string;
   name: string | null;
   image: string;
@@ -33,6 +33,7 @@ export interface INftCollection {
   supply?: number;
   count?: number;
   owners: number | undefined | null;
+  traits?: any;
 }
 
 export interface INftCollectionUpdate {

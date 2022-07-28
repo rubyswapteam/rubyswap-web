@@ -58,7 +58,7 @@ function Dashboard(props) {
         }
         return classes.filter(Boolean).join(' ');
     }
-    var bannerStyle = (props === null || props === void 0 ? void 0 : props.banner) ? "linear-gradient(rgba(256, 256, 256, 0.8), rgba(256, 256, 256, 0.85)), url('" + (props === null || props === void 0 ? void 0 : props.banner) + "')"
+    var bannerStyle = (props === null || props === void 0 ? void 0 : props.banner) ? "linear-gradient(rgba(256, 256, 256, 0.3), rgba(256, 256, 256, 0.7)), url('" + (props === null || props === void 0 ? void 0 : props.banner) + "')"
         : '';
     react_2.useEffect(function () {
         id && parentRoute() == 'wallet' ? fetchEthBalance(id) : '';

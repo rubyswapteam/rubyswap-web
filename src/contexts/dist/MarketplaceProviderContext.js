@@ -65,11 +65,12 @@ exports.MarketplaceProvider = function (_a) {
     var _b = react_1.useState(undefined), userTrades = _b[0], setUserTrades = _b[1];
     var _c = react_1.useState(undefined), collectionTrades = _c[0], setCollectionTrades = _c[1];
     var _d = react_1.useState(undefined), userTradesFiltered = _d[0], setUserTradesFiltered = _d[1];
-    var _e = react_1.useState({
+    var _e = react_1.useState(undefined), recentTrades = _e[0], setRecentTrades = _e[1];
+    var _f = react_1.useState({
         marketplace: '',
         contract: ''
-    }), tradeFilters = _e[0], setTradeFilters = _e[1];
-    var _f = react_1.useState(undefined), activeCollection = _f[0], setActiveCollection = _f[1];
+    }), tradeFilters = _f[0], setTradeFilters = _f[1];
+    var _g = react_1.useState(undefined), activeCollection = _g[0], setActiveCollection = _g[1];
     function getTradesX2Y2(user, contract) {
         if (user === void 0) { user = ''; }
         if (contract === void 0) { contract = ''; }
@@ -147,7 +148,10 @@ exports.MarketplaceProvider = function (_a) {
                                 contract: trade.token.contract,
                                 tokenId: trade.token.token_id,
                                 txn: trade.tx,
-                                marketplace: 'X2Y2'
+                                marketplace: 'X2Y2',
+                                from: trade.from_address,
+                                to: trade.to_address,
+                                chainId: 1
                             };
                         });
                         resArr = __spreadArrays(resArr, filteredResultArray);
@@ -243,7 +247,10 @@ exports.MarketplaceProvider = function (_a) {
                                     contract: trade.collection.address,
                                     tokenId: trade.token.tokenId,
                                     txn: trade.hash,
-                                    marketplace: 'LooksRare'
+                                    marketplace: 'LooksRare',
+                                    from: trade.from,
+                                    to: trade.to,
+                                    chainId: 1
                                 };
                             });
                         }
@@ -274,32 +281,69 @@ exports.MarketplaceProvider = function (_a) {
         });
     }
     function getCollectionTrades(collection) {
-        if (collection === void 0) { collection = ''; }
+        var _a, _b;
+        if (collection === void 0) { collection = activeCollection === null || activeCollection === void 0 ? void 0 : activeCollection.contractAddress; }
         return __awaiter(this, void 0, void 0, function () {
-            var _a, x2y2res, looksRes, trades;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _c, x2y2res, looksRes, trades, recentTrades, i, trade, url, tokenMetadata, dbPostUrl, promiseArray, index, size, loopLimit, i;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
-                        console.log('getCollectionTrades');
-                        // console.log(!collection);
-                        // console.log(!collection.contractAddress);
-                        // if (!collection || !collection.contractAddress) return;
                         if (!collection)
                             return [2 /*return*/];
-                        console.log('callAPIs');
                         return [4 /*yield*/, Promise.all([
                                 getCollectionTradesX2Y2(collection),
                                 getCollectionTradesLooksRare(collection),
                             ])];
                     case 1:
-                        _a = _b.sent(), x2y2res = _a[0], looksRes = _a[1];
+                        _c = _d.sent(), x2y2res = _c[0], looksRes = _c[1];
                         trades = [];
                         if (x2y2res)
                             trades = __spreadArrays(trades, x2y2res);
                         if (looksRes)
                             trades = __spreadArrays(trades, looksRes);
-                        console.log(trades);
                         setCollectionTrades(trades);
+                        recentTrades = trades
+                            .sort(function (a, b) { return a.timestamp - b.timestamp; })
+                            .slice(-10);
+                        i = 0;
+                        _d.label = 2;
+                    case 2:
+                        if (!(i < recentTrades.length)) return [3 /*break*/, 6];
+                        trade = recentTrades[i];
+                        if (!!trade.image) return [3 /*break*/, 5];
+                        url = "/.netlify/functions/getNftLooksRare?contract=" + trade.contract + "&tokenId=" + trade.tokenId;
+                        return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
+                    case 3: return [4 /*yield*/, (_d.sent()).json()];
+                    case 4:
+                        tokenMetadata = _d.sent();
+                        console.log(tokenMetadata);
+                        recentTrades[i] = __assign(__assign({}, trade), {
+                            image: (_a = tokenMetadata.data) === null || _a === void 0 ? void 0 : _a.imageURI,
+                            name: (_b = tokenMetadata.data) === null || _b === void 0 ? void 0 : _b.name
+                        });
+                        _d.label = 5;
+                    case 5:
+                        i++;
+                        return [3 /*break*/, 2];
+                    case 6:
+                        setRecentTrades(recentTrades);
+                        dbPostUrl = '/.netlify/functions/postSaleHistoryToDb';
+                        promiseArray = [];
+                        index = 0;
+                        size = 10;
+                        loopLimit = trades.length / size + 1;
+                        for (i = 1; i < loopLimit + 1; i++) {
+                            console.log(trades.slice(size * (i - 1), size * i));
+                            // setTimeout(function timer() {
+                            promiseArray.push(fetch(dbPostUrl, {
+                                method: 'POST',
+                                body: JSON.stringify(trades.slice(size * (i - 1), size * i)),
+                                redirect: 'follow'
+                            }).then(function (response) { return response.json(); }));
+                            index += size;
+                            // }, i * 1000);
+                        }
+                        Promise.all(promiseArray);
                         return [2 /*return*/];
                 }
             });
@@ -377,7 +421,8 @@ exports.MarketplaceProvider = function (_a) {
                                 floor: collectionRaw.collection.stats.floor_price,
                                 owners: collectionRaw.collection.stats.num_owners,
                                 count: collectionRaw.collection.stats.count,
-                                supply: collectionRaw.collection.stats.total_supply
+                                supply: collectionRaw.collection.stats.total_supply,
+                                traits: collectionRaw.collection.traits
                             };
                             setActiveCollection(nftCollection);
                             if (getTrades)
@@ -400,7 +445,8 @@ exports.MarketplaceProvider = function (_a) {
         activeCollection: activeCollection,
         getCollectionBySlugOS: getCollectionBySlugOS,
         collectionTrades: collectionTrades,
-        getCollectionTrades: getCollectionTrades
+        getCollectionTrades: getCollectionTrades,
+        recentTrades: recentTrades
     }); }, [
         userTrades,
         setUserTrades,
@@ -414,6 +460,7 @@ exports.MarketplaceProvider = function (_a) {
         getCollectionBySlugOS,
         collectionTrades,
         getCollectionTrades,
+        recentTrades,
     ]);
     return (react_1["default"].createElement(MarketplaceProviderContext.Provider, { value: contextValue }, children));
 };

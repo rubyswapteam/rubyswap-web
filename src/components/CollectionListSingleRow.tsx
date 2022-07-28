@@ -4,10 +4,14 @@ import CollectionNftCard from './CollectionNftCard';
 
 interface Props {
   selectedNfts: INft[];
+  collectionName?: string;
+  chainId?: number;
 }
 
 const CollectionListSingleRow: React.FC<Props> = ({
   selectedNfts,
+  collectionName,
+  chainId,
 }): JSX.Element => {
   return (
     <div>
@@ -18,6 +22,8 @@ const CollectionListSingleRow: React.FC<Props> = ({
               <CollectionNftCard
                 key={selectedNft.id}
                 selectedNft={selectedNft}
+                collectionName={collectionName}
+                chainId={chainId}
               />
             ))}
           </div>
