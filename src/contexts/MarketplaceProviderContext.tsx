@@ -287,6 +287,14 @@ export const MarketplaceProvider = ({
     let newTrades: any[] = [];
     if (x2y2res) newTrades = [...newTrades, ...x2y2res];
     if (looksRes) newTrades = [...newTrades, ...looksRes];
+    console.log('newTrades');
+    newTrades = newTrades.filter(
+      (y) =>
+        !dbTrades.some((x: any) =>
+          ['txn', 'tokenId', 'contract'].every((key) => x[key] == y[key]),
+        ),
+    );
+    console.log(newTrades);
     if (newTrades) dbTrades = [...dbTrades, ...newTrades];
     setCollectionTrades(dbTrades);
 

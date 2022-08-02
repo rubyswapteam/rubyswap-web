@@ -25,12 +25,12 @@ const CollectionNftCard: React.FC<Props> = ({
     <div className="group relative">
       <div
         className={
-          'drop-shadow-md p-2 rounded-xl text-sm bg-white hover:drop-shadow-lg'
+          'drop-shadow-md rounded-xl text-sm bg-white hover:drop-shadow-xl'
         }
       >
         <div
           className={
-            'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer rounded-xl'
+            'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer rounded-t-xl'
           }
         >
           {(
@@ -85,27 +85,29 @@ const CollectionNftCard: React.FC<Props> = ({
             <div>#&nbsp;{selectedNft.tokenId}</div>
           </span>
         </div>
-        <div className="justify-between flex py-2 mb-2 border-b border-gray-50">
-          <div className="text-[10px] font-bold">
-            {collectionName || selectedNft.collectionName}
-          </div>
-          <div className="px-2 pt-[2px] border border-gray-100 rounded-md transition-colors hover:bg-gray-100 cursor-pointer">
-            <div className="text-[10px] font-bold text-transparent bg-clip-text bg-cover bg-theme-gradient">
-              Details
+        <div className="p-2">
+          <div className="justify-between flex py-2 mb-2 border-b border-gray-50">
+            <div className="text-[10px] font-bold">
+              {collectionName || selectedNft.collectionName}
+            </div>
+            <div className="px-2 pt-[2px] border border-gray-100 rounded-md transition-colors hover:bg-gray-100 cursor-pointer">
+              <div className="text-[10px] font-bold text-transparent bg-clip-text bg-cover bg-theme-gradient">
+                Details
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-between items-center text-xs">
-          <div className="pt-1">
-            {selectedNft.name || '#'.concat(selectedNft.tokenId)}
-          </div>
-          <div className="flex place-items-center">
-            <div className="pt-1">{selectedNft.price}</div>
-            {(chainId == 1 || selectedNft.chainId == 1) && (
-              <>
-                <EthereumIcon width={12} height={12} />
-              </>
-            )}
+          <div className="flex justify-between items-center text-xs">
+            <div className="pt-1">
+              {selectedNft.name || '#'.concat(selectedNft.tokenId)}
+            </div>
+            <div className="flex place-items-center">
+              <div className="pt-1">{selectedNft.price}</div>
+              {(chainId == 1 || selectedNft.chainId == 1) && (
+                <>
+                  <EthereumIcon width={12} height={12} />
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

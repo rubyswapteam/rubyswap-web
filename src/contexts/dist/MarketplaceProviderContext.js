@@ -375,6 +375,13 @@ exports.MarketplaceProvider = function (_a) {
                             newTrades = __spreadArrays(newTrades, x2y2res);
                         if (looksRes)
                             newTrades = __spreadArrays(newTrades, looksRes);
+                        console.log('newTrades');
+                        newTrades = newTrades.filter(function (y) {
+                            return !dbTrades.some(function (x) {
+                                return ['txn', 'tokenId', 'contract'].every(function (key) { return x[key] == y[key]; });
+                            });
+                        });
+                        console.log(newTrades);
                         if (newTrades)
                             dbTrades = __spreadArrays(dbTrades, newTrades);
                         setCollectionTrades(dbTrades);
