@@ -12,55 +12,67 @@ import Tab from '@/components/Tab';
 import { useNftProvider } from '@/contexts/NftProviderContext';
 import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import CollectionUpdate from '../../components/CollectionUpdate';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import RightArrow from '../../components/RightArrow';
 
-export default function Collection() {
+export default function Collection(props: any) {
   const router = useRouter();
   const { id, tab, range } = router.query;
-  const {
-    nfts,
-    fetchNfts,
-    nftCollection,
-    fetchNftCollection,
-    collectionUpdates,
-    fetchNftCollectionUpdates,
-  } = useNftProvider();
+  const [isLoadingCollectionTrades, setIsLoadingCollectionTrades] =
+    useState<boolean>(true);
+  const [isLoadingRecentTrades, setIsLoadingRecentTrades] =
+    useState<boolean>(true);
+  const { nfts, fetchNfts, collectionUpdates, fetchNftCollectionUpdates } =
+    useNftProvider();
   const {
     activeCollection,
-    getCollectionBySlugOS,
+    getCollectionBySlug,
     collectionTrades,
-    getCollectionTrades,
     recentTrades,
   } = useMarketplaceProvider();
 
   useEffect(() => {
-    if (!nftCollection) {
-      fetchNftCollection();
-    }
     if (!nfts) {
       fetchNfts();
     }
     if (!collectionUpdates) {
       fetchNftCollectionUpdates();
     }
-  }, [nftCollection, nfts, collectionUpdates]);
+  }, [nfts, collectionUpdates]);
 
   useEffect(() => {
-    console.log(id);
     if (
       !activeCollection ||
       !activeCollection.collection ||
       activeCollection.collection.slug.toString().toLowerCase() !==
         id?.toString().toLowerCase()
     ) {
-      getCollectionBySlugOS(id, true);
+      setLoading(true);
+      getCollectionBySlug(id, true);
+      setLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    setIsLoadingCollectionTrades(false);
+  }, [collectionTrades]);
+
+  useEffect(() => {
+    console.log(activeCollection?.traits);
+  }, [activeCollection]);
+
+  useEffect(() => {
+    setIsLoadingRecentTrades(false);
+  }, [recentTrades]);
+
+  function setLoading(state: boolean) {
+    setIsLoadingCollectionTrades(state);
+    setIsLoadingRecentTrades(state);
+  }
 
   const primaryTabs = [
     {
@@ -103,29 +115,30 @@ export default function Collection() {
       {
         name: 'Floor Price',
         value:
-          activeCollection?.floor &&
-          `${(activeCollection?.floor).toFixed(2)} ETH`,
+          activeCollection?.osFloorPrice &&
+          `${(activeCollection?.osFloorPrice).toFixed(2)} ETH`,
       },
       {
         name: `${rng} Volume`,
         value:
-          activeCollection?.thirtyDayVolume &&
-          `${(activeCollection?.thirtyDayVolume).toFixed(2)} ETH`,
+          activeCollection?.osThirtyDayVolume &&
+          `${(activeCollection?.osThirtyDayVolume).toFixed(2)} ETH`,
       },
       {
         name: `${rng} Day Sales`,
         value:
-          activeCollection?.thirtyDaySales &&
-          `${activeCollection?.thirtyDaySales}`,
+          activeCollection?.osThirtyDaySales &&
+          `${activeCollection?.osThirtyDaySales}`,
       },
       {
         name: 'Supply',
-        value: activeCollection?.count && `${activeCollection?.count}`,
+        value:
+          activeCollection?.totalSupply && `${activeCollection?.totalSupply}`,
       },
       {
         name: 'Unique Ownership',
         value: `${(
-          (activeCollection?.owners / activeCollection?.count) *
+          (activeCollection?.numOwners / activeCollection?.totalSupply) *
           100
         ).toFixed(2)}%`,
       },
@@ -151,14 +164,14 @@ export default function Collection() {
             </div>
             <div className="flex mx-8">
               <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                {collectionTrades && (
+                {collectionTrades && !isLoadingCollectionTrades && (
                   <SalesHistoryChart
                     data={collectionTrades}
                   ></SalesHistoryChart>
                 )}
               </div>
               <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                {collectionTrades && (
+                {collectionTrades && !isLoadingCollectionTrades && (
                   <AveragePriceVolumeChart
                     data={collectionTrades}
                   ></AveragePriceVolumeChart>
@@ -268,11 +281,11 @@ export default function Collection() {
                 <RightArrow height={16} width={16} />
               </div>
             </div>
-            {/* )} */}
-            {/* {activeNfts.nfts.length != 0 && ( */}
-            {/* <CollectionList selectedNfts={activeNfts.nfts} /> */}
-            {/* )} */}
-            <TraitsSidebarFilter traits={activeCollection?.traits} />
+            <TraitsSidebarFilter
+              traits={
+                activeCollection?.traits && JSON.parse(activeCollection?.traits)
+              }
+            />
           </div>
         </div>
       );
@@ -302,20 +315,21 @@ export default function Collection() {
     <>
       <Layout>
         <Dashboard
+          setSearchModalState={props.setSearchModalState}
           title={
             <CollectionProfileHeader
-              image={activeCollection?.image}
+              image={activeCollection?.imageUrl}
               name={activeCollection?.name}
-              items={activeCollection?.supply}
-              floor={activeCollection?.floor}
-              oneDayVolume={activeCollection?.oneDayVolume}
+              items={activeCollection?.totalSupply}
+              floor={activeCollection?.osFloorPrice}
+              oneDayVolume={activeCollection?.osOneDayVolume}
             />
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
           refresh={setRefreshButton()}
           body={setBody()}
-          banner={activeCollection?.bannerImage}
+          banner={activeCollection?.bannerImageUrl}
         />
       </Layout>
     </>

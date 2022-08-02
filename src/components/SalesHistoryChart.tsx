@@ -54,7 +54,6 @@ export default function SalesHistoryChart(props: any) {
       setIsShowing(true);
     }
 
-    console.log(trades);
     return trades;
   }
 

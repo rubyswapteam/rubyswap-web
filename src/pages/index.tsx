@@ -9,7 +9,7 @@ import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTabl
 import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
 
-export default function Index() {
+export default function Index(props: any) {
   const router = useRouter();
   const { tab, range } = router.query;
 
@@ -58,6 +58,7 @@ export default function Index() {
     <>
       <Layout>
         <Dashboard
+          setSearchModalState={props.setSearchModalState}
           title={'Browse'}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}

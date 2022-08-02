@@ -129,11 +129,9 @@ exports.MarketplaceProvider = function (_a) {
                         cursor = '';
                         resArr = [];
                         isFinished = false;
-                        console.log(contract_address);
                         _a.label = 1;
                     case 1:
                         url = "/.netlify/functions/getTradesX2Y2?contract=" + contract_address + cursor;
-                        console.log(url);
                         return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
                     case 2: return [4 /*yield*/, (_a.sent()).json()];
                     case 3:
@@ -316,7 +314,6 @@ exports.MarketplaceProvider = function (_a) {
                     case 3: return [4 /*yield*/, (_d.sent()).json()];
                     case 4:
                         tokenMetadata = _d.sent();
-                        console.log(tokenMetadata);
                         recentTrades[i] = __assign(__assign({}, trade), {
                             image: (_a = tokenMetadata.data) === null || _a === void 0 ? void 0 : _a.imageURI,
                             name: (_b = tokenMetadata.data) === null || _b === void 0 ? void 0 : _b.name
@@ -332,18 +329,19 @@ exports.MarketplaceProvider = function (_a) {
                         index = 0;
                         size = 10;
                         loopLimit = trades.length / size + 1;
-                        for (i = 1; i < loopLimit + 1; i++) {
-                            console.log(trades.slice(size * (i - 1), size * i));
+                        for (i = 0; i < loopLimit; i++) {
                             // setTimeout(function timer() {
+                            console.log(trades.slice(index, index + size));
                             promiseArray.push(fetch(dbPostUrl, {
                                 method: 'POST',
-                                body: JSON.stringify(trades.slice(size * (i - 1), size * i)),
+                                body: JSON.stringify(trades.slice(index, index + size)),
                                 redirect: 'follow'
                             }).then(function (response) { return response.json(); }));
                             index += size;
-                            // }, i * 1000);
                         }
-                        Promise.all(promiseArray);
+                        return [4 /*yield*/, Promise.all(promiseArray)];
+                    case 7:
+                        _d.sent();
                         return [2 /*return*/];
                 }
             });
@@ -386,49 +384,90 @@ exports.MarketplaceProvider = function (_a) {
             userPurchases = __spreadArrays(userPurchases, looksRes.purchases);
         return { sales: userSales, purchases: userPurchases };
     }
-    function getCollectionBySlugOS(slug, getTrades) {
+    function getCollectionBySlug(slug, getTrades, setActive, persist) {
         if (slug === void 0) { slug = ''; }
         if (getTrades === void 0) { getTrades = false; }
+        if (setActive === void 0) { setActive = true; }
+        if (persist === void 0) { persist = false; }
         return __awaiter(this, void 0, void 0, function () {
-            var collectionRaw, nftCollection;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch("https://api.opensea.io/api/v1/collection/" + slug, {
-                            method: 'GET',
-                            redirect: 'follow'
-                        })];
-                    case 1: return [4 /*yield*/, (_a.sent()).json()];
+            var collection, isStored, collectionRaw, dbPostUrl, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 6, , 7]);
+                        return [4 /*yield*/, fetch("/.netlify/functions/getDbCollectionBySlug?slug=" + slug, {
+                                method: 'GET',
+                                redirect: 'follow'
+                            })];
+                    case 1: return [4 /*yield*/, (_b.sent()).json()];
                     case 2:
-                        collectionRaw = _a.sent();
+                        collection = (_b.sent())[0];
+                        isStored = !collection.contractAddress;
+                        console.log(isStored);
+                        console.log(collection);
+                        if (!!isStored) return [3 /*break*/, 5];
+                        return [4 /*yield*/, fetch("https://api.opensea.io/api/v1/collection/" + slug, {
+                                method: 'GET',
+                                redirect: 'follow'
+                            })];
+                    case 3: return [4 /*yield*/, (_b.sent()).json()];
+                    case 4:
+                        collectionRaw = _b.sent();
                         if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
-                            nftCollection = {
+                            collection = {
                                 contractAddress: collectionRaw.collection.primary_asset_contracts[0].address,
-                                tokenStandard: collectionRaw.collection.primary_asset_contracts[0].schema_name,
-                                description: collectionRaw.collection.description,
-                                isVerified: collectionRaw.collection.safelist_request_status == 'verified',
-                                image: collectionRaw.collection.image_url,
-                                bannerImage: collectionRaw.collection.banner_image_url,
+                                editors: collectionRaw.collection.editors,
                                 slug: collectionRaw.collection.slug,
+                                imageUrl: collectionRaw.collection.image_url,
+                                largeImageUrl: collectionRaw.collection.large_image_url,
+                                bannerImageUrl: collectionRaw.collection.banner_image_url,
+                                schemaName: collectionRaw.collection.primary_asset_contracts[0].schema_name,
+                                description: collectionRaw.collection.description,
+                                osVerificationState: collectionRaw.collection.safelist_request_status == 'verified',
                                 name: collectionRaw.collection.name,
+                                website: collectionRaw.collection.external_url,
+                                discordUrl: collectionRaw.collection.discord_url,
+                                twitterUsername: collectionRaw.collection.twitter_username,
+                                instagramUsername: collectionRaw.collection.instagram_username,
                                 chainId: nftUtils_1.NftChainId.ETHEREUM,
-                                oneDayVolume: collectionRaw.collection.stats.one_day_volume,
-                                oneDaySales: collectionRaw.collection.stats.one_day_sales,
-                                oneDayAveragePrice: collectionRaw.collection.stats.one_day_average_price,
-                                sevenDayVolume: collectionRaw.collection.stats.seven_day_volume,
-                                sevenDaySales: collectionRaw.collection.stats.seven_day_sales,
-                                thirtyDaySales: collectionRaw.collection.stats.thirty_day_sales,
-                                thirtyDayVolume: collectionRaw.collection.stats.thirty_day_volume,
-                                floor: collectionRaw.collection.stats.floor_price,
-                                owners: collectionRaw.collection.stats.num_owners,
-                                count: collectionRaw.collection.stats.count,
-                                supply: collectionRaw.collection.stats.total_supply,
-                                traits: collectionRaw.collection.traits
+                                osOneDayVolume: collectionRaw.collection.stats.one_day_volume,
+                                osOneDaySales: collectionRaw.collection.stats.one_day_sales,
+                                osOneDayChange: collectionRaw.collection.stats.one_day_change,
+                                osSevenDayVolume: collectionRaw.collection.stats.seven_day_volume,
+                                osSevenDaySales: collectionRaw.collection.stats.seven_day_sales,
+                                osSevenDayChange: collectionRaw.collection.stats.seven_day_change,
+                                osThirtyDaySales: collectionRaw.collection.stats.thirty_day_sales,
+                                osThirtyDayVolume: collectionRaw.collection.stats.thirty_day_volume,
+                                osThirtyDayChange: collectionRaw.collection.stats.thirty_day_change,
+                                osTotalVolume: collectionRaw.collection.stats.total_volume,
+                                osTotalSales: collectionRaw.collection.stats.total_sales,
+                                osFloorPrice: collectionRaw.collection.stats.floor_price,
+                                numOwners: collectionRaw.collection.stats.num_owners,
+                                totalSupply: collectionRaw.collection.stats.total_supply,
+                                traits: JSON.stringify(collectionRaw.collection.traits),
+                                updatedAt: moment_1["default"]().unix(),
+                                osStatsUpdatedAt: moment_1["default"]().unix()
                             };
-                            setActiveCollection(nftCollection);
-                            if (getTrades)
-                                getCollectionTrades(collectionRaw.collection.primary_asset_contracts[0].address);
                         }
-                        return [2 /*return*/];
+                        if (setActive)
+                            setActiveCollection(collection);
+                        if (getTrades) {
+                            getCollectionTrades(collection.contractAddress);
+                        }
+                        if (persist || !isStored) {
+                            dbPostUrl = '/.netlify/functions/postCollectionToDb';
+                            fetch(dbPostUrl, {
+                                method: 'POST',
+                                body: JSON.stringify(collection),
+                                redirect: 'follow'
+                            });
+                        }
+                        return [2 /*return*/, collection];
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        _a = _b.sent();
+                        return [2 /*return*/, false];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -443,7 +482,7 @@ exports.MarketplaceProvider = function (_a) {
         userTradesFiltered: userTradesFiltered,
         setUserTradesFiltered: setUserTradesFiltered,
         activeCollection: activeCollection,
-        getCollectionBySlugOS: getCollectionBySlugOS,
+        getCollectionBySlug: getCollectionBySlug,
         collectionTrades: collectionTrades,
         getCollectionTrades: getCollectionTrades,
         recentTrades: recentTrades
@@ -457,7 +496,7 @@ exports.MarketplaceProvider = function (_a) {
         userTradesFiltered,
         setUserTradesFiltered,
         activeCollection,
-        getCollectionBySlugOS,
+        getCollectionBySlug,
         collectionTrades,
         getCollectionTrades,
         recentTrades,

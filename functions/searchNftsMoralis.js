@@ -8,27 +8,23 @@ const headers = {
   'Access-Control-Allow-Methods': '*',
   'Access-Control-Max-Age': '2592000',
   'Access-Control-Allow-Credentials': 'true',
+  'X-API-Key':
+    'VgDfyvmSN1SppgTXg9Zj1Vge8Pf4cyz4Xs1V4s67cv5cT1VsLSs9OGoIiF4sZx0m',
 };
 
 export async function handler(event) {
-  const from =
-    event.queryStringParameters.from != undefined
-      ? '&from=' + event.queryStringParameters.from
+  const chain =
+    event.queryStringParameters.chain != undefined
+      ? event.queryStringParameters.chain
       : '';
-  const to =
-    event.queryStringParameters.to != undefined
-      ? '&to=' + event.queryStringParameters.to
+  const q =
+    event.queryStringParameters.q != undefined
+      ? event.queryStringParameters.q
       : '';
-  const contract =
-    event.queryStringParameters.contract != undefined
-      ? '&collection=' + event.queryStringParameters.contract
-      : '';
-  const API_ENDPOINT =
-    'https://api.looksrare.org/api/v1/events?type=SALE&pagination%5Bfirst%5D=150' +
-    from +
-    to +
-    contract;
 
+  const API_ENDPOINT = `https://deep-index.moralis.io/api/v2/nft/search?chain=${chain}&format=decimal&q=${q}&filter=name`;
+
+  console.log(API_ENDPOINT);
   try {
     const response = await fetch(API_ENDPOINT, { headers: headers });
     const data = await response.json();

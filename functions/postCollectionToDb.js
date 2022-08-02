@@ -18,7 +18,7 @@ const headers = {
 
 export async function handler(event) {
   const API_ENDPOINT =
-    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/TradeHistory';
+    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails';
 
   var requestOptions = {
     method: 'POST',

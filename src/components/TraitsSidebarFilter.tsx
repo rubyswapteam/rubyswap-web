@@ -9,18 +9,16 @@ export default function TraitsSidebarFilter(props: Props) {
     { key: string; count: number }[] | undefined
   >(undefined);
   function camelize(str: string) {
-    return str
-      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-        return index === 0 ? word.toUpperCase() : word.toLowerCase();
-      })
-      .replace(/\s+/g, '');
+    return str.replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+      letter.toUpperCase(),
+    );
   }
   useEffect(() => {
     if (props.traits) {
       const keys = Object.keys(props.traits);
       const traitCounts = keys.map((key) => {
         return {
-          key: camelize(key),
+          key: key,
           count: props.traits[key] ? Object.keys(props.traits[key]).length : 0,
         };
       });
@@ -47,7 +45,7 @@ export default function TraitsSidebarFilter(props: Props) {
                 }
                 // onClick={() => props.getCollectionNfts(nft.contract)}
               >
-                <div className="">{trait.key}</div>
+                <div className="">{camelize(trait.key)}</div>
                 <div className="">{trait.count}</div>
               </div>
             </div>

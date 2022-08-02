@@ -130,6 +130,7 @@ export default function Dashboard(props: any) {
                       <DashboardSidebar
                         sidebarNavigation={topNavigation}
                         classNames={classNames}
+                        setSearchModalState={props.setSearchModalState}
                       />
                     </nav>
                   </div>
@@ -140,6 +141,7 @@ export default function Dashboard(props: any) {
                           <DashboardSidebar
                             sidebarNavigation={bottomNavigation}
                             classNames={classNames}
+                            setSearchModalState={props.setSearchModalState}
                           />
                         </nav>
                       </div>
@@ -167,6 +169,7 @@ export default function Dashboard(props: any) {
                 <DashboardSidebar
                   sidebarNavigation={topNavigation}
                   classNames={classNames}
+                  setSearchModalState={props.setSearchModalState}
                 />
               </nav>
             </div>

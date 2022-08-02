@@ -30,28 +30,27 @@ function handler(event) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          API_ENDPOINT = 'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/TradeHistory';
-          console.log(event);
+          API_ENDPOINT = 'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails';
           requestOptions = {
             method: 'POST',
             headers: headers,
             body: event.body,
             redirect: 'follow'
           };
-          _context.prev = 3;
-          _context.next = 6;
+          _context.prev = 2;
+          _context.next = 5;
           return regeneratorRuntime.awrap((0, _nodeFetch["default"])(API_ENDPOINT, requestOptions));
 
-        case 6:
+        case 5:
           response = _context.sent;
           return _context.abrupt("return", {
             statusCode: 200,
-            body: JSON.stringify(data)
+            body: JSON.stringify(response)
           });
 
-        case 10:
-          _context.prev = 10;
-          _context.t0 = _context["catch"](3);
+        case 9:
+          _context.prev = 9;
+          _context.t0 = _context["catch"](2);
           return _context.abrupt("return", {
             statusCode: 500,
             body: JSON.stringify({
@@ -59,10 +58,10 @@ function handler(event) {
             })
           });
 
-        case 13:
+        case 12:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[3, 10]]);
+  }, null, null, [[2, 9]]);
 }

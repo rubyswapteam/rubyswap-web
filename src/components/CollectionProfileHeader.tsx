@@ -30,7 +30,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
                   alt={name}
                 />
               </div>
-              <div className="truncate text-2xl font-semibold text-gray-700 ml-2">
+              <div className="truncate text-2xl font-semibold text-gray-700 ml-2 pt-2">
                 {name}
               </div>
               <span className="ml-2">

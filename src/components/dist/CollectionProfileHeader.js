@@ -12,7 +12,7 @@ var CollectionProfileHeader = function (_a) {
                     react_1["default"].createElement("div", { className: "flex items-center flex-shrink-1 truncate" },
                         react_1["default"].createElement("div", { className: "flex-shrink-0 flex items-center justify-center bg-blue rounded-full" },
                             react_1["default"].createElement("img", { className: "h-12 w-12 rounded-full", src: image, alt: name })),
-                        react_1["default"].createElement("div", { className: "truncate text-2xl font-semibold text-gray-700 ml-2" }, name),
+                        react_1["default"].createElement("div", { className: "truncate text-2xl font-semibold text-gray-700 ml-2 pt-2" }, name),
                         react_1["default"].createElement("span", { className: "ml-2" },
                             react_1["default"].createElement("div", { className: "h-6 w-6 flex-shrink-0 flex items-center justify-center bg-blue rounded-full" },
                                 react_1["default"].createElement(VerifiedBadgeIcon_1["default"], { height: 30, width: 30 })))),

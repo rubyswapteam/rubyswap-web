@@ -108,7 +108,16 @@ export const WalletProvider = ({
             userNfts.summary = [...summary];
           })
           .finally(() => {
-            setUserNfts({ ...userNfts });
+            const newUserNfts = { ...userNfts };
+            const newSummary = newUserNfts.summary.sort((a, b) => {
+              const nameA = collectionNames[a.contract]?.toLowerCase();
+              const nameB = collectionNames[b.contract]?.toLowerCase();
+              if (nameA < nameB) return -1;
+              if (nameA > nameB) return 1;
+              return 0;
+            });
+            newUserNfts.summary = [...newSummary];
+            setUserNfts({ ...newUserNfts });
           });
       } while (pageKey !== '');
     }
@@ -150,7 +159,6 @@ export const WalletProvider = ({
       if (!link?.includes('https://ipfs.io')) score++;
       return score;
     });
-    console.log(...scores);
     const index = scores.findIndex((score) => score == Math.max(...scores));
     return links[index].replace('ipfs://', 'https://ipfs.io/ipfs/');
   }

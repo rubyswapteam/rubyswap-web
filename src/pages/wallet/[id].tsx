@@ -18,7 +18,7 @@ import UserProfileHeader from '../../components/UserProfileHeader';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
 
-export default function Collection() {
+export default function Collection(props: any) {
   const router = useRouter();
   const { id, tab, range } = router.query;
   const primaryTabs = [
@@ -212,6 +212,7 @@ export default function Collection() {
     <>
       <Layout>
         <Dashboard
+          setSearchModalState={props.setSearchModalState}
           title={
             <UserProfileHeader name={id?.toString()} wallet={id?.toString()} />
           }

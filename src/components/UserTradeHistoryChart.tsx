@@ -62,7 +62,6 @@ export default function UserTradeHistoryChart(props: any) {
       }
       return { sales: sales, purchases: purchases };
     } else {
-      console.log('false');
       return { sales: [], purchases: [] };
     }
   }

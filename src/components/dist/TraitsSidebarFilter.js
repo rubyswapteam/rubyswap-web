@@ -4,18 +4,16 @@ var react_1 = require("react");
 function TraitsSidebarFilter(props) {
     var _a = react_1.useState(undefined), traitTable = _a[0], setTraitTable = _a[1];
     function camelize(str) {
-        return str
-            .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-            return index === 0 ? word.toUpperCase() : word.toLowerCase();
-        })
-            .replace(/\s+/g, '');
+        return str.replace(/(^\w{1})|(\s+\w{1})/g, function (letter) {
+            return letter.toUpperCase();
+        });
     }
     react_1.useEffect(function () {
         if (props.traits) {
             var keys = Object.keys(props.traits);
             var traitCounts = keys.map(function (key) {
                 return {
-                    key: camelize(key),
+                    key: key,
                     count: props.traits[key] ? Object.keys(props.traits[key]).length : 0
                 };
             });
@@ -33,7 +31,7 @@ function TraitsSidebarFilter(props) {
                             // (props.activeCollection == nft.contract
                             // ? ' bg-blue-50': ' hover:bg-gray-50')
                             ' hover:bg-gray-50' },
-                        React.createElement("div", { className: "" }, trait.key),
+                        React.createElement("div", { className: "" }, camelize(trait.key)),
                         React.createElement("div", { className: "" }, trait.count)))); }))));
 }
 exports["default"] = TraitsSidebarFilter;

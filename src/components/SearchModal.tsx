@@ -5,29 +5,117 @@ import {
   JSXElementConstructor,
   ReactChildren,
   ReactElement,
+  useEffect,
 } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import React from 'react';
+import { useMarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
 interface Props {
-  isOpen: boolean;
+  open: boolean;
+  setOpen: React.Dispatch<any>;
 }
 
-export default function SearchModal(
-  props: Props,
-  {
-    children,
-  }: {
-    children: ReactElement<
-      ReactChildren,
-      string | JSXElementConstructor<unknown>
-    >;
-  },
-) {
-  const [open, setOpen] = useState(props.isOpen);
+export default function SearchModal(props: Props) {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const { getCollectionBySlug } = useMarketplaceProvider();
+
+  function reset() {
+    setSearchResults([]);
+    setSearchTerm('');
+  }
+
+  function handleClick(e: any) {
+    e.stopPropagation();
+  }
+
+  useEffect(() => {
+    let isSubscribed = true;
+
+    const fetchData = async (q: string) => {
+      // get the data from the api
+      let json: any = {};
+      const osMetadataArr: any[] = [];
+      if (isSubscribed) {
+        const API_URL = `/.netlify/functions/searchNftsMoralis?chain=eth&q=${q}`;
+        const response = await fetch(API_URL, {
+          method: 'GET',
+          redirect: 'follow',
+        });
+        // convert the data to json
+        json = await response.json();
+        json.result = json.result.reduce((prevVal: any[], currVal: any) => {
+          if (
+            prevVal.length == 0 ||
+            !prevVal.find((val) => val.token_address == currVal.token_address)
+          ) {
+            prevVal.push(currVal);
+          }
+          return prevVal;
+        }, []);
+        const osMetadataPromise: any[] = [];
+        for (let i = 0; i < json.result.length; i++) {
+          const contract = json.result[i].token_address;
+          const metadata = fetch(
+            `/.netlify/functions/getSlugX2Y2?contract=${contract}`,
+            {
+              method: 'GET',
+              redirect: 'follow',
+            },
+          ).then((metadata) =>
+            metadata
+              ?.json()
+              .then((metadataJson) =>
+                getCollectionBySlug(
+                  metadataJson?.data?.slug,
+                  false,
+                  false,
+                  true,
+                ),
+              )
+              .then((osMetadata) => {
+                osMetadataArr.push(osMetadata),
+                  setSearchResults(osMetadataArr.filter((data) => data));
+              }),
+          );
+        }
+        console.log(osMetadataArr);
+        // set state with the result
+        if (isSubscribed) {
+          setSearchResults(osMetadataArr);
+        }
+      }
+    };
+
+    setIsLoading(true);
+
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm.length > 2) {
+        console.log(searchTerm);
+        // fetchData(searchTerm).catch(console.error);
+        // setIsLoading(false);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(delayDebounceFn);
+      isSubscribed = false;
+    };
+  }, [searchTerm]);
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={props.open} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-50"
+        onClose={() => {
+          props.setOpen(false);
+          reset();
+        }}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -37,10 +125,22 @@ export default function SearchModal(
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div
+            className="fixed inset-0 bg-slate-900/25 backdrop-blur transition-opacity opacity-100"
+            onClick={() => {
+              props.setOpen(false);
+              reset();
+            }}
+          />
         </Transition.Child>
 
-        <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div
+          onClick={() => {
+            props.setOpen(false);
+            reset();
+          }}
+          className="fixed z-10 inset-0 overflow-y-auto"
+        >
           <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -51,28 +151,77 @@ export default function SearchModal(
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-sm sm:w-full sm:p-6">
-                <div>
-                  <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                    <textarea
-                      rows={4}
-                      name="comment"
-                      id="comment"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      defaultValue={''}
+              <div className="relative w-full max-w-lg transform px-4 transition-all opacity-100 scale-100">
+                <div
+                  className="overflow-hidden rounded-lg bg-white shadow-md"
+                  id="headlessui-dialog-panel-26"
+                  onClick={(e) => handleClick(e)}
+                >
+                  <div className="relative">
+                    <input
+                      className="block w-full appearance-none bg-transparent py-4 pl-4 pr-12 text-base text-slate-900 placeholder:text-slate-600 focus:outline-none sm:text-sm sm:leading-6"
+                      placeholder="Search collections..."
+                      aria-label="Search components"
+                      id="headlessui-combobox-input-27"
+                      role="combobox"
+                      type="text"
+                      aria-expanded="false"
+                      autoComplete="off"
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                    <svg
+                      className="pointer-events-none absolute top-4 right-4 h-6 w-6 fill-slate-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M20.47 21.53a.75.75 0 1 0 1.06-1.06l-1.06 1.06Zm-9.97-4.28a6.75 6.75 0 0 1-6.75-6.75h-1.5a8.25 8.25 0 0 0 8.25 8.25v-1.5ZM3.75 10.5a6.75 6.75 0 0 1 6.75-6.75v-1.5a8.25 8.25 0 0 0-8.25 8.25h1.5Zm6.75-6.75a6.75 6.75 0 0 1 6.75 6.75h1.5a8.25 8.25 0 0 0-8.25-8.25v1.5Zm11.03 16.72-5.196-5.197-1.061 1.06 5.197 5.197 1.06-1.06Zm-4.28-9.97c0 1.864-.755 3.55-1.977 4.773l1.06 1.06A8.226 8.226 0 0 0 18.75 10.5h-1.5Zm-1.977 4.773A6.727 6.727 0 0 1 10.5 17.25v1.5a8.226 8.226 0 0 0 5.834-2.416l-1.061-1.061Z"></path>
+                    </svg>
                   </div>
                 </div>
-                <div className="mt-5 sm:mt-6">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                    onClick={() => setOpen(false)}
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-500"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <div
+                    className="h-64 bg-white rounded-lg w-full mt-5 shadow-md overflow-scroll"
+                    onClick={(e) => handleClick(e)}
                   >
-                    Go back to dashboard
-                  </button>
-                </div>
-              </Dialog.Panel>
+                    {searchResults.map((res) => (
+                      <div
+                        className="hover:bg-gray-50"
+                        key={res?.contractAddress}
+                      >
+                        {res && (
+                          <div className="px-4 py-2 flex">
+                            {res?.image && (
+                              <img
+                                className="h-12 w-12 rounded-full"
+                                src={res?.image}
+                              />
+                            )}
+                            {!res?.image && (
+                              <Jazzicon
+                                diameter={45}
+                                seed={jsNumberForAddress(res.contractAddress)}
+                              />
+                            )}
+                            <div className="text-left text-sm ml-3">
+                              <div>{res.name}</div>
+                              <div className="text-gray-600">
+                                {res.contractAddress}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </Transition.Child>
+              </div>
             </Transition.Child>
           </div>
         </div>
