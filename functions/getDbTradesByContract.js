@@ -10,9 +10,9 @@ const supabase = createClient(
 export async function handler(event) {
   // Insert a row
   const { data, error } = await supabase
-    .from('CollectionDetails')
+    .from('HistoricalTrades')
     .select('*')
-    .ilike('slug', event.queryStringParameters.slug);
+    .ilike('contract', event.queryStringParameters.contract);
 
   if (!Object.keys(data).length || error)
     return {

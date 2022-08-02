@@ -12,7 +12,7 @@ export async function handler(event) {
   const { data, error } = await supabase
     .from('CollectionDetails')
     .select('*')
-    .eq('contractAddress', event.queryStringParameters.contract);
+    .ilike('contract', event.queryStringParameters.contract);
 
   if (!Object.keys(data).length || error)
     return {

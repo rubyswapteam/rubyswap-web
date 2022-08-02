@@ -27,8 +27,6 @@ export async function handler(event) {
     redirect: 'follow',
   };
 
-  console.log(event.body);
-
   try {
     const response = await fetch(API_ENDPOINT, requestOptions);
     // const data = await response.json();

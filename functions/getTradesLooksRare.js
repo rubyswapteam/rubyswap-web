@@ -23,11 +23,16 @@ export async function handler(event) {
     event.queryStringParameters.contract != undefined
       ? '&collection=' + event.queryStringParameters.contract
       : '';
+  const cursor =
+    event.queryStringParameters.cursor != undefined
+      ? '&pagination[cursor]=' + event.queryStringParameters.cursor
+      : '';
   const API_ENDPOINT =
     'https://api.looksrare.org/api/v1/events?type=SALE&pagination%5Bfirst%5D=150' +
     from +
     to +
-    contract;
+    contract +
+    cursor;
 
   try {
     const response = await fetch(API_ENDPOINT, { headers: headers });

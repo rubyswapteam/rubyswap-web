@@ -2,6 +2,7 @@ import { INftCollection, NftChainId } from '@/utils/nftUtils';
 import { ethers } from 'ethers';
 import { cp } from 'fs';
 import moment from 'moment';
+import { type } from 'os';
 import React, {
   JSXElementConstructor,
   ReactChildren,
@@ -69,23 +70,33 @@ export const MarketplaceProvider = ({
     return { sales: sales, purchases: purchases };
   }
 
-  async function getCollectionTradesX2Y2(contract = '') {
+  async function getCollectionTradesX2Y2(
+    contract = '',
+    lastTxn: any = undefined,
+  ) {
     const contract_address =
       !!contract && contract.length > 1 ? contract : undefined;
     if (!contract_address) return;
 
     let cursor = '';
+    console.log('createdAfter');
+    console.log(!!lastTxn && !!lastTxn?.timestamp);
+    const createdAfter =
+      !!lastTxn && !!lastTxn?.timestamp
+        ? '&createdAfter=' + lastTxn.timestamp
+        : '';
     let resArr: any[] = [];
     let isFinished = false;
 
     do {
-      const url = `/.netlify/functions/getTradesX2Y2?contract=${contract_address}${cursor}`;
+      console.log('x2y2LoopStart');
+      const url = `/.netlify/functions/getTradesX2Y2?contract=${contract_address}${cursor}${createdAfter}`;
 
       const res = await (
         await fetch(url, { method: 'GET', redirect: 'follow' })
       ).json();
 
-      if (!res.data) return;
+      if (!res.data) return resArr;
 
       let filteredResultArray = [];
 
@@ -97,6 +108,7 @@ export const MarketplaceProvider = ({
           tokenId: trade.token.token_id.toString(),
           txn: trade.tx,
           marketplace: 'X2Y2',
+          looksRareId: null,
           from: trade.from_address,
           to: trade.to_address,
           chainId: 1,
@@ -104,6 +116,8 @@ export const MarketplaceProvider = ({
       });
       resArr = [...resArr, ...filteredResultArray];
 
+      console.log(res);
+      console.log(res.next && res.next.length > 1);
       if (res.next && res.next.length > 1) {
         cursor = '&cursor=' + res.next;
       } else {
@@ -160,20 +174,33 @@ export const MarketplaceProvider = ({
     return { sales: sales, purchases: purchases };
   }
 
-  async function getCollectionTradesLooksRare(contract = '') {
+  async function getCollectionTradesLooksRare(
+    contract = '',
+    lastTxn: any = undefined,
+  ) {
     const contract_address =
       !!contract && contract.length > 1 ? contract : undefined;
     if (!contract_address) return;
 
-    const url = `/.netlify/functions/getTradesLooksRare?contract=${contract_address}`;
+    let isFinished = false;
+    let resArr: any[] = [];
+    let cursor =
+      lastTxn && lastTxn.looksRareId
+        ? '&pagination[cursor]=' + lastTxn.looksRareId
+        : '';
 
-    const res = await (
-      await fetch(url, { method: 'GET', redirect: 'follow' })
-    ).json();
+    do {
+      console.log('looksLoopStart');
+      const url = `/.netlify/functions/getTradesLooksRare?contract=${contract_address}${cursor}`;
 
-    let filteredResultArray = [];
+      const res = await (
+        await fetch(url, { method: 'GET', redirect: 'follow' })
+      ).json();
 
-    if (res.data) {
+      let filteredResultArray = [];
+
+      if (!res.data) return resArr;
+
       filteredResultArray = res.data?.map((trade: any) => {
         return {
           timestamp: moment(trade.createdAt).unix(),
@@ -182,41 +209,88 @@ export const MarketplaceProvider = ({
           tokenId: trade.token.tokenId.toString(),
           txn: trade.hash,
           marketplace: 'LooksRare',
+          looksRareId: parseInt(trade.id),
           from: trade.from,
           to: trade.to,
           chainId: 1,
         };
       });
-    }
 
-    return filteredResultArray;
+      resArr = [...resArr, ...filteredResultArray];
+
+      console.log(res.data);
+      console.log(!!res.data[0]?.id);
+      if (!!res.data[0]?.id && filteredResultArray.length < 150) {
+        cursor = '&cursor=' + res.data[res.data.length - 1].id;
+      } else {
+        isFinished = true;
+      }
+    } while (!isFinished);
+
+    return resArr;
   }
 
   async function getUserTrades(user = '', contract = '') {
-    // const [x2y2res, looksRes] = await Promise.all([
     const x2y2res = await getTradesX2Y2(user, contract);
     const looksRes = await getTradesLooksRare(user, contract);
-    // ]);
     const aggregateTrades = getAggregateTrades(x2y2res, looksRes);
     setUserTrades(aggregateTrades);
     applyTradeFilters(aggregateTrades, tradeFilters);
+  }
+
+  async function getCollectionTradesfromDb(contractAddress: string) {
+    const collection = await (
+      await fetch(
+        `/.netlify/functions/getDbTradesByContract?contract=${contractAddress}`,
+        {
+          method: 'GET',
+          redirect: 'follow',
+        },
+      )
+    ).json();
+    return collection;
   }
 
   async function getCollectionTrades(
     collection = activeCollection?.contractAddress,
   ) {
     if (!collection) return;
+    let dbTrades = await getCollectionTradesfromDb(collection);
+    if (!Array.isArray(dbTrades)) dbTrades = [];
+    console.log('dbTrades');
+    console.log(dbTrades);
+    let maxValues: any = {
+      LooksRare: { timestamp: 0, looksRareId: 0 },
+      X2Y2: { timestamp: 0 },
+    };
+    if (dbTrades.length > 0) {
+      maxValues = dbTrades.reduce(
+        function (prev: any, current: any) {
+          return prev[current.marketplace].timestamp > current.timestamp
+            ? prev
+            : { ...prev, ...{ [current.marketplace]: current } };
+        },
+        { LooksRare: { timestamp: 0, looksRareId: 0 }, X2Y2: { timestamp: 0 } },
+      );
+      console.log(maxValues);
+    }
     const [x2y2res, looksRes] = await Promise.all([
-      getCollectionTradesX2Y2(collection),
-      getCollectionTradesLooksRare(collection),
+      getCollectionTradesX2Y2(collection, maxValues.X2Y2),
+      getCollectionTradesLooksRare(collection, maxValues.LooksRare),
     ]);
-    let trades: any[] = [];
-    if (x2y2res) trades = [...trades, ...x2y2res];
-    if (looksRes) trades = [...trades, ...looksRes];
+    console.log('dbTrades');
+    console.log(dbTrades);
+    console.log('x2y2res');
+    console.log(x2y2res);
+    console.log('looksRes');
+    console.log(looksRes);
+    let newTrades: any[] = [];
+    if (x2y2res) newTrades = [...newTrades, ...x2y2res];
+    if (looksRes) newTrades = [...newTrades, ...looksRes];
+    if (newTrades) dbTrades = [...dbTrades, ...newTrades];
+    setCollectionTrades(dbTrades);
 
-    setCollectionTrades(trades);
-
-    const recentTrades = trades
+    const recentTrades = dbTrades
       .sort((a, b) => a.timestamp - b.timestamp)
       .slice(-10);
 
@@ -238,35 +312,17 @@ export const MarketplaceProvider = ({
     }
     setRecentTrades(recentTrades);
 
-    // while (index < trades.length) {
-    //   promiseArray.push(
-    //     await fetch(dbPostUrl, {
-    //       method: 'POST',
-    //       body: JSON.stringify(trades.slice(index, index + size)),
-    //       redirect: 'follow',
-    //     }).then((response) => response.json()),
-    //   );
-    //   index += size;
-    // }
-    // Promise.all(promiseArray);
-
-    // const test = await fetch(dbPostUrl, {
-    //   method: 'POST',
-    //   body: JSON.stringify(trades.splice(-200)),
-    //   redirect: 'follow',
-    // });
     const dbPostUrl = '/.netlify/functions/postHistoricalTradesToDb';
     const promiseArray: any[] = [];
     let index = 0;
-    const size = 2;
-    const loopLimit = trades.length / size + 1;
+    const size = 100;
+    const loopLimit = newTrades.length / size + 1;
     for (let i = 0; i < loopLimit; i++) {
-      console.log(trades.slice(index, index + size));
-      // setTimeout(function timer() {
+      console.log(newTrades.slice(index, index + size));
       promiseArray.push(
         fetch(dbPostUrl, {
           method: 'POST',
-          body: JSON.stringify(trades.slice(index, index + size)),
+          body: JSON.stringify(newTrades.slice(index, index + size)),
           redirect: 'follow',
         }),
       );
@@ -347,13 +403,11 @@ export const MarketplaceProvider = ({
     setActive = true,
     persist = false,
   ) {
-    if (!slug || slug.length < 3) return false;
-    console.log('getCollectionBySlug');
-    console.log(slug);
+    if (!slug || slug.length < 3 || slug === undefined || slug == '')
+      return false;
     let collection: any = await fetchCollectionFromDb(slug);
     const isStored = collection && collection.contractAddress;
     try {
-      console.log(!isStored);
       if (!isStored) {
         const collectionRaw = await (
           await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
@@ -361,7 +415,6 @@ export const MarketplaceProvider = ({
             redirect: 'follow',
           })
         ).json();
-        console.log(collectionRaw);
         if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
           collection = {
             contractAddress:
@@ -400,7 +453,6 @@ export const MarketplaceProvider = ({
             updatedAt: moment().unix(),
             osStatsUpdatedAt: moment().unix(),
           };
-          console.log(collection);
         }
         if (persist || !isStored) {
           const dbPostUrl = '/.netlify/functions/postCollectionToDb';

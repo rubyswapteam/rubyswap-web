@@ -29,12 +29,19 @@ export async function handler(event) {
     event.queryStringParameters.cursor.length > 1
       ? '&cursor=' + event.queryStringParameters.cursor
       : '';
+  const createdAfter =
+    event.queryStringParameters.createdAfter != undefined &&
+    event.queryStringParameters.createdAfter.length > 1
+      ? '&created_after=' + event.queryStringParameters.createdAfter
+      : '';
+
   const API_ENDPOINT =
     'https://api.x2y2.org/v1/events?type=sale&limit=200' +
     from +
     to +
     contract +
-    cursor;
+    cursor +
+    createdAfter;
 
   try {
     const response = await fetch(API_ENDPOINT, { headers: headers });

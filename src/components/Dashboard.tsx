@@ -207,7 +207,7 @@ export default function Dashboard(props: any) {
           <main className="flex-1">
             <div className={'h-screen overflow-hidden flex-col flex'}>
               <div
-                className="py-6 bg-gray-50 z-10"
+                className="py-6 bg-gray-50 z-10 bg-cover"
                 style={{
                   backgroundImage: `${bannerStyle}`,
                 }}

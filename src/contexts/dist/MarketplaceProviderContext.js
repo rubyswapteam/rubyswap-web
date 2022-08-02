@@ -116,10 +116,11 @@ exports.MarketplaceProvider = function (_a) {
             });
         });
     }
-    function getCollectionTradesX2Y2(contract) {
+    function getCollectionTradesX2Y2(contract, lastTxn) {
         if (contract === void 0) { contract = ''; }
+        if (lastTxn === void 0) { lastTxn = undefined; }
         return __awaiter(this, void 0, void 0, function () {
-            var contract_address, cursor, resArr, isFinished, url, res, filteredResultArray;
+            var contract_address, cursor, createdAfter, resArr, isFinished, url, res, filteredResultArray;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -127,17 +128,23 @@ exports.MarketplaceProvider = function (_a) {
                         if (!contract_address)
                             return [2 /*return*/];
                         cursor = '';
+                        console.log('createdAfter');
+                        console.log(!!lastTxn && !!(lastTxn === null || lastTxn === void 0 ? void 0 : lastTxn.timestamp));
+                        createdAfter = !!lastTxn && !!(lastTxn === null || lastTxn === void 0 ? void 0 : lastTxn.timestamp)
+                            ? '&createdAfter=' + lastTxn.timestamp
+                            : '';
                         resArr = [];
                         isFinished = false;
                         _a.label = 1;
                     case 1:
-                        url = "/.netlify/functions/getTradesX2Y2?contract=" + contract_address + cursor;
+                        console.log('x2y2LoopStart');
+                        url = "/.netlify/functions/getTradesX2Y2?contract=" + contract_address + cursor + createdAfter;
                         return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
                     case 2: return [4 /*yield*/, (_a.sent()).json()];
                     case 3:
                         res = _a.sent();
                         if (!res.data)
-                            return [2 /*return*/];
+                            return [2 /*return*/, resArr];
                         filteredResultArray = [];
                         filteredResultArray = res.data.map(function (trade) {
                             return {
@@ -147,12 +154,15 @@ exports.MarketplaceProvider = function (_a) {
                                 tokenId: trade.token.token_id.toString(),
                                 txn: trade.tx,
                                 marketplace: 'X2Y2',
+                                looksRareId: null,
                                 from: trade.from_address,
                                 to: trade.to_address,
                                 chainId: 1
                             };
                         });
                         resArr = __spreadArrays(resArr, filteredResultArray);
+                        console.log(res);
+                        console.log(res.next && res.next.length > 1);
                         if (res.next && res.next.length > 1) {
                             cursor = '&cursor=' + res.next;
                         }
@@ -220,39 +230,62 @@ exports.MarketplaceProvider = function (_a) {
             });
         });
     }
-    function getCollectionTradesLooksRare(contract) {
-        var _a;
+    function getCollectionTradesLooksRare(contract, lastTxn) {
+        var _a, _b, _c;
         if (contract === void 0) { contract = ''; }
+        if (lastTxn === void 0) { lastTxn = undefined; }
         return __awaiter(this, void 0, void 0, function () {
-            var contract_address, url, res, filteredResultArray;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var contract_address, isFinished, resArr, cursor, url, res, filteredResultArray;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         contract_address = !!contract && contract.length > 1 ? contract : undefined;
                         if (!contract_address)
                             return [2 /*return*/];
-                        url = "/.netlify/functions/getTradesLooksRare?contract=" + contract_address;
+                        isFinished = false;
+                        resArr = [];
+                        cursor = lastTxn && lastTxn.looksRareId
+                            ? '&pagination[cursor]=' + lastTxn.looksRareId
+                            : '';
+                        _d.label = 1;
+                    case 1:
+                        console.log('looksLoopStart');
+                        url = "/.netlify/functions/getTradesLooksRare?contract=" + contract_address + cursor;
                         return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
-                    case 1: return [4 /*yield*/, (_b.sent()).json()];
-                    case 2:
-                        res = _b.sent();
+                    case 2: return [4 /*yield*/, (_d.sent()).json()];
+                    case 3:
+                        res = _d.sent();
                         filteredResultArray = [];
-                        if (res.data) {
-                            filteredResultArray = (_a = res.data) === null || _a === void 0 ? void 0 : _a.map(function (trade) {
-                                return {
-                                    timestamp: moment_1["default"](trade.createdAt).unix(),
-                                    price: parseFloat(ethers_1.ethers.utils.formatEther(trade.order.price)),
-                                    contract: trade.collection.address,
-                                    tokenId: trade.token.tokenId.toString(),
-                                    txn: trade.hash,
-                                    marketplace: 'LooksRare',
-                                    from: trade.from,
-                                    to: trade.to,
-                                    chainId: 1
-                                };
-                            });
+                        if (!res.data)
+                            return [2 /*return*/, resArr];
+                        filteredResultArray = (_a = res.data) === null || _a === void 0 ? void 0 : _a.map(function (trade) {
+                            return {
+                                timestamp: moment_1["default"](trade.createdAt).unix(),
+                                price: parseFloat(ethers_1.ethers.utils.formatEther(trade.order.price)),
+                                contract: trade.collection.address,
+                                tokenId: trade.token.tokenId.toString(),
+                                txn: trade.hash,
+                                marketplace: 'LooksRare',
+                                looksRareId: parseInt(trade.id),
+                                from: trade.from,
+                                to: trade.to,
+                                chainId: 1
+                            };
+                        });
+                        resArr = __spreadArrays(resArr, filteredResultArray);
+                        console.log(res.data);
+                        console.log(!!((_b = res.data[0]) === null || _b === void 0 ? void 0 : _b.id));
+                        if (!!((_c = res.data[0]) === null || _c === void 0 ? void 0 : _c.id) && filteredResultArray.length < 150) {
+                            cursor = '&cursor=' + res.data[res.data.length - 1].id;
                         }
-                        return [2 /*return*/, filteredResultArray];
+                        else {
+                            isFinished = true;
+                        }
+                        _d.label = 4;
+                    case 4:
+                        if (!isFinished) return [3 /*break*/, 1];
+                        _d.label = 5;
+                    case 5: return [2 /*return*/, resArr];
                 }
             });
         });
@@ -278,63 +311,107 @@ exports.MarketplaceProvider = function (_a) {
             });
         });
     }
+    function getCollectionTradesfromDb(contractAddress) {
+        return __awaiter(this, void 0, void 0, function () {
+            var collection;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, fetch("/.netlify/functions/getDbTradesByContract?contract=" + contractAddress, {
+                            method: 'GET',
+                            redirect: 'follow'
+                        })];
+                    case 1: return [4 /*yield*/, (_a.sent()).json()];
+                    case 2:
+                        collection = _a.sent();
+                        return [2 /*return*/, collection];
+                }
+            });
+        });
+    }
     function getCollectionTrades(collection) {
         var _a, _b;
         if (collection === void 0) { collection = activeCollection === null || activeCollection === void 0 ? void 0 : activeCollection.contractAddress; }
         return __awaiter(this, void 0, void 0, function () {
-            var _c, x2y2res, looksRes, trades, recentTrades, i, trade, url, tokenMetadata, dbPostUrl, promiseArray, index, size, loopLimit, i;
+            var dbTrades, maxValues, _c, x2y2res, looksRes, newTrades, recentTrades, i, trade, url, tokenMetadata, dbPostUrl, promiseArray, index, size, loopLimit, i;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
                         if (!collection)
                             return [2 /*return*/];
-                        return [4 /*yield*/, Promise.all([
-                                getCollectionTradesX2Y2(collection),
-                                getCollectionTradesLooksRare(collection),
-                            ])];
+                        return [4 /*yield*/, getCollectionTradesfromDb(collection)];
                     case 1:
+                        dbTrades = _d.sent();
+                        if (!Array.isArray(dbTrades))
+                            dbTrades = [];
+                        console.log('dbTrades');
+                        console.log(dbTrades);
+                        maxValues = {
+                            LooksRare: { timestamp: 0, looksRareId: 0 },
+                            X2Y2: { timestamp: 0 }
+                        };
+                        if (dbTrades.length > 0) {
+                            maxValues = dbTrades.reduce(function (prev, current) {
+                                var _a;
+                                return prev[current.marketplace].timestamp > current.timestamp
+                                    ? prev
+                                    : __assign(__assign({}, prev), (_a = {}, _a[current.marketplace] = current, _a));
+                            }, { LooksRare: { timestamp: 0, looksRareId: 0 }, X2Y2: { timestamp: 0 } });
+                            console.log(maxValues);
+                        }
+                        return [4 /*yield*/, Promise.all([
+                                getCollectionTradesX2Y2(collection, maxValues.X2Y2),
+                                getCollectionTradesLooksRare(collection, maxValues.LooksRare),
+                            ])];
+                    case 2:
                         _c = _d.sent(), x2y2res = _c[0], looksRes = _c[1];
-                        trades = [];
+                        console.log('dbTrades');
+                        console.log(dbTrades);
+                        console.log('x2y2res');
+                        console.log(x2y2res);
+                        console.log('looksRes');
+                        console.log(looksRes);
+                        newTrades = [];
                         if (x2y2res)
-                            trades = __spreadArrays(trades, x2y2res);
+                            newTrades = __spreadArrays(newTrades, x2y2res);
                         if (looksRes)
-                            trades = __spreadArrays(trades, looksRes);
-                        setCollectionTrades(trades);
-                        recentTrades = trades
+                            newTrades = __spreadArrays(newTrades, looksRes);
+                        if (newTrades)
+                            dbTrades = __spreadArrays(dbTrades, newTrades);
+                        setCollectionTrades(dbTrades);
+                        recentTrades = dbTrades
                             .sort(function (a, b) { return a.timestamp - b.timestamp; })
                             .slice(-10);
                         i = 0;
-                        _d.label = 2;
-                    case 2:
-                        if (!(i < recentTrades.length)) return [3 /*break*/, 6];
+                        _d.label = 3;
+                    case 3:
+                        if (!(i < recentTrades.length)) return [3 /*break*/, 7];
                         trade = recentTrades[i];
-                        if (!!trade.image) return [3 /*break*/, 5];
+                        if (!!trade.image) return [3 /*break*/, 6];
                         url = "/.netlify/functions/getNftLooksRare?contract=" + trade.contract + "&tokenId=" + trade.tokenId;
                         return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
-                    case 3: return [4 /*yield*/, (_d.sent()).json()];
-                    case 4:
+                    case 4: return [4 /*yield*/, (_d.sent()).json()];
+                    case 5:
                         tokenMetadata = _d.sent();
                         recentTrades[i] = __assign(__assign({}, trade), {
                             image: (_a = tokenMetadata.data) === null || _a === void 0 ? void 0 : _a.imageURI,
                             name: (_b = tokenMetadata.data) === null || _b === void 0 ? void 0 : _b.name
                         });
-                        _d.label = 5;
-                    case 5:
-                        i++;
-                        return [3 /*break*/, 2];
+                        _d.label = 6;
                     case 6:
+                        i++;
+                        return [3 /*break*/, 3];
+                    case 7:
                         setRecentTrades(recentTrades);
                         dbPostUrl = '/.netlify/functions/postHistoricalTradesToDb';
                         promiseArray = [];
                         index = 0;
-                        size = 2;
-                        loopLimit = trades.length / size + 1;
+                        size = 100;
+                        loopLimit = newTrades.length / size + 1;
                         for (i = 0; i < loopLimit; i++) {
-                            console.log(trades.slice(index, index + size));
-                            // setTimeout(function timer() {
+                            console.log(newTrades.slice(index, index + size));
                             promiseArray.push(fetch(dbPostUrl, {
                                 method: 'POST',
-                                body: JSON.stringify(trades.slice(index, index + size)),
+                                body: JSON.stringify(newTrades.slice(index, index + size)),
                                 redirect: 'follow'
                             }));
                             index += size;
@@ -418,10 +495,8 @@ exports.MarketplaceProvider = function (_a) {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!slug || slug.length < 3)
+                        if (!slug || slug.length < 3 || slug === undefined || slug == '')
                             return [2 /*return*/, false];
-                        console.log('getCollectionBySlug');
-                        console.log(slug);
                         return [4 /*yield*/, fetchCollectionFromDb(slug)];
                     case 1:
                         collection = _b.sent();
@@ -429,7 +504,6 @@ exports.MarketplaceProvider = function (_a) {
                         _b.label = 2;
                     case 2:
                         _b.trys.push([2, 6, , 7]);
-                        console.log(!isStored);
                         if (!!isStored) return [3 /*break*/, 5];
                         return [4 /*yield*/, fetch("https://api.opensea.io/api/v1/collection/" + slug, {
                                 method: 'GET',
@@ -438,7 +512,6 @@ exports.MarketplaceProvider = function (_a) {
                     case 3: return [4 /*yield*/, (_b.sent()).json()];
                     case 4:
                         collectionRaw = _b.sent();
-                        console.log(collectionRaw);
                         if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
                             collection = {
                                 contractAddress: collectionRaw.collection.primary_asset_contracts[0].address,
@@ -474,7 +547,6 @@ exports.MarketplaceProvider = function (_a) {
                                 updatedAt: moment_1["default"]().unix(),
                                 osStatsUpdatedAt: moment_1["default"]().unix()
                             };
-                            console.log(collection);
                         }
                         if (persist || !isStored) {
                             dbPostUrl = '/.netlify/functions/postCollectionToDb';
