@@ -91,10 +91,10 @@ export const MarketplaceProvider = ({
 
       filteredResultArray = res.data.map((trade: any) => {
         return {
-          timestamp: trade.order.updated_at,
-          price: ethers.utils.formatEther(trade.order.price),
+          timestamp: parseInt(trade.order.updated_at),
+          price: parseFloat(ethers.utils.formatEther(trade.order.price)),
           contract: trade.token.contract,
-          tokenId: trade.token.token_id,
+          tokenId: trade.token.token_id.toString(),
           txn: trade.tx,
           marketplace: 'X2Y2',
           from: trade.from_address,
@@ -177,9 +177,9 @@ export const MarketplaceProvider = ({
       filteredResultArray = res.data?.map((trade: any) => {
         return {
           timestamp: moment(trade.createdAt).unix(),
-          price: ethers.utils.formatEther(trade.order.price),
+          price: parseFloat(ethers.utils.formatEther(trade.order.price)),
           contract: trade.collection.address,
-          tokenId: trade.token.tokenId,
+          tokenId: trade.token.tokenId.toString(),
           txn: trade.hash,
           marketplace: 'LooksRare',
           from: trade.from,
@@ -255,24 +255,23 @@ export const MarketplaceProvider = ({
     //   body: JSON.stringify(trades.splice(-200)),
     //   redirect: 'follow',
     // });
-    const dbPostUrl = '/.netlify/functions/postSaleHistoryToDb';
+    const dbPostUrl = '/.netlify/functions/postHistoricalTradesToDb';
     const promiseArray: any[] = [];
     let index = 0;
-    const size = 10;
+    const size = 2;
     const loopLimit = trades.length / size + 1;
     for (let i = 0; i < loopLimit; i++) {
-      // setTimeout(function timer() {
       console.log(trades.slice(index, index + size));
+      // setTimeout(function timer() {
       promiseArray.push(
         fetch(dbPostUrl, {
           method: 'POST',
           body: JSON.stringify(trades.slice(index, index + size)),
           redirect: 'follow',
-        }).then((response) => response.json()),
+        }),
       );
       index += size;
     }
-    await Promise.all(promiseArray);
   }
 
   function applyTradeFilters(
@@ -321,14 +320,10 @@ export const MarketplaceProvider = ({
     return { sales: userSales, purchases: userPurchases };
   }
 
-  async function getCollectionBySlug(
-    slug = '',
-    getTrades = false,
-    setActive = true,
-    persist = false,
-  ) {
+  async function fetchCollectionFromDb(slug: string) {
+    let collection: any = {};
     try {
-      let collection = (
+      collection = (
         await (
           await fetch(
             `/.netlify/functions/getDbCollectionBySlug?slug=${slug}`,
@@ -339,9 +334,26 @@ export const MarketplaceProvider = ({
           )
         ).json()
       )[0];
-      const isStored = !collection.contractAddress;
-      console.log(isStored);
-      console.log(collection);
+    } catch {
+      collection = false;
+    }
+
+    return collection;
+  }
+
+  async function getCollectionBySlug(
+    slug = '',
+    getTrades = false,
+    setActive = true,
+    persist = false,
+  ) {
+    if (!slug || slug.length < 3) return false;
+    console.log('getCollectionBySlug');
+    console.log(slug);
+    let collection: any = await fetchCollectionFromDb(slug);
+    const isStored = collection && collection.contractAddress;
+    try {
+      console.log(!isStored);
       if (!isStored) {
         const collectionRaw = await (
           await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
@@ -349,6 +361,7 @@ export const MarketplaceProvider = ({
             redirect: 'follow',
           })
         ).json();
+        console.log(collectionRaw);
         if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
           collection = {
             contractAddress:
@@ -387,10 +400,7 @@ export const MarketplaceProvider = ({
             updatedAt: moment().unix(),
             osStatsUpdatedAt: moment().unix(),
           };
-        }
-        if (setActive) setActiveCollection(collection);
-        if (getTrades) {
-          getCollectionTrades(collection.contractAddress);
+          console.log(collection);
         }
         if (persist || !isStored) {
           const dbPostUrl = '/.netlify/functions/postCollectionToDb';
@@ -400,8 +410,12 @@ export const MarketplaceProvider = ({
             redirect: 'follow',
           });
         }
-        return collection;
       }
+      if (setActive) setActiveCollection(collection);
+      if (getTrades) {
+        getCollectionTrades(collection.contractAddress);
+      }
+      return collection;
     } catch {
       return false;
     }

@@ -28,6 +28,7 @@ export async function handler(event) {
   };
 
   try {
+    console.log(requestOptions);
     const response = await fetch(API_ENDPOINT, requestOptions);
     // const data = await response.json();
     return { statusCode: 200, body: JSON.stringify(response) };

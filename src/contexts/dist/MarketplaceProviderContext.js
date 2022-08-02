@@ -141,10 +141,10 @@ exports.MarketplaceProvider = function (_a) {
                         filteredResultArray = [];
                         filteredResultArray = res.data.map(function (trade) {
                             return {
-                                timestamp: trade.order.updated_at,
-                                price: ethers_1.ethers.utils.formatEther(trade.order.price),
+                                timestamp: parseInt(trade.order.updated_at),
+                                price: parseFloat(ethers_1.ethers.utils.formatEther(trade.order.price)),
                                 contract: trade.token.contract,
-                                tokenId: trade.token.token_id,
+                                tokenId: trade.token.token_id.toString(),
                                 txn: trade.tx,
                                 marketplace: 'X2Y2',
                                 from: trade.from_address,
@@ -241,9 +241,9 @@ exports.MarketplaceProvider = function (_a) {
                             filteredResultArray = (_a = res.data) === null || _a === void 0 ? void 0 : _a.map(function (trade) {
                                 return {
                                     timestamp: moment_1["default"](trade.createdAt).unix(),
-                                    price: ethers_1.ethers.utils.formatEther(trade.order.price),
+                                    price: parseFloat(ethers_1.ethers.utils.formatEther(trade.order.price)),
                                     contract: trade.collection.address,
-                                    tokenId: trade.token.tokenId,
+                                    tokenId: trade.token.tokenId.toString(),
                                     txn: trade.hash,
                                     marketplace: 'LooksRare',
                                     from: trade.from,
@@ -324,24 +324,21 @@ exports.MarketplaceProvider = function (_a) {
                         return [3 /*break*/, 2];
                     case 6:
                         setRecentTrades(recentTrades);
-                        dbPostUrl = '/.netlify/functions/postSaleHistoryToDb';
+                        dbPostUrl = '/.netlify/functions/postHistoricalTradesToDb';
                         promiseArray = [];
                         index = 0;
-                        size = 10;
+                        size = 2;
                         loopLimit = trades.length / size + 1;
                         for (i = 0; i < loopLimit; i++) {
-                            // setTimeout(function timer() {
                             console.log(trades.slice(index, index + size));
+                            // setTimeout(function timer() {
                             promiseArray.push(fetch(dbPostUrl, {
                                 method: 'POST',
                                 body: JSON.stringify(trades.slice(index, index + size)),
                                 redirect: 'follow'
-                            }).then(function (response) { return response.json(); }));
+                            }));
                             index += size;
                         }
-                        return [4 /*yield*/, Promise.all(promiseArray)];
-                    case 7:
-                        _d.sent();
                         return [2 /*return*/];
                 }
             });
@@ -384,6 +381,33 @@ exports.MarketplaceProvider = function (_a) {
             userPurchases = __spreadArrays(userPurchases, looksRes.purchases);
         return { sales: userSales, purchases: userPurchases };
     }
+    function fetchCollectionFromDb(slug) {
+        return __awaiter(this, void 0, void 0, function () {
+            var collection, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        collection = {};
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, fetch("/.netlify/functions/getDbCollectionBySlug?slug=" + slug, {
+                                method: 'GET',
+                                redirect: 'follow'
+                            })];
+                    case 2: return [4 /*yield*/, (_b.sent()).json()];
+                    case 3:
+                        collection = (_b.sent())[0];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        _a = _b.sent();
+                        collection = false;
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/, collection];
+                }
+            });
+        });
+    }
     function getCollectionBySlug(slug, getTrades, setActive, persist) {
         if (slug === void 0) { slug = ''; }
         if (getTrades === void 0) { getTrades = false; }
@@ -394,17 +418,18 @@ exports.MarketplaceProvider = function (_a) {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 6, , 7]);
-                        return [4 /*yield*/, fetch("/.netlify/functions/getDbCollectionBySlug?slug=" + slug, {
-                                method: 'GET',
-                                redirect: 'follow'
-                            })];
-                    case 1: return [4 /*yield*/, (_b.sent()).json()];
+                        if (!slug || slug.length < 3)
+                            return [2 /*return*/, false];
+                        console.log('getCollectionBySlug');
+                        console.log(slug);
+                        return [4 /*yield*/, fetchCollectionFromDb(slug)];
+                    case 1:
+                        collection = _b.sent();
+                        isStored = collection && collection.contractAddress;
+                        _b.label = 2;
                     case 2:
-                        collection = (_b.sent())[0];
-                        isStored = !collection.contractAddress;
-                        console.log(isStored);
-                        console.log(collection);
+                        _b.trys.push([2, 6, , 7]);
+                        console.log(!isStored);
                         if (!!isStored) return [3 /*break*/, 5];
                         return [4 /*yield*/, fetch("https://api.opensea.io/api/v1/collection/" + slug, {
                                 method: 'GET',
@@ -413,6 +438,7 @@ exports.MarketplaceProvider = function (_a) {
                     case 3: return [4 /*yield*/, (_b.sent()).json()];
                     case 4:
                         collectionRaw = _b.sent();
+                        console.log(collectionRaw);
                         if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
                             collection = {
                                 contractAddress: collectionRaw.collection.primary_asset_contracts[0].address,
@@ -448,11 +474,7 @@ exports.MarketplaceProvider = function (_a) {
                                 updatedAt: moment_1["default"]().unix(),
                                 osStatsUpdatedAt: moment_1["default"]().unix()
                             };
-                        }
-                        if (setActive)
-                            setActiveCollection(collection);
-                        if (getTrades) {
-                            getCollectionTrades(collection.contractAddress);
+                            console.log(collection);
                         }
                         if (persist || !isStored) {
                             dbPostUrl = '/.netlify/functions/postCollectionToDb';
@@ -462,8 +484,14 @@ exports.MarketplaceProvider = function (_a) {
                                 redirect: 'follow'
                             });
                         }
+                        _b.label = 5;
+                    case 5:
+                        if (setActive)
+                            setActiveCollection(collection);
+                        if (getTrades) {
+                            getCollectionTrades(collection.contractAddress);
+                        }
                         return [2 /*return*/, collection];
-                    case 5: return [3 /*break*/, 7];
                     case 6:
                         _a = _b.sent();
                         return [2 /*return*/, false];

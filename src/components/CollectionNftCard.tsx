@@ -23,17 +23,21 @@ const CollectionNftCard: React.FC<Props> = ({
 
   return (
     <div className="group relative">
-      <div className={'drop-shadow-md p-2 rounded-xl text-sm bg-white'}>
+      <div
+        className={
+          'drop-shadow-md p-2 rounded-xl text-sm bg-white hover:drop-shadow-lg'
+        }
+      >
         <div
           className={
-            'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer'
+            'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer rounded-xl'
           }
         >
           {(
             <img
               src={selectedNft.image}
               alt={selectedNft.imageAlt}
-              className="w-full h-full transition-opacity hover:opacity-75 object-center object-cover rounded-xl"
+              className="w-full h-full transition-all hover:scale-110 object-center object-cover"
               style={{ display: isLoading ? 'none' : 'block' }}
               onLoadStart={() => setIsLoading(true)}
               onLoad={() => setIsLoading(false)}

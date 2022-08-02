@@ -18,7 +18,7 @@ const headers = {
 
 export async function handler(event) {
   const API_ENDPOINT =
-    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/TradeHistory';
+    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/HistoricalTrades';
 
   var requestOptions = {
     method: 'POST',
@@ -26,6 +26,8 @@ export async function handler(event) {
     body: event.body,
     redirect: 'follow',
   };
+
+  console.log(event.body);
 
   try {
     const response = await fetch(API_ENDPOINT, requestOptions);
@@ -37,4 +39,10 @@ export async function handler(event) {
       body: JSON.stringify({ error: error }),
     };
   }
+  // request(options, function (error, response) {
+  //   if (error) throw new Error(error);
+  //   console.log(response.body);
+  // });
+
+  return { statusCode: 200, body: JSON.stringify(response) };
 }

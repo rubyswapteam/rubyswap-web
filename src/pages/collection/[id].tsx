@@ -62,10 +62,6 @@ export default function Collection(props: any) {
   }, [collectionTrades]);
 
   useEffect(() => {
-    console.log(activeCollection?.traits);
-  }, [activeCollection]);
-
-  useEffect(() => {
     setIsLoadingRecentTrades(false);
   }, [recentTrades]);
 
