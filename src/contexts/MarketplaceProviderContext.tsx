@@ -291,7 +291,7 @@ export const MarketplaceProvider = ({
     setCollectionTrades(dbTrades);
 
     const recentTrades = dbTrades
-      .sort((a, b) => a.timestamp - b.timestamp)
+      .sort((a: any, b: any) => a.timestamp - b.timestamp)
       .slice(-10);
 
     for (let i = 0; i < recentTrades.length; i++) {
