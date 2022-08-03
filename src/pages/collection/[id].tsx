@@ -14,10 +14,11 @@ import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
-import CollectionUpdate from '../../components/CollectionUpdate';
+import CollectionUpdates from '../../components/CollectionUpdates';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import RightArrow from '../../components/RightArrow';
+import { SampleDiscordUpdates } from '@/data/dummy-data/sampleDiscordUpdates';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -148,7 +149,7 @@ export default function Collection(props: any) {
           <div className="my-4">
             <CollectionAnnouncementBanner
               route={`/collection/${id}?tab=updates`}
-              message={collectionUpdates && collectionUpdates[0].title}
+              message={SampleDiscordUpdates && SampleDiscordUpdates[0].content}
             />
           </div>
           <div className="py-8 bg-gray-100 w-full">
@@ -219,7 +220,11 @@ export default function Collection(props: any) {
       return (
         <>
           <div className="mt-6 h-inherit overflow-scroll">
-            <CollectionUpdate collectionUpdates={collectionUpdates} />
+            {activeCollection?.contractAddress && (
+              <CollectionUpdates
+                contractAddress={activeCollection?.contractAddress}
+              />
+            )}
           </div>
         </>
       );

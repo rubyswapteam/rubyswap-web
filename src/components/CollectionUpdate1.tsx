@@ -12,7 +12,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function CollectionUpdate(props: Props) {
+export default function CollectionUpdate1(props: Props) {
   const [enabled, setEnabled] = useState(false);
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-80">
@@ -65,9 +65,6 @@ export default function CollectionUpdate(props: Props) {
                     .startOf('seconds')
                     .fromNow()}
                 </a>
-              </div>
-              <div className="py-0.5 px-2 rounded-md bg-gray-100 self-center">
-                {update.updateType}
               </div>
             </div>
             <div className="font-bold mb-3">{update.title}</div>

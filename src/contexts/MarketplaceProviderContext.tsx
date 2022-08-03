@@ -79,8 +79,6 @@ export const MarketplaceProvider = ({
     if (!contract_address) return;
 
     let cursor = '';
-    console.log('createdAfter');
-    console.log(!!lastTxn && !!lastTxn?.timestamp);
     const createdAfter =
       !!lastTxn && !!lastTxn?.timestamp
         ? '&createdAfter=' + lastTxn.timestamp
@@ -89,7 +87,6 @@ export const MarketplaceProvider = ({
     let isFinished = false;
 
     do {
-      console.log('x2y2LoopStart');
       const url = `/.netlify/functions/getTradesX2Y2?contract=${contract_address}${cursor}${createdAfter}`;
 
       const res = await (
@@ -116,8 +113,6 @@ export const MarketplaceProvider = ({
       });
       resArr = [...resArr, ...filteredResultArray];
 
-      console.log(res);
-      console.log(res.next && res.next.length > 1);
       if (res.next && res.next.length > 1) {
         cursor = '&cursor=' + res.next;
       } else {
@@ -190,7 +185,6 @@ export const MarketplaceProvider = ({
         : '';
 
     do {
-      console.log('looksLoopStart');
       const url = `/.netlify/functions/getTradesLooksRare?contract=${contract_address}${cursor}`;
 
       const res = await (
@@ -218,8 +212,6 @@ export const MarketplaceProvider = ({
 
       resArr = [...resArr, ...filteredResultArray];
 
-      console.log(res.data);
-      console.log(!!res.data[0]?.id);
       if (!!res.data[0]?.id && filteredResultArray.length < 150) {
         cursor = '&cursor=' + res.data[res.data.length - 1].id;
       } else {
@@ -257,8 +249,6 @@ export const MarketplaceProvider = ({
     if (!collection) return;
     let dbTrades = await getCollectionTradesfromDb(collection);
     if (!Array.isArray(dbTrades)) dbTrades = [];
-    console.log('dbTrades');
-    console.log(dbTrades);
     let maxValues: any = {
       LooksRare: { timestamp: 0, looksRareId: 0 },
       X2Y2: { timestamp: 0 },
@@ -272,29 +262,20 @@ export const MarketplaceProvider = ({
         },
         { LooksRare: { timestamp: 0, looksRareId: 0 }, X2Y2: { timestamp: 0 } },
       );
-      console.log(maxValues);
     }
     const [x2y2res, looksRes] = await Promise.all([
       getCollectionTradesX2Y2(collection, maxValues.X2Y2),
       getCollectionTradesLooksRare(collection, maxValues.LooksRare),
     ]);
-    console.log('dbTrades');
-    console.log(dbTrades);
-    console.log('x2y2res');
-    console.log(x2y2res);
-    console.log('looksRes');
-    console.log(looksRes);
     let newTrades: any[] = [];
     if (x2y2res) newTrades = [...newTrades, ...x2y2res];
     if (looksRes) newTrades = [...newTrades, ...looksRes];
-    console.log('newTrades');
     newTrades = newTrades.filter(
       (y) =>
         !dbTrades.some((x: any) =>
           ['txn', 'tokenId', 'contract'].every((key) => x[key] == y[key]),
         ),
     );
-    console.log(newTrades);
     if (newTrades) dbTrades = [...dbTrades, ...newTrades];
     setCollectionTrades(dbTrades);
 
@@ -326,7 +307,6 @@ export const MarketplaceProvider = ({
     const size = 100;
     const loopLimit = newTrades.length / size + 1;
     for (let i = 0; i < loopLimit; i++) {
-      console.log(newTrades.slice(index, index + size));
       promiseArray.push(
         fetch(dbPostUrl, {
           method: 'POST',

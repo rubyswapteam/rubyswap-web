@@ -128,8 +128,6 @@ exports.MarketplaceProvider = function (_a) {
                         if (!contract_address)
                             return [2 /*return*/];
                         cursor = '';
-                        console.log('createdAfter');
-                        console.log(!!lastTxn && !!(lastTxn === null || lastTxn === void 0 ? void 0 : lastTxn.timestamp));
                         createdAfter = !!lastTxn && !!(lastTxn === null || lastTxn === void 0 ? void 0 : lastTxn.timestamp)
                             ? '&createdAfter=' + lastTxn.timestamp
                             : '';
@@ -137,7 +135,6 @@ exports.MarketplaceProvider = function (_a) {
                         isFinished = false;
                         _a.label = 1;
                     case 1:
-                        console.log('x2y2LoopStart');
                         url = "/.netlify/functions/getTradesX2Y2?contract=" + contract_address + cursor + createdAfter;
                         return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
                     case 2: return [4 /*yield*/, (_a.sent()).json()];
@@ -161,8 +158,6 @@ exports.MarketplaceProvider = function (_a) {
                             };
                         });
                         resArr = __spreadArrays(resArr, filteredResultArray);
-                        console.log(res);
-                        console.log(res.next && res.next.length > 1);
                         if (res.next && res.next.length > 1) {
                             cursor = '&cursor=' + res.next;
                         }
@@ -231,13 +226,13 @@ exports.MarketplaceProvider = function (_a) {
         });
     }
     function getCollectionTradesLooksRare(contract, lastTxn) {
-        var _a, _b, _c;
+        var _a, _b;
         if (contract === void 0) { contract = ''; }
         if (lastTxn === void 0) { lastTxn = undefined; }
         return __awaiter(this, void 0, void 0, function () {
             var contract_address, isFinished, resArr, cursor, url, res, filteredResultArray;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         contract_address = !!contract && contract.length > 1 ? contract : undefined;
                         if (!contract_address)
@@ -247,14 +242,13 @@ exports.MarketplaceProvider = function (_a) {
                         cursor = lastTxn && lastTxn.looksRareId
                             ? '&pagination[cursor]=' + lastTxn.looksRareId
                             : '';
-                        _d.label = 1;
+                        _c.label = 1;
                     case 1:
-                        console.log('looksLoopStart');
                         url = "/.netlify/functions/getTradesLooksRare?contract=" + contract_address + cursor;
                         return [4 /*yield*/, fetch(url, { method: 'GET', redirect: 'follow' })];
-                    case 2: return [4 /*yield*/, (_d.sent()).json()];
+                    case 2: return [4 /*yield*/, (_c.sent()).json()];
                     case 3:
-                        res = _d.sent();
+                        res = _c.sent();
                         filteredResultArray = [];
                         if (!res.data)
                             return [2 /*return*/, resArr];
@@ -273,18 +267,16 @@ exports.MarketplaceProvider = function (_a) {
                             };
                         });
                         resArr = __spreadArrays(resArr, filteredResultArray);
-                        console.log(res.data);
-                        console.log(!!((_b = res.data[0]) === null || _b === void 0 ? void 0 : _b.id));
-                        if (!!((_c = res.data[0]) === null || _c === void 0 ? void 0 : _c.id) && filteredResultArray.length < 150) {
+                        if (!!((_b = res.data[0]) === null || _b === void 0 ? void 0 : _b.id) && filteredResultArray.length < 150) {
                             cursor = '&cursor=' + res.data[res.data.length - 1].id;
                         }
                         else {
                             isFinished = true;
                         }
-                        _d.label = 4;
+                        _c.label = 4;
                     case 4:
                         if (!isFinished) return [3 /*break*/, 1];
-                        _d.label = 5;
+                        _c.label = 5;
                     case 5: return [2 /*return*/, resArr];
                 }
             });
@@ -343,8 +335,6 @@ exports.MarketplaceProvider = function (_a) {
                         dbTrades = _d.sent();
                         if (!Array.isArray(dbTrades))
                             dbTrades = [];
-                        console.log('dbTrades');
-                        console.log(dbTrades);
                         maxValues = {
                             LooksRare: { timestamp: 0, looksRareId: 0 },
                             X2Y2: { timestamp: 0 }
@@ -356,7 +346,6 @@ exports.MarketplaceProvider = function (_a) {
                                     ? prev
                                     : __assign(__assign({}, prev), (_a = {}, _a[current.marketplace] = current, _a));
                             }, { LooksRare: { timestamp: 0, looksRareId: 0 }, X2Y2: { timestamp: 0 } });
-                            console.log(maxValues);
                         }
                         return [4 /*yield*/, Promise.all([
                                 getCollectionTradesX2Y2(collection, maxValues.X2Y2),
@@ -364,24 +353,16 @@ exports.MarketplaceProvider = function (_a) {
                             ])];
                     case 2:
                         _c = _d.sent(), x2y2res = _c[0], looksRes = _c[1];
-                        console.log('dbTrades');
-                        console.log(dbTrades);
-                        console.log('x2y2res');
-                        console.log(x2y2res);
-                        console.log('looksRes');
-                        console.log(looksRes);
                         newTrades = [];
                         if (x2y2res)
                             newTrades = __spreadArrays(newTrades, x2y2res);
                         if (looksRes)
                             newTrades = __spreadArrays(newTrades, looksRes);
-                        console.log('newTrades');
                         newTrades = newTrades.filter(function (y) {
                             return !dbTrades.some(function (x) {
                                 return ['txn', 'tokenId', 'contract'].every(function (key) { return x[key] == y[key]; });
                             });
                         });
-                        console.log(newTrades);
                         if (newTrades)
                             dbTrades = __spreadArrays(dbTrades, newTrades);
                         setCollectionTrades(dbTrades);
@@ -415,7 +396,6 @@ exports.MarketplaceProvider = function (_a) {
                         size = 100;
                         loopLimit = newTrades.length / size + 1;
                         for (i = 0; i < loopLimit; i++) {
-                            console.log(newTrades.slice(index, index + size));
                             promiseArray.push(fetch(dbPostUrl, {
                                 method: 'POST',
                                 body: JSON.stringify(newTrades.slice(index, index + size)),
