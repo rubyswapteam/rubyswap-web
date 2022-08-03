@@ -1,9 +1,10 @@
 import { Switch, Transition } from '@headlessui/react';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Props {
-  contractAddress: string;
+  updates: any;
+  isLoading: boolean;
 }
 
 function classNames(...classes: string[]) {
@@ -12,18 +13,11 @@ function classNames(...classes: string[]) {
 
 function formatText(text: string) {
   if (!text) return '';
-  let newText = addEmojis(text);
-  newText = newText.split('\n').join('<br />');
+  let newText = text.split('\n').join('<br />');
   newText = convertBolds(newText);
   newText = convertTags(newText);
   newText = convertUrls(newText);
   return newText;
-}
-
-function addEmojis(text: string) {
-  return text.replace(/\\u([0-9A-F]{4})/gi, (_, g) =>
-    String.fromCharCode(`0x${g}`),
-  );
 }
 
 function convertTags(text: string) {
@@ -51,56 +45,6 @@ function convertUrls(text: string) {
 
 export default function CollectionUpdates(props: Props) {
   const [enabled, setEnabled] = useState(false);
-  const [updates, setUpdates] = useState<any[]>({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    let isSubscribed = true;
-    console.log('useEffect');
-    console.log(props?.contractAddress);
-
-    const fetchData = async (contractAddress: string) => {
-      console.log('fetchData');
-      console.log(contractAddress);
-      let collection: any = {};
-      try {
-        collection = await (
-          await fetch(
-            `/.netlify/functions/getDbCollectionUpdatesByContract?contract=${contractAddress}`,
-            {
-              method: 'GET',
-              redirect: 'follow',
-            },
-          )
-        )
-          .json()
-          .then((res) => {
-            console.log(res);
-            res = res.map((item: any) => {
-              return { ...item, ...{ data: JSON.parse(item.data) } };
-            });
-            setUpdates(res);
-          });
-      } catch {
-        collection = [];
-      }
-
-      return collection;
-    };
-
-    setIsLoading(true);
-
-    const delayDebounceFn = setTimeout(() => {
-      console.log(props.contractAddress);
-      fetchData(props.contractAddress).catch(console.error);
-      setIsLoading(false);
-    }, 500);
-
-    return () => {
-      clearTimeout(delayDebounceFn);
-      isSubscribed = false;
-    };
-  }, [props.contractAddress]);
 
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-80">
@@ -124,9 +68,10 @@ export default function CollectionUpdates(props: Props) {
         <Switch.Label as="span" className="ml-3">
           <span className="text-sm font-medium text-gray-900">Holder Only</span>
         </Switch.Label>
-      </Switch.Group>.
-      {updates?.length > 1 &&
-        updates.map((update: any) => (
+      </Switch.Group>
+      .
+      {props.updates?.length > 1 &&
+        props.updates.map((update: any) => (
           <Transition
             key={update.data.id}
             show={!enabled || update.data.holdersOnly}

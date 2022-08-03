@@ -66,8 +66,8 @@ export default function AveragePriceVolumeChart(props: any) {
         0,
       );
       const price = volume / filteredPriceTime.length;
-      totalVolume.push(roundData(volume));
-      averagePrice.push(roundData(price));
+      totalVolume.push(roundData(volume) || 0);
+      averagePrice.push(roundData(price) || 0);
     });
     setIsShowing(true);
 

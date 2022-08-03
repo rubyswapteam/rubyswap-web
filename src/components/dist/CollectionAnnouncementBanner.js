@@ -2,18 +2,14 @@
 exports.__esModule = true;
 var link_1 = require("next/link");
 function formatText(text) {
-    var newText = addEmojis(text);
-    newText = newText.split('\n').join('<br />');
+    if (!text)
+        return '';
+    var newText = text.split('\n').join('<br />');
     newText = convertBolds(newText);
     newText = convertTags(newText);
     console.log(newText);
     newText = convertUrl(newText);
     return newText;
-}
-function addEmojis(text) {
-    return text.replace(/\\u([0-9A-F]{4})/gi, function (_, g) {
-        return String.fromCharCode("0x" + g);
-    });
 }
 function convertTags(text) {
     return text.replace(/(\@everyone.*?)/gm, "<a class='font-semibold bg-[#DEE0FC] p-1 rounded-md'>@everyone</a>");

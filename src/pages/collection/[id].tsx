@@ -18,17 +18,19 @@ import CollectionUpdates from '../../components/CollectionUpdates';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import RightArrow from '../../components/RightArrow';
-import { SampleDiscordUpdates } from '@/data/dummy-data/sampleDiscordUpdates';
 
 export default function Collection(props: any) {
   const router = useRouter();
   const { id, tab, range } = router.query;
+  const [isLoadingCollection, setIsLoadingCollection] = useState<boolean>(true);
   const [isLoadingCollectionTrades, setIsLoadingCollectionTrades] =
     useState<boolean>(true);
   const [isLoadingRecentTrades, setIsLoadingRecentTrades] =
     useState<boolean>(true);
-  const { nfts, fetchNfts, collectionUpdates, fetchNftCollectionUpdates } =
-    useNftProvider();
+  const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
+  const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
+    useState(false);
+  const { nfts, fetchNfts } = useNftProvider();
   const {
     activeCollection,
     getCollectionBySlug,
@@ -40,9 +42,6 @@ export default function Collection(props: any) {
     if (!nfts) {
       fetchNfts();
     }
-    if (!collectionUpdates) {
-      fetchNftCollectionUpdates();
-    }
   }, [nfts, collectionUpdates]);
 
   useEffect(() => {
@@ -53,10 +52,61 @@ export default function Collection(props: any) {
         id?.toString().toLowerCase()
     ) {
       setLoading(true);
-      getCollectionBySlug(id, true);
-      setLoading(false);
+      getCollectionBySlug(id, true).then((res: any) => {
+        setIsLoadingCollection(false);
+        setIsLoadingCollectionTrades(false);
+        setIsLoadingRecentTrades(false);
+      });
     }
   }, [id]);
+
+  useEffect(() => {
+    let isSubscribed = true;
+    console.log('useEffect');
+    console.log(activeCollection?.contractAddress);
+
+    const fetchData = async (contractAddress: string) => {
+      console.log('fetchData');
+      console.log(contractAddress);
+      let collection: any = {};
+      try {
+        collection = await (
+          await fetch(
+            `/.netlify/functions/getDbCollectionUpdatesByContract?contract=${contractAddress}`,
+            {
+              method: 'GET',
+              redirect: 'follow',
+            },
+          )
+        )
+          .json()
+          .then((res) => {
+            console.log(res);
+            res = res.map((item: any) => {
+              return { ...item, ...{ data: JSON.parse(item.data) } };
+            });
+            setCollectionUpdates(res);
+          });
+      } catch {
+        collection = [];
+      }
+
+      return collection;
+    };
+
+    setIsLoadingCollectionUpdates(true);
+
+    const delayDebounceFn = setTimeout(() => {
+      console.log(activeCollection?.contractAddress);
+      fetchData(activeCollection?.contractAddress).catch(console.error);
+      setIsLoadingCollectionUpdates(false);
+    }, 500);
+
+    return () => {
+      clearTimeout(delayDebounceFn);
+      isSubscribed = false;
+    };
+  }, [activeCollection?.contractAddress]);
 
   useEffect(() => {
     setIsLoadingCollectionTrades(false);
@@ -67,6 +117,7 @@ export default function Collection(props: any) {
   }, [recentTrades]);
 
   function setLoading(state: boolean) {
+    setIsLoadingCollection(state);
     setIsLoadingCollectionTrades(state);
     setIsLoadingRecentTrades(state);
   }
@@ -147,10 +198,14 @@ export default function Collection(props: any) {
       return (
         <div className="h-inherit overflow-scroll pb-80">
           <div className="my-4">
-            <CollectionAnnouncementBanner
-              route={`/collection/${id}?tab=updates`}
-              message={SampleDiscordUpdates && SampleDiscordUpdates[0].content}
-            />
+            {collectionUpdates && collectionUpdates.length > 1 && (
+              <CollectionAnnouncementBanner
+                route={`/collection/${id}?tab=updates`}
+                message={
+                  collectionUpdates[0].data.content.substring(0, 80) + '...'
+                }
+              />
+            )}
           </div>
           <div className="py-8 bg-gray-100 w-full">
             <div className="my-8">
@@ -222,7 +277,8 @@ export default function Collection(props: any) {
           <div className="mt-6 h-inherit overflow-scroll">
             {activeCollection?.contractAddress && (
               <CollectionUpdates
-                contractAddress={activeCollection?.contractAddress}
+                updates={collectionUpdates}
+                isLoading={isLoadingCollectionUpdates}
               />
             )}
           </div>

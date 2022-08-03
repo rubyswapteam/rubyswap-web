@@ -6,19 +6,13 @@ interface Props {
 }
 
 function formatText(text: string) {
-  let newText = addEmojis(text);
-  newText = newText.split('\n').join('<br />');
+  if (!text) return '';
+  let newText = text.split('\n').join('<br />');
   newText = convertBolds(newText);
   newText = convertTags(newText);
   console.log(newText);
   newText = convertUrl(newText);
   return newText;
-}
-
-function addEmojis(text: string) {
-  return text.replace(/\\u([0-9A-F]{4})/gi, (_, g) =>
-    String.fromCharCode(`0x${g}`),
-  );
 }
 
 function convertTags(text: string): string {

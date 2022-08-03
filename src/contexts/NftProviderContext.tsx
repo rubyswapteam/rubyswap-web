@@ -22,6 +22,7 @@ import { SampleCollectionOS } from '@/data/dummy-data/sampleCollectionOS';
 import { SampleNfts } from '@/data/dummy-data/sampleNfts';
 import { SampleCollectionUpdates } from '@/data/dummy-data/sampleCollectionUpdates';
 import Collection from '../pages/wallet/[id]';
+import { ethers } from 'ethers';
 
 const NftProviderContext = React.createContext<any>({});
 
@@ -112,7 +113,9 @@ export const NftProvider = ({
         chainId: NftChainId.ETHEREUM,
         imageAlt: SampleNfts[i].collectionName,
         name: SampleNfts[i].name,
-        price: SampleNfts[i].currentBasePrice,
+        price: parseFloat(
+          (SampleNfts[i].currentBasePrice * 10 ** -18).toPrecision(4),
+        ),
         marketplace: SampleNfts[i].market,
       };
       nfts.push(nft);
