@@ -18,13 +18,9 @@ export async function handler(event) {
     redirect: 'follow',
   };
 
-  console.log('requestOptions');
-  console.log(requestOptions);
-
   try {
     const response = await fetch(API_ENDPOINT, requestOptions);
     const data = await response.json();
-    console.log(data);
     return { statusCode: 200, body: JSON.stringify(data) };
   } catch (error) {
     return {
