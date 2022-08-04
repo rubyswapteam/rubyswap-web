@@ -18,16 +18,21 @@ function handler(event) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
+          // Insert a row
+          console.log(event.queryStringParameters.slug);
+          _context.next = 3;
           return regeneratorRuntime.awrap(supabase.from('CollectionDetails').select('*').ilike('slug', event.queryStringParameters.slug));
 
-        case 2:
+        case 3:
           _ref = _context.sent;
           data = _ref.data;
           error = _ref.error;
+          console.log(data);
+          console.log(!Object.keys(data).length || error);
+          console.log(JSON.stringify(data));
 
           if (!(!Object.keys(data).length || error)) {
-            _context.next = 7;
+            _context.next = 11;
             break;
           }
 
@@ -38,13 +43,13 @@ function handler(event) {
             })
           });
 
-        case 7:
+        case 11:
           return _context.abrupt("return", {
             statusCode: 200,
             body: JSON.stringify(data)
           });
 
-        case 8:
+        case 12:
         case "end":
           return _context.stop();
       }

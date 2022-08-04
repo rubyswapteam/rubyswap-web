@@ -9,10 +9,15 @@ const supabase = createClient(
 // Our standard serverless handler function
 export async function handler(event) {
   // Insert a row
+  console.log(event.queryStringParameters.slug);
   const { data, error } = await supabase
     .from('CollectionDetails')
     .select('*')
     .ilike('slug', event.queryStringParameters.slug);
+
+  console.log(data);
+  console.log(!Object.keys(data).length || error);
+  console.log(JSON.stringify(data));
 
   if (!Object.keys(data).length || error)
     return {

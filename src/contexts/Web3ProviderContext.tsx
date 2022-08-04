@@ -58,11 +58,14 @@ export const Web3Provider = ({
         providerOptions,
       });
       const web3ModalInstance = await web3Modal.connect();
+      console.log(web3ModalInstance);
       const web3ModalProvider = new ethers.providers.Web3Provider(
         web3ModalInstance,
       );
+      console.log(web3ModalProvider);
       setProvider(web3ModalProvider);
       setActiveWallet((web3ModalProvider.provider as any).selectedAddress);
+      console.log((web3ModalProvider.provider as any).selectedAddress);
     } catch (error) {
       console.error(error);
     }
