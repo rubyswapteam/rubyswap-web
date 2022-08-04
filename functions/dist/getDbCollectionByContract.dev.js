@@ -28,18 +28,18 @@ function handler(event) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          if (event.queryStringParameters.slug) {
+          if (event.queryStringParameters.contract) {
             _context.next = 2;
             break;
           }
 
           return _context.abrupt("return", {
             statusCode: 500,
-            error: 'No slug provided'
+            error: 'No contract provided'
           });
 
         case 2:
-          API_ENDPOINT = "https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails?select=*&slug=ilike.".concat(event.queryStringParameters.slug);
+          API_ENDPOINT = "https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails?select=*&contractAddress=ilike.".concat(event.queryStringParameters.contract);
           console.log({
             method: 'GET',
             headers: headers,
@@ -55,18 +55,23 @@ function handler(event) {
 
         case 7:
           response = _context.sent;
-          _context.next = 10;
+          console.log('response');
+          console.log(response);
+          _context.next = 12;
           return regeneratorRuntime.awrap(response.json());
 
-        case 10:
+        case 12:
           data = _context.sent;
+          console.log('data');
+          console.log(data);
+          console.log(JSON.stringify(data));
           return _context.abrupt("return", {
             statusCode: 200,
             body: JSON.stringify(data)
           });
 
-        case 14:
-          _context.prev = 14;
+        case 19:
+          _context.prev = 19;
           _context.t0 = _context["catch"](4);
           return _context.abrupt("return", {
             statusCode: 500,
@@ -75,10 +80,10 @@ function handler(event) {
             })
           });
 
-        case 17:
+        case 22:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[4, 14]]);
+  }, null, null, [[4, 19]]);
 }

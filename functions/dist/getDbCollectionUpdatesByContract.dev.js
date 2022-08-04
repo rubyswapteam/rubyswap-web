@@ -28,18 +28,18 @@ function handler(event) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          if (event.queryStringParameters.slug) {
+          if (event.queryStringParameters.contract) {
             _context.next = 2;
             break;
           }
 
           return _context.abrupt("return", {
             statusCode: 500,
-            error: 'No slug provided'
+            error: 'No contract provided'
           });
 
         case 2:
-          API_ENDPOINT = "https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails?select=*&slug=ilike.".concat(event.queryStringParameters.slug);
+          API_ENDPOINT = "https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionUpdates?select=*&contractAddress=ilike.".concat(event.queryStringParameters.contract, "&order=timestamp.desc");
           console.log({
             method: 'GET',
             headers: headers,
