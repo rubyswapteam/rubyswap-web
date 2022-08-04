@@ -15,6 +15,9 @@ export async function handler(event) {
     .select('*')
     .ilike('slug', event.queryStringParameters.slug);
 
+  console.log(data);
+  console.log(error);
+
   if (error)
     return {
       statusCode: 500,

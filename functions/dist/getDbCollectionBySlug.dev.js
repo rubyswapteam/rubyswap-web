@@ -27,9 +27,11 @@ function handler(event) {
           _ref = _context.sent;
           data = _ref.data;
           error = _ref.error;
+          console.log(data);
+          console.log(error);
 
           if (!error) {
-            _context.next = 8;
+            _context.next = 10;
             break;
           }
 
@@ -40,13 +42,13 @@ function handler(event) {
             })
           });
 
-        case 8:
+        case 10:
           return _context.abrupt("return", {
             statusCode: 200,
             body: JSON.stringify(data)
           });
 
-        case 9:
+        case 11:
         case "end":
           return _context.stop();
       }
