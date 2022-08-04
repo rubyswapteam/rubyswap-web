@@ -249,7 +249,11 @@ export default function Collection(props: any) {
               />
             </div>
             <CollectionListSingleRow
-              selectedNfts={recentTrades}
+              selectedNfts={
+                activeListings &&
+                activeListings.data &&
+                activeListings.data.splice(0, 10)
+              }
               collectionName={activeCollection?.name}
               chainId={activeCollection?.chainId}
             />
