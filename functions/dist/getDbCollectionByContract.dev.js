@@ -26,7 +26,7 @@ function handler(event) {
           data = _ref.data;
           error = _ref.error;
 
-          if (!(!Object.keys(data).length || error)) {
+          if (!error) {
             _context.next = 7;
             break;
           }

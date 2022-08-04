@@ -27,12 +27,27 @@ function handler(event) {
           _ref = _context.sent;
           data = _ref.data;
           error = _ref.error;
+
+          if (!error) {
+            _context.next = 8;
+            break;
+          }
+
+          console.log(error);
+          return _context.abrupt("return", {
+            statusCode: 500,
+            body: JSON.stringify({
+              error: 'Failed fetching data'
+            })
+          });
+
+        case 8:
           return _context.abrupt("return", {
             statusCode: 200,
             body: JSON.stringify(data)
           });
 
-        case 6:
+        case 9:
         case "end":
           return _context.stop();
       }

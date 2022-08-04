@@ -9,11 +9,20 @@ const supabase = createClient(
 // Our standard serverless handler function
 export async function handler(event) {
   // Insert a row
+
   const { data, error } = await supabase
     .from('CollectionUpdates')
     .select('*')
     .ilike('contractAddress', event.queryStringParameters.contract)
     .order('timestamp', { ascending: false });
+
+  if (error) {
+    console.log(error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Failed fetching data' }),
+    };
+  }
 
   return { statusCode: 200, body: JSON.stringify(data) };
 }

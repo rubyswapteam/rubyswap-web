@@ -14,11 +14,13 @@ export async function handler(event) {
     .select('*')
     .ilike('contract', event.queryStringParameters.contract);
 
-  if (!Object.keys(data).length || error)
+  if (error) {
+    console.log(error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed fetching data' }),
     };
+  }
 
   return { statusCode: 200, body: JSON.stringify(data) };
 }

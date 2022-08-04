@@ -15,11 +15,7 @@ export async function handler(event) {
     .select('*')
     .ilike('slug', event.queryStringParameters.slug);
 
-  console.log(data);
-  console.log(!Object.keys(data).length || error);
-  console.log(JSON.stringify(data));
-
-  if (!Object.keys(data).length || error)
+  if (error)
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed fetching data' }),

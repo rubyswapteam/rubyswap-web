@@ -14,7 +14,7 @@ export async function handler(event) {
     .select('*')
     .ilike('contract', event.queryStringParameters.contract);
 
-  if (!Object.keys(data).length || error)
+  if (error)
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed fetching data' }),
