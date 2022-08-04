@@ -123,6 +123,13 @@ function AveragePriceVolumeChart(props) {
                 },
                 y: 40
             },
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false
+                    }
+                }
+            },
             series: [
                 {
                     name: 'Volume',

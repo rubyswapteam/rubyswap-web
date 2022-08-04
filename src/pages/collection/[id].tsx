@@ -36,6 +36,8 @@ export default function Collection(props: any) {
     getCollectionBySlug,
     collectionTrades,
     recentTrades,
+    activeListings,
+    fetchActiveListings,
   } = useMarketplaceProvider();
 
   useEffect(() => {
@@ -106,6 +108,13 @@ export default function Collection(props: any) {
       clearTimeout(delayDebounceFn);
       isSubscribed = false;
     };
+  }, [activeCollection?.contractAddress]);
+
+  useEffect(() => {
+    if (activeCollection?.contractAddress)
+      fetchActiveListings(activeCollection.contractAddress).then((res: any) =>
+        console.log(res),
+      );
   }, [activeCollection?.contractAddress]);
 
   useEffect(() => {
@@ -266,7 +275,11 @@ export default function Collection(props: any) {
       return (
         // <>
         //   <div className="-mt-6">
-        <CollectionList selectedNfts={nfts && nfts} />
+        <CollectionList
+          selectedNfts={
+            activeListings && activeListings.data && activeListings.data
+          }
+        />
         //   </div>
         // </>
       );

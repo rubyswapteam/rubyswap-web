@@ -34,7 +34,7 @@ var CollectionNftCard = function (_a) {
                 react_1["default"].createElement("span", { className: "border-2 border-white rounded-md absolute left-3 bottom-3 bg-white text-black h-6 px-2 font-bold text-xs flex items-center justify-center" },
                     react_1["default"].createElement("div", null,
                         "#\u00A0",
-                        selectedNft.tokenId))),
+                        selectedNft.rarityScore || selectedNft.tokenId))),
             react_1["default"].createElement("div", { className: "p-2" },
                 react_1["default"].createElement("div", { className: "justify-between flex py-2 mb-2 border-b border-gray-50" },
                     react_1["default"].createElement("div", { className: "text-[10px] font-bold" }, collectionName || selectedNft.collectionName),

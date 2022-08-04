@@ -31,6 +31,7 @@ export const MarketplaceProvider = ({
     contract: '',
   });
   const [activeCollection, setActiveCollection] = useState<any>(undefined);
+  const [activeListings, setActiveListings] = useState<any>();
 
   async function getTradesX2Y2(user = '', contract = '') {
     const user_address = user != undefined ? '=' + user : '';
@@ -364,6 +365,65 @@ export const MarketplaceProvider = ({
     return { sales: userSales, purchases: userPurchases };
   }
 
+  async function fetchActiveListings(contractAddress: string, offset = 0) {
+    let listings: any = [];
+    try {
+      const listingsRaw = await fetch('/.netlify/functions/getGemAssets', {
+        method: 'POST',
+        body: JSON.stringify({
+          filters: {
+            address: contractAddress,
+          },
+          limit: 100,
+          offset: offset,
+          fields: {
+            name: 1,
+            address: 1,
+            isVerified: 1,
+            updatedAt: 1,
+            currentEthPrice: 1,
+            marketplace: 1,
+            market: 1,
+            imageUrl: 1,
+            tokenId: 1,
+            id: 1,
+            owner: 1,
+            traits: 1,
+            rarityScore: 1,
+          },
+          sort: {
+            currentEthPrice: 'asc',
+          },
+        }),
+      });
+      listings = await listingsRaw.json();
+      listings.data = listings.data.map((item: any) => {
+        return {
+          timestamp: item.orderCreatedAt,
+          price: (item.currentEthPrice * 10 ** -18).toFixed(2),
+          contract: item.address,
+          tokenId: item.id,
+          txn: undefined,
+          marketplace: item.market || item.marketplace,
+          looksRareId: undefined,
+          from: item.owner,
+          to: undefined,
+          chainId: 1,
+          image: item.imageUrl,
+          name: item.name,
+          traits: item.traits,
+          rarityScore: item.rarityScore,
+        };
+      });
+    } catch {
+      listings = {};
+    }
+
+    setActiveListings(listings);
+
+    return listings;
+  }
+
   async function fetchCollectionFromDb(slug: string) {
     let collection: any = {};
     try {
@@ -476,6 +536,8 @@ export const MarketplaceProvider = ({
       collectionTrades,
       getCollectionTrades,
       recentTrades,
+      fetchActiveListings,
+      activeListings,
     }),
     [
       userTrades,
@@ -491,6 +553,8 @@ export const MarketplaceProvider = ({
       collectionTrades,
       getCollectionTrades,
       recentTrades,
+      fetchActiveListings,
+      activeListings,
     ],
   );
 

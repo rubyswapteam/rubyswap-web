@@ -145,6 +145,13 @@ export default function AveragePriceVolumeChart(props: any) {
         },
         y: 40,
       },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false,
+          },
+        },
+      },
       series: [
         {
           name: 'Volume',

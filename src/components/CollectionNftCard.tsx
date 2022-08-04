@@ -9,7 +9,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
-  selectedNft: INft;
+  selectedNft: any;
   collectionName?: string;
   chainId?: number;
 }
@@ -82,7 +82,7 @@ const CollectionNftCard: React.FC<Props> = ({
           </div>
           {/* This should be the rarity (where it's known) */}
           <span className="border-2 border-white rounded-md absolute left-3 bottom-3 bg-white text-black h-6 px-2 font-bold text-xs flex items-center justify-center">
-            <div>#&nbsp;{selectedNft.tokenId}</div>
+            <div>#&nbsp;{selectedNft.rarityScore || selectedNft.tokenId}</div>
           </span>
         </div>
         <div className="p-2">

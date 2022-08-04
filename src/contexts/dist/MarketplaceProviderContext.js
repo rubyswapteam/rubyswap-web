@@ -71,6 +71,7 @@ exports.MarketplaceProvider = function (_a) {
         contract: ''
     }), tradeFilters = _f[0], setTradeFilters = _f[1];
     var _g = react_1.useState(undefined), activeCollection = _g[0], setActiveCollection = _g[1];
+    var _h = react_1.useState(), activeListings = _h[0], setActiveListings = _h[1];
     function getTradesX2Y2(user, contract) {
         if (user === void 0) { user = ''; }
         if (contract === void 0) { contract = ''; }
@@ -445,6 +446,80 @@ exports.MarketplaceProvider = function (_a) {
             userPurchases = __spreadArrays(userPurchases, looksRes.purchases);
         return { sales: userSales, purchases: userPurchases };
     }
+    function fetchActiveListings(contractAddress, offset) {
+        if (offset === void 0) { offset = 0; }
+        return __awaiter(this, void 0, void 0, function () {
+            var listings, listingsRaw, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        listings = [];
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, fetch('/.netlify/functions/getGemAssets', {
+                                method: 'POST',
+                                body: JSON.stringify({
+                                    filters: {
+                                        address: contractAddress
+                                    },
+                                    limit: 100,
+                                    offset: offset,
+                                    fields: {
+                                        name: 1,
+                                        address: 1,
+                                        isVerified: 1,
+                                        updatedAt: 1,
+                                        currentEthPrice: 1,
+                                        marketplace: 1,
+                                        market: 1,
+                                        imageUrl: 1,
+                                        tokenId: 1,
+                                        id: 1,
+                                        owner: 1,
+                                        traits: 1,
+                                        rarityScore: 1
+                                    },
+                                    sort: {
+                                        currentEthPrice: 'asc'
+                                    }
+                                })
+                            })];
+                    case 2:
+                        listingsRaw = _b.sent();
+                        return [4 /*yield*/, listingsRaw.json()];
+                    case 3:
+                        listings = _b.sent();
+                        listings.data = listings.data.map(function (item) {
+                            return {
+                                timestamp: item.orderCreatedAt,
+                                price: (item.currentEthPrice * Math.pow(10, -18)).toFixed(2),
+                                contract: item.address,
+                                tokenId: item.id,
+                                txn: undefined,
+                                marketplace: item.market || item.marketplace,
+                                looksRareId: undefined,
+                                from: item.owner,
+                                to: undefined,
+                                chainId: 1,
+                                image: item.imageUrl,
+                                name: item.name,
+                                traits: item.traits,
+                                rarityScore: item.rarityScore
+                            };
+                        });
+                        return [3 /*break*/, 5];
+                    case 4:
+                        _a = _b.sent();
+                        listings = {};
+                        return [3 /*break*/, 5];
+                    case 5:
+                        setActiveListings(listings);
+                        return [2 /*return*/, listings];
+                }
+            });
+        });
+    }
     function fetchCollectionFromDb(slug) {
         return __awaiter(this, void 0, void 0, function () {
             var collection, _a;
@@ -572,7 +647,9 @@ exports.MarketplaceProvider = function (_a) {
         getCollectionBySlug: getCollectionBySlug,
         collectionTrades: collectionTrades,
         getCollectionTrades: getCollectionTrades,
-        recentTrades: recentTrades
+        recentTrades: recentTrades,
+        fetchActiveListings: fetchActiveListings,
+        activeListings: activeListings
     }); }, [
         userTrades,
         setUserTrades,
@@ -587,6 +664,8 @@ exports.MarketplaceProvider = function (_a) {
         collectionTrades,
         getCollectionTrades,
         recentTrades,
+        fetchActiveListings,
+        activeListings,
     ]);
     return (react_1["default"].createElement(MarketplaceProviderContext.Provider, { value: contextValue }, children));
 };
