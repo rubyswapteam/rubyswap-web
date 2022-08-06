@@ -3,11 +3,44 @@ import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 
 export default function SalesHistoryChart(props: any) {
-  const [daysRequired, setDaysRequired] = useState({ days: 60, trim: 5 });
+  const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [isShowing, setIsShowing] = useState(false);
+  const { theme } = useTheme();
+  const lightTheme = {
+    background: '#ffffff',
+    text: '#07062C',
+    primaryColour: 'rgba(0, 0, 0, 0.3)',
+    secondaryColour: 'rgb(70, 115, 250)',
+  };
+  const darkTheme = {
+    background: '#000000',
+    text: '#ffffff',
+    primaryColour: 'rgba(255, 255, 255, 0.3)',
+    secondaryColour: 'rgba(200, 0, 200, 0.5)',
+  };
+
+  const [themeColours, setThemeColours] = useState(
+    theme == 'light' ? lightTheme : darkTheme,
+  );
+
+  useEffect(() => {
+    setTheme();
+  }, [theme]);
+
+  function setTheme() {
+    if (theme == 'dark') {
+      setThemeColours(darkTheme);
+      return darkTheme;
+    }
+    if (theme == 'light') {
+      setThemeColours(lightTheme);
+      return lightTheme;
+    }
+  }
 
   useEffect(() => {
     setChartOptions(reset());
@@ -64,9 +97,9 @@ export default function SalesHistoryChart(props: any) {
         zoomType: 'xy',
         style: {
           fontFamily: 'Biotif',
-          color: '#07062C',
+          color: themeColours.text,
         },
-        backgroundColor: '#ffffff',
+        backgroundColor: themeColours.background,
         height: props.chart?.height || '60%',
         marginLeft: 80,
         marginRight: 40,
@@ -79,12 +112,12 @@ export default function SalesHistoryChart(props: any) {
           labels: {
             padding: 15,
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
         },
@@ -93,12 +126,12 @@ export default function SalesHistoryChart(props: any) {
         {
           labels: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
         },
@@ -106,26 +139,26 @@ export default function SalesHistoryChart(props: any) {
       title: {
         text: 'Sales History',
         style: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         y: 40,
       },
       series: [
         {
           name: 'Sales',
-          color: '#33333399',
+          color: themeColours.primaryColour,
           data: trades,
         },
       ],
       legend: {
         itemStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         itemHoverStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         itemHiddenStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
       },
       plotOptions: {
@@ -171,6 +204,7 @@ export default function SalesHistoryChart(props: any) {
       <HighchartsReact
         highcharts={HighCharts}
         options={chartOptions}
+        updateArgs={[true]}
       ></HighchartsReact>
     </Transition>
   );

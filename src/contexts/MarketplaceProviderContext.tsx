@@ -31,7 +31,7 @@ export const MarketplaceProvider = ({
     contract: '',
   });
   const [activeCollection, setActiveCollection] = useState<any>(undefined);
-  const [activeListings, setActiveListings] = useState<any>();
+  const [activeListings, setActiveListings] = useState<any[]>();
 
   async function getTradesX2Y2(user = '', contract = '') {
     const user_address = user != undefined ? '=' + user : '';
@@ -397,7 +397,7 @@ export const MarketplaceProvider = ({
         }),
       });
       listings = await listingsRaw.json();
-      listings.data = listings.data.map((item: any) => {
+      listings = listings.data.map((item: any) => {
         return {
           timestamp: item.orderCreatedAt,
           price: (item.currentEthPrice * 10 ** -18).toFixed(2),
@@ -455,6 +455,8 @@ export const MarketplaceProvider = ({
       return false;
     let collection: any = await fetchCollectionFromDb(slug);
     const isStored = collection && collection.contractAddress;
+    const isStatsUpdated =
+      Math.round(moment().unix() - 1800) < collection.osStatsUpdatedAt;
     try {
       if (!isStored) {
         const collectionRaw = await (

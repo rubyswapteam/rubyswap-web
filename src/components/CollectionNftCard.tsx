@@ -25,7 +25,7 @@ const CollectionNftCard: React.FC<Props> = ({
     <div className="group relative">
       <div
         className={
-          'drop-shadow-md rounded-xl text-sm bg-white hover:drop-shadow-xl'
+          'drop-shadow-md rounded-xl text-sm bg-white dark:bg-white/5 hover:drop-shadow-xl'
         }
       >
         <div
@@ -81,7 +81,7 @@ const CollectionNftCard: React.FC<Props> = ({
             </div>
           </div>
           {/* This should be the rarity (where it's known) */}
-          <span className="border-2 border-white rounded-md absolute left-3 bottom-3 bg-white text-black h-6 px-2 font-bold text-xs flex items-center justify-center">
+          <span className="border-2 border-white rounded-md absolute left-3 bottom-3 dark:bg-black dark:text-white bg-white text-black h-6 px-2 font-bold text-xs flex items-center justify-center">
             <div>#&nbsp;{selectedNft.rarityScore || selectedNft.tokenId}</div>
           </span>
         </div>

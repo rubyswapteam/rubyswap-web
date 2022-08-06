@@ -17,12 +17,12 @@ const StatsBoxList: React.FC<Props> = ({ stats, route }): JSX.Element => {
           {stats.map((item: any) => (
             <div
               key={item.name}
-              className="text-center px-2 py-3 bg-white drop-shadow-md rounded-lg overflow-hidden sm:p-4 hover:bg-gray-50 cursor-pointer"
+              className="text-center px-2 py-3 bg-white dark:bg-white/10 drop-shadow-md rounded-lg overflow-hidden sm:p-4 hover:bg-gray-50 cursor-pointer"
             >
-              <dt className="text-base font-medium truncate text-transparent bg-clip-text bg-cover text-gray-600">
+              <dt className="text-base font-medium truncate text-transparent bg-clip-text bg-cover text-gray-600 dark:text-white/50">
                 {item.name}
               </dt>
-              <dd className="mt-1 text-base font-semibold text-gray-900">
+              <dd className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
                 {item.value}
               </dd>
             </div>

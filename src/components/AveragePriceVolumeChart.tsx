@@ -3,18 +3,55 @@ import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+import highchartsMore from 'highcharts/highcharts-more';
 
 export default function AveragePriceVolumeChart(props: any) {
-  const [daysRequired, setDaysRequired] = useState({ days: 60, trim: 5 });
+  const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
   const [isShowing, setIsShowing] = useState(false);
   const [chartOptions, setChartOptions] = useState(undefined as any);
+  const { theme } = useTheme();
+  const lightTheme = {
+    background: '#ffffff',
+    text: '#07062C',
+    primaryColour: '#333333',
+    secondaryColour: 'rgb(70, 115, 250)',
+  };
+  const darkTheme = {
+    background: '#000000',
+    text: '#ffffff',
+    primaryColour: 'rgba(255,255,255,20)',
+    secondaryColour: 'rgb(70, 115, 250)',
+  };
+  const [themeColours, setThemeColours] = useState(
+    theme == 'light' ? lightTheme : darkTheme,
+  );
+  highchartsMore(HighCharts);
 
   useEffect(() => {
     setChartOptions(reset());
   }, [props.data, daysRequired]);
 
+  useEffect(() => {
+    setTheme();
+    // console.log('{ ...chartOptions }');
+    console.log(chartOptions);
+    if (chartOptions) setChartOptions(JSON.parse(JSON.stringify(chartOptions)));
+  }, [theme]);
+
+  function setTheme() {
+    if (theme == 'dark') {
+      setThemeColours(darkTheme);
+      return darkTheme;
+    }
+    if (theme == 'light') {
+      setThemeColours(lightTheme);
+      return lightTheme;
+    }
+  }
+
   function roundData(x: number) {
-    return Math.round((x + Number.EPSILON) * 100) / 100;
+    return Math.round((x + Number.EPSILON) * 1000) / 1000;
   }
 
   function reset() {
@@ -57,26 +94,38 @@ export default function AveragePriceVolumeChart(props: any) {
 
     const totalVolume: number[] = [];
     const averagePrice: number[] = [];
+    const rangeValues: number[][] = [];
     dates.days.forEach((x, i) => {
       const filteredPriceTime = trades.filter(
         (x: number[]) => Math.floor(x[0]) == i,
       );
-      const volume = filteredPriceTime.reduce(
-        (a: number, b: number[]) => a + b[1],
-        0,
-      );
+      const isolatedVals = filteredPriceTime.map((x: number[]) => x[1]);
+      const volume = isolatedVals.reduce((a: number, b: number) => a + b, 0);
+      console.log(...filteredPriceTime);
+      console.log(Math.min(...isolatedVals));
+      console.log(Math.max(...isolatedVals));
+
+      const range = [
+        roundData(Math.min(...isolatedVals)),
+        roundData(Math.max(...isolatedVals)),
+      ];
       const price = volume / filteredPriceTime.length;
       totalVolume.push(roundData(volume) || 0);
       averagePrice.push(roundData(price) || 0);
+      rangeValues.push(range);
     });
     setIsShowing(true);
 
-    return { averagePrice: averagePrice, volume: totalVolume };
+    return {
+      averagePrice: averagePrice,
+      volume: totalVolume,
+      range: rangeValues,
+    };
   }
 
   function getOptions(
     dates: any[],
-    trades?: { averagePrice: number[]; volume: number[] },
+    trades?: { averagePrice: number[]; volume: number[]; range: number[][] },
   ) {
     const options = {
       chart: {
@@ -84,9 +133,9 @@ export default function AveragePriceVolumeChart(props: any) {
         zoomType: 'xy',
         style: {
           fontFamily: 'Biotif',
-          color: '#ffffff',
+          color: themeColours.background,
         },
-        backgroundColor: '#ffffff',
+        backgroundColor: themeColours.background,
         height: props.chart?.height || '60%',
         marginLeft: 80,
         marginRight: 70,
@@ -99,12 +148,12 @@ export default function AveragePriceVolumeChart(props: any) {
           labels: {
             padding: 15,
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
         },
@@ -113,26 +162,26 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           labels: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             text: 'Average price',
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
         },
         {
           labels: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             text: 'Total Volume',
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           opposite: true,
@@ -141,7 +190,7 @@ export default function AveragePriceVolumeChart(props: any) {
       title: {
         text: 'Average Price and Volume',
         style: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         y: 40,
       },
@@ -161,13 +210,13 @@ export default function AveragePriceVolumeChart(props: any) {
           tooltip: {
             valueSuffix: ' ETH',
           },
-          color: '#333333',
+          color: themeColours.primaryColour,
         },
         {
           name: 'Average Price',
           type: 'spline',
           data: trades?.averagePrice,
-          color: 'rgb(70, 115, 250)',
+          color: themeColours.secondaryColour,
           // color: {
           //   linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
           //   stops: [
@@ -179,16 +228,36 @@ export default function AveragePriceVolumeChart(props: any) {
             valueSuffix: ' ETH',
           },
         },
+        {
+          name: 'Range',
+          data: trades?.range,
+          type: 'arearange',
+          lineWidth: 0,
+          linkedTo: ':previous',
+          color: 'rgba(200, 0, 200, 0.2)',
+          fillOpacity: 0.3,
+          zIndex: 0,
+          marker: {
+            enabled: false,
+          },
+          tooltip: {
+            valueSuffix: ' ETH',
+          },
+        },
       ],
+      tooltip: {
+        crosshairs: true,
+        shared: true,
+      },
       legend: {
         itemStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         itemHoverStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         itemHiddenStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
       },
     };
@@ -208,6 +277,7 @@ export default function AveragePriceVolumeChart(props: any) {
       leaveTo="transform opacity-0 scale-95 -translate-y-6"
     >
       <HighchartsReact
+        allowChartUpdate={true}
         highcharts={HighCharts}
         options={chartOptions}
       ></HighchartsReact>

@@ -112,10 +112,13 @@ export default function Collection(props: any) {
 
   useEffect(() => {
     if (activeCollection?.contractAddress)
-      fetchActiveListings(activeCollection.contractAddress).then((res: any) =>
-        console.log(res),
-      );
+      fetchActiveListings(activeCollection.contractAddress);
   }, [activeCollection?.contractAddress]);
+
+  useEffect(() => {
+    if (tab == 'listings' && activeCollection?.contractAddress)
+      fetchActiveListings(activeCollection.contractAddress);
+  }, [activeCollection?.contractAddress, tab]);
 
   useEffect(() => {
     setIsLoadingCollectionTrades(false);
@@ -250,9 +253,7 @@ export default function Collection(props: any) {
             </div>
             <CollectionListSingleRow
               selectedNfts={
-                activeListings &&
-                activeListings.data &&
-                activeListings.data.splice(0, 10)
+                activeListings && [...activeListings?.splice(0, 10)]
               }
               collectionName={activeCollection?.name}
               chainId={activeCollection?.chainId}
@@ -279,11 +280,7 @@ export default function Collection(props: any) {
       return (
         // <>
         //   <div className="-mt-6">
-        <CollectionList
-          selectedNfts={
-            activeListings && activeListings.data && activeListings.data
-          }
-        />
+        <CollectionList selectedNfts={activeListings && [...activeListings]} />
         //   </div>
         // </>
       );
@@ -314,7 +311,7 @@ export default function Collection(props: any) {
               route={`/collection/${id}?tab=analytics`}
             />
           </div>
-          <div className="bg-gray-50 py-10 my-10">
+          <div className="bg-gray-50 dark:bg-white/[.02] py-10 my-10">
             <div className="flex w-full px-4 sm:px-6 md:px-8">
               <div className="w-full my-10 rounded-xl overflow-hidden mr-8">
                 {collectionTrades && (

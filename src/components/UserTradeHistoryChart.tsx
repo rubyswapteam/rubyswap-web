@@ -3,11 +3,49 @@ import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
 import { useState, useEffect, Fragment } from 'react';
+import { useTheme } from 'next-themes';
 
 export default function UserTradeHistoryChart(props: any) {
   const [daysRequired, setDaysRequired] = useState({ days: 60, trim: 5 });
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [isShowing, setIsShowing] = useState(false);
+  const { theme } = useTheme();
+
+  const lightTheme = {
+    background: '#ffffff',
+    text: '#07062C',
+    primaryColour: 'rgba(0, 0, 0, 0.3)',
+    secondaryColour: 'rgb(70, 115, 250)',
+  };
+  const darkTheme = {
+    background: '#000000',
+    text: '#ffffff',
+    primaryColour: 'rgba(255, 255, 255, 0.3)',
+    secondaryColour: 'rgba(200, 0, 200, 0.5)',
+  };
+  const [themeColours, setThemeColours] = useState(
+    theme == 'light' ? lightTheme : darkTheme,
+  );
+
+  useEffect(() => {
+    setTheme();
+    setChartOptions(reset());
+  }, [theme]);
+
+  useEffect(() => {
+    setChartOptions(reset());
+  }, [theme]);
+
+  function setTheme() {
+    if (theme == 'dark') {
+      setThemeColours(darkTheme);
+      return darkTheme;
+    }
+    if (theme == 'light') {
+      setThemeColours(lightTheme);
+      return lightTheme;
+    }
+  }
 
   useEffect(() => {
     setChartOptions(reset());
@@ -76,9 +114,9 @@ export default function UserTradeHistoryChart(props: any) {
         zoomType: 'xy',
         style: {
           fontFamily: 'Biotif',
-          color: '#07062C',
+          color: themeColours.text,
         },
-        backgroundColor: '#ffffff',
+        backgroundColor: themeColours.background,
         height: props.chart?.height || '60%',
         marginLeft: 80,
         marginRight: 40,
@@ -91,12 +129,12 @@ export default function UserTradeHistoryChart(props: any) {
           labels: {
             padding: 15,
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
         },
@@ -105,12 +143,12 @@ export default function UserTradeHistoryChart(props: any) {
         {
           labels: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
           title: {
             style: {
-              color: '#07062C',
+              color: themeColours.text,
             },
           },
         },
@@ -118,14 +156,14 @@ export default function UserTradeHistoryChart(props: any) {
       title: {
         text: 'Trading History',
         style: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         y: 40,
       },
       series: [
         {
           name: 'Sales',
-          color: '#33333399',
+          color: themeColours.primaryColour,
           data: trades?.sales,
           marker: {
             symbol: 'circle',
@@ -133,7 +171,7 @@ export default function UserTradeHistoryChart(props: any) {
         },
         {
           name: 'Purchases',
-          color: 'rgb(59, 130, 246)',
+          color: themeColours.secondaryColour,
           data: trades?.purchases,
           marker: {
             symbol: 'circle',
@@ -142,13 +180,13 @@ export default function UserTradeHistoryChart(props: any) {
       ],
       legend: {
         itemStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         itemHoverStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
         itemHiddenStyle: {
-          color: '#07062C',
+          color: themeColours.text,
         },
       },
       plotOptions: {

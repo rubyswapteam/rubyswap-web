@@ -21,7 +21,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
     <>
       <div className="mb-4 md:mb-0 flex-col w-full z-5 pb-6">
         <div className="flex flex-col md:flex-row items-start lg:items-center gap-2 justify-between">
-          <div className="flex flex-col bg-white/75 p-4 rounded drop-shadow-md">
+          <div className="flex flex-col bg-white/75 dark:bg-black/75 p-4 rounded drop-shadow-md">
             <div className="flex items-center flex-shrink-1 truncate">
               <div className="flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
                 <img
@@ -30,7 +30,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
                   alt={name}
                 />
               </div>
-              <div className="truncate text-2xl font-semibold text-gray-700 ml-2 pt-2">
+              <div className="truncate text-2xl font-semibold text-gray-700 dark:text-gray-200 ml-2 pt-2">
                 {name}
               </div>
               <span className="ml-2">
@@ -41,23 +41,29 @@ const CollectionProfileHeader: React.FC<Props> = ({
             </div>
             <div className="flex my-2 h-4 md:mb-0 text-xs">
               <span className="flex">
-                <span className="font-medium text-gray-500">Items:&nbsp;</span>
-                <span className="flex items-center text-gray-600">{items}</span>
+                <span className="font-medium text-gray-500 dark:text-white">
+                  Items:&nbsp;
+                </span>
+                <span className="flex items-center text-gray-600 dark:text-gray-100">
+                  {items}
+                </span>
               </span>
               <div className="mx-2 border border-gray-300" />
               <span className="flex">
-                <span className="font-medium text-gray-500">Floor:&nbsp;</span>
-                <span className="flex items-center text-gray-600">
+                <span className="font-medium text-gray-500 dark:text-white">
+                  Floor:&nbsp;
+                </span>
+                <span className="flex items-center text-gray-600 dark:text-gray-100">
                   {floor?.toFixed(2)}&nbsp;
                   <EthereumIcon height={14} width={14} />
                 </span>
               </span>
               <div className="mx-2 border border-gray-300" />
               <span className="flex">
-                <span className="font-medium text-gray-500">
+                <span className="font-medium text-gray-500 dark:text-white">
                   24h Volume:&nbsp;
                 </span>
-                <span className="flex items-center text-gray-600">
+                <span className="flex items-center text-gray-600 dark:text-gray-100">
                   {oneDayVolume?.toFixed(2)}&nbsp;
                   <EthereumIcon height={14} width={14} />
                 </span>

@@ -33,22 +33,27 @@ const Tab: React.FC<Props> = ({ tabs, condense }): JSX.Element => {
           aria-label="Tabs"
         >
           {tabs.map((tab: any) => (
-            <Link key={tab.name} href={tab.href} prefetch={false}>
-              <a
-                className={classNames(
-                  tab.current
-                    ? 'text-white bg-cover bg-theme-gradient bg-gray-100'
-                    : 'text-gray-900 hover:bg-gray-100',
-                  tab.border
-                    ? 'bg-white drop-shadow'
-                    : 'bg-white drop-shadow text-xs',
-                  'text-sm px-3 py-1 font-medium self-center rounded-md',
-                )}
-                aria-current={tab.current ? 'page' : undefined}
-              >
-                {tab.name}
-              </a>
-            </Link>
+            <div
+              key={tab.name}
+              className="bg-white dark:bg-blackish bg-clip-padding rounded-md overflow-hidden"
+            >
+              <Link href={tab.href} prefetch={false}>
+                <a
+                  className={classNames(
+                    tab.current
+                      ? 'text-white bg-cover bg-theme-gradient'
+                      : 'text-gray-900 hover:bg-gray-100',
+                    tab.border
+                      ? 'dark:text-white dark:hover:bg-white/5 drop-shadow bg-clip-padding'
+                      : 'dark:text-white dark:hover:bg-white/5 drop-shadow text-xs bg-clip-padding',
+                    'text-sm px-3 py-1 font-medium self-center flex',
+                  )}
+                  aria-current={tab.current ? 'page' : undefined}
+                >
+                  {tab.name}
+                </a>
+              </Link>
+            </div>
           ))}
         </nav>
       </div>

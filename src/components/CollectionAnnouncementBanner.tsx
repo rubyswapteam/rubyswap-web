@@ -18,7 +18,7 @@ function formatText(text: string) {
 function convertTags(text: string): string {
   return text.replace(
     /(\@everyone.*?)/gm,
-    "<a class='font-semibold bg-[#DEE0FC] p-1 rounded-md'>@everyone</a>",
+    "<a class='font-semibold bg-[#DEE0FC] dark:bg-[#194add] p-1 rounded-md'>@everyone</a>",
   );
 }
 
@@ -42,15 +42,15 @@ export default function CollectionAnnouncementBanner(props: Props) {
   return (
     <Link href={props.route} passHref>
       <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8 flex w-full text-sm cursor-pointer">
-        <div className="w-full bg-white drop-shadow border-l-4 border-gray-800">
+        <div className="w-full bg-white dark:bg-white/[.02] drop-shadow border-l-4 border-gray-800 dark:border-white">
           <div className=""></div>
           <div className="mx-auto md:flex items-center justify-between">
             <div className="px-4 md:pl-8 md:pr-2 py-4">
-              <div className="text-gray-900 mb-3 font-semibold md:max-w-xl">
+              <div className="text-gray-900 dark:text-white mb-3 font-semibold md:max-w-xl">
                 Latest Annoucement:
               </div>
               <div
-                className="text-gray-900 font-medium md:max-w-xl"
+                className="text-gray-900 dark:text-white font-medium md:max-w-xl"
                 dangerouslySetInnerHTML={{ __html: formatText(props?.message) }}
               />
             </div>

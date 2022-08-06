@@ -6,29 +6,32 @@ import { Web3Provider } from '@/contexts/Web3ProviderContext';
 import { AppProps } from 'next/app';
 import { useState } from 'react';
 import '../styles/globals.css';
+import { ThemeProvider } from 'next-themes';
 
 function App({ Component, pageProps }: AppProps) {
   const [searchModalState, setSearchModalState] = useState(false);
 
   return (
-    <Web3Provider>
-      <WalletProvider>
-        <MarketplaceProvider>
-          <NftProvider>
-            <>
-              <SearchModal
-                open={searchModalState}
-                setOpen={setSearchModalState}
-              />
-              <Component
-                setSearchModalState={setSearchModalState}
-                {...pageProps}
-              />
-            </>
-          </NftProvider>
-        </MarketplaceProvider>
-      </WalletProvider>
-    </Web3Provider>
+    <ThemeProvider attribute="class">
+      <Web3Provider>
+        <WalletProvider>
+          <MarketplaceProvider>
+            <NftProvider>
+              <>
+                <SearchModal
+                  open={searchModalState}
+                  setOpen={setSearchModalState}
+                />
+                <Component
+                  setSearchModalState={setSearchModalState}
+                  {...pageProps}
+                />
+              </>
+            </NftProvider>
+          </MarketplaceProvider>
+        </WalletProvider>
+      </Web3Provider>
+    </ThemeProvider>
   );
 }
 

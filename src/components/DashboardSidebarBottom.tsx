@@ -18,9 +18,9 @@ const DashboardSidebarBottom: React.FC<Props> = ({
           <a
             className={classNames(
               item.current
-                ? 'bg-gray-100 text-gray-600'
-                : 'text-gray-600 hover:bg-gray-100 hover:bg-opacity-75',
-              'group flex items-center px-2 py-1 text-xs font-medium rounded-md',
+                ? 'bg-gray-100 dark:bg-gray-900/75'
+                : 'hover:bg-gray-100/75 dark:hover:bg-gray-900/50',
+              'text-gray-600 dark:text-white/80 group flex items-center px-2 py-1 text-xs font-medium rounded-md',
             )}
           >
             {item.name}

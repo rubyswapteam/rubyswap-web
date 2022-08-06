@@ -9,6 +9,7 @@ import DashboardSidebarBottom from './DashboardSidebarBottom';
 import { useRouter } from 'next/router';
 import ConnectWalletButton from './ConnectWalletButton';
 import { useWeb3Provider } from '../contexts/Web3ProviderContext';
+import ThemeToggle from './ThemeToggle';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
@@ -154,8 +155,8 @@ export default function Dashboard(props: any) {
           </Dialog>
         </Transition.Root>
 
-        <div className="hidden md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 drop-shadow z-50">
-          <div className="flex-1 flex flex-col px-5 py-2 min-h-0 bg-white">
+        <div className="hidden md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 drop-shadow dark:drop-shadow-md-w z-50">
+          <div className="flex-1 flex flex-col px-5 py-2 min-h-0 bg-white dark:bg-blackish">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <nav className="mt-0 flex-1 px-2">
                 <div className="mb-5">
@@ -185,6 +186,8 @@ export default function Dashboard(props: any) {
                       <EthPriceTracker />
                       <div className="h-4 border-l border-gray-200 border-0.5" />
                       <GasTracker />
+                      <div className="h-4 border-l border-gray-200 border-0.5" />
+                      <ThemeToggle />
                     </div>
                   </nav>
                 </div>
@@ -207,13 +210,13 @@ export default function Dashboard(props: any) {
           <main className="flex-1">
             <div className={'h-screen overflow-hidden flex-col flex'}>
               <div
-                className="py-6 bg-gray-50 z-10 bg-cover"
+                className="py-6 bg-gray-50 dark:bg-white/[.02] z-10 bg-cover"
                 style={{
                   backgroundImage: `${bannerStyle}`,
                 }}
               >
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-                  <h1 className="text-2xl font-semibold text-gray-900">
+                  <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
                     {props.title}
                   </h1>
                 </div>

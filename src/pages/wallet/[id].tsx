@@ -175,7 +175,7 @@ export default function Collection(props: any) {
                 />
               </div>
             </div>
-            <div className="px-4 sm:px-6 md:px-8 py-20 bg-gray-50">
+            <div className="px-4 sm:px-6 md:px-8 py-20 bg-gray-50 dark:bg-white/[.02]">
               <div className="w-full mt-5 rounded-xl overflow-hidden">
                 <UserTradeHistoryChart
                   chart={{ height: '30%' }}
