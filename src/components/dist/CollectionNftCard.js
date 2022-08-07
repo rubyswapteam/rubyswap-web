@@ -7,7 +7,6 @@ var PlusIcon_1 = require("@/components/PlusIcon");
 var EthereumIcon_1 = require("@/components/EthereumIcon");
 var X2Y2Icon_1 = require("./X2Y2Icon");
 var LooksRareIcon_1 = require("./LooksRareIcon");
-var react_loading_skeleton_1 = require("react-loading-skeleton");
 require("react-loading-skeleton/dist/skeleton.css");
 var CollectionNftCard = function (_a) {
     var selectedNft = _a.selectedNft, collectionName = _a.collectionName, chainId = _a.chainId;
@@ -28,18 +27,19 @@ var CollectionNftCard = function (_a) {
     return (react_1["default"].createElement("div", { className: "group relative" },
         react_1["default"].createElement("div", { className: 'drop-shadow-md rounded-xl text-sm bg-white dark:bg-white/5 hover:drop-shadow-xl' },
             react_1["default"].createElement("div", { className: 'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer rounded-t-xl' },
-                (react_1["default"].createElement("img", { src: selectedNft.image, alt: selectedNft.imageAlt, className: "w-full h-full transition-all hover:scale-110 object-center object-cover", style: { display: isLoading ? 'none' : 'block' }, onLoadStart: function () { return setIsLoading(true); }, onLoad: function () { return setIsLoading(false); } })) || react_1["default"].createElement(react_loading_skeleton_1["default"], null),
+                isLoading && (react_1["default"].createElement("a", { className: "w-full h-full bg-black/90 hover:scale-110 text-white bg-cover object-center text-center my-auto flex flex-grow flex-col justify-around" }, "Loading...")),
+                react_1["default"].createElement("img", { src: selectedNft.image, alt: selectedNft.imageAlt, className: "w-full h-full transition-all hover:scale-110 object-center object-cover " + (isLoading ? 'hidden' : 'block'), onLoadStart: function () { return setIsLoading(true); }, onLoad: function () { return setIsLoading(false); } }),
                 react_1["default"].createElement("a", { target: "_blank", rel: "_ noreferrer", className: "absolute left-3 top-3 w-12 h-12" },
                     selectedNft.marketplace === nftUtils_1.NftMarketplace.OPENSEA && (react_1["default"].createElement("div", { className: "rounded-full" },
-                        react_1["default"].createElement(OpenseaIcon_1["default"], { height: 20, width: 20 }))),
+                        react_1["default"].createElement(OpenseaIcon_1["default"], { height: 28, width: 28 }))),
                     selectedNft.marketplace === nftUtils_1.NftMarketplace.LOOKSRARE && (react_1["default"].createElement("div", { className: "rounded-full" },
-                        react_1["default"].createElement(LooksRareIcon_1["default"], { height: 20, width: 20 }))),
+                        react_1["default"].createElement(LooksRareIcon_1["default"], { height: 28, width: 28 }))),
                     selectedNft.marketplace === nftUtils_1.NftMarketplace.X2Y2 && (react_1["default"].createElement("div", { className: "rounded-full" },
-                        react_1["default"].createElement(X2Y2Icon_1["default"], { height: 20, width: 20 }))),
+                        react_1["default"].createElement(X2Y2Icon_1["default"], { height: 28, width: 28 }))),
                     selectedNft.marketplace === nftUtils_1.NftMarketplace.NFTRADE && (react_1["default"].createElement("div", { className: "rounded-full" },
-                        react_1["default"].createElement(OpenseaIcon_1["default"], { height: 20, width: 20 }))),
+                        react_1["default"].createElement(OpenseaIcon_1["default"], { height: 28, width: 28 }))),
                     selectedNft.marketplace === nftUtils_1.NftMarketplace.SEAPORT && (react_1["default"].createElement("div", { className: "rounded-full" },
-                        react_1["default"].createElement(OpenseaIcon_1["default"], { height: 20, width: 20 })))),
+                        react_1["default"].createElement(OpenseaIcon_1["default"], { height: 28, width: 28 })))),
                 react_1["default"].createElement("div", { className: "absolute right-2 top-2 w-5 h-5 flex items-center justify-center group-hover:opacity-100 transition-opacity duration-200 transition opacity-0" },
                     react_1["default"].createElement("div", { className: "absolute opacity-20 rounded-full w-full h-full left-0 top-0 bg-white" }),
                     react_1["default"].createElement("div", { className: "w-3 h-3" },

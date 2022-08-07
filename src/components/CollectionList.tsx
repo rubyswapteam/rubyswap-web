@@ -22,10 +22,10 @@ const CollectionList: React.FC<Props> = ({
         {selectedNfts && (
           <div className="grid grid-cols-1 gap-y-10 gap-x-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-4 pb-80">
             {selectedNfts &&
-              selectedNfts.map((nft: INft, i: number) => (
+              selectedNfts.map((nft: any, i: number) => (
                 <div
                   className="opacity-0"
-                  key={i}
+                  key={nft.tokenId + nft.chainId + nft?.name}
                   style={{ animation: animStr(i) }}
                 >
                   <CollectionNftCard selectedNft={nft} />

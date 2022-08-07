@@ -45,16 +45,22 @@ const CollectionNftCard: React.FC<Props> = ({
             'w-full min-h-80 flex flex-col relative aspect-square overflow-hidden lg:h-50 lg:aspect-none cursor-pointer rounded-t-xl'
           }
         >
-          {(
+          {isLoading && (
+            <a className="w-full h-full bg-black/90 hover:scale-110 text-white bg-cover object-center text-center my-auto flex flex-grow flex-col justify-around">
+              Loading...
+            </a>
+          )}
+          {
             <img
               src={selectedNft.image}
               alt={selectedNft.imageAlt}
-              className="w-full h-full transition-all hover:scale-110 object-center object-cover"
-              style={{ display: isLoading ? 'none' : 'block' }}
+              className={`w-full h-full transition-all hover:scale-110 object-center object-cover ${
+                isLoading ? 'hidden' : 'block'
+              }`}
               onLoadStart={() => setIsLoading(true)}
               onLoad={() => setIsLoading(false)}
             />
-          ) || <Skeleton />}
+          }
           <a
             target="_blank"
             rel="_ noreferrer"
@@ -62,27 +68,27 @@ const CollectionNftCard: React.FC<Props> = ({
           >
             {selectedNft.marketplace === NftMarketplace.OPENSEA && (
               <div className="rounded-full">
-                <OpenSeaIcon height={20} width={20} />
+                <OpenSeaIcon height={28} width={28} />
               </div>
             )}
             {selectedNft.marketplace === NftMarketplace.LOOKSRARE && (
               <div className="rounded-full">
-                <LooksRareIcon height={20} width={20} />
+                <LooksRareIcon height={28} width={28} />
               </div>
             )}
             {selectedNft.marketplace === NftMarketplace.X2Y2 && (
               <div className="rounded-full">
-                <X2Y2Icon height={20} width={20} />
+                <X2Y2Icon height={28} width={28} />
               </div>
             )}
             {selectedNft.marketplace === NftMarketplace.NFTRADE && (
               <div className="rounded-full">
-                <OpenSeaIcon height={20} width={20} />
+                <OpenSeaIcon height={28} width={28} />
               </div>
             )}
             {selectedNft.marketplace === NftMarketplace.SEAPORT && (
               <div className="rounded-full">
-                <OpenSeaIcon height={20} width={20} />
+                <OpenSeaIcon height={28} width={28} />
               </div>
             )}
           </a>

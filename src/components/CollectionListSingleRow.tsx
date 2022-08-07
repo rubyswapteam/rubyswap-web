@@ -20,7 +20,7 @@ const CollectionListSingleRow: React.FC<Props> = ({
           <div className="w-[250%] lg:w-[200%] xl:w-[166%] grid grid-cols-1 gap-y-10 gap-x-5 grid-cols-10">
             {selectedNfts.map((selectedNft: INft) => (
               <CollectionNftCard
-                key={selectedNft.id}
+                key={selectedNft?.id + selectedNft?.tokenId}
                 selectedNft={selectedNft}
                 collectionName={collectionName}
                 chainId={chainId}

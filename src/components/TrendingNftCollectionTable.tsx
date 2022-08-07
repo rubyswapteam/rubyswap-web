@@ -96,7 +96,7 @@ export default function TrendingNftCollectionTable() {
                                     prefetch={false}
                                   >
                                     <tr
-                                      className="hover:bg-gray-50 dark:hover:bg-gray-500/5 transition-colors cursor-pointer border-b border-gray-100 dark:border-white/20"
+                                      className="hover:bg-gray-50 dark:hover:bg-white/[.02] transition-colors cursor-pointer border-b border-gray-100 dark:border-white/20"
                                       key={nftCollection.id}
                                     >
                                       <td className="py-5 pl-4 pr-7 text-sm sm:pl-6">
