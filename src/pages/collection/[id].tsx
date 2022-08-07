@@ -219,7 +219,7 @@ export default function Collection(props: any) {
               />
             )}
           </div>
-          <div className="py-8 bg-gray-100 w-full">
+          <div className="py-8 bg-gray-100 dark:bg-white/[.02] w-full">
             <div className="my-8">
               <StatsBoxList
                 stats={getStats()}

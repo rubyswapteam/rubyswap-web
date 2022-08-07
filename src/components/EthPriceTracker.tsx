@@ -34,7 +34,7 @@ export function EthPriceTracker() {
   }, []);
 
   return (
-    <div className="my-4 p-2 text-xs font-medium text-gray-600">
+    <div className="my-4 p-2 text-xs font-medium text-gray-600 dark:text-gray-300">
       {error && <div>Error: {error}</div>}
       {!error && !isLoaded && <div>Loading...</div>}
       {!error && isLoaded && (
