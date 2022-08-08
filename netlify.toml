@@ -9,4 +9,4 @@
     Access-Control-Allow-Origin = "*"
 
 [functions."updateOneDayVolume"]
-schedule = "*/30 * * * *"
+  schedule = "*/30 * * * *"
