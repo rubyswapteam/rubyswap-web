@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { INft, NftMarketplace } from '@/utils/nftUtils';
+import { NftMarketplace } from '@/utils/nftUtils';
 import OpenSeaIcon from '@/components/OpenseaIcon';
 import PlusIcon from '@/components/PlusIcon';
 import EthereumIcon from '@/components/EthereumIcon';
 import X2Y2Icon from './X2Y2Icon';
 import LooksRareIcon from './LooksRareIcon';
-import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
@@ -46,7 +45,7 @@ const CollectionNftCard: React.FC<Props> = ({
           }
         >
           {isLoading && (
-            <a className="w-full h-full bg-black/90 hover:scale-110 text-white bg-cover object-center text-center my-auto flex flex-grow flex-col justify-around">
+            <a className="w-full h-full bg-black/90 hover:scale-110 text-white bg-cover object-center text-center my-auto flex flex-grow flex-col justify-around p-14">
               Loading...
             </a>
           )}
@@ -108,8 +107,8 @@ const CollectionNftCard: React.FC<Props> = ({
             <div className="text-[10px] font-bold">
               {collectionName || selectedNft.collectionName}
             </div>
-            <div className="px-2 pt-[2px] border border-gray-100 rounded-md transition-colors hover:bg-gray-100 cursor-pointer">
-              <div className="text-[10px] font-bold text-transparent bg-clip-text bg-cover bg-theme-gradient">
+            <div className="px-2 pt-[2px] border border-gray-100 dark:bg-black rounded-md transition-all hover:bg-gray-100 dark:hover:bg-theme-gradient dark:bg-cover cursor-pointer">
+              <div className="text-[10px] font-bold text-transparent dark:text-white bg-clip-text bg-cover bg-theme-gradient">
                 Details
               </div>
             </div>

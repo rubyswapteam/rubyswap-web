@@ -302,16 +302,14 @@ export default function Collection(props: any) {
     if (tab == 'analytics') {
       return (
         <div className="h-inherit overflow-scroll pb-80">
-          <div className="pb-4">
-            <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-              <CollectionTitleHeader title={'Summary Stats'} />
-            </div>
+          <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+            <CollectionTitleHeader title={'Summary Stats'} />
+          </div>
+          <div className="bg-gray-50 dark:bg-white/[.02] py-10 mt-4 mb-10">
             <StatsBoxList
               stats={getStats()}
               route={`/collection/${id}?tab=analytics`}
             />
-          </div>
-          <div className="bg-gray-50 dark:bg-white/[.02] py-10 my-10">
             <div className="flex w-full px-4 sm:px-6 md:px-8">
               <div className="w-full my-10 rounded-xl overflow-hidden mr-8">
                 {collectionTrades && (

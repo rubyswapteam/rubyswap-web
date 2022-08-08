@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 const EthereumIcon: React.FC = (): JSX.Element => {
   const { theme, setTheme } = useTheme();
-  handleTheme(false);
   const [isChecked, setIsChecked] = useState(theme !== 'light');
 
   useEffect(() => {
@@ -13,10 +12,12 @@ const EthereumIcon: React.FC = (): JSX.Element => {
 
   function handleTheme(click: boolean) {
     if (click) {
+      console.log('onchange');
       const newTheme = theme == 'light' ? 'dark' : 'light';
       localStorage.setItem('ruby-theme', newTheme);
       setTheme(newTheme);
     } else {
+      console.log('onchange');
       const storedTheme =
         typeof window !== 'undefined'
           ? localStorage.getItem('ruby-theme') || 'light'
@@ -31,7 +32,6 @@ const EthereumIcon: React.FC = (): JSX.Element => {
       <input
         className="toggle-checkbox"
         type="checkbox"
-        // onClick={() => handleTheme(true)}
         onChange={() => handleTheme(true)}
         checked={isChecked}
       ></input>

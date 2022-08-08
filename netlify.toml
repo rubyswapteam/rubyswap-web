@@ -7,3 +7,6 @@
   for = "/*"
     [headers.values]
     Access-Control-Allow-Origin = "*"
+
+[functions."updateOneDayVolume"]
+schedule = "*/30 * * * *"
