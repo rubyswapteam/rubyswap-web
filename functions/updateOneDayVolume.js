@@ -72,8 +72,6 @@ export async function handler(event) {
   try {
     const responseGem = await fetch(GEM_API_ENDPOINT, gemRequestOptions);
     const data = await responseGem.json();
-    console.log('JSON.stringify(data)');
-    console.log(JSON.stringify(data));
 
     const collections = [];
     const timestamp = moment().unix();
@@ -83,12 +81,12 @@ export async function handler(event) {
         period: 'one_day',
         slug: data.data[i].slug,
         description: data.data[i].description,
-        discordUrl: data.data[i].discord_url,
-        imageUrl: data.data[i].image_url,
-        instagramUsername: data.data[i].instagram_username,
+        discordUrl: data.data[i].discordUrl,
+        imageUrl: data.data[i].imageUrl,
+        instagramUsername: data.data[i].instagramUsername,
         osVerificationState: data.data[i].isVerified,
         name: data.data[i].name,
-        twitterUsername: data.data[i].twitter_username,
+        twitterUsername: data.data[i].twitterUsername,
         osOneDayVolume: data.data[i].stats.one_day_volume,
         osOneDaySales: data.data[i].stats.one_day_sales,
         osOneDayChange: data.data[i].stats.one_day_change,
@@ -108,11 +106,6 @@ export async function handler(event) {
       collections.push(collection);
     }
 
-    console.log('collections');
-    console.log(collections);
-
-    // return { statusCode: 200, body: JSON.stringify(collections) };
-
     var supabaseRequestOptions = {
       method: 'POST',
       headers: supabaseHeaders,
@@ -120,8 +113,6 @@ export async function handler(event) {
       redirect: 'follow',
     };
 
-    // console.log('supabaseRequestOptions');
-    // console.log(supabaseRequestOptions);
     const responseSupabase = await fetch(
       SUPABASE_API_ENDPOINT,
       supabaseRequestOptions,
