@@ -1,16 +1,16 @@
 {
-  "name": "aws-lambda",
+  "name": "serverless",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "",
-  "license": "Python-2.0",
+  "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1190.0",
+    "moment": "^2.29.4",
     "node-fetch": "^3.2.10"
   }
 }
