@@ -37,74 +37,75 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.useWeb3Provider = exports.Web3Provider = void 0;
-var web3modal_1 = require("web3modal");
 var ethers_1 = require("ethers");
 var react_1 = require("react");
-var wallet_sdk_1 = require("@coinbase/wallet-sdk");
-var web3_provider_1 = require("@walletconnect/web3-provider");
+var injected_wallets_1 = require("@web3-onboard/injected-wallets");
+var walletconnect_1 = require("@web3-onboard/walletconnect");
+var core_1 = require("@web3-onboard/core");
+var coinbase_1 = require("@web3-onboard/coinbase");
 var Web3ProviderContext = react_1["default"].createContext({});
+var injected = injected_wallets_1["default"]();
+var walletConnect = walletconnect_1["default"]();
+var coinbaseWallet = coinbase_1["default"]();
+var MAINNET_RPC_URL = 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1';
+var onboard = core_1["default"]({
+    wallets: [coinbaseWallet, walletConnect, injected],
+    chains: [
+        {
+            id: '0x1',
+            token: 'ETH',
+            namespace: 'evm',
+            label: 'Ethereum Mainnet',
+            rpcUrl: MAINNET_RPC_URL
+        },
+    ],
+    appMetadata: {
+        name: 'My App',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+        logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+        description: 'My app using Onboard',
+        recommendedInjectedWallets: [
+            { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
+            { name: 'MetaMask', url: 'https://metamask.io' },
+        ]
+    },
+    accountCenter: { desktop: { enabled: false }, mobile: { enabled: false } }
+});
 exports.Web3Provider = function (_a) {
     var children = _a.children;
     var _b = react_1.useState(undefined), provider = _b[0], setProvider = _b[1];
     var _c = react_1.useState(undefined), activeWallet = _c[0], setActiveWallet = _c[1];
     var _d = react_1.useState(undefined), ethBalance = _d[0], setEthBalance = _d[1];
-    var _e = react_1.useState(-1), chainId = _e[0], setChainId = _e[1];
+    var _e = react_1.useState(''), chainId = _e[0], setChainId = _e[1];
+    var _f = react_1.useState(), network = _f[0], setNetwork = _f[1];
+    var _g = react_1.useState(false), isLoading = _g[0], setIsLoading = _g[1];
     react_1.useEffect(function () {
         if (provider) {
-            setListener();
+            // setListener();
         }
     }, [provider]);
     function connectWallet() {
         return __awaiter(this, void 0, void 0, function () {
-            var providerOptions, web3Modal, web3ModalInstance, web3ModalProvider, accounts, network, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var wallets, _a, accounts, chains, provider_1, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 4, , 5]);
-                        providerOptions = {
-                            walletconnect: {
-                                package: web3_provider_1["default"],
-                                options: {
-                                    rpc: {
-                                        1: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1'
-                                    }
-                                }
-                            },
-                            coinbasewallet: {
-                                package: wallet_sdk_1.CoinbaseWalletSDK,
-                                options: {
-                                    appName: 'My Awesome App',
-                                    rpc: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1'
-                                }
-                            }
-                        };
-                        web3Modal = new web3modal_1["default"]({
-                            cacheProvider: true,
-                            providerOptions: providerOptions
-                        });
-                        return [4 /*yield*/, web3Modal.connect()];
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, onboard.connectWallet()];
                     case 1:
-                        web3ModalInstance = _a.sent();
-                        console.log(web3ModalInstance);
-                        web3ModalProvider = new ethers_1.ethers.providers.Web3Provider(web3ModalInstance);
-                        return [4 /*yield*/, web3ModalProvider.listAccounts()];
+                        wallets = _b.sent();
+                        setIsLoading(true);
+                        _a = wallets[0], accounts = _a.accounts, chains = _a.chains, provider_1 = _a.provider;
+                        setActiveWallet(accounts[0].address);
+                        setChainId(chains[0].id);
+                        setProvider(provider_1);
+                        setIsLoading(false);
+                        return [3 /*break*/, 3];
                     case 2:
-                        accounts = _a.sent();
-                        return [4 /*yield*/, web3ModalProvider.getNetwork()];
-                    case 3:
-                        network = _a.sent();
-                        setChainId(network.chainId);
-                        setProvider(web3ModalProvider);
-                        if (accounts)
-                            setActiveWallet(accounts[0]);
-                        setActiveWallet(web3ModalProvider.provider.selectedAddress);
-                        console.log(web3ModalProvider.provider.selectedAddress);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        error_1 = _a.sent();
+                        error_1 = _b.sent();
                         console.error(error_1);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -124,11 +125,59 @@ exports.Web3Provider = function (_a) {
     //     console.error(error);
     //   }
     // }
-    function setListener() {
-        provider.provider.on('accountsChanged', function (accounts) {
-            setActiveWallet(accounts[0]);
+    var switchNetwork = function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, onboard.setChain({ chainId: toHex(network) })];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
         });
-    }
+    }); };
+    var handleNetwork = function (e) {
+        var id = e.target.value;
+        setNetwork(Number(id));
+    };
+    var disconnect = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var primaryWallet;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, onboard.state.get().wallets];
+                case 1:
+                    primaryWallet = (_a.sent())[0];
+                    if (!primaryWallet)
+                        return [2 /*return*/];
+                    return [4 /*yield*/, onboard.disconnectWallet({ label: primaryWallet.label })];
+                case 2:
+                    _a.sent();
+                    refreshState();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    var refreshState = function () {
+        setActiveWallet('');
+        setChainId('');
+        setProvider(undefined);
+    };
+    var truncateAddress = function (address) {
+        if (!address)
+            return 'No Account';
+        var match = address.match(/^(0x[a-zA-Z0-9]{2})[a-zA-Z0-9]+([a-zA-Z0-9]{2})$/);
+        if (!match)
+            return address;
+        return match[1] + "\u2026" + match[2];
+    };
+    var toHex = function (num) {
+        var val = Number(num);
+        return '0x' + val.toString(16);
+    };
+    // function setListener() {
+    //   provider.provider.on('accountsChanged', (accounts: any[]) => {
+    //     setActiveWallet(accounts[0]);
+    //   });
+    // }
     function fetchEthBalance(address) {
         if (provider && provider.provider) {
             provider.getBalance(address).then(function (balance) {

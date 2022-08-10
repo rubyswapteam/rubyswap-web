@@ -11,8 +11,44 @@ import React, {
 } from 'react';
 import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import injectedModule from '@web3-onboard/injected-wallets';
+import walletConnectModule from '@web3-onboard/walletconnect';
+import walletLinkModule from '@web3-onboard/walletlink';
+import Onboard from '@web3-onboard/core';
+import coinbaseWalletModule from '@web3-onboard/coinbase';
 
 const Web3ProviderContext = React.createContext<any>({});
+
+const injected = injectedModule();
+const walletConnect = walletConnectModule();
+const coinbaseWallet = coinbaseWalletModule();
+
+const MAINNET_RPC_URL =
+  'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1';
+
+const onboard = Onboard({
+  wallets: [coinbaseWallet, walletConnect, injected],
+  chains: [
+    {
+      id: '0x1', // chain ID must be in hexadecimel
+      token: 'ETH', // main chain token
+      namespace: 'evm',
+      label: 'Ethereum Mainnet',
+      rpcUrl: MAINNET_RPC_URL,
+    },
+  ],
+  appMetadata: {
+    name: 'My App',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+    description: 'My app using Onboard',
+    recommendedInjectedWallets: [
+      { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
+      { name: 'MetaMask', url: 'https://metamask.io' },
+    ],
+  },
+  accountCenter: { desktop: { enabled: false }, mobile: { enabled: false } },
+});
 
 export const Web3Provider = ({
   children,
@@ -25,50 +61,59 @@ export const Web3Provider = ({
   const [provider, setProvider] = useState<any>(undefined);
   const [activeWallet, setActiveWallet] = useState<any>(undefined);
   const [ethBalance, setEthBalance] = useState<string | undefined>(undefined);
-  const [chainId, setChainId] = useState<number>(-1);
+  const [chainId, setChainId] = useState<string>('');
+  const [network, setNetwork] = useState<number>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (provider) {
-      setListener();
+      // setListener();
     }
   }, [provider]);
 
   async function connectWallet() {
     try {
-      const providerOptions = {
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            rpc: {
-              1: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1',
-            },
-          },
-        },
-        coinbasewallet: {
-          package: CoinbaseWalletSDK,
-          options: {
-            appName: 'My Awesome App',
-            rpc: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1',
-          },
-        },
-      };
+      const wallets = await onboard.connectWallet();
+      setIsLoading(true);
+      const { accounts, chains, provider } = wallets[0];
+      setActiveWallet(accounts[0].address);
+      setChainId(chains[0].id);
+      setProvider(provider);
+      setIsLoading(false);
+      // const providerOptions = {
+      //   walletconnect: {
+      //     package: WalletConnectProvider,
+      //     options: {
+      //       rpc: {
+      //         1: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1',
+      //       },
+      //     },
+      //   },
+      //   coinbasewallet: {
+      //     package: CoinbaseWalletSDK,
+      //     options: {
+      //       appName: 'My Awesome App',
+      //       rpc: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1',
+      //     },
+      //   },
+      // };
 
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      });
-      const web3ModalInstance = await web3Modal.connect();
-      console.log(web3ModalInstance);
-      const web3ModalProvider = new ethers.providers.Web3Provider(
-        web3ModalInstance,
-      );
-      const accounts = await web3ModalProvider.listAccounts();
-      const network = await web3ModalProvider.getNetwork();
-      setChainId(network.chainId);
-      setProvider(web3ModalProvider);
-      if (accounts) setActiveWallet(accounts[0]);
-      setActiveWallet((web3ModalProvider.provider as any).selectedAddress);
-      console.log((web3ModalProvider.provider as any).selectedAddress);
+      // const web3Modal = new Web3Modal({
+      //   cacheProvider: true, // optional
+      //   providerOptions, // required
+      // });
+      // const web3ModalInstance = await web3Modal.connect();
+      // console.log(web3ModalInstance);
+      // const web3ModalProvider = new ethers.providers.Web3Provider(
+      //   web3ModalInstance,
+      // );
+      // const accounts = await web3ModalProvider.listAccounts();
+      // const network = await web3ModalProvider.getNetwork();
+      // setChainId(network.chainId);
+      // setProvider(web3ModalProvider);
+      // if (accounts) setActiveWallet(accounts[0]);
+      // setActiveWallet((web3ModalProvider.provider as any).selectedAddress);
+      // console.log((web3ModalProvider.provider as any).selectedAddress);
     } catch (error) {
       console.error(error);
     }
@@ -90,11 +135,47 @@ export const Web3Provider = ({
   //   }
   // }
 
-  function setListener() {
-    provider.provider.on('accountsChanged', (accounts: any[]) => {
-      setActiveWallet(accounts[0]);
-    });
-  }
+  const switchNetwork = async () => {
+    await onboard.setChain({ chainId: toHex(network) });
+  };
+
+  const handleNetwork = (e: any) => {
+    const id = e.target.value;
+    setNetwork(Number(id));
+  };
+
+  const disconnect = async () => {
+    const [primaryWallet] = await onboard.state.get().wallets;
+    if (!primaryWallet) return;
+    await onboard.disconnectWallet({ label: primaryWallet.label });
+    refreshState();
+  };
+
+  const refreshState = () => {
+    setActiveWallet('');
+    setChainId('');
+    setProvider(undefined);
+  };
+
+  const truncateAddress = (address: string) => {
+    if (!address) return 'No Account';
+    const match = address.match(
+      /^(0x[a-zA-Z0-9]{2})[a-zA-Z0-9]+([a-zA-Z0-9]{2})$/,
+    );
+    if (!match) return address;
+    return `${match[1]}…${match[2]}`;
+  };
+
+  const toHex = (num: any) => {
+    const val = Number(num);
+    return '0x' + val.toString(16);
+  };
+
+  // function setListener() {
+  //   provider.provider.on('accountsChanged', (accounts: any[]) => {
+  //     setActiveWallet(accounts[0]);
+  //   });
+  // }
 
   function fetchEthBalance(address: string) {
     if (provider && provider.provider) {
