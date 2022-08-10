@@ -71,6 +71,28 @@ export const Web3Provider = ({
     }
   }, [provider]);
 
+  useEffect(() => {
+    const connectWalletOnPageLoad = async () => {
+      if (
+        !!localStorage &&
+        !!localStorage.getItem('isWalletConnectedRuby') &&
+        (localStorage.getItem('isWalletConnectedRuby') || '').length > 10
+      ) {
+        try {
+          const cachedData = JSON.parse(
+            localStorage.getItem('isWalletConnectedRuby') || '',
+          );
+          setActiveWallet(cachedData.wallet);
+          setChainId(cachedData.chainId);
+          setProvider(cachedData.provider);
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
+    };
+    connectWalletOnPageLoad();
+  }, []);
+
   async function connectWallet() {
     try {
       const wallets = await onboard.connectWallet();
@@ -79,41 +101,15 @@ export const Web3Provider = ({
       setActiveWallet(accounts[0].address);
       setChainId(chains[0].id);
       setProvider(provider);
+      localStorage.setItem(
+        'isWalletConnectedRuby',
+        JSON.stringify({
+          wallet: accounts[0].address,
+          chainId: chains[0].id,
+          provider: provider,
+        }),
+      );
       setIsLoading(false);
-      // const providerOptions = {
-      //   walletconnect: {
-      //     package: WalletConnectProvider,
-      //     options: {
-      //       rpc: {
-      //         1: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1',
-      //       },
-      //     },
-      //   },
-      //   coinbasewallet: {
-      //     package: CoinbaseWalletSDK,
-      //     options: {
-      //       appName: 'My Awesome App',
-      //       rpc: 'https://eth-mainnet.g.alchemy.com/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1',
-      //     },
-      //   },
-      // };
-
-      // const web3Modal = new Web3Modal({
-      //   cacheProvider: true, // optional
-      //   providerOptions, // required
-      // });
-      // const web3ModalInstance = await web3Modal.connect();
-      // console.log(web3ModalInstance);
-      // const web3ModalProvider = new ethers.providers.Web3Provider(
-      //   web3ModalInstance,
-      // );
-      // const accounts = await web3ModalProvider.listAccounts();
-      // const network = await web3ModalProvider.getNetwork();
-      // setChainId(network.chainId);
-      // setProvider(web3ModalProvider);
-      // if (accounts) setActiveWallet(accounts[0]);
-      // setActiveWallet((web3ModalProvider.provider as any).selectedAddress);
-      // console.log((web3ModalProvider.provider as any).selectedAddress);
     } catch (error) {
       console.error(error);
     }
@@ -155,6 +151,7 @@ export const Web3Provider = ({
     setActiveWallet('');
     setChainId('');
     setProvider(undefined);
+    localStorage.setItem('isWalletConnectedRuby', 'false');
   };
 
   const truncateAddress = (address: string) => {
@@ -170,12 +167,6 @@ export const Web3Provider = ({
     const val = Number(num);
     return '0x' + val.toString(16);
   };
-
-  // function setListener() {
-  //   provider.provider.on('accountsChanged', (accounts: any[]) => {
-  //     setActiveWallet(accounts[0]);
-  //   });
-  // }
 
   function fetchEthBalance(address: string) {
     if (provider && provider.provider) {

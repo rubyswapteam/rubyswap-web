@@ -84,6 +84,28 @@ exports.Web3Provider = function (_a) {
             // setListener();
         }
     }, [provider]);
+    react_1.useEffect(function () {
+        var connectWalletOnPageLoad = function () { return __awaiter(void 0, void 0, void 0, function () {
+            var cachedData;
+            return __generator(this, function (_a) {
+                if (!!localStorage &&
+                    !!localStorage.getItem('isWalletConnectedRuby') &&
+                    (localStorage.getItem('isWalletConnectedRuby') || '').length > 10) {
+                    try {
+                        cachedData = JSON.parse(localStorage.getItem('isWalletConnectedRuby') || '');
+                        setActiveWallet(cachedData.wallet);
+                        setChainId(cachedData.chainId);
+                        setProvider(cachedData.provider);
+                    }
+                    catch (ex) {
+                        console.log(ex);
+                    }
+                }
+                return [2 /*return*/];
+            });
+        }); };
+        connectWalletOnPageLoad();
+    }, []);
     function connectWallet() {
         return __awaiter(this, void 0, void 0, function () {
             var wallets, _a, accounts, chains, provider_1, error_1;
@@ -99,6 +121,11 @@ exports.Web3Provider = function (_a) {
                         setActiveWallet(accounts[0].address);
                         setChainId(chains[0].id);
                         setProvider(provider_1);
+                        localStorage.setItem('isWalletConnectedRuby', JSON.stringify({
+                            wallet: accounts[0].address,
+                            chainId: chains[0].id,
+                            provider: provider_1
+                        }));
                         setIsLoading(false);
                         return [3 /*break*/, 3];
                     case 2:
@@ -160,6 +187,7 @@ exports.Web3Provider = function (_a) {
         setActiveWallet('');
         setChainId('');
         setProvider(undefined);
+        localStorage.setItem('isWalletConnectedRuby', 'false');
     };
     var truncateAddress = function (address) {
         if (!address)
@@ -173,11 +201,6 @@ exports.Web3Provider = function (_a) {
         var val = Number(num);
         return '0x' + val.toString(16);
     };
-    // function setListener() {
-    //   provider.provider.on('accountsChanged', (accounts: any[]) => {
-    //     setActiveWallet(accounts[0]);
-    //   });
-    // }
     function fetchEthBalance(address) {
         if (provider && provider.provider) {
             provider.getBalance(address).then(function (balance) {

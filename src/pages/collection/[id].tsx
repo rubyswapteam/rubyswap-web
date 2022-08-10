@@ -18,6 +18,7 @@ import CollectionUpdates from '../../components/CollectionUpdates';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import RightArrow from '../../components/RightArrow';
+import HolderDistrbutionChart from '@/components/HolderDistributionChart';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -305,20 +306,20 @@ export default function Collection(props: any) {
           <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
             <CollectionTitleHeader title={'Summary Stats'} />
           </div>
-          <div className="bg-gray-50 dark:bg-white/[.02] py-10 mt-4 mb-10">
-            <StatsBoxList
-              stats={getStats()}
-              route={`/collection/${id}?tab=analytics`}
-            />
-            <div className="flex w-full px-4 sm:px-6 md:px-8">
-              <div className="w-full my-10 rounded-xl overflow-hidden mr-8">
+          <StatsBoxList
+            stats={getStats()}
+            route={`/collection/${id}?tab=analytics`}
+          />
+          <div className="bg-gray-50 dark:bg-white/[.02] my-12 py-16 px-4 sm:px-6 md:px-8">
+            <div className="flex w-full">
+              <div className="w-full rounded-xl overflow-hidden mr-8">
                 {collectionTrades && (
                   <SalesHistoryChart
                     data={collectionTrades}
                   ></SalesHistoryChart>
                 )}
               </div>
-              <div className="w-full my-10 rounded-xl overflow-hidden">
+              <div className="w-full rounded-xl overflow-hidden">
                 {collectionTrades && (
                   <AveragePriceVolumeChart
                     data={collectionTrades}
@@ -327,10 +328,20 @@ export default function Collection(props: any) {
               </div>
             </div>
           </div>
-          <div className="w-full my-10 rounded-xl overflow-hidden">
+          <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+            <HolderDistrbutionChart
+              contractAddress={activeCollection?.contractAddress}
+            ></HolderDistrbutionChart>
+          </div>
+          <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+            <CollectionTitleHeader
+              title={'Bubble Chart - Holder Relationships'}
+            />
+          </div>
+          <div className="w-full my-10 px-4 sm:px-6 md:px-8 rounded-xl overflow-hidden">
             {activeCollection && activeCollection.contractAddress && (
               <iframe
-                className="w-full h-[50vh]"
+                className="w-full h-[50vh] rounded-xl"
                 src={`https://app.bubblemaps.io/eth/token/${activeCollection.contractAddress}?theme=gemxyz`}
               />
             )}

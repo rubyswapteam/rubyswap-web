@@ -35,7 +35,6 @@ export default function AveragePriceVolumeChart(props: any) {
   useEffect(() => {
     setTheme();
     // console.log('{ ...chartOptions }');
-    console.log(chartOptions);
     if (chartOptions) setChartOptions(JSON.parse(JSON.stringify(chartOptions)));
   }, [theme]);
 
@@ -101,10 +100,6 @@ export default function AveragePriceVolumeChart(props: any) {
       );
       const isolatedVals = filteredPriceTime.map((x: number[]) => x[1]);
       const volume = isolatedVals.reduce((a: number, b: number) => a + b, 0);
-      console.log(...filteredPriceTime);
-      console.log(Math.min(...isolatedVals));
-      console.log(Math.max(...isolatedVals));
-
       const range = [
         roundData(Math.min(...isolatedVals)),
         roundData(Math.max(...isolatedVals)),
