@@ -1,9 +1,11 @@
 import { Transition } from '@headlessui/react';
-import * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import CollectionTitleHeader from './CollectionTitleHeader';
+import CollectionHolderTable from './CollectionHolderTable';
+import highchartsDrilldown from 'highcharts/modules/drilldown';
+import Highcharts from 'highcharts';
 
 export default function HolderDistrbutionChart(props: any) {
   const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
@@ -12,15 +14,21 @@ export default function HolderDistrbutionChart(props: any) {
   const [rawData, setRawData] = useState<any[]>(undefined as any);
   const [holderCounts, setHolderCounts] = useState(undefined as any);
   const [total, setTotal] = useState(undefined as any);
+  const [pcTopLevel, setPcTopLevel] = useState(undefined as any);
+  const [pcWhaleDrilldown, setPcWhaleDrilldown] = useState(undefined as any);
   const { theme } = useTheme();
+  highchartsDrilldown(Highcharts);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // Highcharts.Tooltip.prototype.hide = function () {};
+
   const lightTheme = {
-    background: '#ffffff',
+    background: 'rgba(255,255,255,0.00)',
     text: '#07062C',
     primaryColour: '#333333',
     secondaryColour: 'rgb(70, 115, 250)',
   };
   const darkTheme = {
-    background: '#000000',
+    background: 'rgba(255,255,255,0.00)',
     text: '#ffffff',
     primaryColour: 'rgba(255,255,255,20)',
     secondaryColour: 'rgb(70, 115, 250)',
@@ -62,23 +70,76 @@ export default function HolderDistrbutionChart(props: any) {
         console.log(res);
         if (res && res[0]) {
           const holders = res[0].data;
-          const whales = holders.slice(15, 0);
+          const whaleCount = 25;
+          const whaleHolders = res[0].data.slice(0, whaleCount);
+          console.log('whaleHolders');
+          console.log(whaleHolders);
           const holderCounts = holders.reduce(
             (acc: any, curr: any) => (
               (acc[curr.tokenBalance] = (acc[curr.tokenBalance] || 0) + 1), acc
             ),
             {},
           );
-          const sizes = Object.keys(holderCounts);
           const values = Object.values(holderCounts) as number[];
-          const total = values.reduce((prev, curr) => prev + curr, 0);
-          const whaleTotal = values.reduce((prev, curr) => prev + curr, 0);
-          // const newOptions = getOptions(sizes, values);
-          // setChartOptions(newOptions);
+          const total = holders.reduce(
+            (prev: number, curr: { tokenBalance: number }) =>
+              prev + curr.tokenBalance,
+            0,
+          );
+          const whaleTotal = whaleHolders.reduce(
+            (prev: number, curr: { tokenBalance: number }) =>
+              prev + curr.tokenBalance,
+            0,
+          );
+          const pieChartTopLevel = [
+            {
+              name: 'Remaining Holder',
+              y: total - whaleTotal,
+              title: 'test',
+              format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${
+                holders.length - whaleCount
+              }</a><br /><a style='font-weight:600'>Holdings:</a> ${
+                total - whaleTotal
+              } / (${(((total - whaleTotal) / total) * 100).toFixed(
+                2,
+              )}%)</a></div>`,
+            },
+            {
+              name: 'Top 25 Whale',
+              y: whaleTotal,
+              drilldown: 'whaleWallets',
+              format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${whaleCount}</a><br /><a style='font-weight:600'>Holdings:</a> ${whaleTotal} / (${(
+                (whaleTotal / total) *
+                100
+              ).toFixed(2)}%)</a></div>`,
+              //could be a function
+            },
+          ];
+          const pieChartWhaleDrilldown = [];
+          for (let i = 0; i < whaleHolders.length; i++) {
+            pieChartWhaleDrilldown.push({
+              name: whaleHolders[i].ownerAddress,
+              y: whaleHolders[i].tokenBalance,
+              format: `<div style="display:block"><a><a style='font-weight:600'>Wallet:</a> ${
+                whaleHolders[i].ownerAddress
+              }</a><br /><a><a style='font-weight:600'>Holding:</a> ${
+                whaleHolders[i].tokenBalance
+              } / (${((whaleHolders[i].tokenBalance / total) * 100).toFixed(
+                2,
+              )}%)</a></div>`,
+            });
+          }
+
           setHolderCounts(holderCounts);
           setTotal(total);
+          setPcTopLevel(pieChartTopLevel);
+          setPcWhaleDrilldown(pieChartWhaleDrilldown);
           setIsShowing(true);
-          // setRawData(res[0]);
+          const newOptions = getOptions(
+            pieChartTopLevel,
+            pieChartWhaleDrilldown,
+          );
+          setChartOptions(newOptions);
         }
       });
   }
@@ -102,112 +163,84 @@ export default function HolderDistrbutionChart(props: any) {
     holdersData();
   }
 
-  // function getOptions(sizes: string[], values: number[]) {
-  //   const options = {
-  //     chart: {
-  //       type: 'series',
-  //       zoomType: 'xy',
-  //       style: {
-  //         fontFamily: 'Biotif',
-  //         color: themeColours.background,
-  //       },
-  //       backgroundColor: themeColours.background,
-  //       height: props.chart?.height || '60%',
-  //       marginLeft: 80,
-  //       marginRight: 70,
-  //       marginTop: 80,
-  //     },
-  //     xAxis: [
-  //       {
-  //         categories: sizes,
-  //         crosshair: true,
-  //         labels: {
-  //           padding: 15,
-  //           style: {
-  //             color: themeColours.text,
-  //           },
-  //         },
-  //         title: {
-  //           style: {
-  //             color: themeColours.text,
-  //           },
-  //         },
-  //       },
-  //     ],
-  //     yAxis: [
-  //       {
-  //         labels: {
-  //           style: {
-  //             color: themeColours.text,
-  //           },
-  //         },
-  //         title: {
-  //           text: 'Average price',
-  //           style: {
-  //             color: themeColours.text,
-  //           },
-  //         },
-  //       },
-  //       {
-  //         labels: {
-  //           style: {
-  //             color: themeColours.text,
-  //           },
-  //         },
-  //         title: {
-  //           text: 'Total Volume',
-  //           style: {
-  //             color: themeColours.text,
-  //           },
-  //         },
-  //         opposite: true,
-  //       },
-  //     ],
-  //     title: {
-  //       text: 'Average Price and Volume',
-  //       style: {
-  //         color: themeColours.text,
-  //       },
-  //       y: 40,
-  //     },
-  //     plotOptions: {
-  //       series: {
-  //         marker: {
-  //           enabled: false,
-  //         },
-  //       },
-  //     },
-  //     series: [
-  //       {
-  //         name: 'Volume',
-  //         type: 'column',
-  //         yAxis: 1,
-  //         data: values,
-  //         tooltip: {
-  //           valueSuffix: ' ETH',
-  //         },
-  //         color: themeColours.primaryColour,
-  //       },
-  //     ],
-  //     tooltip: {
-  //       crosshairs: true,
-  //       shared: true,
-  //     },
-  //     legend: {
-  //       itemStyle: {
-  //         color: themeColours.text,
-  //       },
-  //       itemHoverStyle: {
-  //         color: themeColours.text,
-  //       },
-  //       itemHiddenStyle: {
-  //         color: themeColours.text,
-  //       },
-  //     },
-  //   };
+  function getOptions(topLevelData: any, drilldownData: any) {
+    const options = {
+      chart: {
+        type: 'pie',
+        style: {
+          fontFamily: 'Biotif',
+          color: themeColours.background,
+        },
+        backgroundColor: themeColours.background,
+      },
+      title: {
+        text: 'Top 25 Whales:',
+        style: {
+          color: themeColours.text,
+        },
+      },
+      subtitle: {
+        text: 'Click the whale slice for wallet level breakdowns.',
+        style: {
+          color: themeColours.text,
+        },
+      },
+      width: null,
+      height: null,
+      accessibility: {
+        announceNewData: {
+          enabled: true,
+        },
+        point: {
+          valueSuffix: '%',
+        },
+      },
 
-  //   return options;
-  // }
+      plotOptions: {
+        series: {
+          dataLabels: {
+            enabled: true,
+            format: '{point.name} NFT count: {point.y:1f}',
+            style: {
+              color: themeColours.text,
+            },
+          },
+        },
+      },
+
+      tooltip: {
+        formatter: function () {
+          const { format } = (this as any).point.options;
+          return format;
+        },
+        // headerFormat:
+        //   '<span style="font-size:11px">NFT Distribution</span><br>',
+        // pointFormat: `<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}% - {total}</b> of total<br/>`,
+      },
+
+      series: [
+        {
+          name: 'Collector:Whale Ratio',
+          colorByPoint: true,
+          data: topLevelData,
+        },
+      ],
+      drilldown: {
+        activeDataLabelStyle: {
+          color: themeColours.text,
+        },
+        series: [
+          {
+            name: 'Top 25 Whales',
+            id: 'whaleWallets',
+            data: drilldownData,
+          },
+        ],
+      },
+    };
+
+    return options;
+  }
 
   return (
     <Transition
@@ -233,7 +266,7 @@ export default function HolderDistrbutionChart(props: any) {
               id="tabs"
               name="tabs"
               className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-              // defaultValue={tabs.find((tab) => tab.current).name}
+              defaultValue={tabs?.find((tab) => tab?.current)?.name}
             >
               {tabs.map((tab) => (
                 <option key={tab.name}>{tab.name}</option>
@@ -261,74 +294,23 @@ export default function HolderDistrbutionChart(props: any) {
           </div>
         </div>
       </div>
-      <table className="overflow-scroll inline-block rounded-md w-[50%]">
-        <thead className="flex w-full">
-          <tr className="flex w-full">
-            <div className="w-[25%]">
-              <th
-                scope="col"
-                className="h-full py-3.5 flex text-left text-sm font-semibold text-gray-900 sticky top-0 bg-gray-50 dark:bg-white/[.03] dark:text-white pl-4"
-              >
-                NFTs Per Wallet
-              </th>
-            </div>
-            <div className="w-[25%]">
-              <th
-                scope="col"
-                className="h-full py-3.5 flex text-left text-sm font-semibold text-gray-900 sticky top-0 bg-gray-50 dark:bg-white/[.03] dark:text-white pl-4"
-              >
-                Wallets
-              </th>
-            </div>
-            <div className="w-[25%]">
-              <th
-                scope="col"
-                className="h-full py-3.5 flex text-left text-sm font-semibold text-gray-900 sticky top-0 bg-gray-50 dark:bg-white/[.03] dark:text-white pl-4"
-              >
-                Total
-              </th>
-            </div>
-            <div className="w-[25%]">
-              <th
-                scope="col"
-                className="h-full py-3.5 flex text-left text-sm font-semibold text-gray-900 sticky top-0 bg-gray-50 dark:bg-white/[.03] dark:text-white pl-4"
-              >
-                Collection %
-              </th>
-            </div>
-          </tr>
-        </thead>
-        <tbody className="h-64 overflow-scroll bg-white dark:bg-white/10 block w-full">
-          {holderCounts &&
-            Object.keys(holderCounts).map((count) => (
-              <tr key={count} className="flex">
-                <div className="w-[25%]">
-                  <td className="h-full py-2text-sm text-gray-900 pl-4 dark:text-white/80">
-                    {count}
-                  </td>
-                </div>
-                <div className="w-[25%]">
-                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                    {holderCounts[count]}
-                  </td>
-                </div>
-                <div className="w-[25%]">
-                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                    {parseInt(count) * holderCounts[count]}
-                  </td>{' '}
-                </div>
-                <div className="w-[25%]">
-                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                    {(
-                      (100 * parseInt(count) * holderCounts[count]) /
-                      total
-                    ).toFixed(2)}
-                  </td>
-                </div>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <div className="flex h-64 justify-between border-2 border-gray-100 dark:border-white/10">
+        <div className="flex flex-grow w-full">
+          {holderCounts && total && (
+            <CollectionHolderTable
+              holderCounts={holderCounts}
+              total={total}
+            ></CollectionHolderTable>
+          )}
+        </div>
+        <div className="flex w-full justify-center">
+          <HighchartsReact
+            allowChartUpdate={true}
+            highcharts={Highcharts}
+            options={chartOptions}
+          ></HighchartsReact>
+        </div>
+      </div>
     </Transition>
   );
 }

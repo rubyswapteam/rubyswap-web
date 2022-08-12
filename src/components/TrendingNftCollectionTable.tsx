@@ -1,27 +1,56 @@
-import { useNftProvider } from '@/contexts/NftProviderContext';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { INftCollection } from '@/utils/nftUtils';
 import { StarIcon } from '@heroicons/react/outline';
 import EthereumIcon from './EthereumIcon';
-import { Transition } from '@headlessui/react';
+import moment from 'moment';
 
 export default function TrendingNftCollectionTable() {
-  const { trendingNftCollections, fetchAllTrendingNftCollections } =
-    useNftProvider();
+  const [fullTrendingCollections, setFullTrendingCollections] = useState<
+    undefined | any[]
+  >(undefined);
+  const [trendingCollections, setTrendingCollections] = useState<
+    undefined | any[]
+  >(undefined);
+  const [lastFetch, setLastFetch] = useState<number>(0);
 
   useEffect(() => {
-    if (!trendingNftCollections) {
-      fetchAllTrendingNftCollections();
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    if (!trendingCollections || lastFetch < moment().unix() - 600) {
+      console.log('!trendingCollections');
+      console.log(!trendingCollections);
+      console.log('lastFetch');
+      console.log(lastFetch);
+      console.log('lastFetch < moment().unix() - 600');
+      console.log(lastFetch < moment().unix() - 600);
+      try {
+        fetch('/.netlify/functions/getDbTrendingCollections').then((res) =>
+          res.json().then((result) => {
+            setFullTrendingCollections(result);
+            setTrendingCollections(
+              result.filter(
+                (collection: any) => collection.period === 'one_day',
+              ),
+            );
+            setLastFetch(moment().unix());
+            console.log(result);
+          }),
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [trendingNftCollections]);
+  };
 
   return (
     <div className="flex flex-col">
       <div className="">
         <div className="inline-block min-w-full align-middle">
           <div className="md:rounded-lg">
-            {trendingNftCollections && (
+            {trendingCollections && (
               <div className="mt-1 flex flex-col">
                 <div className="">
                   <div className="inline-block min-w-full py-2 align-middle">
@@ -86,10 +115,12 @@ export default function TrendingNftCollectionTable() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-blackish">
-                          {trendingNftCollections.map(
-                            (nftCollection: INftCollection) =>
-                              nftCollection.image && (
-                                <React.Fragment key={nftCollection.id}>
+                          {trendingCollections.map(
+                            (nftCollection) =>
+                              nftCollection.imageUrl && (
+                                <React.Fragment
+                                  key={nftCollection.index + nftCollection.slug}
+                                >
                                   <Link
                                     key={nftCollection.id}
                                     href={`/collection/${nftCollection.slug}`}
@@ -108,7 +139,7 @@ export default function TrendingNftCollectionTable() {
                                         <div className="flex items-center">
                                           <img
                                             className="h-8 w-8 rounded-full"
-                                            src={nftCollection.image}
+                                            src={nftCollection.imageUrl}
                                             alt=""
                                           />
                                         </div>
@@ -132,50 +163,20 @@ export default function TrendingNftCollectionTable() {
                                         </div>
                                       </td>
                                       <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75">
-                                        {nftCollection.chainId == 1 && (
-                                          <>
-                                            <EthereumIcon
-                                              width={16}
-                                              height={16}
-                                            />
-                                          </>
-                                        )}
+                                        <EthereumIcon width={16} height={16} />
                                       </td>
                                       <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 circularstdbook">
                                         <div className="flex items-center">
                                           <div className="pt-1">
-                                            {nftCollection.oneDayVolume?.toFixed(
+                                            {nftCollection.osOneDayVolume?.toFixed(
                                               2,
                                             )}{' '}
                                           </div>
-                                          {nftCollection.chainId == 1 && (
-                                            <>
-                                              <div className="pl-1">
-                                                <EthereumIcon
-                                                  width={16}
-                                                  height={16}
-                                                />
-                                              </div>
-                                            </>
-                                          )}
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 circularstdbook">
-                                        <div className="flex items-center">
-                                          <div className="flex items-center">
-                                            <div className="pt-1">
-                                              {nftCollection.floor?.toFixed(2)}{' '}
-                                            </div>
-                                            {nftCollection.chainId == 1 && (
-                                              <>
-                                                <div className="pl-1">
-                                                  <EthereumIcon
-                                                    width={16}
-                                                    height={16}
-                                                  />
-                                                </div>
-                                              </>
-                                            )}
+                                          <div className="pl-1">
+                                            <EthereumIcon
+                                              width={16}
+                                              height={16}
+                                            />
                                           </div>
                                         </div>
                                       </td>
@@ -183,31 +184,45 @@ export default function TrendingNftCollectionTable() {
                                         <div className="flex items-center">
                                           <div className="flex items-center">
                                             <div className="pt-1">
-                                              {nftCollection.oneDayAveragePrice?.toFixed(
+                                              {nftCollection.osFloorPrice?.toFixed(
                                                 2,
                                               )}{' '}
                                             </div>
-                                            {nftCollection.chainId == 1 && (
-                                              <>
-                                                <div className="pl-1">
-                                                  <EthereumIcon
-                                                    width={16}
-                                                    height={16}
-                                                  />
-                                                </div>
-                                              </>
-                                            )}
+                                            <div className="pl-1">
+                                              <EthereumIcon
+                                                width={16}
+                                                height={16}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
                                       </td>
                                       <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 circularstdbook">
                                         <div className="flex items-center">
-                                          {nftCollection.oneDaySales}
+                                          <div className="flex items-center">
+                                            <div className="pt-1">
+                                              {(
+                                                nftCollection.osOneDayVolume /
+                                                nftCollection.osOneDaySales
+                                              )?.toFixed(2)}{' '}
+                                            </div>
+                                            <div className="pl-1">
+                                              <EthereumIcon
+                                                width={16}
+                                                height={16}
+                                              />
+                                            </div>
+                                          </div>
                                         </div>
                                       </td>
                                       <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 circularstdbook">
                                         <div className="flex items-center">
-                                          {nftCollection.owners}
+                                          {nftCollection.osOneDaySales}
+                                        </div>
+                                      </td>
+                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 circularstdbook">
+                                        <div className="flex items-center">
+                                          {nftCollection.numOwners}
                                         </div>
                                       </td>
                                     </tr>

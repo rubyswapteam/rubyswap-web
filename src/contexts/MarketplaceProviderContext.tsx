@@ -456,6 +456,8 @@ export const MarketplaceProvider = ({
     let collection: any = await fetchCollectionFromDb(slug);
     const isStored = collection && collection.contractAddress;
     const isStatsUpdated =
+      collection &&
+      collection.osStatsUpdatedAt &&
       Math.round(moment().unix() - 1800) < collection.osStatsUpdatedAt;
     try {
       if (!isStored) {

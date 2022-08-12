@@ -19,10 +19,12 @@ import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContex
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import RightArrow from '../../components/RightArrow';
 import HolderDistrbutionChart from '@/components/HolderDistributionChart';
+import { useTheme } from 'next-themes';
 
 export default function Collection(props: any) {
   const router = useRouter();
   const { id, tab, range } = router.query;
+  const { theme } = useTheme();
   const [isLoadingCollection, setIsLoadingCollection] = useState<boolean>(true);
   const [isLoadingCollectionTrades, setIsLoadingCollectionTrades] =
     useState<boolean>(true);
@@ -112,12 +114,10 @@ export default function Collection(props: any) {
   }, [activeCollection?.contractAddress]);
 
   useEffect(() => {
-    if (activeCollection?.contractAddress)
-      fetchActiveListings(activeCollection.contractAddress);
-  }, [activeCollection?.contractAddress]);
-
-  useEffect(() => {
-    if (tab == 'listings' && activeCollection?.contractAddress)
+    if (
+      (tab == 'listings' && activeCollection?.contractAddress) ||
+      (activeCollection?.contractAddress && !activeListings)
+    )
       fetchActiveListings(activeCollection.contractAddress);
   }, [activeCollection?.contractAddress, tab]);
 
@@ -333,18 +333,22 @@ export default function Collection(props: any) {
               contractAddress={activeCollection?.contractAddress}
             ></HolderDistrbutionChart>
           </div>
-          <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-            <CollectionTitleHeader
-              title={'Bubble Chart - Holder Relationships'}
-            />
-          </div>
-          <div className="w-full my-10 px-4 sm:px-6 md:px-8 rounded-xl overflow-hidden">
-            {activeCollection && activeCollection.contractAddress && (
-              <iframe
-                className="w-full h-[50vh] rounded-xl"
-                src={`https://app.bubblemaps.io/eth/token/${activeCollection.contractAddress}?theme=gemxyz`}
+          <div className="bg-gray-50 dark:bg-white/[.02]">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+              <CollectionTitleHeader
+                title={'Bubble Chart - Holder Relationships'}
               />
-            )}
+            </div>
+            <div className="w-full my-10 px-4 sm:px-6 md:px-8 rounded-xl overflow-hidden">
+              {activeCollection && activeCollection.contractAddress && (
+                <iframe
+                  className="w-full h-[50vh] rounded-xl"
+                  src={`https://app.bubblemaps.io/eth/token/${
+                    activeCollection.contractAddress
+                  }?theme=${theme == 'light' ? 'gemxyz' : 'dark'}`}
+                />
+              )}
+            </div>
           </div>
         </div>
       );

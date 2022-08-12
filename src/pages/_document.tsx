@@ -8,7 +8,7 @@ export default function Document() {
         <script src="https://code.iconify.design/1/1.0.4/iconify.min.js">
           {' '}
         </script>
-        <link href="/dist/output.css" rel="stylesheet"></link>
+        {/* <link href="/dist/global.css" rel="stylesheet"></link> */}
       </Head>
       <body>
         <Main />

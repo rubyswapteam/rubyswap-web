@@ -15,11 +15,9 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-export async function handler(event) {
-  if (!event.queryStringParameters.contract)
-    return { statusCode: 500, error: 'No contract provided' };
-
-  const API_ENDPOINT = `https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/HistoricalTrades?select=*&contract=ilike.${event.queryStringParameters.contract}`;
+export async function handler() {
+  const API_ENDPOINT =
+    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/TrendingTable?select=*&order=index.asc';
 
   console.log({
     method: 'GET',

@@ -5,9 +5,6 @@ const gem = process.env.GEM;
 const supabase = process.env.SUPABASE;
 
 const gemHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'Origin, X-Requested-With, Content-Type, Accept',
   'Content-Type': 'application/json',
   'X-API-KEY': gem,
 };
@@ -34,7 +31,7 @@ export async function handler() {
     headers: gemHeaders,
     body: JSON.stringify({
       sort: { 'stats.one_day_volume': -1 },
-      limit: 100,
+      limit: 300,
       fields: {
         name: 1,
         contract: 1,
@@ -75,34 +72,34 @@ export async function handler() {
     const data = await responseGem.json();
 
     const collections = [];
-    const timestamp = moment().unix();
+    const timestamp = Math.floor(moment().unix());
 
     for (let i = 0; i < data.data.length; i++) {
       const collection = {
         period: 'one_day',
         index: i,
-        slug: data.data[i].slug || '',
-        description: data.data[i].description || '',
-        discordUrl: data.data[i].discordUrl || '',
-        imageUrl: data.data[i].imageUrl || '',
-        instagramUsername: data.data[i].instagramUsername || '',
-        osVerificationState: data.data[i].isVerified || false,
-        name: data.data[i].name || '',
-        twitterUsername: data.data[i].twitterUsername || '',
-        osOneDayVolume: data.data[i].stats.one_day_volume,
-        osOneDaySales: data.data[i].stats.one_day_sales,
-        osOneDayChange: data.data[i].stats.one_day_change,
-        osSevenDayVolume: data.data[i].stats.seven_day_volume,
-        osSevenDaySales: data.data[i].stats.seven_day_sales,
-        osSevenDayChange: data.data[i].stats.seven_day_change,
-        osThirtyDaySales: data.data[i].stats.thirty_day_sales,
-        osThirtyDayVolume: data.data[i].stats.thirty_day_volume,
-        osThirtyDayChange: data.data[i].stats.thirty_day_change,
-        osTotalVolume: data.data[i].stats.total_volume,
-        osTotalSales: data.data[i].stats.total_sales,
-        osFloorPrice: data.data[i].stats.floor_price,
-        numOwners: data.data[i].stats.num_owners,
-        totalSupply: data.data[i].stats.total_supply,
+        slug: data.data[i]?.slug || '',
+        description: data.data[i]?.description || '',
+        discordUrl: data.data[i]?.discordUrl || '',
+        imageUrl: data.data[i]?.imageUrl || '',
+        instagramUsername: data.data[i]?.instagramUsername || '',
+        osVerificationState: data.data[i]?.isVerified || false,
+        name: data.data[i]?.name || '',
+        twitterUsername: data.data[i]?.twitterUsername || '',
+        osOneDayVolume: data.data[i]?.stats?.one_day_volume,
+        osOneDaySales: Math.floor(data.data[i]?.stats?.one_day_sales),
+        osOneDayChange: data.data[i]?.stats?.one_day_change,
+        osSevenDayVolume: data.data[i]?.stats?.seven_day_volume,
+        osSevenDaySales: Math.floor(data.data[i]?.stats?.seven_day_sales),
+        osSevenDayChange: data.data[i]?.stats?.seven_day_change,
+        osThirtyDaySales: Math.floor(data.data[i]?.stats?.thirty_day_sales),
+        osThirtyDayVolume: data.data[i]?.stats?.thirty_day_volume,
+        osThirtyDayChange: data.data[i]?.stats?.thirty_day_change,
+        osTotalVolume: data.data[i]?.stats?.total_volume,
+        osTotalSales: Math.floor(data.data[i]?.stats?.total_sales),
+        osFloorPrice: data.data[i]?.stats?.floor_price,
+        numOwners: Math.floor(data.data[i]?.stats?.num_owners),
+        totalSupply: Math.floor(data.data[i]?.stats?.total_supply),
         updatedAt: timestamp,
       };
       collections.push(collection);
@@ -114,6 +111,7 @@ export async function handler() {
       body: JSON.stringify(collections),
       redirect: 'follow',
     };
+    console.log(collections);
 
     const responseSupabase = await fetch(
       SUPABASE_API_ENDPOINT,

@@ -43,6 +43,7 @@ export async function handler() {
       method: 'POST',
       headers: supabaseHeaders,
       body: JSON.stringify({
+        index: 0,
         ethPrice: ethPrice,
         gasPrice: gasPrice,
         timestamp: Math.floor(moment().unix()),
