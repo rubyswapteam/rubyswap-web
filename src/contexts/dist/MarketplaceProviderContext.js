@@ -55,7 +55,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 exports.__esModule = true;
 exports.useMarketplaceProvider = exports.MarketplaceProvider = void 0;
-var nftUtils_1 = require("@/utils/nftUtils");
 var ethers_1 = require("ethers");
 var moment_1 = require("moment");
 var react_1 = require("react");
@@ -553,86 +552,27 @@ exports.MarketplaceProvider = function (_a) {
         if (setActive === void 0) { setActive = true; }
         if (persist === void 0) { persist = false; }
         return __awaiter(this, void 0, void 0, function () {
-            var collection, isStored, isStatsUpdated, collectionRaw, dbPostUrl, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var collection;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         if (!slug || slug.length < 3 || slug === undefined || slug == '')
                             return [2 /*return*/, false];
                         return [4 /*yield*/, fetchCollectionFromDb(slug)];
                     case 1:
-                        collection = _b.sent();
-                        isStored = collection && collection.contractAddress;
-                        isStatsUpdated = collection &&
-                            collection.osStatsUpdatedAt &&
-                            Math.round(moment_1["default"]().unix() - 1800) < collection.osStatsUpdatedAt;
-                        _b.label = 2;
-                    case 2:
-                        _b.trys.push([2, 6, , 7]);
-                        if (!!isStored) return [3 /*break*/, 5];
-                        return [4 /*yield*/, fetch("https://api.opensea.io/api/v1/collection/" + slug, {
-                                method: 'GET',
-                                redirect: 'follow'
-                            })];
-                    case 3: return [4 /*yield*/, (_b.sent()).json()];
-                    case 4:
-                        collectionRaw = _b.sent();
-                        if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
-                            collection = {
-                                contractAddress: collectionRaw.collection.primary_asset_contracts[0].address,
-                                editors: collectionRaw.collection.editors,
-                                slug: collectionRaw.collection.slug,
-                                imageUrl: collectionRaw.collection.image_url,
-                                largeImageUrl: collectionRaw.collection.large_image_url,
-                                bannerImageUrl: collectionRaw.collection.banner_image_url,
-                                schemaName: collectionRaw.collection.primary_asset_contracts[0].schema_name,
-                                description: collectionRaw.collection.description,
-                                osVerificationState: collectionRaw.collection.safelist_request_status == 'verified',
-                                name: collectionRaw.collection.name,
-                                website: collectionRaw.collection.external_url,
-                                discordUrl: collectionRaw.collection.discord_url,
-                                twitterUsername: collectionRaw.collection.twitter_username,
-                                instagramUsername: collectionRaw.collection.instagram_username,
-                                chainId: nftUtils_1.NftChainId.ETHEREUM,
-                                osOneDayVolume: collectionRaw.collection.stats.one_day_volume,
-                                osOneDaySales: collectionRaw.collection.stats.one_day_sales,
-                                osOneDayChange: collectionRaw.collection.stats.one_day_change,
-                                osSevenDayVolume: collectionRaw.collection.stats.seven_day_volume,
-                                osSevenDaySales: collectionRaw.collection.stats.seven_day_sales,
-                                osSevenDayChange: collectionRaw.collection.stats.seven_day_change,
-                                osThirtyDaySales: collectionRaw.collection.stats.thirty_day_sales,
-                                osThirtyDayVolume: collectionRaw.collection.stats.thirty_day_volume,
-                                osThirtyDayChange: collectionRaw.collection.stats.thirty_day_change,
-                                osTotalVolume: collectionRaw.collection.stats.total_volume,
-                                osTotalSales: collectionRaw.collection.stats.total_sales,
-                                osFloorPrice: collectionRaw.collection.stats.floor_price,
-                                numOwners: collectionRaw.collection.stats.num_owners,
-                                totalSupply: collectionRaw.collection.stats.total_supply,
-                                traits: JSON.stringify(collectionRaw.collection.traits),
-                                updatedAt: moment_1["default"]().unix(),
-                                osStatsUpdatedAt: moment_1["default"]().unix()
-                            };
+                        collection = _a.sent();
+                        if (collection && (collection === null || collection === void 0 ? void 0 : collection.contractAddress)) {
+                            if (setActive)
+                                setActiveCollection(collection);
+                            if (getTrades) {
+                                getCollectionTrades(collection.contractAddress);
+                            }
+                            return [2 /*return*/, collection];
                         }
-                        if (persist || !isStored) {
-                            dbPostUrl = '/.netlify/functions/postCollectionToDb';
-                            fetch(dbPostUrl, {
-                                method: 'POST',
-                                body: JSON.stringify(collection),
-                                redirect: 'follow'
-                            });
+                        else {
+                            return [2 /*return*/, false];
                         }
-                        _b.label = 5;
-                    case 5:
-                        if (setActive)
-                            setActiveCollection(collection);
-                        if (getTrades) {
-                            getCollectionTrades(collection.contractAddress);
-                        }
-                        return [2 /*return*/, collection];
-                    case 6:
-                        _a = _b.sent();
-                        return [2 /*return*/, false];
-                    case 7: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });

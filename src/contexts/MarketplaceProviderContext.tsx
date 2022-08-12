@@ -1,8 +1,5 @@
-import { INftCollection, NftChainId } from '@/utils/nftUtils';
 import { ethers } from 'ethers';
-import { cp } from 'fs';
 import moment from 'moment';
-import { type } from 'os';
 import React, {
   JSXElementConstructor,
   ReactChildren,
@@ -453,74 +450,14 @@ export const MarketplaceProvider = ({
   ) {
     if (!slug || slug.length < 3 || slug === undefined || slug == '')
       return false;
-    let collection: any = await fetchCollectionFromDb(slug);
-    const isStored = collection && collection.contractAddress;
-    const isStatsUpdated =
-      collection &&
-      collection.osStatsUpdatedAt &&
-      Math.round(moment().unix() - 1800) < collection.osStatsUpdatedAt;
-    try {
-      if (!isStored) {
-        const collectionRaw = await (
-          await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
-            method: 'GET',
-            redirect: 'follow',
-          })
-        ).json();
-        if (slug.length > 1 && collectionRaw && collectionRaw.collection) {
-          collection = {
-            contractAddress:
-              collectionRaw.collection.primary_asset_contracts[0].address,
-            editors: collectionRaw.collection.editors,
-            slug: collectionRaw.collection.slug,
-            imageUrl: collectionRaw.collection.image_url,
-            largeImageUrl: collectionRaw.collection.large_image_url,
-            bannerImageUrl: collectionRaw.collection.banner_image_url,
-            schemaName:
-              collectionRaw.collection.primary_asset_contracts[0].schema_name,
-            description: collectionRaw.collection.description,
-            osVerificationState:
-              collectionRaw.collection.safelist_request_status == 'verified',
-            name: collectionRaw.collection.name,
-            website: collectionRaw.collection.external_url,
-            discordUrl: collectionRaw.collection.discord_url,
-            twitterUsername: collectionRaw.collection.twitter_username,
-            instagramUsername: collectionRaw.collection.instagram_username,
-            chainId: NftChainId.ETHEREUM,
-            osOneDayVolume: collectionRaw.collection.stats.one_day_volume,
-            osOneDaySales: collectionRaw.collection.stats.one_day_sales,
-            osOneDayChange: collectionRaw.collection.stats.one_day_change,
-            osSevenDayVolume: collectionRaw.collection.stats.seven_day_volume,
-            osSevenDaySales: collectionRaw.collection.stats.seven_day_sales,
-            osSevenDayChange: collectionRaw.collection.stats.seven_day_change,
-            osThirtyDaySales: collectionRaw.collection.stats.thirty_day_sales,
-            osThirtyDayVolume: collectionRaw.collection.stats.thirty_day_volume,
-            osThirtyDayChange: collectionRaw.collection.stats.thirty_day_change,
-            osTotalVolume: collectionRaw.collection.stats.total_volume,
-            osTotalSales: collectionRaw.collection.stats.total_sales,
-            osFloorPrice: collectionRaw.collection.stats.floor_price,
-            numOwners: collectionRaw.collection.stats.num_owners,
-            totalSupply: collectionRaw.collection.stats.total_supply,
-            traits: JSON.stringify(collectionRaw.collection.traits),
-            updatedAt: moment().unix(),
-            osStatsUpdatedAt: moment().unix(),
-          };
-        }
-        if (persist || !isStored) {
-          const dbPostUrl = '/.netlify/functions/postCollectionToDb';
-          fetch(dbPostUrl, {
-            method: 'POST',
-            body: JSON.stringify(collection),
-            redirect: 'follow',
-          });
-        }
-      }
+    const collection: any = await fetchCollectionFromDb(slug);
+    if (collection && collection?.contractAddress) {
       if (setActive) setActiveCollection(collection);
       if (getTrades) {
         getCollectionTrades(collection.contractAddress);
       }
       return collection;
-    } catch {
+    } else {
       return false;
     }
   }

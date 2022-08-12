@@ -3,13 +3,11 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { Fragment, useState, useEffect } from 'react';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardUserDropdown from './DashboardUserDropdown';
-import { EthPriceTracker } from './EthPriceTracker';
-import { GasTracker } from './GasTracker';
 import DashboardSidebarBottom from './DashboardSidebarBottom';
 import { useRouter } from 'next/router';
 import ConnectWalletButton from './ConnectWalletButton';
 import { useWeb3Provider } from '../contexts/Web3ProviderContext';
-import ThemeToggle from './ThemeToggle';
+import { DashboardSidebarFooter } from './DashboardSidebarFooter';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
@@ -183,11 +181,7 @@ export default function Dashboard(props: any) {
                       classNames={classNames}
                     />
                     <div className="flex items-center border-t border-gray-100">
-                      <EthPriceTracker />
-                      <div className="h-4 border-l border-gray-200 border-0.5" />
-                      <GasTracker />
-                      <div className="h-4 border-l border-gray-200 border-0.5" />
-                      <ThemeToggle />
+                      <DashboardSidebarFooter />
                     </div>
                   </nav>
                 </div>

@@ -55,17 +55,15 @@ export default function Index(props: any) {
   }
 
   return (
-    <>
-      <Layout>
-        <Dashboard
-          setSearchModalState={props.setSearchModalState}
-          title={'Browse'}
-          primaryTabs={<Tab tabs={primaryTabs} />}
-          secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
-          body={setBody()}
-          refresh={<RefreshButton />}
-        />
-      </Layout>
-    </>
+    <Layout>
+      <Dashboard
+        setSearchModalState={props.setSearchModalState}
+        title={'Browse'}
+        primaryTabs={<Tab tabs={primaryTabs} />}
+        secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
+        body={setBody()}
+        refresh={<RefreshButton />}
+      />
+    </Layout>
   );
 }
