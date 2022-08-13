@@ -7,12 +7,3 @@
   for = "/*"
     [headers.values]
     Access-Control-Allow-Origin = "*"
-
-[functions."updateOneDayVolume"]
-  schedule = "*/20 * * * *"
-
-[functions."updateSevenDayVolume"]
-  schedule = "*/23 * * * *"
-
-[functions."updateThirtyDayVolume"]
-  schedule = "*/21 * * * *"
