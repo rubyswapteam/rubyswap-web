@@ -109,7 +109,7 @@ export async function handler(event) {
 
           const response = await fetch(POST_API_ENDPOINT, requestOptions);
           console.log('post push');
-          return { statusCode: 200, body: JSON.stringify([newData]) };
+          return { statusCode: 200, body: JSON.stringify([collection]) };
         }
       }
     } catch {
