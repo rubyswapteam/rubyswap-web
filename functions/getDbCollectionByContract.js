@@ -19,7 +19,7 @@ export async function handler(event) {
   if (!event.queryStringParameters.contract)
     return { statusCode: 500, error: 'No contract provided' };
 
-  const API_ENDPOINT = `https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails?select=*&contractAddress=ilike.${event.queryStringParameters.contract}`;
+  const API_ENDPOINT = `https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails?select=*&contractAddress=ilike.${event.queryStringParameters.contract.toLowerCase()}`;
 
   console.log({
     method: 'GET',

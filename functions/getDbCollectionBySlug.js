@@ -63,7 +63,7 @@ export async function handler(event) {
         if (newData && newData.collection) {
           const collection = {
             contractAddress:
-              newData?.collection?.primary_asset_contracts[0]?.address,
+              newData?.collection?.primary_asset_contracts[0]?.address?.toLowerCase(),
             editors: newData?.collection?.editors,
             slug: newData?.collection?.slug,
             imageUrl: newData?.collection?.image_url,

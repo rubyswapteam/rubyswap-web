@@ -277,9 +277,9 @@ export const MarketplaceProvider = ({
     if (newTrades) dbTrades = [...dbTrades, ...newTrades];
     setCollectionTrades(dbTrades);
 
-    const recentTrades = dbTrades
+    const recentTrades = [...dbTrades]
       .sort((a: any, b: any) => a.timestamp - b.timestamp)
-      .slice(-10);
+      .slice(-6);
 
     for (let i = 0; i < recentTrades.length; i++) {
       const trade = recentTrades[i];
@@ -297,7 +297,7 @@ export const MarketplaceProvider = ({
         };
       }
     }
-    setRecentTrades(recentTrades);
+    setRecentTrades([...recentTrades]);
 
     const dbPostUrl = '/.netlify/functions/postHistoricalTradesToDb';
     const promiseArray: any[] = [];
@@ -368,29 +368,8 @@ export const MarketplaceProvider = ({
       const listingsRaw = await fetch('/.netlify/functions/getGemAssets', {
         method: 'POST',
         body: JSON.stringify({
-          filters: {
-            address: contractAddress,
-          },
-          limit: 100,
+          contractAddress: contractAddress,
           offset: offset,
-          fields: {
-            name: 1,
-            address: 1,
-            isVerified: 1,
-            updatedAt: 1,
-            currentEthPrice: 1,
-            marketplace: 1,
-            market: 1,
-            imageUrl: 1,
-            tokenId: 1,
-            id: 1,
-            owner: 1,
-            traits: 1,
-            rarityScore: 1,
-          },
-          sort: {
-            currentEthPrice: 'asc',
-          },
         }),
       });
       listings = await listingsRaw.json();

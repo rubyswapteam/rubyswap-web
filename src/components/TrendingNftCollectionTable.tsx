@@ -1,9 +1,8 @@
+import { StarIcon } from '@heroicons/react/outline';
+import moment from 'moment';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { INftCollection } from '@/utils/nftUtils';
-import { StarIcon } from '@heroicons/react/outline';
 import EthereumIcon from './EthereumIcon';
-import moment from 'moment';
 
 export default function TrendingNftCollectionTable() {
   const [fullTrendingCollections, setFullTrendingCollections] = useState<
@@ -19,6 +18,7 @@ export default function TrendingNftCollectionTable() {
   }, []);
 
   const fetchData = () => {
+    // TO BE MOVED TO CONTEXT PROVIDER TO STOP RELOADING / STORE IN SESSION STORAGE
     if (!trendingCollections || lastFetch < moment().unix() - 600) {
       console.log('!trendingCollections');
       console.log(!trendingCollections);
