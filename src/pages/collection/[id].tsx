@@ -31,9 +31,9 @@ export default function Collection(props: any) {
   const [isLoadingRecentTrades, setIsLoadingRecentTrades] =
     useState<boolean>(true);
   const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
+  const [recentListings, setRecentListings] = useState<any[]>([]);
   const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
     useState(false);
-  const { nfts, fetchNfts } = useNftProvider();
   const {
     activeCollection,
     getCollectionBySlug,
@@ -42,12 +42,6 @@ export default function Collection(props: any) {
     activeListings,
     fetchActiveListings,
   } = useMarketplaceProvider();
-
-  useEffect(() => {
-    if (!nfts) {
-      fetchNfts();
-    }
-  }, [nfts, collectionUpdates]);
 
   useEffect(() => {
     if (
@@ -116,9 +110,13 @@ export default function Collection(props: any) {
   useEffect(() => {
     if (
       (tab == 'listings' && activeCollection?.contractAddress) ||
-      (activeCollection?.contractAddress && !activeListings)
+      (activeCollection?.contractAddress && tab == undefined)
     )
-      fetchActiveListings(activeCollection.contractAddress);
+      fetchActiveListings(activeCollection.contractAddress).then(
+        (listings: any[]) => {
+          setRecentListings(listings.splice(0, 10));
+        },
+      );
   }, [activeCollection?.contractAddress, tab]);
 
   useEffect(() => {
@@ -253,9 +251,7 @@ export default function Collection(props: any) {
               />
             </div>
             <CollectionListSingleRow
-              selectedNfts={
-                activeListings && [...activeListings?.splice(0, 10)]
-              }
+              selectedNfts={recentListings}
               collectionName={activeCollection?.name}
               chainId={activeCollection?.chainId}
             />
@@ -357,7 +353,6 @@ export default function Collection(props: any) {
       return (
         <div className="flex w-full justify-between flex-col h-inherit">
           <div className="flex w-full justify-between flex-row h-inherit">
-            {/* {activeNfts.nfts.length == 0 && ( */}
             <div className="w-full">
               {' '}
               <div className="items-center mt-[30vh] justify-center mx-auto text-gray-500 flex">

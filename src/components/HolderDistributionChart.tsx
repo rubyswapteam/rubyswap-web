@@ -294,7 +294,7 @@ export default function HolderDistrbutionChart(props: any) {
           </div>
         </div>
       </div>
-      <div className="flex h-64 justify-between border-2 border-gray-100 dark:border-white/10">
+      <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
         <div className="flex flex-grow w-full">
           {holderCounts && total && (
             <CollectionHolderTable
