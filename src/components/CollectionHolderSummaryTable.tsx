@@ -47,7 +47,7 @@ const CollectionHolderSummaryTable: React.FC<Props> = ({
           </div>
         </tr>
       </thead>
-      <tbody className="h-full overflow-scroll bg-white dark:bg-white/5 block w-full">
+      <tbody className="h-full flex-shrink overflow-scroll bg-white dark:bg-white/5 block w-full">
         {holderCounts &&
           Object.keys(holderCounts)
             .slice(0)

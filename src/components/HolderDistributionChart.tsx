@@ -315,12 +315,12 @@ export default function HolderDistrbutionChart(props: any) {
           </div>
         </div>
       )}
-      {activeTab == 'Wallets' && (
+      {activeTab == 'Wallets' && holders && (
         <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
           <div className="flex flex-grow w-full">
             {
               <CollectionHolderWalletTable
-                holders={holders}
+                holdersIn={holders}
                 total={total}
               ></CollectionHolderWalletTable>
             }

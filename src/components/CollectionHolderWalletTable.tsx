@@ -1,17 +1,38 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import InfiniteScroll from 'react-infinite-scroll-component';
 interface Props {
-  holders: any[];
+  holdersIn: any[];
   total: number;
 }
 
 const CollectionHolderWalletTable: React.FC<Props> = ({
-  holders,
+  holdersIn,
   total,
 }): JSX.Element => {
+  const [holders, setHolders] = useState<any[]>(holdersIn.slice(0, 20));
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const fetchMoreData = () => {
+    if (holdersIn.length > 0 && holders.length >= holdersIn.length) {
+      setHasMore(false);
+      return holders;
+    }
+    let newHolders = Object.assign(holders);
+    newHolders = newHolders.concat(
+      holdersIn.slice(newHolders.length, newHolders.length + 20),
+    );
+    setHolders(newHolders);
+    return newHolders;
+  };
+
+  const addToWatchlist = (address: string) => {
+    console.log(address);
+  };
+
   return (
-    <table className="overflow-auto inline-block w-full h-full border-r-2 border-gray-100 dark:border-white/10">
+    <table className="overflow-hidden inline-block w-full h-full border-r-2 border-gray-100 dark:border-white/10">
       <thead className="flex w-full">
         <tr className="flex w-full">
           <div className="w-[5%]">
@@ -55,59 +76,74 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
         </tr>
       </thead>
       <tbody className="h-full overflow-scroll bg-white dark:bg-white/5 block w-full">
-        {holders &&
-          holders.map((holder: any) => (
-            <tr
-              key={holder.ownerAddress}
-              className="flex hover:bg-black/5 dark:hover:bg-black/75"
-            >
-              <div className="w-[5%] self-center">
-                <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                  <Jazzicon
-                    diameter={20}
-                    seed={jsNumberForAddress(holder.ownerAddress)}
-                  />
-                </td>
-              </div>
-              <div className="w-[40%] self-center">
-                <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                  {holder.ownerAddress}
-                </td>
-              </div>
-              <div className="w-[10%] self-center">
-                <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                  {holder.tokenBalance}
-                </td>
-              </div>
-              <div className="w-[10%] self-center">
-                <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                  {((holder.tokenBalance / total) * 100).toFixed(2)}%
-                </td>
-              </div>
-              <div className="w-[35%] self-center">
-                <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80 flex justify-evenly">
-                  <button
-                    className={
-                      'text-gray-500 hover:text-gray-700 x-3 py-2 font-medium text-sm rounded-md ml-8'
-                    }
-                    onClick={() => {}}
-                  >
-                    {'Add to Watchlist'}
-                  </button>
-                  <Link href={`/wallet/${holder.ownerAddress}`} passHref>
-                    <a
+        {holders && (
+          <InfiniteScroll
+            dataLength={holders.length}
+            next={fetchMoreData}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+            height={200}
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+          >
+            {holders.map((holder: any) => (
+              <tr
+                key={holder.ownerAddress}
+                className="flex hover:bg-black/5 dark:hover:bg-black/75"
+              >
+                <div className="w-[5%] self-center">
+                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
+                    <Jazzicon
+                      diameter={20}
+                      seed={jsNumberForAddress(holder.ownerAddress)}
+                    />
+                  </td>
+                </div>
+                <div className="w-[40%] self-center">
+                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
+                    {holder.ownerAddress}
+                  </td>
+                </div>
+                <div className="w-[10%] self-center">
+                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
+                    {holder.tokenBalance}
+                  </td>
+                </div>
+                <div className="w-[10%] self-center">
+                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
+                    {((holder.tokenBalance / total) * 100).toFixed(2)}%
+                  </td>
+                </div>
+                <div className="w-[35%] self-center">
+                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80 flex justify-evenly">
+                    <button
                       className={
-                        'text-gray-500 hover:text-gray-700 x-3 py-2 font-medium text-sm rounded-md'
+                        'text-gray-500 hover:text-gray-700 x-3 py-2 font-medium text-sm rounded-md ml-8'
                       }
-                      onClick={() => {}}
+                      onClick={() => {
+                        addToWatchlist(holder.ownerAddress);
+                      }}
                     >
-                      {'View Wallet'}
-                    </a>
-                  </Link>
-                </td>
-              </div>
-            </tr>
-          ))}
+                      {'Add to Watchlist'}
+                    </button>
+                    <Link href={`/wallet/${holder.ownerAddress}`} passHref>
+                      <a
+                        className={
+                          'text-gray-500 hover:text-gray-700 x-3 py-2 font-medium text-sm rounded-md'
+                        }
+                      >
+                        {'View Wallet'}
+                      </a>
+                    </Link>
+                  </td>
+                </div>
+              </tr>
+            ))}
+          </InfiniteScroll>
+        )}
       </tbody>
     </table>
   );
