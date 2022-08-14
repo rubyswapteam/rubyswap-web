@@ -5,7 +5,7 @@ interface Props {
   total: number;
 }
 
-const CollectionHolderTable: React.FC<Props> = ({
+const CollectionHolderSummaryTable: React.FC<Props> = ({
   holderCounts,
   total,
 }): JSX.Element => {
@@ -87,4 +87,4 @@ const CollectionHolderTable: React.FC<Props> = ({
   );
 };
 
-export default CollectionHolderTable;
+export default CollectionHolderSummaryTable;

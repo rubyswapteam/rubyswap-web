@@ -3,16 +3,17 @@ import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import CollectionTitleHeader from './CollectionTitleHeader';
-import CollectionHolderTable from './CollectionHolderTable';
+import CollectionHolderSummaryTable from './CollectionHolderSummaryTable';
 import highchartsDrilldown from 'highcharts/modules/drilldown';
 import Highcharts from 'highcharts';
+import CollectionHolderWalletTable from './CollectionHolderWalletTable';
 
 export default function HolderDistrbutionChart(props: any) {
   const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
   const [isShowing, setIsShowing] = useState(false);
   const [chartOptions, setChartOptions] = useState(undefined as any);
-  const [rawData, setRawData] = useState<any[]>(undefined as any);
   const [holderCounts, setHolderCounts] = useState(undefined as any);
+  const [holders, setHolders] = useState(undefined as any);
   const [total, setTotal] = useState(undefined as any);
   const [pcTopLevel, setPcTopLevel] = useState(undefined as any);
   const [pcWhaleDrilldown, setPcWhaleDrilldown] = useState(undefined as any);
@@ -20,7 +21,12 @@ export default function HolderDistrbutionChart(props: any) {
   highchartsDrilldown(Highcharts);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   // Highcharts.Tooltip.prototype.hide = function () {};
-
+  const tabs = [
+    { name: 'Summary', href: '#', current: true },
+    { name: 'Wallets', href: '#', current: false },
+    { name: 'Watchlist', href: '#', current: false },
+    { name: 'Bluechips', href: '#', current: false },
+  ];
   const lightTheme = {
     background: 'rgba(255,255,255,0.00)',
     text: '#07062C',
@@ -36,12 +42,7 @@ export default function HolderDistrbutionChart(props: any) {
   const [themeColours, setThemeColours] = useState(
     theme == 'light' ? lightTheme : darkTheme,
   );
-  const tabs = [
-    { name: 'Summary', href: '#', current: true },
-    { name: 'Wallets', href: '#', current: false },
-    { name: 'Watchlist', href: '#', current: false },
-    { name: 'Bluechips', href: '#', current: false },
-  ];
+  const [activeTab, setActiveTab] = useState<string>(tabs[0].name);
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
   }
@@ -130,6 +131,7 @@ export default function HolderDistrbutionChart(props: any) {
             });
           }
 
+          setHolders(holders);
           setHolderCounts(holderCounts);
           setTotal(total);
           setPcTopLevel(pieChartTopLevel);
@@ -276,41 +278,55 @@ export default function HolderDistrbutionChart(props: any) {
           <div className="hidden sm:block">
             <nav className="flex space-x-4" aria-label="Tabs">
               {tabs.map((tab) => (
-                <a
+                <button
                   key={tab.name}
-                  href={tab.href}
                   className={classNames(
-                    tab.current
+                    activeTab == tab.name
                       ? 'bg-indigo-100 text-indigo-700'
                       : 'text-gray-500 hover:text-gray-700',
                     'px-3 py-2 font-medium text-sm rounded-md',
                   )}
                   aria-current={tab.current ? 'page' : undefined}
+                  onClick={() => setActiveTab(tab.name)}
                 >
                   {tab.name}
-                </a>
+                </button>
               ))}
             </nav>
           </div>
         </div>
       </div>
-      <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
-        <div className="flex flex-grow w-full">
-          {holderCounts && total && (
-            <CollectionHolderTable
-              holderCounts={holderCounts}
-              total={total}
-            ></CollectionHolderTable>
-          )}
+      {activeTab == 'Summary' && (
+        <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
+          <div className="flex flex-grow w-full">
+            {holderCounts && total && (
+              <CollectionHolderSummaryTable
+                holderCounts={holderCounts}
+                total={total}
+              ></CollectionHolderSummaryTable>
+            )}
+          </div>
+          <div className="flex w-full justify-center">
+            <HighchartsReact
+              allowChartUpdate={true}
+              highcharts={Highcharts}
+              options={chartOptions}
+            ></HighchartsReact>
+          </div>
         </div>
-        <div className="flex w-full justify-center">
-          <HighchartsReact
-            allowChartUpdate={true}
-            highcharts={Highcharts}
-            options={chartOptions}
-          ></HighchartsReact>
+      )}
+      {activeTab == 'Wallets' && (
+        <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
+          <div className="flex flex-grow w-full">
+            {
+              <CollectionHolderWalletTable
+                holders={holders}
+                total={total}
+              ></CollectionHolderWalletTable>
+            }
+          </div>
         </div>
-      </div>
+      )}
     </Transition>
   );
 }
