@@ -18,32 +18,49 @@ export default function TrendingNftCollectionTable() {
   }, []);
 
   const fetchData = () => {
-    // TO BE MOVED TO CONTEXT PROVIDER TO STOP RELOADING / STORE IN SESSION STORAGE
-    if (!trendingCollections || lastFetch < moment().unix() - 600) {
-      console.log('!trendingCollections');
-      console.log(!trendingCollections);
-      console.log('lastFetch');
-      console.log(lastFetch);
-      console.log('lastFetch < moment().unix() - 600');
-      console.log(lastFetch < moment().unix() - 600);
+    const lastFetchSS = Number(sessionStorage.getItem('r-tnct-lf'));
+    const refreshTime = moment().unix() - 600;
+    if ((lastFetchSS && lastFetchSS < refreshTime) || lastFetch < refreshTime) {
       try {
-        fetch('/.netlify/functions/getDbTrendingCollections').then((res) =>
-          res.json().then((result) => {
-            setFullTrendingCollections(result);
-            setTrendingCollections(
-              result.filter(
-                (collection: any) => collection.period === 'one_day',
-              ),
-            );
-            setLastFetch(moment().unix());
-            console.log(result);
-          }),
-        );
+        fetchDbData();
       } catch (error) {
         console.log(error);
       }
+    } else {
+      const collectionString = sessionStorage.getItem('r-tnct-ftc');
+      const collections = collectionString
+        ? JSON.parse(collectionString)
+        : null;
+      if (collections) {
+        setFullTrendingCollections(collections);
+        setTrendingCollections(
+          collections.filter(
+            (collection: any) => collection.period === 'one_day',
+          ),
+        );
+        setLastFetch(Number(sessionStorage.getItem('r-tnct-lf') as string));
+      } else {
+        sessionStorage.removeItem('r-tnct-lf');
+        sessionStorage.removeItem('r-tnct-ftc');
+        fetchDbData();
+      }
     }
   };
+
+  function fetchDbData() {
+    fetch('/.netlify/functions/getDbTrendingCollections').then((res) =>
+      res.json().then((result) => {
+        const time = moment().unix();
+        setFullTrendingCollections(result);
+        setTrendingCollections(
+          result.filter((collection: any) => collection.period === 'one_day'),
+        );
+        setLastFetch(time);
+        sessionStorage.setItem('r-tnct-ftc', JSON.stringify(result));
+        sessionStorage.setItem('r-tnct-lf', time.toString());
+      }),
+    );
+  }
 
   return (
     <div className="flex flex-col">
