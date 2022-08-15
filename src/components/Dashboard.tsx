@@ -52,7 +52,7 @@ export default function Dashboard(props: any) {
   const bottomNavigation = [
     { name: 'Settings', href: '#', current: false },
     { name: 'Updates', href: '#', current: false },
-    { name: 'Contact', href: '#', current: false },
+    { name: 'Contact', href: 'https://ruby.canny.io/requests', current: false },
   ];
 
   function classNames(...classes: string[]) {

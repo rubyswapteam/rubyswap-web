@@ -376,7 +376,7 @@ export const MarketplaceProvider = ({
       listings = listings.data.map((item: any) => {
         return {
           timestamp: item.orderCreatedAt,
-          price: (item.currentEthPrice * 10 ** -18).toFixed(2),
+          price: (item.currentEthPrice * 10 ** -18).toFixed(3),
           contract: item.address,
           tokenId: item.id,
           txn: undefined,

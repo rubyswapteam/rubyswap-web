@@ -114,7 +114,8 @@ export default function Collection(props: any) {
     )
       fetchActiveListings(activeCollection.contractAddress).then(
         (listings: any[]) => {
-          setRecentListings(listings.splice(0, 6));
+          const fullListings = [...listings];
+          setRecentListings(fullListings.splice(0, 6));
         },
       );
   }, [activeCollection?.contractAddress, tab]);
