@@ -362,7 +362,11 @@ export const MarketplaceProvider = ({
     return { sales: userSales, purchases: userPurchases };
   }
 
-  async function fetchActiveListings(contractAddress: string, offset = 0) {
+  async function fetchActiveListings(
+    contractAddress: string,
+    limit = 100000,
+    offset = 0,
+  ) {
     let listings: any = [];
     try {
       const listingsRaw = await fetch('/.netlify/functions/getGemAssets', {
@@ -370,6 +374,7 @@ export const MarketplaceProvider = ({
         body: JSON.stringify({
           contractAddress: contractAddress,
           offset: offset,
+          limit: limit,
         }),
       });
       listings = await listingsRaw.json();

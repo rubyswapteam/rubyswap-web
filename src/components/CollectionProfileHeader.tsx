@@ -3,19 +3,11 @@ import VerifiedBadgeIcon from '@/components/VerifiedBadgeIcon';
 import EthereumIcon from '@/components/EthereumIcon';
 
 interface Props {
-  image: string;
-  name: string;
-  items: number;
-  floor: number;
-  oneDayVolume: number;
+  collection: any;
 }
 
 const CollectionProfileHeader: React.FC<Props> = ({
-  image,
-  name,
-  items,
-  floor,
-  oneDayVolume,
+  collection,
 }): JSX.Element => {
   return (
     <>
@@ -26,18 +18,20 @@ const CollectionProfileHeader: React.FC<Props> = ({
               <div className="flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
                 <img
                   className="h-12 w-12 rounded-full"
-                  src={image}
-                  alt={name}
+                  src={collection?.imageUrl}
+                  alt={collection?.name}
                 />
               </div>
               <div className="truncate text-2xl font-semibold text-gray-700 dark:text-gray-200 ml-2 pt-2">
-                {name}
+                {collection?.name}
               </div>
-              <span className="ml-2">
-                <div className="h-6 w-6 flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
-                  <VerifiedBadgeIcon height={30} width={30} />
-                </div>
-              </span>
+              {collection?.osVerificationState == 'true' && (
+                <span className="ml-2">
+                  <div className="h-6 w-6 flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
+                    <VerifiedBadgeIcon height={30} width={30} />
+                  </div>
+                </span>
+              )}
             </div>
             <div className="flex my-2 h-4 md:mb-0 text-xs">
               <span className="flex">
@@ -45,7 +39,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
                   Items:&nbsp;
                 </span>
                 <span className="flex items-center text-gray-600 dark:text-gray-100">
-                  {items}
+                  {collection?.totalSupply}
                 </span>
               </span>
               <div className="mx-2 border border-gray-300" />
@@ -54,7 +48,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
                   Floor:&nbsp;
                 </span>
                 <span className="flex items-center text-gray-600 dark:text-gray-100">
-                  {floor?.toFixed(2)}&nbsp;
+                  {collection?.osFloorPrice?.toFixed(2)}&nbsp;
                   <EthereumIcon height={14} width={14} />
                 </span>
               </span>
@@ -64,7 +58,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
                   24h Volume:&nbsp;
                 </span>
                 <span className="flex items-center text-gray-600 dark:text-gray-100">
-                  {oneDayVolume?.toFixed(2)}&nbsp;
+                  {collection?.osOneDayVolume?.toFixed(2)}&nbsp;
                   <EthereumIcon height={14} width={14} />
                 </span>
               </span>

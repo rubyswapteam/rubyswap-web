@@ -16,7 +16,7 @@ export async function handler(event) {
     filters: {
       address: parsedBody.contractAddress,
     },
-    limit: 100,
+    limit: parsedBody.limit,
     offset: parsedBody.offset,
     fields: {
       name: 1,

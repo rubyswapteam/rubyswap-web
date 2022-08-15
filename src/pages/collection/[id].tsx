@@ -4,22 +4,21 @@ import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import Dashboard from '@/components/Dashboard';
+import HolderDistrbutionChart from '@/components/HolderDistributionChart';
 import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
 import SalesHistoryChart from '@/components/SalesHistoryChart';
 import StatsBoxList from '@/components/StatsBoxList';
 import Tab from '@/components/Tab';
-import { useNftProvider } from '@/contexts/NftProviderContext';
 import { rangeTabs } from '@/utils/nftUtils';
+import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import CollectionUpdates from '../../components/CollectionUpdates';
-import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
-import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import RightArrow from '../../components/RightArrow';
-import HolderDistrbutionChart from '@/components/HolderDistributionChart';
-import { useTheme } from 'next-themes';
+import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
+import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -111,13 +110,15 @@ export default function Collection(props: any) {
     if (
       (tab == 'listings' && activeCollection?.contractAddress) ||
       (activeCollection?.contractAddress && tab == undefined)
-    )
-      fetchActiveListings(activeCollection.contractAddress).then(
+    ) {
+      const limit = tab == undefined ? 6 : 10000;
+      fetchActiveListings(activeCollection.contractAddress, limit).then(
         (listings: any[]) => {
           const fullListings = [...listings];
           setRecentListings(fullListings.splice(0, 6));
         },
       );
+    }
   }, [activeCollection?.contractAddress, tab]);
 
   useEffect(() => {
@@ -396,15 +397,7 @@ export default function Collection(props: any) {
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}
-          title={
-            <CollectionProfileHeader
-              image={activeCollection?.imageUrl}
-              name={activeCollection?.name}
-              items={activeCollection?.totalSupply}
-              floor={activeCollection?.osFloorPrice}
-              oneDayVolume={activeCollection?.osOneDayVolume}
-            />
-          }
+          title={<CollectionProfileHeader collection={activeCollection} />}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
           refresh={setRefreshButton()}
