@@ -1,6 +1,8 @@
 import { INft } from '@/utils/nftUtils';
 import React from 'react';
 import CollectionNftCard from './CollectionNftCard';
+import { motion } from 'framer-motion';
+import { animations } from '@/utils/framerAnimations';
 
 interface Props {
   selectedNfts: any[];
@@ -17,7 +19,10 @@ const CollectionListSingleRow: React.FC<Props> = ({
     <div>
       <div className="w-full flex flex-col items-start flex-1 overflow-hidden py-8 px-4 sm:px-6 md:px-8">
         {selectedNfts && (
-          <div className="w-full grid grid-cols-6 gap-y-10 gap-x-5 grid-cols-6">
+          <motion.div
+            variants={animations.stagger}
+            className="w-full grid grid-cols-6 gap-y-10 gap-x-5 grid-cols-6"
+          >
             {[...selectedNfts].map((selectedNft: any) => (
               <CollectionNftCard
                 key={selectedNft?.contract + selectedNft?.tokenId}
@@ -26,7 +31,7 @@ const CollectionListSingleRow: React.FC<Props> = ({
                 chainId={chainId}
               />
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

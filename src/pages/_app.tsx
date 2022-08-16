@@ -7,6 +7,7 @@ import { AppProps } from 'next/app';
 import { useState } from 'react';
 import '../styles/globals.css';
 import { ThemeProvider } from 'next-themes';
+import { AnimatePresence } from 'framer-motion';
 
 function App({ Component, pageProps }: AppProps) {
   const [searchModalState, setSearchModalState] = useState(false);
@@ -22,10 +23,12 @@ function App({ Component, pageProps }: AppProps) {
                   open={searchModalState}
                   setOpen={setSearchModalState}
                 />
-                <Component
-                  setSearchModalState={setSearchModalState}
-                  {...pageProps}
-                />
+                <AnimatePresence exitBeforeEnter>
+                  <Component
+                    setSearchModalState={setSearchModalState}
+                    {...pageProps}
+                  />
+                </AnimatePresence>
               </>
             </NftProvider>
           </MarketplaceProvider>

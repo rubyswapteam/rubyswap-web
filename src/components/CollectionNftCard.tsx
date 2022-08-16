@@ -6,6 +6,8 @@ import EthereumIcon from '@/components/EthereumIcon';
 import X2Y2Icon from './X2Y2Icon';
 import LooksRareIcon from './LooksRareIcon';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { animations } from '@/utils/framerAnimations';
+import { motion } from 'framer-motion';
 
 interface Props {
   selectedNft: any;

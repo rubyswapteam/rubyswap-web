@@ -9,7 +9,7 @@ export default function UserCollectionSidebarFilter(props: Props) {
   return (
     <>
       <div className="bg-white dark:bg-white/5 flex-col h-inherit overflow-scroll w-[20vw] px-3 pt-5 float-right drop-shadow z-0 text-sm pb-60">
-        <div className="flex justify-between p-2 mt-2 rounded-md hover:bg-gray-50 cursor-pointer">
+        <div className="flex justify-between p-2 mt-2 rounded-md">
           <div className="font-semibold">Collections</div>
           <div>{props.userNfts?.totalCount}</div>
         </div>

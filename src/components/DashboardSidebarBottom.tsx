@@ -16,6 +16,7 @@ const DashboardSidebarBottom: React.FC<Props> = ({
       {sidebarNavigation.map((item: any) =>
         item.href.substring(0, 4) == 'http' ? (
           <a
+            key={item.name}
             target="_blank"
             href={item.href}
             rel="noopener noreferrer"

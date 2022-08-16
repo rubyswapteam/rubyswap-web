@@ -1,5 +1,4 @@
 import CollectionAnnouncementBanner from '@/components/CollectionAnnouncementBanner';
-import CollectionList from '@/components/CollectionList';
 import CollectionListings from '@/components/CollectionListings';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
@@ -20,6 +19,7 @@ import CollectionUpdates from '../../components/CollectionUpdates';
 import RightArrow from '../../components/RightArrow';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
+import { motion } from 'framer-motion';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -400,7 +400,7 @@ export default function Collection(props: any) {
   }
 
   return (
-    <>
+    <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}
@@ -412,6 +412,6 @@ export default function Collection(props: any) {
           banner={activeCollection?.bannerImageUrl}
         />
       </Layout>
-    </>
+    </motion.div>
   );
 }

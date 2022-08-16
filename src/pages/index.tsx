@@ -8,6 +8,7 @@ import TrendingNftCollectionTable from '@/components/TrendingNftCollectionTable'
 import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTable';
 import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 
 export default function Index(props: any) {
   const router = useRouter();
@@ -55,15 +56,17 @@ export default function Index(props: any) {
   }
 
   return (
-    <Layout>
-      <Dashboard
-        setSearchModalState={props.setSearchModalState}
-        title={'Browse'}
-        primaryTabs={<Tab tabs={primaryTabs} />}
-        secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
-        body={setBody()}
-        refresh={<RefreshButton />}
-      />
-    </Layout>
+    <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
+      <Layout>
+        <Dashboard
+          setSearchModalState={props.setSearchModalState}
+          title={'Browse'}
+          primaryTabs={<Tab tabs={primaryTabs} />}
+          secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
+          body={setBody()}
+          refresh={<RefreshButton />}
+        />
+      </Layout>
+    </motion.div>
   );
 }

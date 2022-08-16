@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  position: unset!important;
+}
+
 html,
 body {
   padding: 0;

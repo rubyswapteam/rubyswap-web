@@ -17,6 +17,7 @@ import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarF
 import UserProfileHeader from '../../components/UserProfileHeader';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
+import { motion } from 'framer-motion';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -209,7 +210,7 @@ export default function Collection(props: any) {
   }
 
   return (
-    <>
+    <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}
@@ -222,6 +223,6 @@ export default function Collection(props: any) {
           body={setBody()}
         />
       </Layout>
-    </>
+    </motion.div>
   );
 }
