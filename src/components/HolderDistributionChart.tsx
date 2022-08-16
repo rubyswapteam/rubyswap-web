@@ -1,22 +1,20 @@
 import { Transition } from '@headlessui/react';
-import HighchartsReact from 'highcharts-react-official';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
-import CollectionTitleHeader from './CollectionTitleHeader';
-import CollectionHolderSummaryTable from './CollectionHolderSummaryTable';
-import highchartsDrilldown from 'highcharts/modules/drilldown';
 import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import highchartsDrilldown from 'highcharts/modules/drilldown';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import CollectionHolderSummaryTable from './CollectionHolderSummaryTable';
 import CollectionHolderWalletTable from './CollectionHolderWalletTable';
+import CollectionTitleHeader from './CollectionTitleHeader';
 
 export default function HolderDistrbutionChart(props: any) {
-  const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
   const [isShowing, setIsShowing] = useState(false);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [holderCounts, setHolderCounts] = useState(undefined as any);
   const [holders, setHolders] = useState(undefined as any);
   const [total, setTotal] = useState(undefined as any);
-  const [pcTopLevel, setPcTopLevel] = useState(undefined as any);
-  const [pcWhaleDrilldown, setPcWhaleDrilldown] = useState(undefined as any);
+
   const { theme } = useTheme();
   highchartsDrilldown(Highcharts);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -49,7 +47,7 @@ export default function HolderDistrbutionChart(props: any) {
 
   useEffect(() => {
     reset(props.contractAddress);
-  }, [props.contractAddress, daysRequired]);
+  }, [props.contractAddress]);
 
   useEffect(() => {
     setTheme();
@@ -134,8 +132,6 @@ export default function HolderDistrbutionChart(props: any) {
           setHolders(holders);
           setHolderCounts(holderCounts);
           setTotal(total);
-          setPcTopLevel(pieChartTopLevel);
-          setPcWhaleDrilldown(pieChartWhaleDrilldown);
           setIsShowing(true);
           const newOptions = getOptions(
             pieChartTopLevel,
@@ -297,7 +293,7 @@ export default function HolderDistrbutionChart(props: any) {
         </div>
       </div>
       {activeTab == 'Summary' && (
-        <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
+        <div className="flex h-[40vh] justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
           <div className="flex flex-grow w-full">
             {holderCounts && total && (
               <CollectionHolderSummaryTable
@@ -316,7 +312,7 @@ export default function HolderDistrbutionChart(props: any) {
         </div>
       )}
       {activeTab == 'Wallets' && holders && (
-        <div className="flex h-64 justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
+        <div className="flex h-[40vh] justify-between border-2 border-gray-100 rounded-md dark:border-white/10">
           <div className="flex flex-grow w-full">
             {
               <CollectionHolderWalletTable

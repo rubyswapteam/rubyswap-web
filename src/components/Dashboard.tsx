@@ -176,11 +176,13 @@ export default function Dashboard(props: any) {
               <div className="flex-shrink-0 w-full group block">
                 <div className="flex items-center">
                   <nav className="mt-0 flex-1 px-2 space-y-1">
-                    <DashboardSidebarBottom
-                      sidebarNavigation={bottomNavigation}
-                      classNames={classNames}
-                    />
-                    <div className="flex items-center border-t border-gray-100">
+                    <div className="mb-3 space-y-1">
+                      <DashboardSidebarBottom
+                        sidebarNavigation={bottomNavigation}
+                        classNames={classNames}
+                      />
+                    </div>
+                    <div className="flex items-center border-t border-gray-100 dark:border-white/10">
                       <DashboardSidebarFooter />
                     </div>
                   </nav>

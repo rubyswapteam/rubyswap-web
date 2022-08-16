@@ -19,12 +19,11 @@ const CollectionListings: React.FC<Props> = ({
   const [nfts, setNfts] = useState<any[]>(selectedNfts?.slice(0, 50));
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [height, setHeight] = useState(0);
-  const ref = useRef(null);
   const router = useRouter();
   const { tab } = router.query;
+  const ref = useRef(null);
 
   useEffect(() => {
-    console.log('0');
     if (ref && ref?.current) {
       setHeight((ref.current as any).clientHeight);
     }
@@ -32,20 +31,17 @@ const CollectionListings: React.FC<Props> = ({
 
   useEffect(
     () => () => {
-      console.log('1');
       setNfts([]);
     },
     [],
   );
 
   useEffect(() => {
-    console.log('2');
     setNfts([]);
     fetchMoreData([]);
   }, [tab]);
 
   const fetchMoreData = (varIn: any[] = nfts) => {
-    console.log('3');
     if (
       selectedNfts.length > 0 &&
       nfts.length >= totalListings &&

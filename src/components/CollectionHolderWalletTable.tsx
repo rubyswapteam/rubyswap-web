@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import InfiniteScroll from 'react-infinite-scroll-component';
 interface Props {
@@ -11,8 +11,10 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
   holdersIn,
   total,
 }): JSX.Element => {
-  const [holders, setHolders] = useState<any[]>(holdersIn.slice(0, 20));
+  const [holders, setHolders] = useState<any[]>(holdersIn.slice(0, 50));
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [height, setHeight] = useState(0);
+  const ref = useRef(null);
 
   const fetchMoreData = () => {
     if (holdersIn.length > 0 && holders.length >= holdersIn.length) {
@@ -21,7 +23,7 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
     }
     let newHolders = Object.assign(holders);
     newHolders = newHolders.concat(
-      holdersIn.slice(newHolders.length, newHolders.length + 20),
+      holdersIn.slice(newHolders.length, newHolders.length + 50),
     );
     setHolders(newHolders);
     return newHolders;
@@ -30,6 +32,12 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
   const addToWatchlist = (address: string) => {
     console.log(address);
   };
+
+  useEffect(() => {
+    if (ref && ref?.current) {
+      setHeight((ref.current as any).clientHeight);
+    }
+  });
 
   return (
     <table className="overflow-hidden inline-block w-full h-full border-r-2 border-gray-100 dark:border-white/10">
@@ -75,16 +83,21 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
           </div>
         </tr>
       </thead>
-      <tbody className="h-full overflow-scroll bg-white dark:bg-white/5 block w-full">
+      <tbody
+        id="chwt-tb"
+        ref={ref}
+        className="h-full overflow-scroll bg-white dark:bg-white/5 block w-full"
+      >
         {holders && (
           <InfiniteScroll
             dataLength={holders.length}
             next={fetchMoreData}
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
-            height={200}
+            scrollThreshold={0.5}
+            scrollableTarget={'chwt-tb'}
             endMessage={
-              <p style={{ textAlign: 'center' }}>
+              <p className="text-center pb-80 pt-4">
                 <b>Yay! You have seen it all</b>
               </p>
             }

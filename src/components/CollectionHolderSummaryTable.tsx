@@ -10,7 +10,7 @@ const CollectionHolderSummaryTable: React.FC<Props> = ({
   total,
 }): JSX.Element => {
   return (
-    <table className="overflow-auto inline-block w-full h-full border-r-2 border-gray-100 dark:border-white/10">
+    <table className="overflow-hidden inline-block w-full h-full border-r-2 border-gray-100 dark:border-white/10">
       <thead className="flex w-full">
         <tr className="flex w-full">
           <div className="w-[25%]">
@@ -82,6 +82,7 @@ const CollectionHolderSummaryTable: React.FC<Props> = ({
                 </div>
               </tr>
             ))}
+        <div className="pb-32"></div>
       </tbody>
     </table>
   );
