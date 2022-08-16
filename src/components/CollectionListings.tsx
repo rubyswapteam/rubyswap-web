@@ -24,6 +24,21 @@ const CollectionListings: React.FC<Props> = ({
   const router = useRouter();
   const { tab } = router.query;
   const ref = useRef(null);
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        duration: 0.2,
+        staggerChildren: 0.03,
+      },
+    },
+  };
+
+  const listItem = {
+    hidden: { y: 20, opacity: 0 },
+    show: { y: 0, opacity: 1 },
+  };
 
   useEffect(() => {
     if (ref && ref?.current) {
@@ -65,7 +80,7 @@ const CollectionListings: React.FC<Props> = ({
     `fadeIn ${duration}ms ease-out ${delay}ms forwards`;
   return (
     <div
-      className="w-full overflow-scroll h-inherit mt-2 flex flex-col items-start flex-1 pb-96"
+      className="w-full overflow-scroll h-inherit mt-2 flex flex-col items-start flex-1 pb-96 "
       ref={ref}
       id="scroller"
     >
@@ -85,7 +100,9 @@ const CollectionListings: React.FC<Props> = ({
             </div>
           }
           height={height - 100}
-          className={'w-full flex flex-wrap h-full oveflow-visible pb-80'}
+          className={
+            'w-full flex flex-wrap h-full oveflow-visible pb-80 px-4 sm:px-6 md:px-8'
+          }
           scrollableTarget="scroller"
           endMessage={
             <div className="w-full justify-center flex my-5 py-5 border-t border-white/10">
@@ -96,13 +113,15 @@ const CollectionListings: React.FC<Props> = ({
           }
         >
           <motion.div
-            variants={animations.stagger}
+            variants={container}
+            initial="hidden"
+            animate="show"
             className={'flex flex-wrap w-full'}
           >
             {nfts &&
               nfts.map((nft: any, i: number) => (
                 <motion.div
-                  variants={animations.fadeInUp}
+                  variants={listItem}
                   key={nft?.tokenId + nft?.contract + nft?.chainId + nft?.name}
                   style={{ animation: animStr(i) }}
                   className="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2"
