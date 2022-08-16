@@ -29,6 +29,7 @@ export const MarketplaceProvider = ({
   });
   const [activeCollection, setActiveCollection] = useState<any>(undefined);
   const [activeListings, setActiveListings] = useState<any[]>();
+  const [totalListings, setTotalListings] = useState<number>(0);
 
   async function getTradesX2Y2(user = '', contract = '') {
     const user_address = user != undefined ? '=' + user : '';
@@ -364,7 +365,7 @@ export const MarketplaceProvider = ({
 
   async function fetchActiveListings(
     contractAddress: string,
-    limit = 100000,
+    limit = 1000,
     offset = 0,
   ) {
     let listings: any = [];
@@ -378,6 +379,7 @@ export const MarketplaceProvider = ({
         }),
       });
       listings = await listingsRaw.json();
+      setTotalListings(listings.total);
       listings = listings.data.map((item: any) => {
         return {
           timestamp: item.orderCreatedAt,
@@ -463,6 +465,7 @@ export const MarketplaceProvider = ({
       recentTrades,
       fetchActiveListings,
       activeListings,
+      totalListings,
     }),
     [
       userTrades,
@@ -480,6 +483,7 @@ export const MarketplaceProvider = ({
       recentTrades,
       fetchActiveListings,
       activeListings,
+      totalListings,
     ],
   );
 

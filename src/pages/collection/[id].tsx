@@ -1,5 +1,6 @@
 import CollectionAnnouncementBanner from '@/components/CollectionAnnouncementBanner';
 import CollectionList from '@/components/CollectionList';
+import CollectionListings from '@/components/CollectionListings';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
@@ -40,6 +41,7 @@ export default function Collection(props: any) {
     recentTrades,
     activeListings,
     fetchActiveListings,
+    totalListings,
   } = useMarketplaceProvider();
 
   useEffect(() => {
@@ -60,12 +62,9 @@ export default function Collection(props: any) {
 
   useEffect(() => {
     let isSubscribed = true;
-    console.log('useEffect');
     console.log(activeCollection?.contractAddress);
 
     const fetchData = async (contractAddress: string) => {
-      console.log('fetchData');
-      console.log(contractAddress);
       let collection: any = {};
       try {
         collection = await (
@@ -111,11 +110,14 @@ export default function Collection(props: any) {
       (tab == 'listings' && activeCollection?.contractAddress) ||
       (activeCollection?.contractAddress && tab == undefined)
     ) {
-      const limit = tab == undefined ? 6 : 10000;
+      const limit = tab == undefined ? 100 : 1000;
       fetchActiveListings(activeCollection.contractAddress, limit).then(
         (listings: any[]) => {
-          const fullListings = [...listings];
-          setRecentListings(fullListings.splice(0, 6));
+          const recentListings = [];
+          for (let i = 0; i < 6; i++) {
+            recentListings.push(listings[i]);
+          }
+          setRecentListings(recentListings);
         },
       );
     }
@@ -277,11 +279,16 @@ export default function Collection(props: any) {
     }
     if (tab == 'listings') {
       return (
-        // <>
-        //   <div className="-mt-6">
-        <CollectionList selectedNfts={activeListings && [...activeListings]} />
-        //   </div>
-        // </>
+        <>
+          {/* <div className="-mt-6"> */}
+          {activeListings && activeListings.length > 0 && (
+            <CollectionListings
+              selectedNfts={activeListings && [...activeListings]}
+              totalListings={totalListings}
+            />
+          )}
+          {/* </div> */}
+        </>
       );
     }
     if (tab == 'updates') {

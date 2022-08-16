@@ -21,11 +21,11 @@ const CollectionNftCard: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const handleName = () => {
-    if (selectedNft && selectedNft.name) {
-      if (selectedNft.length > 20) {
-        return selectedNft.substring(0, 20) + '...';
+    if (selectedNft && selectedNft?.name) {
+      if (selectedNft?.length > 20) {
+        return selectedNft?.substring(0, 20) + '...';
       } else {
-        return selectedNft.name;
+        return selectedNft?.name;
       }
     } else {
       return undefined;
@@ -51,8 +51,8 @@ const CollectionNftCard: React.FC<Props> = ({
           )}
           {
             <img
-              src={selectedNft.image}
-              alt={selectedNft.imageAlt}
+              src={selectedNft?.image}
+              alt={selectedNft?.imageAlt}
               className={`w-full h-full transition-all hover:scale-110 object-center object-cover ${
                 isLoading ? 'hidden' : 'block'
               }`}
@@ -65,27 +65,27 @@ const CollectionNftCard: React.FC<Props> = ({
             rel="_ noreferrer"
             className="absolute left-3 top-3 w-12 h-12"
           >
-            {selectedNft.marketplace === NftMarketplace.OPENSEA && (
+            {selectedNft?.marketplace === NftMarketplace.OPENSEA && (
               <div className="rounded-full">
                 <OpenSeaIcon height={28} width={28} />
               </div>
             )}
-            {selectedNft.marketplace === NftMarketplace.LOOKSRARE && (
+            {selectedNft?.marketplace === NftMarketplace.LOOKSRARE && (
               <div className="rounded-full">
                 <LooksRareIcon height={28} width={28} />
               </div>
             )}
-            {selectedNft.marketplace === NftMarketplace.X2Y2 && (
+            {selectedNft?.marketplace === NftMarketplace.X2Y2 && (
               <div className="rounded-full">
                 <X2Y2Icon height={28} width={28} />
               </div>
             )}
-            {selectedNft.marketplace === NftMarketplace.NFTRADE && (
+            {selectedNft?.marketplace === NftMarketplace.NFTRADE && (
               <div className="rounded-full">
                 <OpenSeaIcon height={28} width={28} />
               </div>
             )}
-            {selectedNft.marketplace === NftMarketplace.SEAPORT && (
+            {selectedNft?.marketplace === NftMarketplace.SEAPORT && (
               <div className="rounded-full">
                 <OpenSeaIcon height={28} width={28} />
               </div>
@@ -99,13 +99,13 @@ const CollectionNftCard: React.FC<Props> = ({
           </div>
           {/* This should be the rarity (where it's known) */}
           <span className="border-2 border-white rounded-md absolute left-3 bottom-3 dark:bg-black dark:text-white bg-white text-black h-6 px-2 font-bold text-xs flex items-center justify-center">
-            <div>#&nbsp;{selectedNft.rarityScore || selectedNft.tokenId}</div>
+            <div>#&nbsp;{selectedNft?.rarityScore || selectedNft?.tokenId}</div>
           </span>
         </div>
         <div className="p-2">
           <div className="justify-between flex py-2 mb-2 border-b border-gray-50">
             <div className="text-[10px] font-bold">
-              {collectionName || selectedNft.collectionName}
+              {collectionName || selectedNft?.collectionName}
             </div>
             <div className="px-2 pt-[2px] border border-gray-100 dark:bg-black rounded-md transition-all hover:bg-gray-100 dark:hover:bg-theme-gradient dark:bg-cover cursor-pointer">
               <div className="text-[10px] font-bold text-transparent dark:text-white bg-clip-text bg-cover bg-theme-gradient">
@@ -115,11 +115,11 @@ const CollectionNftCard: React.FC<Props> = ({
           </div>
           <div className="flex justify-between items-center text-xs">
             <div className="pt-1">
-              {handleName() || '#'.concat(selectedNft.tokenId)}
+              {handleName() || '#'.concat(selectedNft?.tokenId)}
             </div>
             <div className="flex place-items-center">
-              <div className="pt-1">{selectedNft.price}</div>
-              {(chainId == 1 || selectedNft.chainId == 1) && (
+              <div className="pt-1">{selectedNft?.price}</div>
+              {(chainId == 1 || selectedNft?.chainId == 1) && (
                 <>
                   <EthereumIcon width={12} height={12} />
                 </>
