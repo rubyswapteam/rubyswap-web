@@ -32,10 +32,6 @@ export default function UserTradeHistoryChart(props: any) {
     setChartOptions(reset());
   }, [theme]);
 
-  useEffect(() => {
-    setChartOptions(reset());
-  }, [theme]);
-
   function setTheme() {
     if (theme == 'dark') {
       setThemeColours(darkTheme);

@@ -29,7 +29,6 @@ const CollectionList: React.FC<Props> = ({
 }): JSX.Element => {
   return (
     <motion.div
-      // exit={{ opacity: 0 }}
       initial={{ opacity: 'initial' }}
       animate={{ opacity: 'animate' }}
       className="w-full overflow-scroll h-inherit"

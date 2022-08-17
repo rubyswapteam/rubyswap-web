@@ -1,13 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import { Fragment, useState, useEffect } from 'react';
-import DashboardSidebar from './DashboardSidebar';
-import DashboardUserDropdown from './DashboardUserDropdown';
-import DashboardSidebarBottom from './DashboardSidebarBottom';
 import { useRouter } from 'next/router';
-import ConnectWalletButton from './ConnectWalletButton';
+import { Fragment, useState } from 'react';
 import { useWeb3Provider } from '../contexts/Web3ProviderContext';
+import ConnectWalletButton from './ConnectWalletButton';
+import DashboardSidebar from './DashboardSidebar';
+import DashboardSidebarBottom from './DashboardSidebarBottom';
 import { DashboardSidebarFooter } from './DashboardSidebarFooter';
+import DashboardUserDropdown from './DashboardUserDropdown';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function Dashboard(props: any) {
   const parentRoute = () => {
     return router.route.split('/')[1];
   };
-  const { provider, connectWallet, activeWallet, fetchEthBalance } =
+  const { provider, connectWallet, activeWallet, ethBalance } =
     useWeb3Provider();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -62,10 +62,6 @@ export default function Dashboard(props: any) {
   const bannerStyle = props?.banner
     ? `linear-gradient(rgba(256, 256, 256, 0.4), rgba(256, 256, 256, 0.7)), url('${props?.banner}')`
     : '';
-
-  useEffect(() => {
-    id && parentRoute() == 'wallet' ? fetchEthBalance(id) : '';
-  }, [id]);
 
   return (
     <>
@@ -124,7 +120,7 @@ export default function Dashboard(props: any) {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+                  <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto overflow-x-visible">
                     <nav className="mt-5 px-2 space-y-1">
                       <DashboardSidebar
                         sidebarNavigation={topNavigation}
@@ -155,14 +151,17 @@ export default function Dashboard(props: any) {
 
         <div className="hidden md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 drop-shadow dark:drop-shadow-md-w z-50">
           <div className="flex-1 flex flex-col px-5 py-2 min-h-0 bg-white dark:bg-blackish">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto overflow-y-visible z-50">
               <nav className="mt-0 flex-1 px-2">
                 <div className="mb-5">
                   {!provider && (
                     <ConnectWalletButton connectWallet={connectWallet} />
                   )}
                   {provider && (
-                    <DashboardUserDropdown address={condensedWalletName()} />
+                    <DashboardUserDropdown
+                      address={condensedWalletName()}
+                      balance={ethBalance}
+                    />
                   )}
                 </div>
                 <DashboardSidebar

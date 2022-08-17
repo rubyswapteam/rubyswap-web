@@ -1,21 +1,16 @@
-import Web3Modal from 'web3modal';
-import { ethers } from 'ethers';
+import coinbaseWalletModule from '@web3-onboard/coinbase';
+import Onboard from '@web3-onboard/core';
+import injectedModule from '@web3-onboard/injected-wallets';
+import walletConnectModule from '@web3-onboard/walletconnect';
 import React, {
   JSXElementConstructor,
   ReactChildren,
   ReactElement,
   useContext,
+  useEffect,
   useMemo,
   useState,
-  useEffect,
 } from 'react';
-import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk';
-import WalletConnectProvider from '@walletconnect/web3-provider';
-import injectedModule from '@web3-onboard/injected-wallets';
-import walletConnectModule from '@web3-onboard/walletconnect';
-import walletLinkModule from '@web3-onboard/walletlink';
-import Onboard from '@web3-onboard/core';
-import coinbaseWalletModule from '@web3-onboard/coinbase';
 
 const Web3ProviderContext = React.createContext<any>({});
 
@@ -97,8 +92,10 @@ export const Web3Provider = ({
     try {
       const wallets = await onboard.connectWallet();
       setIsLoading(true);
+      console.log(wallets);
       const { accounts, chains, provider } = wallets[0];
       setActiveWallet(accounts[0].address);
+      fetchEthBalance(accounts[0]);
       setChainId(chains[0].id);
       setProvider(provider);
       localStorage.setItem(
@@ -114,22 +111,6 @@ export const Web3Provider = ({
       console.error(error);
     }
   }
-
-  // async function connectWallet() {
-  //   try {
-  //     const web3ModalInstance = await web3Modal.connect();
-  //     console.log(web3ModalInstance);
-  //     const web3ModalProvider = new ethers.providers.Web3Provider(
-  //       web3ModalInstance,
-  //     );
-  //     console.log(web3ModalProvider);
-  //     setProvider(web3ModalProvider);
-  //     setActiveWallet((web3ModalProvider.provider as any).selectedAddress);
-  //     console.log((web3ModalProvider.provider as any).selectedAddress);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   const switchNetwork = async () => {
     await onboard.setChain({ chainId: toHex(network) });
@@ -168,12 +149,9 @@ export const Web3Provider = ({
     return '0x' + val.toString(16);
   };
 
-  function fetchEthBalance(address: string) {
-    if (provider && provider.provider) {
-      provider.getBalance(address).then((balance: ethers.BigNumberish) => {
-        const balanceInEth = ethers.utils.formatEther(balance);
-        setEthBalance(balanceInEth);
-      });
+  function fetchEthBalance(account: any) {
+    if (account && account.balance) {
+      setEthBalance(Number(account.balance.ETH).toFixed(3));
     }
   }
 
@@ -184,8 +162,8 @@ export const Web3Provider = ({
       connectWallet,
       activeWallet,
       setActiveWallet,
-      fetchEthBalance,
       ethBalance,
+      disconnect,
     }),
     [
       provider,
@@ -193,8 +171,8 @@ export const Web3Provider = ({
       connectWallet,
       activeWallet,
       setActiveWallet,
-      fetchEthBalance,
       ethBalance,
+      disconnect,
     ],
   );
 

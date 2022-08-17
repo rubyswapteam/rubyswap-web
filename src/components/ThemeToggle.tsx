@@ -12,17 +12,14 @@ const EthereumIcon: React.FC = (): JSX.Element => {
 
   function handleTheme(click: boolean) {
     if (click) {
-      console.log('onchange');
       const newTheme = theme == 'light' ? 'dark' : 'light';
       localStorage.setItem('ruby-theme', newTheme);
       setTheme(newTheme);
     } else {
-      console.log('onchange');
       const storedTheme =
         typeof window === 'undefined'
           ? 'undefined'
           : localStorage.getItem('ruby-theme') || 'light';
-      console.log(storedTheme);
       setTheme(storedTheme);
     }
   }

@@ -20,6 +20,7 @@ const CollectionListSingleRow: React.FC<Props> = ({
       <div className="w-full flex flex-col items-start flex-1 overflow-hidden py-8 px-4 sm:px-6 md:px-8">
         {selectedNfts && (
           <motion.div
+            key={selectedNfts[0]?.contract}
             variants={animations.stagger}
             className="w-full grid grid-cols-6 gap-y-10 gap-x-5 grid-cols-6"
           >
