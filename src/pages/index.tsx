@@ -21,18 +21,21 @@ export default function Index(props: any) {
       href: '?tab=sweeps',
       current: tab == 'sweeps',
       border: true,
+      tooltip: true,
     },
     {
       name: 'Watchlist',
       href: '?tab=watchlist',
       current: tab == 'watchlist',
       border: true,
+      tooltip: true,
     },
     {
       name: 'Owned',
       href: '?tab=owned',
       current: tab == 'owned',
       border: true,
+      tooltip: true,
     },
   ];
 

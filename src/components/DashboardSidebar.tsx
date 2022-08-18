@@ -26,7 +26,7 @@ const DashboardSidebar: React.FC<Props> = ({
         ) : item.search ? (
           <a
             key={item.name}
-            className="text-gray-900 dark:text-white hover:bg-gray-100/75 dark:hover:bg-gray-900/50 group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-5"
+            className="cursor-pointer text-gray-900 dark:text-white hover:bg-gray-100/75 dark:hover:bg-gray-900/50 group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-5"
             onClick={() => {
               setSearchModalState(true);
             }}

@@ -11,6 +11,9 @@ import { Dialog, Transition } from '@headlessui/react';
 import React from 'react';
 import { useMarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
+import VerifiedBadgeIcon from './VerifiedBadgeIcon';
+import Link from 'next/link';
 
 interface Props {
   open: boolean;
@@ -20,7 +23,7 @@ interface Props {
 export default function SearchModal(props: Props) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<any>([]);
   const { getCollectionBySlug } = useMarketplaceProvider();
 
   function reset() {
@@ -36,57 +39,15 @@ export default function SearchModal(props: Props) {
     let isSubscribed = true;
 
     const fetchData = async (q: string) => {
-      // get the data from the api
-      let json: any = {};
-      const osMetadataArr: any[] = [];
       if (isSubscribed) {
-        const API_URL = `/.netlify/functions/searchNftsMoralis?chain=eth&q=${q}`;
+        const API_URL = `/.netlify/functions/searchNfts?searchTerm=${q}`;
         const response = await fetch(API_URL, {
           method: 'GET',
           redirect: 'follow',
         });
-        // convert the data to json
-        json = await response.json();
-        json.result = json.result.reduce((prevVal: any[], currVal: any) => {
-          if (
-            prevVal.length == 0 ||
-            !prevVal.find((val) => val.token_address == currVal.token_address)
-          ) {
-            prevVal.push(currVal);
-          }
-          return prevVal;
-        }, []);
-        const osMetadataPromise: any[] = [];
-        for (let i = 0; i < json.result.length; i++) {
-          const contract = json.result[i].token_address;
-          const metadata = fetch(
-            `/.netlify/functions/getSlugX2Y2?contract=${contract}`,
-            {
-              method: 'GET',
-              redirect: 'follow',
-            },
-          ).then((metadata) =>
-            metadata
-              ?.json()
-              .then((metadataJson) =>
-                getCollectionBySlug(
-                  metadataJson?.data?.slug,
-                  false,
-                  false,
-                  true,
-                ),
-              )
-              .then((osMetadata) => {
-                osMetadataArr.push(osMetadata),
-                  setSearchResults(osMetadataArr.filter((data) => data));
-              }),
-          );
-        }
-        console.log(osMetadataArr);
-        // set state with the result
-        if (isSubscribed) {
-          setSearchResults(osMetadataArr);
-        }
+        const responseJson = await response.json();
+        setSearchResults(responseJson);
+        console.log(responseJson);
       }
     };
 
@@ -94,9 +55,8 @@ export default function SearchModal(props: Props) {
 
     const delayDebounceFn = setTimeout(() => {
       if (searchTerm.length > 2) {
-        console.log(searchTerm);
-        // fetchData(searchTerm).catch(console.error);
-        // setIsLoading(false);
+        fetchData(searchTerm).catch(console.error);
+        setIsLoading(false);
       }
     }, 500);
 
@@ -105,7 +65,6 @@ export default function SearchModal(props: Props) {
       isSubscribed = false;
     };
   }, [searchTerm]);
-
   return (
     <Transition.Root show={props.open} as={Fragment}>
       <Dialog
@@ -190,32 +149,53 @@ export default function SearchModal(props: Props) {
                     className="h-64 bg-white rounded-lg w-full mt-5 shadow-md overflow-scroll"
                     onClick={(e) => handleClick(e)}
                   >
-                    {searchResults.map((res) => (
+                    {searchResults.map((res: any) => (
                       <div
                         className="hover:bg-gray-50"
                         key={res?.contractAddress}
                       >
                         {res && (
-                          <div className="px-4 py-2 flex">
-                            {res?.image && (
-                              <img
-                                className="h-12 w-12 rounded-full"
-                                src={res?.image}
-                              />
-                            )}
-                            {!res?.image && (
-                              <Jazzicon
-                                diameter={45}
-                                seed={jsNumberForAddress(res.contractAddress)}
-                              />
-                            )}
-                            <div className="text-left text-sm ml-3">
-                              <div>{res.name}</div>
-                              <div className="text-gray-600">
-                                {res.contractAddress}
+                          <Link
+                            href={`/collection/${res.slug}`}
+                            prefetch={false}
+                          >
+                            <div className="px-4 py-2 flex">
+                              {res?.imageUrl && (
+                                <img
+                                  className="h-10 w-10 rounded-full self-center"
+                                  src={res?.imageUrl}
+                                />
+                              )}
+                              {!res?.imageUrl && (
+                                <Jazzicon
+                                  diameter={39}
+                                  seed={jsNumberForAddress(res.contractAddress)}
+                                />
+                              )}
+                              <div className="text-left text-sm ml-3 text-black">
+                                <div className="flex items-center">
+                                  <div className="pt-1">{res?.name}</div>
+                                  {['true', 'verified'].includes(
+                                    res?.osVerificationState,
+                                  ) && (
+                                    <div className="flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
+                                      <VerifiedBadgeIcon
+                                        height={16}
+                                        width={16}
+                                      />
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="text-black/75">
+                                  {res?.contractAddress &&
+                                    getTrimmedAddressEllipsisMiddle(
+                                      res?.contractAddress,
+                                      5,
+                                    )}
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         )}
                       </div>
                     ))}

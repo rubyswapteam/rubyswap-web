@@ -25,7 +25,9 @@ const CollectionProfileHeader: React.FC<Props> = ({
               <div className="truncate text-2xl font-semibold text-gray-700 dark:text-gray-200 ml-2 pt-2">
                 {collection?.name}
               </div>
-              {collection?.osVerificationState == 'true' && (
+              {['true', 'verified'].includes(
+                collection?.osVerificationState,
+              ) && (
                 <span className="ml-2">
                   <div className="h-6 w-6 flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
                     <VerifiedBadgeIcon height={30} width={30} />

@@ -92,7 +92,7 @@ const CollectionListings: React.FC<Props> = ({
           loader={
             <div className="w-full justify-center flex my-5 py-5 border-t border-white/10">
               <button
-                className="py-2 px-8 text-center rounded-md dark:bg-white/10"
+                className="py-2 px-8 text-center rounded-md dark:bg-white/10 self-center"
                 onClick={() => fetchMoreData()}
               >
                 Load More
@@ -106,7 +106,7 @@ const CollectionListings: React.FC<Props> = ({
           scrollableTarget="scroller"
           endMessage={
             <div className="w-full justify-center flex my-5 py-5 border-t border-white/10">
-              <div className="py-2 px-8 text-center rounded-md dark:bg-white/10">
+              <div className="py-2 px-8 text-center rounded-md dark:bg-white/10 self-center">
                 End of Listings
               </div>
             </div>

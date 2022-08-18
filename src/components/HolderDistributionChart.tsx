@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import CollectionHolderSummaryTable from './CollectionHolderSummaryTable';
 import CollectionHolderWalletTable from './CollectionHolderWalletTable';
 import CollectionTitleHeader from './CollectionTitleHeader';
+import { useRouter } from 'next/router';
 
 export default function HolderDistrbutionChart(props: any) {
   const [isShowing, setIsShowing] = useState(false);
@@ -14,6 +15,10 @@ export default function HolderDistrbutionChart(props: any) {
   const [holderCounts, setHolderCounts] = useState(undefined as any);
   const [holders, setHolders] = useState(undefined as any);
   const [total, setTotal] = useState(undefined as any);
+  const router = useRouter();
+  const { tab } = router.query;
+  const controller = new AbortController();
+  const { signal } = controller;
 
   const { theme } = useTheme();
   highchartsDrilldown(Highcharts);
@@ -55,91 +60,84 @@ export default function HolderDistrbutionChart(props: any) {
   }, [theme]);
 
   async function getHolders(contract: string) {
-    await (
-      await fetch(
-        `/.netlify/functions/safeGetDbCollectionHoldersByContract?contract=${contract}`,
-        {
-          method: 'GET',
-          redirect: 'follow',
-        },
-      )
-    )
-      .json()
-      .then((res) => {
-        console.log(res);
-        if (res && res[0]) {
-          const holders = res[0].data;
-          const whaleCount = 25;
-          const whaleHolders = res[0].data.slice(0, whaleCount);
-          console.log('whaleHolders');
-          console.log(whaleHolders);
-          const holderCounts = holders.reduce(
-            (acc: any, curr: any) => (
-              (acc[curr.tokenBalance] = (acc[curr.tokenBalance] || 0) + 1), acc
-            ),
-            {},
-          );
-          const values = Object.values(holderCounts) as number[];
-          const total = holders.reduce(
-            (prev: number, curr: { tokenBalance: number }) =>
-              prev + curr.tokenBalance,
-            0,
-          );
-          const whaleTotal = whaleHolders.reduce(
-            (prev: number, curr: { tokenBalance: number }) =>
-              prev + curr.tokenBalance,
-            0,
-          );
-          const pieChartTopLevel = [
-            {
-              name: 'Remaining Holder',
-              y: total - whaleTotal,
-              title: 'test',
-              format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${
-                holders.length - whaleCount
-              }</a><br /><a style='font-weight:600'>Holdings:</a> ${
-                total - whaleTotal
-              } / (${(((total - whaleTotal) / total) * 100).toFixed(
-                2,
-              )}%)</a></div>`,
-            },
-            {
-              name: 'Top 25 Whale',
-              y: whaleTotal,
-              drilldown: 'whaleWallets',
-              format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${whaleCount}</a><br /><a style='font-weight:600'>Holdings:</a> ${whaleTotal} / (${(
-                (whaleTotal / total) *
-                100
-              ).toFixed(2)}%)</a></div>`,
-              //could be a function
-            },
-          ];
-          const pieChartWhaleDrilldown = [];
-          for (let i = 0; i < whaleHolders.length; i++) {
-            pieChartWhaleDrilldown.push({
-              name: whaleHolders[i].ownerAddress,
-              y: whaleHolders[i].tokenBalance,
-              format: `<div style="display:block"><a><a style='font-weight:600'>Wallet:</a> ${
-                whaleHolders[i].ownerAddress
-              }</a><br /><a><a style='font-weight:600'>Holding:</a> ${
-                whaleHolders[i].tokenBalance
-              } / (${((whaleHolders[i].tokenBalance / total) * 100).toFixed(
-                2,
-              )}%)</a></div>`,
-            });
-          }
+    const resInit = await fetch(
+      `/.netlify/functions/safeGetDbCollectionHoldersByContract?contract=${contract}`,
+      {
+        signal: signal,
+        method: 'GET',
+        redirect: 'follow',
+      },
+    );
+    const res = await resInit.json();
+    controller.abort();
 
-          setHolders(holders);
-          setHolderCounts(holderCounts);
-          setTotal(total);
-          setIsShowing(true);
-          const newOptions = getOptions(
-            pieChartTopLevel,
-            pieChartWhaleDrilldown,
-          );
-          setChartOptions(newOptions);
-        }
-      });
+    if (res && res[0]) {
+      const holders = res[0].data;
+      const whaleCount = 25;
+      const whaleHolders = res[0].data.slice(0, whaleCount);
+      const holderCounts = holders.reduce(
+        (acc: any, curr: any) => (
+          (acc[curr.tokenBalance] = (acc[curr.tokenBalance] || 0) + 1), acc
+        ),
+        {},
+      );
+      const values = Object.values(holderCounts) as number[];
+      const total = holders.reduce(
+        (prev: number, curr: { tokenBalance: number }) =>
+          prev + curr.tokenBalance,
+        0,
+      );
+      const whaleTotal = whaleHolders.reduce(
+        (prev: number, curr: { tokenBalance: number }) =>
+          prev + curr.tokenBalance,
+        0,
+      );
+      const pieChartTopLevel = [
+        {
+          name: 'Remaining Holder',
+          y: total - whaleTotal,
+          title: 'test',
+          format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${
+            holders.length - whaleCount
+          }</a><br /><a style='font-weight:600'>Holdings:</a> ${
+            total - whaleTotal
+          } / (${(((total - whaleTotal) / total) * 100).toFixed(
+            2,
+          )}%)</a></div>`,
+        },
+        {
+          name: 'Top 25 Whale',
+          y: whaleTotal,
+          drilldown: 'whaleWallets',
+          format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${whaleCount}</a><br /><a style='font-weight:600'>Holdings:</a> ${whaleTotal} / (${(
+            (whaleTotal / total) *
+            100
+          ).toFixed(2)}%)</a></div>`,
+          //could be a function
+        },
+      ];
+      const pieChartWhaleDrilldown = [];
+      for (let i = 0; i < whaleHolders.length; i++) {
+        pieChartWhaleDrilldown.push({
+          name: whaleHolders[i].ownerAddress,
+          y: whaleHolders[i].tokenBalance,
+          format: `<div style="display:block"><a><a style='font-weight:600'>Wallet:</a> ${
+            whaleHolders[i].ownerAddress
+          }</a><br /><a><a style='font-weight:600'>Holding:</a> ${
+            whaleHolders[i].tokenBalance
+          } / (${((whaleHolders[i].tokenBalance / total) * 100).toFixed(
+            2,
+          )}%)</a></div>`,
+        });
+      }
+      setHolders(holders);
+      setHolderCounts(holderCounts);
+      setTotal(total);
+      setIsShowing(true);
+      const newOptions = getOptions(pieChartTopLevel, pieChartWhaleDrilldown);
+      setChartOptions(newOptions);
+      return newOptions;
+    }
   }
 
   function setTheme() {
@@ -156,7 +154,8 @@ export default function HolderDistrbutionChart(props: any) {
   function reset(contract: string) {
     console.log('reset');
     const holdersData = async () => {
-      return await getHolders(contract);
+      const result: any = await getHolders(contract);
+      return result;
     };
     holdersData();
   }
@@ -211,9 +210,6 @@ export default function HolderDistrbutionChart(props: any) {
           const { format } = (this as any).point.options;
           return format;
         },
-        // headerFormat:
-        //   '<span style="font-size:11px">NFT Distribution</span><br>',
-        // pointFormat: `<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}% - {total}</b> of total<br/>`,
       },
 
       series: [
@@ -259,7 +255,6 @@ export default function HolderDistrbutionChart(props: any) {
             <label htmlFor="tabs" className="sr-only">
               Select a tab
             </label>
-            {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
             <select
               id="tabs"
               name="tabs"

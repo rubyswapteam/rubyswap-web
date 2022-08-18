@@ -14,7 +14,7 @@ export default function SweepsNftCollectionTable() {
 
   useEffect(() => {
     if (!sweepNftCollections) {
-      fetchAllSweepNftCollections();
+      // fetchAllSweepNftCollections();
     }
   }, [sweepNftCollections]);
 

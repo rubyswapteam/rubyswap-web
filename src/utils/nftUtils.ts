@@ -96,7 +96,7 @@ export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
     return (
       val.substring(0, length - 1) +
       '...' +
-      val.substring(val.length - 4, val.length)
+      val.substring(val.length - length, val.length)
     );
   }
   return (
