@@ -72,6 +72,8 @@ export default function HolderDistrbutionChart(props: any) {
     controller.abort();
 
     if (res && res[0]) {
+      console.log('res');
+      console.log(res);
       const holders = res[0].data;
       const whaleCount = 25;
       const whaleHolders = res[0].data.slice(0, whaleCount);
@@ -152,7 +154,6 @@ export default function HolderDistrbutionChart(props: any) {
   }
 
   function reset(contract: string) {
-    console.log('reset');
     const holdersData = async () => {
       const result: any = await getHolders(contract);
       return result;

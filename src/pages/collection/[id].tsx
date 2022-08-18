@@ -62,7 +62,6 @@ export default function Collection(props: any) {
 
   useEffect(() => {
     let isSubscribed = true;
-    console.log(activeCollection?.contractAddress);
 
     const fetchData = async (contractAddress: string) => {
       let collection: any = {};
@@ -78,7 +77,6 @@ export default function Collection(props: any) {
         )
           .json()
           .then((res) => {
-            console.log(res);
             res = res.map((item: any) => {
               return { ...item, ...{ data: JSON.parse(item.data) } };
             });
@@ -94,7 +92,6 @@ export default function Collection(props: any) {
     setIsLoadingCollectionUpdates(true);
 
     const delayDebounceFn = setTimeout(() => {
-      console.log(activeCollection?.contractAddress);
       fetchData(activeCollection?.contractAddress).catch(console.error);
       setIsLoadingCollectionUpdates(false);
     }, 500);

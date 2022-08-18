@@ -92,7 +92,6 @@ export const Web3Provider = ({
     try {
       const wallets = await onboard.connectWallet();
       setIsLoading(true);
-      console.log(wallets);
       const { accounts, chains, provider } = wallets[0];
       setActiveWallet(accounts[0].address);
       fetchEthBalance(accounts[0]);

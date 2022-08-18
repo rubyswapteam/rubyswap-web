@@ -47,7 +47,6 @@ export default function SearchModal(props: Props) {
         });
         const responseJson = await response.json();
         setSearchResults(responseJson);
-        console.log(responseJson);
       }
     };
 
