@@ -14,6 +14,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
 import VerifiedBadgeIcon from './VerifiedBadgeIcon';
 import Link from 'next/link';
+import EthereumIcon from './EthereumIcon';
 
 interface Props {
   open: boolean;
@@ -46,6 +47,7 @@ export default function SearchModal(props: Props) {
           redirect: 'follow',
         });
         const responseJson = await response.json();
+        console.log(responseJson);
         setSearchResults(responseJson);
       }
     };
@@ -151,7 +153,7 @@ export default function SearchModal(props: Props) {
                     {searchResults.map((res: any) => (
                       <div
                         className="hover:bg-gray-50"
-                        key={res?.contractAddress}
+                        key={'searchModalItem-' + res?.contractAddress}
                       >
                         {res && (
                           <Link
@@ -172,12 +174,12 @@ export default function SearchModal(props: Props) {
                                 />
                               )}
                               <div className="text-left text-sm ml-3 text-black">
-                                <div className="flex items-center">
+                                <div className="w-max flex items-center">
                                   <div className="pt-1">{res?.name}</div>
                                   {['true', 'verified'].includes(
                                     res?.osVerificationState,
                                   ) && (
-                                    <div className="flex-shrink-0 flex items-center justify-center bg-blue rounded-full">
+                                    <div className="flex-shrink-0 flex w-max items-center justify-center bg-blue rounded-full">
                                       <VerifiedBadgeIcon
                                         height={16}
                                         width={16}
@@ -191,6 +193,18 @@ export default function SearchModal(props: Props) {
                                       res?.contractAddress,
                                       5,
                                     )}
+                                </div>
+                              </div>
+
+                              <div className="text-right align-right text-sm ml-3 text-black w-full">
+                                <div className="flex items-center justify-end">
+                                  <div className="pt-1">
+                                    {'Floor: ' + res?.osFloorPrice}
+                                  </div>
+                                  <EthereumIcon height={15} width={15} />
+                                </div>
+                                <div className="text-black/75">
+                                  {'Supply: ' + res?.totalSupply}
                                 </div>
                               </div>
                             </div>

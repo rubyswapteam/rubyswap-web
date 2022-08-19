@@ -255,6 +255,7 @@ export default function Collection(props: any) {
               selectedNfts={recentListings}
               collectionName={activeCollection?.name}
               chainId={activeCollection?.chainId}
+              keyPrefix={'newListings'}
             />
           </div>
           <div className="my-14">
@@ -269,6 +270,7 @@ export default function Collection(props: any) {
               selectedNfts={recentTrades}
               collectionName={activeCollection?.name}
               chainId={activeCollection?.chainId}
+              keyPrefix={'recentTrades'}
             />
           </div>
         </div>

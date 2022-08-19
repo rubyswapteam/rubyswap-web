@@ -7,16 +7,13 @@ import { useEffect, useState } from 'react';
 import CollectionHolderSummaryTable from './CollectionHolderSummaryTable';
 import CollectionHolderWalletTable from './CollectionHolderWalletTable';
 import CollectionTitleHeader from './CollectionTitleHeader';
-import { useRouter } from 'next/router';
-
+import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
 export default function HolderDistrbutionChart(props: any) {
   const [isShowing, setIsShowing] = useState(false);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [holderCounts, setHolderCounts] = useState(undefined as any);
   const [holders, setHolders] = useState(undefined as any);
   const [total, setTotal] = useState(undefined as any);
-  const router = useRouter();
-  const { tab } = router.query;
   const controller = new AbortController();
   const { signal } = controller;
 
@@ -121,7 +118,7 @@ export default function HolderDistrbutionChart(props: any) {
       const pieChartWhaleDrilldown = [];
       for (let i = 0; i < whaleHolders.length; i++) {
         pieChartWhaleDrilldown.push({
-          name: whaleHolders[i].ownerAddress,
+          name: getTrimmedAddressEllipsisMiddle(whaleHolders[i].ownerAddress),
           y: whaleHolders[i].tokenBalance,
           format: `<div style="display:block"><a><a style='font-weight:600'>Wallet:</a> ${
             whaleHolders[i].ownerAddress
