@@ -1,14 +1,12 @@
-/** @type {import('tailwindcss').Config} */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 module.exports = {
   darkMode: 'class',
-  content: [
-    './src/**/*.{html,js,jsx,tsx}',
-    './src/pages/**/*.{html,js,jsx,tsx}',
-  ],
+  content: ['./src/**/*.{html,js,jsx}', './src/pages/**/*.{html,js,jsx}'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Biotif'],
+        sans: ['Biotif', ...defaultTheme.fontFamily.sans],
       },
       backgroundImage: {
         'theme-gradient': "url('../assets/gradient/theme.svg')",
