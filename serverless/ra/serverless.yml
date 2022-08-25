@@ -24,4 +24,11 @@ functions:
     handler: functions/updateThirtyDayVolume.handler
     events:
       - schedule: rate(23 minutes)
-
+  updateMints:
+    handler: functions/updateMints.handler
+    events:
+      - schedule: rate(1 minute)
+  deleteMints:
+    handler: functions/deleteMints.handler
+    events:
+      - schedule: rate(45 minutes)
