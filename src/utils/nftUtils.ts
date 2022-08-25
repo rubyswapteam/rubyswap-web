@@ -104,19 +104,14 @@ export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
   );
 }
 
-export const rangeTabs = (
-  tab: any,
-  range: any,
-  route?: string,
-  defaultRange = '24h',
-) => {
+export const rangeTabs = (tab: any, range: any, route?: string) => {
   const tabObj: { name: string; href: string; current: boolean }[] = [];
   ['5m', '15m', '30m', '1h', '6h', '24h', '7d', '30d'].forEach((rng) => {
     const activeHref = getRangeHref(tab, rng, route);
     const activeTab = {
       name: rng,
       href: activeHref,
-      current: range == rng || (rng == defaultRange && range == undefined),
+      current: range == rng || (rng == '24h' && range == undefined),
     };
     tabObj.push(activeTab);
   });
