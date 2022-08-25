@@ -7,7 +7,8 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}',
     './src/pages/**/*.{js,jsx,ts,tsx}',
     './src/pages/*.{js,jsx,ts,tsx}',
-    './src/components/**/*.{js,jsx,ts,tsx}',
+    './src/components/*.{js,jsx,ts,tsx}',
+    './src/utils/*.ts',
     './next.config.js',
   ],
   theme: {

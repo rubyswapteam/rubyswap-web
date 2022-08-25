@@ -1,0 +1,34 @@
+service: eth-metrics
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-2
+
+functions:
+  ethMetrics:
+    handler: functions/ethMetrics.handler
+    events:
+      - schedule: rate(1 minute)
+  updateOneDayVolume:
+    handler: functions/updateOneDayVolume.handler
+    events:
+      - schedule: rate(20 minutes)
+  updateSevenDayVolume:
+    handler: functions/updateSevenDayVolume.handler
+    events:
+      - schedule: rate(21 minutes)
+  updateThirtyDayVolume:
+    handler: functions/updateThirtyDayVolume.handler
+    events:
+      - schedule: rate(23 minutes)
+  updateMints:
+    handler: functions/updateMints.handler
+    events:
+      - schedule: rate(1 minute)
+  deleteMints:
+    handler: functions/deleteMints.handler
+    events:
+      - schedule: rate(45 minutes)

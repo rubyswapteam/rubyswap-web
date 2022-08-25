@@ -13,7 +13,7 @@ var defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   darkMode: 'class',
-  content: ['./src/**/*.{js,ts,jsx,tsx}', './src/pages/**/*.{js,jsx,ts,tsx}', './src/pages/*.{js,jsx,ts,tsx}', './src/components/**/*.{js,jsx,ts,tsx}', './next.config.js'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', './src/pages/**/*.{js,jsx,ts,tsx}', './src/pages/*.{js,jsx,ts,tsx}', './src/components/*.{js,jsx,ts,tsx}', './src/utils/*.ts', './next.config.js'],
   theme: {
     extend: {
       fontFamily: {
