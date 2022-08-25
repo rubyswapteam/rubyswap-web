@@ -1,4 +1,5 @@
 import { StarIcon } from '@heroicons/react/outline';
+import moment from 'moment';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -14,6 +15,9 @@ export default function TrendingNftCollectionTableBody(props: Props) {
     props.trendingCollections.slice(0, 50),
   );
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [newlyMintedTimestamp] = useState<number>(
+    moment().unix() - 60 * 60 * 24 * 7,
+  );
 
   const fetchMoreData = () => {
     if (props.trendingCollections && renderedData) {
@@ -65,7 +69,29 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                   <>
                     <td className="py-5 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
                       <div className="flex items-center">
-                        <StarIcon height={20} width={20} />
+                        <svg
+                          className="w-6 h-6 text-black/10 dark:text-white/10 hover:fill-current rounded-full"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                          />
+                        </svg>
+
+                        {/* <StarIcon
+                          className="text-black/10 dark:text-white/10 hover:bg-black/10 dark:hover:bg-white/10"
+                          height={20}
+                          width={20}
+                        /> */}
                       </div>
                     </td>
                     <td className="whitespace-nowrap py-3 text-sm w-[5%] self-center">
@@ -91,6 +117,17 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                             alt="verified badge"
                           />
                         )}
+                        {nftCollection.firstmint &&
+                          nftCollection.firstmint > newlyMintedTimestamp && (
+                            <div
+                              className="bg-gradient-to-r from-green-600 to-green-600/10 hover:to-green-600/50 ml-2 px-2 py-0.5 rounded-lg text-xs"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              New Mint
+                            </div>
+                          )}
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%]">

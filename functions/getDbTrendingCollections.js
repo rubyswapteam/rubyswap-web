@@ -17,17 +17,18 @@ const headers = {
 
 export async function handler() {
   const API_ENDPOINT =
-    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/TrendingTable?select=*&order=index.asc';
+    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/rpc/gettrending';
 
   console.log({
-    method: 'GET',
+    method: 'POST',
     headers: headers,
     redirect: 'follow',
   });
   try {
     const response = await fetch(API_ENDPOINT, {
-      method: 'GET',
+      method: 'POST',
       headers: headers,
+      body: undefined,
       redirect: 'follow',
     });
     const data = await response.json();
