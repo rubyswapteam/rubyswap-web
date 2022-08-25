@@ -23,7 +23,7 @@ function App({ Component, pageProps }: AppProps) {
                   open={searchModalState}
                   setOpen={setSearchModalState}
                 />
-                <AnimatePresence exitBeforeEnter>
+                <AnimatePresence mode="wait">
                   <Component
                     setSearchModalState={setSearchModalState}
                     {...pageProps}

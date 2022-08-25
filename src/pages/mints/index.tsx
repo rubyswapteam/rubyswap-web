@@ -4,7 +4,6 @@ import MintingCollectionTable from '@/components/MintingCollectionTable';
 import RefreshButton from '@/components/RefreshButton';
 import Tab from '@/components/Tab';
 import { rangeTabs } from '@/utils/nftUtils';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 
 export default function Mints(props: any) {
@@ -48,11 +47,11 @@ export default function Mints(props: any) {
   }
 
   return (
-    <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
+    <div>
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}
-          title={'Browse'}
+          title={'Mints'}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={
             <Tab
@@ -64,6 +63,6 @@ export default function Mints(props: any) {
           refresh={<RefreshButton />}
         />
       </Layout>
-    </motion.div>
+    </div>
   );
 }
