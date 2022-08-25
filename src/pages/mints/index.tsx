@@ -44,7 +44,7 @@ export default function Index(props: any) {
     if (!tab) {
       return (
         <div className="h-inherit overflow-scroll pb-60">
-          <MintingCollectionTable />
+          {/* <MintingCollectionTable /> */}
         </div>
       );
     }
