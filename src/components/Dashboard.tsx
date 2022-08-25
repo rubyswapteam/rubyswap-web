@@ -43,7 +43,7 @@ export default function Dashboard(props: any) {
     {
       name: 'Collections',
       href: '/',
-      current: parentRoute() == 'collection' || parentRoute() == 'a',
+      current: parentRoute() == 'collection' || parentRoute() == '',
     },
     { name: 'Giveaways', href: '/', current: false },
     { name: 'Minting', href: '/mints', current: parentRoute() == 'mints' },
