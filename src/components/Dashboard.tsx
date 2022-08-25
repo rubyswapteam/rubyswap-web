@@ -46,7 +46,7 @@ export default function Dashboard(props: any) {
       current: parentRoute() == 'collection' || parentRoute() == 'a',
     },
     { name: 'Giveaways', href: '/', current: false },
-    { name: 'Minting', href: '/', current: false },
+    { name: 'Minting', href: '/mints', current: parentRoute() == 'mints' },
   ];
 
   const bottomNavigation = [
