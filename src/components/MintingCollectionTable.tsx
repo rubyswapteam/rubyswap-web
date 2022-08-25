@@ -1,4 +1,3 @@
-import { concat } from 'ethers/lib/utils';
 import moment from 'moment';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -66,7 +65,7 @@ export default function MintingCollectionTable() {
   return (
     <div className="flex flex-col">
       {data && (
-        <>
+        <div>
           {data.map((row, i) => (
             <Link
               key={row.address}
@@ -82,7 +81,7 @@ export default function MintingCollectionTable() {
               </div>
             </Link>
           ))}
-        </>
+        </div>
       )}
     </div>
   );
