@@ -1,16 +1,13 @@
 import Dashboard from '@/components/Dashboard';
 import Layout from '@/components/Layout';
-import OwnedNftCollectionTable from '@/components/OwnedNftCollectionTable';
-import RefreshButton from '@/components/RefreshButton';
-import SweepsNftCollectionTable from '@/components/SweepsNftCollectionTable';
-import Tab from '@/components/Tab';
-import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTable';
-import { rangeTabs } from '@/utils/nftUtils';
-import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
 import MintingCollectionTable from '@/components/MintingCollectionTable';
+import RefreshButton from '@/components/RefreshButton';
+import Tab from '@/components/Tab';
+import { rangeTabs } from '@/utils/nftUtils';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
-export default function Index(props: any) {
+export default function Mints(props: any) {
   const router = useRouter();
   const { tab, range } = router.query;
   console.log(tab);
@@ -44,7 +41,7 @@ export default function Index(props: any) {
     if (!tab) {
       return (
         <div className="h-inherit overflow-scroll pb-60">
-          {/* <MintingCollectionTable /> */}
+          <MintingCollectionTable />
         </div>
       );
     }
