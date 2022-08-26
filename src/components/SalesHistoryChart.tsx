@@ -83,7 +83,7 @@ export default function SalesHistoryChart(props: any) {
         (trade.timestamp - minimumDate) / 86400 / trim,
         Number(trade.price),
       ]);
-      setIsShowing(trades.length > 0);
+    setIsShowing(trades.length > 0);
 
     return trades;
   }
