@@ -20,7 +20,7 @@ export default function Mints(props: any) {
       tooltip: true,
     },
     {
-      name: 'Live Mints',
+      name: 'Upcoming',
       href: '?tab=watchlist',
       current: tab == 'watchlist',
       border: true,
@@ -55,7 +55,7 @@ export default function Mints(props: any) {
           secondaryTabs={
             <Tab
               // tabs={rangeTabs(tab, range, undefined, '30m')}
-              tabs={rangeTabs(tab, range, undefined)}
+              tabs={rangeTabs(tab, range, undefined, '1h')}
               condense={true}
             />
           }

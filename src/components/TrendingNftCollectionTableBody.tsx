@@ -1,10 +1,10 @@
-import { StarIcon } from '@heroicons/react/outline';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EthereumIcon from './EthereumIcon';
 import NftCollectionTableStandardCell from './NftCollectionTableStandardCell';
+import StarIcon from './StarIcon';
 
 interface Props {
   trendingCollections: any[];
@@ -69,24 +69,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                   <>
                     <td className="py-5 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
                       <div className="flex items-center">
-                        <svg
-                          className="w-6 h-6 text-black/10 dark:text-white/10 hover:fill-current rounded-full"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                          }}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                          />
-                        </svg>
-
+                        <StarIcon />
                         {/* <StarIcon
                           className="text-black/10 dark:text-white/10 hover:bg-black/10 dark:hover:bg-white/10"
                           height={20}
@@ -105,7 +88,9 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                     </td>
                     <td className="whitespace-nowrap w-[20%] self-center">
                       <div className="text-gray-700 dark:text-white/90 flex items-center text-sm font-medium">
-                        <div className="pt-1">{nftCollection.name}</div>
+                        <div className="pt-1 whitespace-normal">
+                          {nftCollection.name}
+                        </div>
                         {nftCollection.osVerificationState == 'true' && (
                           <img
                             src="https://www.genie.xyz/svgs/verifiedBadge.svg"
@@ -130,7 +115,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                           )}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%]">
+                    <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       <EthereumIcon width={16} height={16} />
                     </td>
                     <NftCollectionTableStandardCell
@@ -149,8 +134,11 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                               : 'bg-red-200 text-red-800 dark:bg-red-200/90')
                           }
                         >
-                          {nftCollection.osOneDayChange?.toFixed(2)}
-                          {'%'}
+                          {nftCollection.osOneDayChange > 10000
+                            ? '> 9999%+'
+                            : nftCollection.osOneDayChange
+                                .toFixed(2)
+                                .toString() + '%'}
                         </div>
                       </div>
                     </td>

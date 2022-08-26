@@ -208,72 +208,77 @@ export default function Collection(props: any) {
   function setBody() {
     if (!tab) {
       return (
-        <div className="h-inherit overflow-scroll pb-80">
-          <div className="my-4">
-            {collectionUpdates && collectionUpdates.length > 1 && (
-              <CollectionAnnouncementBanner
-                route={`/collection/${id}?tab=updates`}
-                message={
-                  collectionUpdates[0].data.content.substring(0, 80) + '...'
-                }
-              />
-            )}
-          </div>
-          <div className="py-8 bg-gray-100 dark:bg-white/[.02] w-full">
-            <div className="my-8">
-              <StatsBoxList
-                stats={getStats()}
-                route={`/collection/${id}?tab=analytics`}
-              />
+        activeCollection?.contractAddress && (
+          <div
+            className="h-inherit overflow-scroll pb-80"
+            key={'collection-page-' + activeCollection?.contractAddress}
+          >
+            <div className="my-4">
+              {collectionUpdates && collectionUpdates.length > 1 && (
+                <CollectionAnnouncementBanner
+                  route={`/collection/${id}?tab=updates`}
+                  message={
+                    collectionUpdates[0].data.content.substring(0, 80) + '...'
+                  }
+                />
+              )}
             </div>
-            <div className="flex mx-8">
-              <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                {collectionTrades && !isLoadingCollectionTrades && (
-                  <SalesHistoryChart
-                    data={collectionTrades}
-                  ></SalesHistoryChart>
-                )}
+            <div className="py-8 bg-gray-100 dark:bg-white/[.02] w-full">
+              <div className="my-8">
+                <StatsBoxList
+                  stats={getStats()}
+                  route={`/collection/${id}?tab=analytics`}
+                />
               </div>
-              <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                {collectionTrades && !isLoadingCollectionTrades && (
-                  <AveragePriceVolumeChart
-                    data={collectionTrades}
-                  ></AveragePriceVolumeChart>
-                )}
+              <div className="flex mx-8">
+                <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                  {collectionTrades && !isLoadingCollectionTrades && (
+                    <SalesHistoryChart
+                      data={collectionTrades}
+                    ></SalesHistoryChart>
+                  )}
+                </div>
+                <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                  {collectionTrades && !isLoadingCollectionTrades && (
+                    <AveragePriceVolumeChart
+                      data={collectionTrades}
+                    ></AveragePriceVolumeChart>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="my-14">
-            <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
-              <CollectionTitleHeader
-                title={'New Listings'}
-                buttonText={'See More'}
-                route={`/collection/${id}?tab=listings`}
+            <div className="my-14">
+              <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
+                <CollectionTitleHeader
+                  title={'New Listings'}
+                  buttonText={'See More'}
+                  route={`/collection/${id}?tab=listings`}
+                />
+              </div>
+              <CollectionListSingleRow
+                selectedNfts={recentListings}
+                collectionName={activeCollection?.name}
+                chainId={activeCollection?.chainId}
+                keyPrefix={'newListings'}
               />
             </div>
-            <CollectionListSingleRow
-              selectedNfts={recentListings}
-              collectionName={activeCollection?.name}
-              chainId={activeCollection?.chainId}
-              keyPrefix={'newListings'}
-            />
-          </div>
-          <div className="my-14">
-            <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
-              <CollectionTitleHeader
-                title={'Recent Sales'}
-                buttonText={'See More'}
-                route={`/collection/${id}?tab=analytics`}
+            <div className="my-14">
+              <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
+                <CollectionTitleHeader
+                  title={'Recent Sales'}
+                  buttonText={'See More'}
+                  route={`/collection/${id}?tab=analytics`}
+                />
+              </div>
+              <CollectionListSingleRow
+                selectedNfts={recentTrades}
+                collectionName={activeCollection?.name}
+                chainId={activeCollection?.chainId}
+                keyPrefix={'recentTrades'}
               />
             </div>
-            <CollectionListSingleRow
-              selectedNfts={recentTrades}
-              collectionName={activeCollection?.name}
-              chainId={activeCollection?.chainId}
-              keyPrefix={'recentTrades'}
-            />
           </div>
-        </div>
+        )
       );
     }
     if (tab == 'listings') {
