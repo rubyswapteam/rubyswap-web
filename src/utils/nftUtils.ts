@@ -112,7 +112,7 @@ export const rangeTabs = (
 ) => {
   const tabObj: { name: string; href: string; current: boolean }[] = [];
   ['5m', '15m', '30m', '1h', '6h', '24h', '7d', '30d'].forEach((rng) => {
-    const activeHref = getRangeHref(tab, rng, route);
+    const activeHref = getRangeHref(tab, rng, route, defaultRange);
     const activeTab = {
       name: rng,
       href: activeHref,
@@ -123,10 +123,15 @@ export const rangeTabs = (
   return tabObj;
 };
 
-function getRangeHref(tab: any, range: any, route?: string) {
+function getRangeHref(
+  tab: any,
+  range: any,
+  route?: string,
+  defaultRange = '24h',
+) {
   const baseRoute = route || '';
   const tabSuffix = tab ? `tab=${tab}` : '';
-  const rangeSuffix = range && range !== '24h' ? `range=${range}` : '';
+  const rangeSuffix = range && range !== defaultRange ? `range=${range}` : '';
   const baseSuffix = tabSuffix || rangeSuffix ? '?' : '';
   const conjunction = tabSuffix && rangeSuffix ? '&' : '';
   return `${baseRoute}${baseSuffix}${tabSuffix}${conjunction}${rangeSuffix}`;

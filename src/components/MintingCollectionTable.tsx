@@ -1,10 +1,14 @@
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import MintingCollectionTableBody from './MintingCollectionTableBody';
 
 export default function MintingCollectionTable() {
+  const router = useRouter();
+  const { range } = router.query;
   const [data, setData] = useState<undefined | any[]>(undefined);
-  const [lastFetch, setLastFetch] = useState<number>(0);
+  const [lastFetch, setLastFetch] = useState<any>({});
+  const [counter, setCounter] = useState<number>(0);
 
   useEffect(() => {
     console.log('useEffect');
@@ -13,28 +17,40 @@ export default function MintingCollectionTable() {
       fetchData();
     }, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [range]);
 
   const fetchData = () => {
-    const lastFetchSS = Number(sessionStorage.getItem('r-tnct-lf'));
+    const lastFetchSS = Number(
+      sessionStorage.getItem('r-mct-lf' + (range || '')),
+    );
     const refreshTime = moment().unix() - 30;
-    if ((lastFetchSS && lastFetchSS < refreshTime) || lastFetch < refreshTime) {
+    if (
+      ((lastFetchSS[(range as string) || ''] as number) &&
+        (lastFetchSS[(range as string) || ''] as number) < refreshTime) ||
+      lastFetch[(range as string) || ''] < refreshTime
+    ) {
       try {
         fetchDbData();
       } catch (error) {
         console.log(error);
       }
     } else {
-      const collectionString = sessionStorage.getItem('r-tnct-ftc');
+      const collectionString = sessionStorage.getItem(
+        'r-mct-d' + (range || ''),
+      );
+      console.log(collectionString);
+      console.log(collectionString ? JSON.parse(collectionString) : null);
       const collections = collectionString
         ? JSON.parse(collectionString)
         : null;
       if (collections) {
-        const time = Number(sessionStorage.getItem('r-tnct-lf') as string);
+        const time = Number(
+          sessionStorage.getItem('r-mct-lf' + (range || '')) as string,
+        );
         applyUpdate(collections, time, false);
       } else {
-        sessionStorage.removeItem('r-tnct-lf');
-        sessionStorage.removeItem('r-tnct-ftc');
+        sessionStorage.removeItem('r-mct-lf' + (range || ''));
+        sessionStorage.removeItem('r-mct-d' + (range || ''));
         fetchDbData();
       }
     }
@@ -43,23 +59,44 @@ export default function MintingCollectionTable() {
   function fetchDbData() {
     fetch('/.netlify/functions/getDbMints', {
       method: 'POST',
-      body: JSON.stringify({ mins: 60 }),
+      body: JSON.stringify({ mins: getMins() }),
       redirect: 'follow',
     }).then((res) =>
       res.json().then((result) => {
         const time = moment().unix();
-        applyUpdate(result, time);
+        if (result.length > 0) {
+          console.log('applyUpdate(result, time)');
+          console.log(result[0]);
+          applyUpdate(result, time);
+        }
       }),
     );
   }
 
+  const getMins = () => {
+    const dict: any = {
+      '1m': 1,
+      '5m': 5,
+      '15m': 15,
+      '30m': 30,
+      '1h': 60,
+      '6h': 360,
+      '24h': 1440,
+      '7d': 10080,
+    };
+
+    console.log(range);
+    return !range ? 60 : dict[(range as string) || ''];
+  };
+
   function applyUpdate(dataIn: any, time: number, persist = true) {
     setData(dataIn.slice(0, 50));
-    setLastFetch(time);
+    setLastFetch({ ...lastFetch, [(range as string) || '']: time });
     if (persist) {
-      sessionStorage.setItem('r-mct-di', JSON.stringify(data));
-      sessionStorage.setItem('r-mct-lf', time.toString());
+      sessionStorage.setItem('r-mct-d' + (range || ''), JSON.stringify(data));
+      sessionStorage.setItem('r-mct-lf' + (range || ''), time.toString());
     }
+    setCounter(counter + 1);
   }
 
   return (
@@ -140,6 +177,7 @@ export default function MintingCollectionTable() {
                         <tbody
                           className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-blackish"
                           id="scrollableTarget"
+                          key={'MCT' + counter.toString() + (range || '')}
                         >
                           {data && data.length > 0 && (
                             <MintingCollectionTableBody data={data} />

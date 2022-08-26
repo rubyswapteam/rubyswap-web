@@ -34,6 +34,7 @@ export default function AveragePriceVolumeChart(props: any) {
 
   useEffect(() => {
     setTheme();
+    // make sure the theme is being reset with the new chart option colours
     // console.log('{ ...chartOptions }');
     if (chartOptions) setChartOptions(JSON.parse(JSON.stringify(chartOptions)));
   }, [theme]);

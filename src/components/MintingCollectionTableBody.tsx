@@ -1,24 +1,26 @@
 import moment from 'moment';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import EthereumIcon from './EthereumIcon';
-import NftCollectionTableStandardCell from './NftCollectionTableStandardCell';
-import StarIcon from './StarIcon';
-import TableProgressBar from './TableProgressBar';
-import TableChevronUp from './TableChevronUp';
-import TableChevronDown from './TableChevronDown';
-import EtherscanLogo from './EtherscanLogo';
-import WebsiteIcon from './WebsiteIcon';
 import DiscordLogo from './DiscordLogo';
-import TwitterLogo from './TwitterLogo';
+import EthereumIcon from './EthereumIcon';
+import EtherscanLogo from './EtherscanLogo';
 import SocialsWrapper from './SocialsWrapper';
+import StarIcon from './StarIcon';
+import TableChevronDown from './TableChevronDown';
+import TableChevronUp from './TableChevronUp';
+import TableProgressBar from './TableProgressBar';
+import TwitterLogo from './TwitterLogo';
+import WebsiteIcon from './WebsiteIcon';
 
 interface Props {
   data: any[];
 }
 
 export default function MintingCollectionTableBody(props: Props) {
+  const router = useRouter();
+  const { range } = router.query;
   const [renderedData, setRenderedData] = useState<any[]>(
     props.data.slice(0, 50),
   );
@@ -56,7 +58,7 @@ export default function MintingCollectionTableBody(props: Props) {
           row.imageUrl && (
             <React.Fragment key={row.index + row.slug}>
               <Link
-                key={row.id}
+                key={row.id + range + row.currRank + row.address}
                 href={`/collection/${row.slug}`}
                 prefetch={false}
               >

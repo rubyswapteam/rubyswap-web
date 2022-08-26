@@ -1,5 +1,3 @@
-import { _fetchData } from 'ethers/lib/utils';
-import { useState, useEffect, useRef } from 'react';
 import EthereumIcon from './EthereumIcon';
 
 export function EthPriceTracker(props: any) {
