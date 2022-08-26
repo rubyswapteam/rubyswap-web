@@ -109,7 +109,8 @@ export default function AveragePriceVolumeChart(props: any) {
       averagePrice.push(roundData(price) || 0);
       rangeValues.push(range);
     });
-    setIsShowing(true);
+
+    setIsShowing(totalVolume.reduce((prev, curr) => prev + curr, 0) > 0);
 
     return {
       averagePrice: averagePrice,
