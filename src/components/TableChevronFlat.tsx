@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TableChevronDown(props: any) {
+export default function TableChevronUp(props: any) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,11 +10,7 @@ export default function TableChevronDown(props: any) {
       stroke="currentColor"
       className={props.class + ' w-6 h-6'}
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
     </svg>
   );
 }

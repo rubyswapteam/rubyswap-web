@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import EthereumIcon from './EthereumIcon';
 import NftCollectionTableStandardCell from './NftCollectionTableStandardCell';
 import StarIcon from './StarIcon';
+import TableProgressBar from './TableProgressBar';
 
 interface Props {
   trendingCollections: any[];
@@ -156,9 +157,19 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                     <NftCollectionTableStandardCell
                       value={nftCollection.osOneDaySales}
                     />
-                    <NftCollectionTableStandardCell
-                      value={nftCollection.numOwners}
-                    />
+                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
+                        <div className="pt-1 whitespace-normal">
+                          {nftCollection.numOwners}
+                        </div>
+                        {nftCollection?.totalSupply && (
+                          <TableProgressBar
+                            value={nftCollection.numOwners}
+                            maxValue={nftCollection.totalSupply}
+                          />
+                        )}
+                      </div>
+                    </td>
                   </>
                 </tr>
               </Link>

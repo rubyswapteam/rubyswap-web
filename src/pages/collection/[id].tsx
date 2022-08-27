@@ -107,7 +107,7 @@ export default function Collection(props: any) {
       (tab == 'listings' && activeCollection?.contractAddress) ||
       (activeCollection?.contractAddress && tab == undefined)
     ) {
-      const limit = tab == undefined ? 100 : 1000;
+      const limit = tab == undefined ? 25 : 1000;
       fetchActiveListings(activeCollection.contractAddress, limit).then(
         (listings: any[]) => {
           const recentListings = [];

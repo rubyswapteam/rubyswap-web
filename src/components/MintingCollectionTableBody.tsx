@@ -9,6 +9,7 @@ import EtherscanLogo from './EtherscanLogo';
 import SocialsWrapper from './SocialsWrapper';
 import StarIcon from './StarIcon';
 import TableChevronDown from './TableChevronDown';
+import TableChevronFlat from './TableChevronFlat';
 import TableChevronUp from './TableChevronUp';
 import TableProgressBar from './TableProgressBar';
 import TwitterLogo from './TwitterLogo';
@@ -197,9 +198,17 @@ export default function MintingCollectionTableBody(props: Props) {
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       {!row.prevRank || row.currRank < row.prevRank ? (
-                        <TableChevronUp />
+                        <TableChevronUp
+                          class={'text-green-600 dark:text-green-300/95'}
+                        />
+                      ) : row.currRank > row.prevRank ? (
+                        <TableChevronDown
+                          class={'text-red-600 dark:text-red-300/95'}
+                        />
                       ) : (
-                        <TableChevronDown />
+                        <TableChevronFlat
+                          class={'text-gray-600 dark:text-gray-300/95'}
+                        />
                       )}
                     </td>
                   </>
