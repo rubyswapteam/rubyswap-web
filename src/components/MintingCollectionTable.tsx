@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import MintingCollectionTableBody from './MintingCollectionTableBody';
 
 export default function MintingCollectionTable() {
@@ -11,7 +11,6 @@ export default function MintingCollectionTable() {
   const [counter, setCounter] = useState<number>(0);
 
   useEffect(() => {
-    console.log('useEffect');
     fetchData();
     const interval = setInterval(() => {
       fetchData();
@@ -20,14 +19,15 @@ export default function MintingCollectionTable() {
   }, [range]);
 
   const fetchData = () => {
-    const lastFetchSS = Number(
-      sessionStorage.getItem('r-mct-lf' + (range || '')),
-    );
+    const lastFetchSS = sessionStorage.getItem('r-mct-lf')
+      ? JSON.parse(sessionStorage.getItem('r-mct-lf') || '')
+      : {};
     const refreshTime = moment().unix() - 30;
     if (
       ((lastFetchSS[(range as string) || ''] as number) &&
         (lastFetchSS[(range as string) || ''] as number) < refreshTime) ||
-      lastFetch[(range as string) || ''] < refreshTime
+      (lastFetch[(range as string) || ''] &&
+        lastFetch[(range as string) || ''] < refreshTime)
     ) {
       try {
         fetchDbData();
@@ -43,13 +43,11 @@ export default function MintingCollectionTable() {
       const collections = collectionString
         ? JSON.parse(collectionString)
         : null;
-      if (collections) {
-        const time = Number(
-          sessionStorage.getItem('r-mct-lf' + (range || '')) as string,
-        );
+      if (collections && collections.length > 0) {
+        const time = Number(sessionStorage.getItem('r-mct-lf') as string);
         applyUpdate(collections, time, false);
       } else {
-        sessionStorage.removeItem('r-mct-lf' + (range || ''));
+        sessionStorage.removeItem('r-mct-lf');
         sessionStorage.removeItem('r-mct-d' + (range || ''));
         fetchDbData();
       }
@@ -64,9 +62,7 @@ export default function MintingCollectionTable() {
     }).then((res) =>
       res.json().then((result) => {
         const time = moment().unix();
-        if (result.length > 0) {
-          console.log('applyUpdate(result, time)');
-          console.log(result[0]);
+        if (result && result.length > 0) {
           applyUpdate(result, time);
         }
       }),
@@ -85,16 +81,20 @@ export default function MintingCollectionTable() {
       '7d': 10080,
     };
 
-    console.log(range);
     return !range ? 60 : dict[(range as string) || ''];
   };
 
   function applyUpdate(dataIn: any, time: number, persist = true) {
-    setData(dataIn.slice(0, 50));
-    setLastFetch({ ...lastFetch, [(range as string) || '']: time });
-    if (persist) {
-      sessionStorage.setItem('r-mct-d' + (range || ''), JSON.stringify(data));
-      sessionStorage.setItem('r-mct-lf' + (range || ''), time.toString());
+    const newData = dataIn.slice(0, 50);
+    const newLastFetch = { ...lastFetch, [(range as string) || '']: time };
+    setData(newData);
+    setLastFetch(newLastFetch);
+    if (persist && newData.length > 0) {
+      sessionStorage.setItem(
+        'r-mct-d' + (range || ''),
+        JSON.stringify(newData),
+      );
+      sessionStorage.setItem('r-mct-lf', JSON.stringify(newLastFetch));
     }
     setCounter(counter + 1);
   }
