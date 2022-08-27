@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MintingCollectionTableBody from './MintingCollectionTableBody';
 
 export default function MintingCollectionTable() {
