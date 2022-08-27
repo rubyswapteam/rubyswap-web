@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 const EthereumIcon: React.FC = (): JSX.Element => {
   const { theme, setTheme } = useTheme();
+  setDefaultTheme();
   const [isChecked, setIsChecked] = useState(theme !== 'light');
 
   useEffect(() => {
@@ -16,12 +17,18 @@ const EthereumIcon: React.FC = (): JSX.Element => {
       localStorage.setItem('ruby-theme', newTheme);
       setTheme(newTheme);
     } else {
-      const storedTheme =
-        typeof window === 'undefined'
-          ? 'undefined'
-          : localStorage.getItem('ruby-theme') || 'light';
-      setTheme(storedTheme);
+      setDefaultTheme();
     }
+  }
+
+  function setDefaultTheme() {
+    const storedTheme =
+      typeof window === 'undefined'
+        ? 'undefined'
+        : localStorage.getItem('ruby-theme') || 'dark';
+    console.log('storedTheme');
+    console.log(storedTheme);
+    setTheme(storedTheme);
   }
 
   return (

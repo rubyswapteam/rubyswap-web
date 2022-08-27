@@ -6,7 +6,10 @@ export default function StarIcon(props: any) {
       <div
         className={'bg-blue-600 h-1 rounded-full'}
         style={{
-          width: `${((props.value * 100) / props.maxValue).toString()}%`,
+          width: `${Math.min(
+            (props.value * 100) / props.maxValue,
+            100,
+          ).toString()}%`,
         }}
       ></div>
     </div>
