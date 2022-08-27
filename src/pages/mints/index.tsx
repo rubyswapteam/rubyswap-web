@@ -55,7 +55,16 @@ export default function Mints(props: any) {
           secondaryTabs={
             <Tab
               // tabs={rangeTabs(tab, range, undefined, '30m')}
-              tabs={rangeTabs(tab, range, undefined, '1h')}
+              tabs={rangeTabs(tab, range, undefined, '1h', [
+                '1m',
+                '5m',
+                '15m',
+                '30m',
+                '1h',
+                '6h',
+                '24h',
+                '7d',
+              ])}
               condense={true}
             />
           }

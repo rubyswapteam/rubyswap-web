@@ -109,9 +109,10 @@ export const rangeTabs = (
   range: any,
   route?: string,
   defaultRange = '24h',
+  tabLabels = ['5m', '15m', '30m', '1h', '6h', '24h', '7d', '30d'],
 ) => {
   const tabObj: { name: string; href: string; current: boolean }[] = [];
-  ['5m', '15m', '30m', '1h', '6h', '24h', '7d', '30d'].forEach((rng) => {
+  tabLabels.forEach((rng) => {
     const activeHref = getRangeHref(tab, rng, route, defaultRange);
     const activeTab = {
       name: rng,

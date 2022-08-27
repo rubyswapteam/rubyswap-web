@@ -13,33 +13,44 @@ export default function MintingCollectionTable() {
   useEffect(() => {
     fetchData();
     const interval = setInterval(() => {
-      fetchData();
-    }, 60000);
+      setCounter((prev) => prev + 1);
+    }, 15000);
     return () => clearInterval(interval);
-  }, [range]);
+  }, []);
 
-  const fetchData = () => {
+  useEffect(() => {
+    fetchData();
+  }, [range, counter]);
+
+  function fetchData() {
+    console.log('fetchData');
     const lastFetchSS = sessionStorage.getItem('r-mct-lf')
       ? JSON.parse(sessionStorage.getItem('r-mct-lf') || '')
       : {};
-    const refreshTime = moment().unix() - 30;
+    const refreshTime = moment().unix() - 14;
+    console.log('lastFetchSS');
+    console.log(lastFetchSS);
+    console.log('lastFetch');
+    console.log(lastFetch);
+    console.log('refreshTime');
+    console.log(refreshTime);
+    console.log('range');
+    console.log(range);
     if (
-      ((lastFetchSS[(range as string) || ''] as number) &&
-        (lastFetchSS[(range as string) || ''] as number) < refreshTime) ||
-      (lastFetch[(range as string) || ''] &&
-        lastFetch[(range as string) || ''] < refreshTime)
+      !lastFetchSS[(range as string) || ''] ||
+      (lastFetchSS[(range as string) || ''] as number) < refreshTime
     ) {
+      console.log('fetchData-1');
       try {
         fetchDbData();
       } catch (error) {
         console.log(error);
       }
     } else {
+      console.log('fetchData-2');
       const collectionString = sessionStorage.getItem(
         'r-mct-d' + (range || ''),
       );
-      console.log(collectionString);
-      console.log(collectionString ? JSON.parse(collectionString) : null);
       const collections = collectionString
         ? JSON.parse(collectionString)
         : null;
@@ -52,7 +63,7 @@ export default function MintingCollectionTable() {
         fetchDbData();
       }
     }
-  };
+  }
 
   function fetchDbData() {
     fetch('/.netlify/functions/getDbMints', {
@@ -69,7 +80,7 @@ export default function MintingCollectionTable() {
     );
   }
 
-  const getMins = () => {
+  function getMins() {
     const dict: any = {
       '1m': 1,
       '5m': 5,
@@ -80,9 +91,10 @@ export default function MintingCollectionTable() {
       '24h': 1440,
       '7d': 10080,
     };
-
+    console.log('getMins range');
+    console.log(range);
     return !range ? 60 : dict[(range as string) || ''];
-  };
+  }
 
   function applyUpdate(dataIn: any, time: number, persist = true) {
     const newData = dataIn.slice(0, 50);
@@ -96,7 +108,6 @@ export default function MintingCollectionTable() {
       );
       sessionStorage.setItem('r-mct-lf', JSON.stringify(newLastFetch));
     }
-    setCounter(counter + 1);
   }
 
   return (
@@ -177,10 +188,33 @@ export default function MintingCollectionTable() {
                         <tbody
                           className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-blackish"
                           id="scrollableTarget"
-                          key={'MCT' + counter.toString() + (range || '')}
+                          key={
+                            'MCT' +
+                            counter.toString() +
+                            data[0]?.total?.toString() +
+                            data[0]?.address +
+                            data[1]?.total?.toString() +
+                            data[1]?.address +
+                            data[2]?.total?.toString() +
+                            data[2]?.address +
+                            (range || '')
+                          }
                         >
                           {data && data.length > 0 && (
-                            <MintingCollectionTableBody data={data} />
+                            <MintingCollectionTableBody
+                              data={data}
+                              keyPrefix={
+                                'MCT' +
+                                counter.toString() +
+                                data[0]?.total?.toString() +
+                                data[0]?.address +
+                                data[1]?.total?.toString() +
+                                data[1]?.address +
+                                data[2]?.total?.toString() +
+                                data[2]?.address +
+                                +(range || '')
+                              }
+                            />
                           )}
                         </tbody>
                       </table>

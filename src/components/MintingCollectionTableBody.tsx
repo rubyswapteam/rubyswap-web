@@ -16,11 +16,10 @@ import WebsiteIcon from './WebsiteIcon';
 
 interface Props {
   data: any[];
+  keyPrefix: string;
 }
 
 export default function MintingCollectionTableBody(props: Props) {
-  const router = useRouter();
-  const { range } = router.query;
   const [renderedData, setRenderedData] = useState<any[]>(
     props.data.slice(0, 50),
   );
@@ -56,9 +55,19 @@ export default function MintingCollectionTableBody(props: Props) {
       {renderedData.map(
         (row) =>
           row.imageUrl && (
-            <React.Fragment key={row.index + row.slug}>
+            <React.Fragment
+              key={
+                props.keyPrefix +
+                row.address +
+                row.index +
+                row.slug +
+                'fragment'
+              }
+            >
               <Link
-                key={row.id + range + row.currRank + row.address}
+                key={
+                  props.keyPrefix + row.address + row.index + row.slug + 'link'
+                }
                 href={`/collection/${row.slug}`}
                 prefetch={false}
               >
