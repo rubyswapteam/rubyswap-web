@@ -132,7 +132,7 @@ export default function TrendingNftCollectionTable() {
                               scope="col"
                               className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Owners
+                              Unique Holders
                             </th>
                           </tr>
                         </thead>

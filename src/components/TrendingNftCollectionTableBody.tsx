@@ -68,7 +68,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                   key={nftCollection.id}
                 >
                   <>
-                    <td className="py-5 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
+                    <td className="py-3 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
                       <div className="flex items-center">
                         <StarIcon />
                         {/* <StarIcon
@@ -116,14 +116,14 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                           )}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
+                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       <EthereumIcon width={16} height={16} />
                     </td>
                     <NftCollectionTableStandardCell
                       value={nftCollection.osOneDayVolume?.toFixed(2)}
                       includeIcon={true}
                     />
-                    <td className="whitespace-nowrap px-3 py-5 text-xs font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
+                    <td className="whitespace-nowrap px-3 py-3 text-xs font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       <div className="flex items-center mt-1">
                         <div
                           className={

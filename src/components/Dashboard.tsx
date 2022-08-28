@@ -211,9 +211,14 @@ export default function Dashboard(props: any) {
                 }}
               >
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-                  <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  <h1 className="text-2xl font-semibold text-black dark:text-white">
                     {props.title}
                   </h1>
+                  {props.subtitle && (
+                    <h1 className="text-sm font-medium text-black/75 dark:text-white/75">
+                      {props.subtitle}
+                    </h1>
+                  )}
                 </div>
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
                   <div className="mt-6 mb-6">{props.primaryTabs}</div>

@@ -64,6 +64,7 @@ export default function Index(props: any) {
         <Dashboard
           setSearchModalState={props.setSearchModalState}
           title={'Browse'}
+          subtitle={'Search through the top collections'}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
           body={setBody()}
