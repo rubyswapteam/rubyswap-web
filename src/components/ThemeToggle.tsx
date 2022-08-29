@@ -26,8 +26,6 @@ const EthereumIcon: React.FC = (): JSX.Element => {
       typeof window === 'undefined'
         ? 'undefined'
         : localStorage.getItem('ruby-theme') || 'dark';
-    console.log('storedTheme');
-    console.log(storedTheme);
     setTheme(storedTheme);
   }
 

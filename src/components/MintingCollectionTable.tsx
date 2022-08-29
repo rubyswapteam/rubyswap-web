@@ -23,31 +23,20 @@ export default function MintingCollectionTable() {
   }, [range, counter]);
 
   function fetchData() {
-    console.log('fetchData');
     const lastFetchSS = sessionStorage.getItem('r-mct-lf')
       ? JSON.parse(sessionStorage.getItem('r-mct-lf') || '')
       : {};
     const refreshTime = moment().unix() - 14;
-    console.log('lastFetchSS');
-    console.log(lastFetchSS);
-    console.log('lastFetch');
-    console.log(lastFetch);
-    console.log('refreshTime');
-    console.log(refreshTime);
-    console.log('range');
-    console.log(range);
     if (
       !lastFetchSS[(range as string) || ''] ||
       (lastFetchSS[(range as string) || ''] as number) < refreshTime
     ) {
-      console.log('fetchData-1');
       try {
         fetchDbData();
       } catch (error) {
         console.log(error);
       }
     } else {
-      console.log('fetchData-2');
       const collectionString = sessionStorage.getItem(
         'r-mct-d' + (range || ''),
       );
@@ -91,8 +80,6 @@ export default function MintingCollectionTable() {
       '24h': 1440,
       '7d': 10080,
     };
-    console.log('getMins range');
-    console.log(range);
     return !range ? 60 : dict[(range as string) || ''];
   }
 

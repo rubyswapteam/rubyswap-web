@@ -45,15 +45,13 @@ export default function Mints(props: any) {
     }
   }
 
-  console.log(process.env.SUPABASE);
-
   return (
     <div>
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}
           title={'Mints'}
-          subtitle={'Access live mint info by the minute'}
+          subtitle={'Access real time mint info'}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={
             <Tab

@@ -158,7 +158,7 @@ export default function MintingCollectionTableBody(props: Props) {
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.totalSupply || row.total + row.prevtotal}
-                          {row.maxSupply && (
+                          {!!row.maxSupply && parseInt(row.maxSupply) != 0 && (
                             <div className="text-xs">
                               {'(' +
                                 Math.floor(

@@ -36,7 +36,7 @@ export async function handler(event) {
       data &&
       data[0] &&
       data[0].data &&
-      data[0].updatedAt > Math.floor(moment().unix() - 86400)
+      data[0].updatedAt > Math.floor(moment().unix() - 1800)
     ) {
       return { statusCode: 200, body: JSON.stringify(data) };
     } else {

@@ -230,7 +230,7 @@ export default function Collection(props: any) {
                   route={`/collection/${id}?tab=analytics`}
                 />
               </div>
-              <div className="flex mx-8">
+              <div className="block xl:flex mx-8">
                 <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <SalesHistoryChart
@@ -419,3 +419,6 @@ export default function Collection(props: any) {
     </motion.div>
   );
 }
+
+
+
