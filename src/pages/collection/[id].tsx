@@ -419,6 +419,3 @@ export default function Collection(props: any) {
     </motion.div>
   );
 }
-
-
-
