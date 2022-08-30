@@ -15,13 +15,17 @@ export default function Index(props: any) {
   const { tab, range } = router.query;
 
   const primaryTabs = [
-    { name: 'Trending', href: '/', current: !tab, border: true },
+    {
+      name: 'Trending',
+      href: '/',
+      current: !tab,
+      border: true,
+    },
     {
       name: 'Sweeps',
       href: '?tab=sweeps',
       current: tab == 'sweeps',
       border: true,
-      tooltip: true,
     },
     {
       name: 'Watchlist',
@@ -38,6 +42,11 @@ export default function Index(props: any) {
       tooltip: true,
     },
   ];
+
+  function setSubtitle() {
+    if (!tab) return 'Browse the top collections';
+    if (tab == 'sweeps') return 'View the latest sweeps';
+  }
 
   function setBody() {
     if (!tab) {
@@ -64,7 +73,7 @@ export default function Index(props: any) {
         <Dashboard
           setSearchModalState={props.setSearchModalState}
           title={'Collections'}
-          subtitle={'Browse the top collections'}
+          subtitle={setSubtitle()}
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
           body={setBody()}

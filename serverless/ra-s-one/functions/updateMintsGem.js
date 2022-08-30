@@ -2,12 +2,12 @@
 import fetch from 'node-fetch';
 import moment from 'moment';
 
-const supabase =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xeHN5em95ZGx1cXl1aWdjZXV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTgyNDk0MzMsImV4cCI6MTk3MzgyNTQzM30.lnxvp4ZngLQkTZn_jkpQbAImyuYb3CBMF88iJAbNJ3E';
+const gem = process.env.GEM;
+const supabase = process.env.SUPABASE;
 
 const postHeaders = {
   origin: 'https://www.gem.xyz',
-  'x-api-key': 'iMHRYlpIXs3zfcBY1r3iKLdqS2YUuOUs',
+  'x-api-key': gem,
   'Content-Type': 'application/json',
 };
 

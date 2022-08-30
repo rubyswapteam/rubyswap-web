@@ -87,7 +87,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                         />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[20%] self-center">
+                    <td className="whitespace-nowrap w-[20%] self-center lg:flex">
                       <div className="text-gray-700 dark:text-white/90 flex items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {nftCollection.name}
@@ -106,7 +106,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                         {nftCollection.firstmint &&
                           nftCollection.firstmint > newlyMintedTimestamp && (
                             <div
-                              className="bg-gradient-to-r from-green-600 to-green-600/10 hover:to-green-600/50 ml-2 px-2 py-0.5 rounded-lg text-xs"
+                              className="h-min self-center bg-gradient-to-r from-green-600 to-green-600/10 hover:to-green-600/50 ml-2 px-2 py-0.5 rounded-lg text-xs"
                               onClick={(event) => {
                                 event.stopPropagation();
                               }}

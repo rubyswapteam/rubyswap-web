@@ -14,7 +14,12 @@ export default function SocialsWrapper({
   return (
     <>
       {link && (
-        <a target="_blank" href={link} rel="noopener noreferrer">
+        <a
+          target="_blank"
+          href={link}
+          rel="noopener noreferrer"
+          onClick={(event) => event.stopPropagation()}
+        >
           <main>{children}</main>
         </a>
       )}

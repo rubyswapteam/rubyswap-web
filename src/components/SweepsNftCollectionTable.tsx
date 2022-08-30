@@ -1,200 +1,192 @@
-import { useNftProvider } from '@/contexts/NftProviderContext';
-import Link from 'next/link';
-import React, { useEffect } from 'react';
-import { INftSweepCollection } from '@/utils/nftUtils';
-import { StarIcon } from '@heroicons/react/outline';
-import EthereumIcon from './EthereumIcon';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-
-dayjs.extend(relativeTime);
+import moment from 'moment';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import MintingCollectionTableBody from './SweepsNftCollectionTableBody';
 
 export default function SweepsNftCollectionTable() {
-  const { sweepNftCollections, fetchAllSweepNftCollections } = useNftProvider();
+  const router = useRouter();
+  const { range } = router.query;
+  const [data, setData] = useState<undefined | any[]>(undefined);
+  const [lastFetch, setLastFetch] = useState<any>({});
+  const [counter, setCounter] = useState<number>(0);
 
   useEffect(() => {
-    if (!sweepNftCollections) {
-      // fetchAllSweepNftCollections();
+    fetchData();
+    const interval = setInterval(() => {
+      setCounter((prev) => prev + 1);
+    }, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [range, counter]);
+
+  function fetchData() {
+    const lastFetchSS = sessionStorage.getItem('r-snct-lf')
+      ? JSON.parse(sessionStorage.getItem('r-snct-lf') || '')
+      : {};
+    const refreshTime = moment().unix() - 14;
+    if (
+      !lastFetchSS[(range as string) || ''] ||
+      (lastFetchSS[(range as string) || ''] as number) < refreshTime
+    ) {
+      try {
+        fetchDbData();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const collectionString = sessionStorage.getItem(
+        'r-snct-d' + (range || ''),
+      );
+      const collections = collectionString
+        ? JSON.parse(collectionString)
+        : null;
+      if (collections && collections.length > 0) {
+        const time = Number(sessionStorage.getItem('r-snct-lf') as string);
+        applyUpdate(collections, time, false);
+      } else {
+        sessionStorage.removeItem('r-snct-lf');
+        sessionStorage.removeItem('r-snct-d' + (range || ''));
+        fetchDbData();
+      }
     }
-  }, [sweepNftCollections]);
+  }
+
+  function fetchDbData() {
+    fetch('/.netlify/functions/getDbSweeps', {
+      method: 'POST',
+      body: JSON.stringify({}),
+      redirect: 'follow',
+    }).then((res) =>
+      res.json().then((result) => {
+        const time = moment().unix();
+        if (result && result.length > 0) {
+          applyUpdate(result, time);
+        }
+      }),
+    );
+  }
+
+  function applyUpdate(dataIn: any, time: number, persist = true) {
+    const newLastFetch = { ...lastFetch, [(range as string) || '']: time };
+    setData(dataIn);
+    setLastFetch(newLastFetch);
+    if (persist && dataIn.length > 0) {
+      sessionStorage.setItem(
+        'r-snct-d' + (range || ''),
+        JSON.stringify(dataIn),
+      );
+      sessionStorage.setItem('r-snct-lf', JSON.stringify(newLastFetch));
+    }
+  }
 
   return (
     <div className="flex flex-col">
       <div className="">
         <div className="inline-block min-w-full align-middle">
           <div className="md:rounded-lg">
-            {sweepNftCollections && (
+            {data && (
               <div className="mt-1 flex flex-col">
                 <div className="">
                   <div className="inline-block min-w-full py-2 align-middle">
                     <div className=" md:rounded-lg">
                       <table className="min-w-full border-separate border-spacing-0">
                         <thead>
-                          <tr>
+                          <tr className="flex">
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-6 w-[5%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 dark:text-white sm:pl-6 w-[5%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
                               &nbsp;
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 text-left text-sm text-gray-900 w-[5%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold py-3.5 text-left text-sm text-gray-900 dark:text-white w-[5%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
                               &nbsp;
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 w-[25%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 dark:text-white w-[20%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Collection
+                              Collections
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[15%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Chain
+                              Socials
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Value
+                              Details
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
-                            >
-                              Sales
-                            </th>
-                            <th
-                              scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
                               Buyer
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Transactions
+                              Unique Holders
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 w-[10%] top-0 sticky bg-white border-b border-gray-100"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Date
+                              Unique Minters
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                            >
+                              Unique Holders
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                            >
+                              Rank
                             </th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100 bg-white">
-                          {sweepNftCollections.map(
-                            (nftCollection: INftSweepCollection, i: number) =>
-                              nftCollection.image && (
-                                <React.Fragment key={i}>
-                                  <Link
-                                    key={nftCollection.id}
-                                    href={`/collection/${nftCollection.collectionAddress}`}
-                                  >
-                                    <tr
-                                      className="hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100"
-                                      key={nftCollection.id}
-                                    >
-                                      <td className="py-5 pl-4 pr-7 text-sm sm:pl-6">
-                                        <div className="flex items-center">
-                                          <StarIcon height={20} width={20} />
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap py-3 text-sm">
-                                        <div className="flex items-center">
-                                          <img
-                                            className="h-8 w-8 rounded-full"
-                                            src={nftCollection.image}
-                                            alt=""
-                                          />
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap">
-                                        <div className="text-gray-700 flex items-center text-sm font-medium">
-                                          <div className="pt-1">
-                                            {nftCollection.name}
-                                          </div>
-                                          {nftCollection.isVerified == true && (
-                                            <img
-                                              src="https://www.genie.xyz/svgs/verifiedBadge.svg"
-                                              className="ml-1"
-                                              style={{
-                                                height: '16px',
-                                                width: '16px',
-                                              }}
-                                              alt="verified badge"
-                                            />
-                                          )}
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700">
-                                        {nftCollection.chainId == 1 && (
-                                          <>
-                                            <EthereumIcon
-                                              width={16}
-                                              height={16}
-                                            />
-                                          </>
-                                        )}
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
-                                        <div className="flex items-center">
-                                          <div className="pt-1">
-                                            {nftCollection?.value
-                                              ? (
-                                                  nftCollection?.value /
-                                                  Math.pow(10, 18)
-                                                ).toFixed(4)
-                                              : '0.0000'}{' '}
-                                          </div>
-                                          {nftCollection.chainId == 1 && (
-                                            <>
-                                              <div className="pl-1">
-                                                <EthereumIcon
-                                                  width={16}
-                                                  height={16}
-                                                />
-                                              </div>
-                                            </>
-                                          )}
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
-                                        <div className="flex items-center">
-                                          <div className="pt-1">
-                                            {nftCollection.sales}
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
-                                        <div className="flex items-center">
-                                          <div className="pt-1">
-                                            {nftCollection.buyer}
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
-                                        <div className="flex items-center">
-                                          {nftCollection.transaction}
-                                        </div>
-                                      </td>
-                                      <td className="whitespace-nowrap px-3 py-5 text-sm font-medium text-gray-700 circularstdbook">
-                                        <div className="flex items-center">
-                                          {dayjs(
-                                            Number(nftCollection.timestamp) *
-                                              1000,
-                                          ).fromNow()}
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  </Link>
-                                </React.Fragment>
-                              ),
+                        <tbody
+                          className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-blackish"
+                          id="scrollableTarget"
+                          key={
+                            'snct' +
+                            counter.toString() +
+                            data[0]?.total?.toString() +
+                            data[0]?.address +
+                            data[1]?.total?.toString() +
+                            data[1]?.address +
+                            data[2]?.total?.toString() +
+                            data[2]?.address +
+                            (range || '')
+                          }
+                        >
+                          {data && data.length > 0 && (
+                            <MintingCollectionTableBody
+                              data={data}
+                              keyPrefix={
+                                'snct' +
+                                counter.toString() +
+                                data[0]?.total?.toString() +
+                                data[0]?.address +
+                                data[1]?.total?.toString() +
+                                data[1]?.address +
+                                data[2]?.total?.toString() +
+                                data[2]?.address +
+                                +(range || '')
+                              }
+                            />
                           )}
                         </tbody>
                       </table>

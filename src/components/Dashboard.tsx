@@ -11,7 +11,6 @@ import DashboardUserDropdown from './DashboardUserDropdown';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
-  const { id, tab, range } = router.query;
 
   const parentRoute = () => {
     return router.route.split('/')[1];
@@ -214,9 +213,9 @@ export default function Dashboard(props: any) {
                   <h1 className="text-2xl font-semibold text-black dark:text-white">
                     {props.title}
                   </h1>
-                  {props.subtitle && (
+                  {props?.subtitle || props.tab?.subtitle && (
                     <h1 className="text-sm font-medium text-black/75 dark:text-white/75">
-                      {props.subtitle}
+                      {props?.subtitle || props.tab?.subtitle}
                     </h1>
                   )}
                 </div>

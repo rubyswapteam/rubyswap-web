@@ -1,6 +1,5 @@
 import moment from 'moment';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import DiscordLogo from './DiscordLogo';
@@ -14,17 +13,22 @@ import TableChevronUp from './TableChevronUp';
 import TableProgressBar from './TableProgressBar';
 import TwitterLogo from './TwitterLogo';
 import WebsiteIcon from './WebsiteIcon';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
 
 interface Props {
   data: any[];
   keyPrefix: string;
 }
 
-export default function MintingCollectionTableBody(props: Props) {
+export default function SweepsNftCollectionTableBody(props: Props) {
   const [renderedData, setRenderedData] = useState<any[]>(
     props.data.slice(0, 50),
   );
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [newlyMintedTimestamp] = useState<number>(
+    moment().unix() - 60 * 60 * 24 * 7,
+  );
   const fetchMoreData = () => {
     if (props.data && renderedData) {
       if (props.data.length > 0 && renderedData?.length >= props.data?.length) {
@@ -95,24 +99,21 @@ export default function MintingCollectionTableBody(props: Props) {
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">{row.name}</div>
                         <div className="text-xs dark:text-white/60">
-                          {row.firstMint
-                            ? moment.unix(row.firstMint).fromNow()
+                          {row.txnTime
+                            ? moment.unix(row.txnTime).fromNow()
                             : '-'}
                         </div>
                       </div>
-                      {row?.totalSupply === row?.maxSupply &&
-                        row?.totalSupply > 0 && (
-                          <div className="pt-1">
-                            <div
-                              className="h-min self-center bg-gradient-to-r from-blue-600 to-blue-600/10 hover:to-blue-600/50 lg:ml-2 px-2 py-0.5 rounded-lg text-xs"
-                              onClick={(event) => {
-                                event.stopPropagation();
-                              }}
-                            >
-                              Mint Complete
-                            </div>
-                          </div>
-                        )}
+                      {row.firstmint && row.firstmint > newlyMintedTimestamp && (
+                        <div
+                          className="h-min self-center bg-gradient-to-r from-green-600 to-green-600/10 hover:to-green-600/50 ml-2 px-2 py-0.5 rounded-lg text-xs"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          New Mint
+                        </div>
+                      )}
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
@@ -138,64 +139,30 @@ export default function MintingCollectionTableBody(props: Props) {
                         <TwitterLogo />
                       </SocialsWrapper>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
-                      <EthereumIcon width={16} height={16} />
-                    </td>
-
                     <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
-                          {row.total}
-                        </div>
-                        <div
-                          className={
-                            'w-fit text-white text-xs flex ' +
-                            (row?.total == row?.prevtotal || !row?.prevtotal
-                              ? ' text-gray-600 dark:text-gray-200/90'
-                              : row?.total > row?.prevtotal
-                              ? ' text-green-600 dark:text-green-200/90'
-                              : ' text-red-600 dark:text-red-200/90')
-                          }
-                        >
-                          {!row?.prevtotal
-                            ? '-'
-                            : row?.total / row?.prevtotal > 100
-                            ? '> 9999%'
-                            : ((row?.total / row?.prevtotal - 1) * 100)
-                                ?.toFixed(2)
-                                .toString() + '%'}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
-                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
-                        <div className="pt-1 whitespace-normal">
-                          {row.totalSupply || row.total + row.prevtotal}
-                          {!!row.maxSupply && parseInt(row.maxSupply) != 0 && (
-                            <div className="text-xs">
-                              {'(' +
-                                Math.floor(
-                                  ((row.totalSupply ||
-                                    row.total + row.prevtotal) /
-                                    row.maxSupply) *
-                                    100,
-                                ) +
-                                '%) of '}
-                              {row.maxSupply}
+                          {row.numItems + ' items'}
+                          <div className="text-xs flex">
+                            <div className="">
+                              {Math.floor(row.cost * 1000) / 1000}
                             </div>
-                          )}
+                            <div className="pl-0.5">
+                              <EthereumIcon width={12} height={12} />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </td>
                     <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
-                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
-                        <div className="pt-1 whitespace-normal">
-                          {row.totalUniqueMinters}
-                        </div>
-                        <TableProgressBar
-                          value={row?.totalUniqueMinters}
-                          maxValue={row?.totalSupply}
+                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium lg: flex">
+                        <Jazzicon
+                          diameter={20}
+                          seed={jsNumberForAddress(row.buyer)}
                         />
+                        <div className="pt-1 lg:pl-1 whitespace-normal">
+                          {getTrimmedAddressEllipsisMiddle(row.buyer, 4)}
+                        </div>
                       </div>
                     </td>
                     <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
@@ -205,6 +172,17 @@ export default function MintingCollectionTableBody(props: Props) {
                         </div>
                         <TableProgressBar
                           value={row.numOwners}
+                          maxValue={row?.totalSupply}
+                        />
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
+                        <div className="pt-1 whitespace-normal">
+                          {row.totalUniqueMinters}
+                        </div>
+                        <TableProgressBar
+                          value={row?.totalUniqueMinters}
                           maxValue={row?.totalSupply}
                         />
                       </div>

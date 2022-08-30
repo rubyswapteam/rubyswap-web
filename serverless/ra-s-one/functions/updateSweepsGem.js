@@ -6,8 +6,8 @@ const supabase = process.env.SUPABASE;
 
 const gemHeaders = {
   'Content-Type': 'application/json',
-  'origin': ' https://www.gem.xyz',
-  'x-api-key': 'iMHRYlpIXs3zfcBY1r3iKLdqS2YUuOUs',
+  origin: ' https://www.gem.xyz',
+  'x-api-key': gem,
 };
 
 const supabaseHeaders = {
@@ -24,13 +24,13 @@ const supabaseHeaders = {
   Prefer: 'resolution=merge-duplicates',
 };
 
-console.log('start')
+console.log('start');
 
 export async function handler() {
   const GEM_API_ENDPOINT =
     'https://sweeps.gemlabs.xyz/analytics/transactions/gem';
   const SUPABASE_API_ENDPOINT =
-    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/Sweeps';
+    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/rpc/persistsweeps';
   const ALCHEMY_API_ENDPOINT =
     'https://eth-mainnet.alchemyapi.io/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1';
   var gemRequestOptions = {
@@ -49,7 +49,7 @@ export async function handler() {
         },
       },
       offset: 0,
-      limit: 100,
+      limit: 50,
       sort: {
         timestamp: -1,
       },
@@ -58,14 +58,15 @@ export async function handler() {
   };
 
   try {
-
-console.log('gem')
+    console.log('gem');
 
     const responseGem = await fetch(GEM_API_ENDPOINT, gemRequestOptions);
-    const data = (await responseGem.json()).data;
+    const gemJson = await responseGem.json();
+    const data = gemJson.data;
 
     const alchemyRequestBody = [];
 
+    console.log('alchemy');
     for (let i = 0; i < data.length; i++) {
       alchemyRequestBody.push({
         id: i,
@@ -74,7 +75,7 @@ console.log('gem')
         method: 'eth_getTransactionByHash',
       });
     }
-    console.log('alchemy');
+    console.log('alchemy done');
 
     const responseAlchemy = await fetch(ALCHEMY_API_ENDPOINT, {
       method: 'POST',
@@ -84,30 +85,32 @@ console.log('gem')
     });
     const alchemyData = await responseAlchemy.json();
 
-    const collections = [];
+    const sweeps = [];
 
     for (let i = 0; i < data.length; i++) {
-      console.log('i')
-      console.log(alchemyData[i])
-      const collection = {
+      console.log('i');
+      const sweep = {
         index: i,
         txn: data[i]?.transactionHash || '',
-        timestamp: data[i]?.timestamp,
+        txnTime: parseInt(data[i]?.timestamp),
         buyer: data[i]?.buyer || '',
         collections: data[i]?.collectionsBought,
-        assets: [],
-        cost: parseInt(alchemyData[i].result.value), // insert alchemy
+        numItems: data[i]?.numItemsBought,
+        assets: null,
+        cost: parseInt(alchemyData[i].result.value) * 10 ** -18, // insert alchemy
+        chainId: 1,
       };
-      collections.push(collection);
+      sweeps.push(sweep);
     }
 
     var supabaseRequestOptions = {
       method: 'POST',
       headers: supabaseHeaders,
-      body: JSON.stringify(collections),
+      body: JSON.stringify({ payload: sweeps }),
+      // body: JSON.stringify(sweeps),
       redirect: 'follow',
     };
-    console.log(collections);
+    console.log(JSON.stringify({ payload: sweeps }));
 
     const responseSupabase = await fetch(
       SUPABASE_API_ENDPOINT,

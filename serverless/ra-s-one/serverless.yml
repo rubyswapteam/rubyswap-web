@@ -16,7 +16,7 @@ functions:
     handler: functions/updateMintsGem.handler
     events:
       - schedule: rate(5 minutes)
-  # updateSweepsGem:
-  #   handler: functions/updateSweepsGem.handler
-  #   events:
-  #     - schedule: rate(1 minutes)
+  updateSweepsGem:
+    handler: functions/updateSweepsGem.handler
+    events:
+      - schedule: rate(1 minute)

@@ -36,9 +36,8 @@ export async function handler(event) {
     sort: {
       currentEthPrice: 'asc',
     },
+    status: ['buy_now'],
   });
-
-  console.log(postBody);
 
   var requestOptions = {
     method: 'POST',
@@ -52,9 +51,72 @@ export async function handler(event) {
     const data = await response.json();
     return { statusCode: 200, body: JSON.stringify(data) };
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error }),
+    const API_ENDPOINT = 'https://api-2.gemlabs.xyz/assets';
+    const postBody = JSON.stringify({
+      filters: {
+        traits: {},
+        traitsRange: {},
+        address: parsedBody.contractAddress,
+        rankRange: {},
+        price: {},
+      },
+      sort: {
+        currentEthPrice: 'asc',
+      },
+      fields: {
+        id: 1,
+        name: 1,
+        address: 1,
+        collectionName: 1,
+        collectionSymbol: 1,
+        externalLink: 1,
+        imageUrl: 1,
+        smallImageUrl: 1,
+        animationUrl: 1,
+        standard: 1,
+        market: 1,
+        pendingTrxs: 1,
+        currentBasePrice: 1,
+        paymentToken: 1,
+        marketUrl: 1,
+        marketplace: 1,
+        tokenId: 1,
+        priceInfo: 1,
+        tokenReserves: 1,
+        ethReserves: 1,
+        sudoPoolAddress: 1,
+        sellOrders: 1,
+        startingPrice: 1,
+        rarityScore: 1,
+      },
+      limit: parsedBody.limit,
+      offset: parsedBody.offset,
+      markets: [],
+      status: ['buy_now'],
+    });
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers':
+        'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-Type': 'application/json',
+      'x-api-key': 'iMHRYlpIXs3zfcBY1r3iKLdqS2YUuOUs',
+      origin: ' https://www.gem.xyz',
     };
+    var requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: postBody,
+      redirect: 'follow',
+    };
+    try {
+      const response = await fetch(API_ENDPOINT, requestOptions);
+      const data = await response.json();
+      return { statusCode: 200, body: JSON.stringify(data) };
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: error }),
+      };
+    }
   }
 }
