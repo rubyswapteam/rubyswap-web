@@ -60,7 +60,16 @@ export async function handler() {
   try {
     console.log('gem');
 
-    const responseGem = await fetch(GEM_API_ENDPOINT, gemRequestOptions);
+    let running = true;
+    let i = 0;
+    let responseGem = undefined;
+    do {
+      responseGem = await fetch(GEM_API_ENDPOINT, gemRequestOptions);
+      console.log(i);
+      if (responseGem.status == 200 || i == 5) running = false;
+      ++i;
+    } while (running);
+
     const gemJson = await responseGem.json();
     const data = gemJson.data;
 
@@ -95,6 +104,9 @@ export async function handler() {
         txnTime: parseInt(data[i]?.timestamp),
         buyer: data[i]?.buyer || '',
         collections: data[i]?.collectionsBought,
+        collectionName: data[i]?.collections[0].name,
+        collectionImageUrl: data[i]?.collections[0].imageUrl,
+        collectionVerification: data[i]?.collections[0].isVerified,
         numItems: data[i]?.numItemsBought,
         assets: null,
         cost: parseInt(alchemyData[i].result.value) * 10 ** -18, // insert alchemy

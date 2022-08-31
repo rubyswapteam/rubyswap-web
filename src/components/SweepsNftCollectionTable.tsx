@@ -71,6 +71,7 @@ export default function SweepsNftCollectionTable() {
 
   function applyUpdate(dataIn: any, time: number, persist = true) {
     const newLastFetch = { ...lastFetch, [(range as string) || '']: time };
+    console.log(dataIn);
     setData(dataIn);
     setLastFetch(newLastFetch);
     if (persist && dataIn.length > 0) {
@@ -141,20 +142,16 @@ export default function SweepsNftCollectionTable() {
                               scope="col"
                               className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
-                              Unique Minters
+                              Date
                             </th>
                             <th
                               scope="col"
                               className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
-                            >
-                              Unique Holders
-                            </th>
+                            ></th>
                             <th
                               scope="col"
                               className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
-                            >
-                              Rank
-                            </th>
+                            ></th>
                           </tr>
                         </thead>
                         <tbody

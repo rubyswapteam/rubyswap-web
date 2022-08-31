@@ -102,9 +102,9 @@ export default function MintingCollectionTableBody(props: Props) {
                       </div>
                       {row?.totalSupply === row?.maxSupply &&
                         row?.totalSupply > 0 && (
-                          <div className="pt-1">
+                          <div className="pt-1 self-center">
                             <div
-                              className="h-min self-center bg-gradient-to-r from-blue-600 to-blue-600/10 hover:to-blue-600/50 lg:ml-2 px-2 py-0.5 rounded-lg text-xs"
+                              className="h-min bg-gradient-to-r from-blue-600 to-blue-600/10 hover:to-blue-600/50 lg:ml-2 px-2 py-0.5 rounded-lg text-xs"
                               onClick={(event) => {
                                 event.stopPropagation();
                               }}

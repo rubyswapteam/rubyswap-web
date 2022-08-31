@@ -11,24 +11,24 @@ export default function Mints(props: any) {
   const { tab, range } = router.query;
 
   const primaryTabs = [
-    { name: 'Mints', href: '/', current: !tab, border: true },
+    { name: 'Mints', href: '/mints', current: !tab, border: true },
     {
       name: 'Top Minters',
-      href: '?tab=minters',
-      current: tab == 'Minters',
+      href: '/mints?tab=minters',
+      current: tab == 'minters',
       border: true,
       tooltip: true,
     },
     {
       name: 'Upcoming',
-      href: '?tab=watchlist',
+      href: '/mints?tab=watchlist',
       current: tab == 'watchlist',
       border: true,
       tooltip: true,
     },
     {
       name: 'Owned',
-      href: '?tab=owned',
+      href: '/mints?tab=owned',
       current: tab == 'owned',
       border: true,
       tooltip: true,

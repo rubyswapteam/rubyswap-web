@@ -59,11 +59,11 @@ export default function SweepsNftCollectionTableBody(props: Props) {
     >
       {renderedData.map(
         (row) =>
-          row.imageUrl && (
+          row.txn && (
             <React.Fragment
               key={
                 props.keyPrefix +
-                row.address +
+                row.collections[0] +
                 row.index +
                 row.slug +
                 'fragment'
@@ -73,7 +73,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                 key={
                   props.keyPrefix + row.address + row.index + row.slug + 'link'
                 }
-                href={`/collection/${row.slug}`}
+                href={`/collection/${row.slug || row.collections[0]}`}
                 prefetch={false}
               >
                 <tr
@@ -88,20 +88,29 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                     </td>
                     <td className="whitespace-nowrap py-3 text-sm w-[5%] self-center">
                       <div className="flex items-center">
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src={row.imageUrl}
-                          alt=""
-                        />
+                        {row.imageUrl || row.collectionImageUrl ? (
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={row?.imageUrl || row?.collectionImageUrl}
+                            alt=""
+                          />
+                        ) : (
+                          <Jazzicon
+                            diameter={28}
+                            seed={jsNumberForAddress(row.buyer)}
+                          />
+                        )}
                       </div>
                     </td>
                     <td className="whitespace-nowrap w-[20%] self-center lg:flex">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
-                        <div className="pt-1 whitespace-normal">{row.name}</div>
+                        <div className="pt-1 whitespace-normal">
+                          {row.name || row.collectionName}
+                        </div>
                         <div className="text-xs dark:text-white/60">
-                          {row.txnTime
-                            ? moment.unix(row.txnTime).fromNow()
-                            : '-'}
+                          {getTrimmedAddressEllipsisMiddle(
+                            row.contractAddress || row.collections[0],
+                          )}
                         </div>
                       </div>
                       {row.firstmint && row.firstmint > newlyMintedTimestamp && (
@@ -118,8 +127,10 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                     <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
                         link={
-                          row.address &&
-                          `https://etherscan.io/address/${row.address}`
+                          (row.contractAddress || row.collections[0]) &&
+                          `https://etherscan.io/address/${
+                            row.contractAddress || row.collections[0]
+                          }`
                         }
                       >
                         <EtherscanLogo />
@@ -160,7 +171,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                           diameter={20}
                           seed={jsNumberForAddress(row.buyer)}
                         />
-                        <div className="pt-1 lg:pl-1 whitespace-normal">
+                        <div className="pt-1 lg:pl-1 whitespace-normal hover:text-yellow-300/90">
                           {getTrimmedAddressEllipsisMiddle(row.buyer, 4)}
                         </div>
                       </div>
@@ -179,28 +190,33 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                     <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
-                          {row.totalUniqueMinters}
+                          {row.txnTime
+                            ? moment.unix(row.txnTime).fromNow()
+                            : '-'}
                         </div>
-                        <TableProgressBar
-                          value={row?.totalUniqueMinters}
-                          maxValue={row?.totalSupply}
-                        />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
-                      {!row.prevRank || row.currRank < row.prevRank ? (
-                        <TableChevronUp
-                          class={'text-green-600 dark:text-green-300/95'}
-                        />
-                      ) : row.currRank > row.prevRank ? (
-                        <TableChevronDown
-                          class={'text-red-600 dark:text-red-300/95'}
-                        />
-                      ) : (
-                        <TableChevronFlat
-                          class={'text-gray-600 dark:text-gray-300/95'}
-                        />
-                      )}
+                    <td className="whitespace-nowrap w-[20%] px-3 py-3 self-center">
+                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
+                        <button
+                          className="hover:bg-white/5 border-white/50 border bg-purple/30  dark:hover:bg-purple/20 px-1.5 py-1 rounded-lg"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          Details
+                        </button>
+                        <button
+                          className="hover:bg-black/10 bg-black/20 dark:bg-white/20  dark:hover:bg-white/10 px-1.5 py-1 rounded-lg ml-2"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          Etherscan
+                        </button>
+                        <button
+                          className="hover:bg-black/20 bg-blue-600/50 dark:hover:bg-blue-600/40 px-1.5 py-1 rounded-lg ml-2"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          Listings
+                        </button>
+                      </div>
                     </td>
                   </>
                 </tr>
