@@ -32,7 +32,7 @@ module.exports = {
         ],
       },
       colors: {
-        blackish: 'rgb(15,15,15)',
+        blackish: 'rgb(0,0,0)',
       },
     },
   },

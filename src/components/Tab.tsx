@@ -35,7 +35,7 @@ const Tab: React.FC<Props> = ({ tabs, condense }): JSX.Element => {
           {tabs.map((tab: any) => (
             <div
               key={tab.name}
-              className="bg-white dark:bg-blackish bg-clip-padding rounded-md"
+              className="bg-white dark:bg-white/[.04] bg-clip-padding rounded-md"
             >
               <Link href={tab.href} prefetch={false}>
                 <a

@@ -224,7 +224,7 @@ export default function Collection(props: any) {
                 />
               )}
             </div>
-            <div className="py-8 bg-gray-100 dark:bg-white/[.02] w-full">
+            <div className="py-8 bg-gray-100 dark:bg-black w-full">
               <div className="my-8">
                 <StatsBoxList
                   stats={getStats()}
@@ -239,6 +239,8 @@ export default function Collection(props: any) {
                     ></SalesHistoryChart>
                   )}
                 </div>
+              </div>
+              <div className="block xl:flex mx-8">
                 <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <AveragePriceVolumeChart

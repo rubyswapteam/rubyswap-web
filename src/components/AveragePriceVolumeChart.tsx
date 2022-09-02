@@ -18,7 +18,7 @@ export default function AveragePriceVolumeChart(props: any) {
     secondaryColour: 'rgb(70, 115, 250)',
   };
   const darkTheme = {
-    background: '#000000',
+    background: 'rgba(255,255,255, 0.04)',
     text: '#ffffff',
     primaryColour: 'rgba(255,255,255,20)',
     secondaryColour: 'rgb(70, 115, 250)',
@@ -133,7 +133,8 @@ export default function AveragePriceVolumeChart(props: any) {
           color: themeColours.background,
         },
         backgroundColor: themeColours.background,
-        height: props.chart?.height || '60%',
+        // height: props.chart?.height || '60%',
+        height: '450px',
         marginLeft: 80,
         marginRight: 70,
         marginTop: 80,
@@ -157,6 +158,12 @@ export default function AveragePriceVolumeChart(props: any) {
       ],
       yAxis: [
         {
+          startOnTick: false,
+          endOnTick: false,
+          type: 'logarithmic',
+          minorTickInterval: 0.1,
+          minorGridLineColor: 'rgba(30,30,30,1)',
+          gridLineColor: 'rgba(40,40,40,1)',
           labels: {
             style: {
               color: themeColours.text,

@@ -57,10 +57,11 @@ export default function Dashboard(props: any) {
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
   }
-
-  const bannerStyle = props?.banner
-    ? `linear-gradient(rgba(256, 256, 256, 0.4), rgba(256, 256, 256, 0.7)), url('${props?.banner}')`
-    : '';
+  
+  const bannerStyle = ''
+  // const bannerStyle = props?.banner
+    // ? `linear-gradient(rgba(256, 256, 256, 0.4), rgba(256, 256, 256, 0.7)), url('${props?.banner}')`
+    // : '';
 
   return (
     <>
@@ -204,7 +205,7 @@ export default function Dashboard(props: any) {
           <main className="flex-1">
             <div className={'h-screen overflow-hidden flex-col flex'}>
               <div
-                className="py-6 bg-gray-50 dark:bg-white/[.02] z-10 bg-cover"
+                className="py-6 bg-black/[.02] dark:bg-blackish z-10 bg-cover"
                 style={{
                   backgroundImage: `${bannerStyle}`,
                 }}

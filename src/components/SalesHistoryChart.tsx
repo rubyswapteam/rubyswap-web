@@ -31,7 +31,7 @@ export default function SalesHistoryChart(props: any) {
     secondaryColour: 'rgb(70, 115, 250)',
   };
   const darkTheme = {
-    background: '#000000',
+    background: 'rgba(255,255,255, 0.04)',
     text: '#ffffff',
     primaryColour: 'rgba(255, 255, 255, 0.3)',
     secondaryColour: 'rgba(200, 0, 200, 0.5)',
@@ -76,6 +76,7 @@ export default function SalesHistoryChart(props: any) {
 
   function filterOutliers(arrIn: any[], priceIndex: number) {
     if (arrIn.length > 5) {
+      console.log('filterOut');
       const arr = arrIn.concat();
       arr.sort(function (a: any, b: any) {
         return a[priceIndex] - b[priceIndex];
@@ -83,8 +84,10 @@ export default function SalesHistoryChart(props: any) {
       const q1 = arr[Math.floor(arr.length / 4)][priceIndex];
       const q3 = arr[Math.ceil(arr.length * (3 / 4))][priceIndex];
       const iqr = q3 - q1;
-      const maxValue = q3 + iqr * 1.5;
-      const minValue = q1 - iqr * 1.5;
+      const maxValue = q3 + iqr * 4;
+      const minValue = q1 - iqr * 1.3;
+      console.log(maxValue);
+      console.log(minValue);
       const filteredValues = arr.filter(function (x: any) {
         return x[priceIndex] <= maxValue && x[priceIndex] >= minValue;
       });
@@ -107,6 +110,8 @@ export default function SalesHistoryChart(props: any) {
         trade.tokenId,
       ]);
     if (trades.length > 0) {
+      console.log('filter');
+      console.log(persist);
       trades = filterOutliers(trades, 1);
     }
     if (persist) setActiveTrades(trades);
@@ -125,7 +130,8 @@ export default function SalesHistoryChart(props: any) {
           color: themeColours.text,
         },
         backgroundColor: themeColours.background,
-        height: props.chart?.height || '60%',
+        // height: '30%',
+        height: '450px',
         marginLeft: 80,
         marginRight: 40,
         marginTop: 80,
@@ -136,10 +142,7 @@ export default function SalesHistoryChart(props: any) {
           type: 'datetime',
           labels: {
             formatter: function () {
-              return Highcharts.dateFormat(
-                '%a %d %b %H:%M:%S',
-                (this as any).value,
-              );
+              return Highcharts.dateFormat('%d/%m/%y', (this as any).value);
             },
             padding: 30,
             style: {
@@ -275,6 +278,7 @@ export default function SalesHistoryChart(props: any) {
         highcharts={HighCharts}
         options={chartOptions}
         updateArgs={[true]}
+        containerProps={{ style: { height: '100%' } }}
       ></HighchartsReact>
     </Transition>
   );

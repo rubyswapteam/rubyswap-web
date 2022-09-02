@@ -72,4 +72,4 @@ const CollectionProfileHeaderOld: React.FC<Props> = ({
   );
 };
 
-export default CollectionProfileHeader;
+export default CollectionProfileHeaderOld;
