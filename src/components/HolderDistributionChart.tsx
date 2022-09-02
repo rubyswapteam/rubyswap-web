@@ -96,7 +96,7 @@ export default function HolderDistrbutionChart(props: any) {
           name: 'Remaining Holder',
           y: total - whaleTotal,
           title: 'test',
-          format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${
+          format: `<div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${
             holders.length - whaleCount
           }</a><br /><a style='font-weight:600'>Holdings:</a> ${
             total - whaleTotal
@@ -108,7 +108,7 @@ export default function HolderDistrbutionChart(props: any) {
           name: 'Top 25 Whale',
           y: whaleTotal,
           drilldown: 'whaleWallets',
-          format: `<div <div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${whaleCount}</a><br /><a style='font-weight:600'>Holdings:</a> ${whaleTotal} / (${(
+          format: `<div style="display:block"><a><a style='font-weight:600'>Wallets:</a> ${whaleCount}</a><br /><a style='font-weight:600'>Holdings:</a> ${whaleTotal} / (${(
             (whaleTotal / total) *
             100
           ).toFixed(2)}%)</a></div>`,

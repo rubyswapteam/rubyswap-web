@@ -1,20 +1,17 @@
+import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import DiscordLogo from './DiscordLogo';
 import EthereumIcon from './EthereumIcon';
 import EtherscanLogo from './EtherscanLogo';
 import SocialsWrapper from './SocialsWrapper';
 import StarIcon from './StarIcon';
-import TableChevronDown from './TableChevronDown';
-import TableChevronFlat from './TableChevronFlat';
-import TableChevronUp from './TableChevronUp';
 import TableProgressBar from './TableProgressBar';
 import TwitterLogo from './TwitterLogo';
 import WebsiteIcon from './WebsiteIcon';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
 
 interface Props {
   data: any[];
@@ -204,18 +201,28 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         >
                           Details
                         </button>
-                        <button
-                          className="hover:bg-black/10 bg-black/20 dark:bg-white/20  dark:hover:bg-white/10 px-1.5 py-1 rounded-lg ml-2"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          Etherscan
-                        </button>
-                        <button
-                          className="hover:bg-black/20 bg-blue-600/50 dark:hover:bg-blue-600/40 px-1.5 py-1 rounded-lg ml-2"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          Listings
-                        </button>
+                        <div className="inline-block">
+                          <SocialsWrapper
+                            link={
+                              row.txn && `https://etherscan.io/tx/${row.txn}`
+                            }
+                          >
+                            <button
+                              className="hover:bg-black/10 bg-black/20 dark:bg-white/20  dark:hover:bg-white/10 px-1.5 py-1 rounded-lg ml-2"
+                              onClick={(event) => event.stopPropagation()}
+                            >
+                              Etherscan
+                            </button>
+                          </SocialsWrapper>
+                        </div>
+                        <Link href={`/collection/${row.slug}`}>
+                          <button
+                            className="hover:bg-black/20 bg-blue-600/50 dark:hover:bg-blue-600/40 px-1.5 py-1 rounded-lg ml-2"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            Listings
+                          </button>
+                        </Link>
                       </div>
                     </td>
                   </>

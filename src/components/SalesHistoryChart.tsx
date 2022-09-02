@@ -4,12 +4,26 @@ import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
+import Highcharts from 'highcharts';
+import { useRouter } from 'next/router';
 
 export default function SalesHistoryChart(props: any) {
-  const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
   const [chartOptions, setChartOptions] = useState(undefined as any);
+  const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isShowing, setIsShowing] = useState(false);
+  const [rangeSeconds] = useState<any>({
+    '5m': 300,
+    '15m': 900,
+    '30m': 1800,
+    '1h': 3600,
+    '6h': 21600,
+    '24h': 86400,
+    '7d': 604800,
+    '30d': 2592000,
+  });
   const { theme } = useTheme();
+  const router = useRouter();
+  const { range } = router.query;
   const lightTheme = {
     background: '#ffffff',
     text: '#07062C',
@@ -22,7 +36,6 @@ export default function SalesHistoryChart(props: any) {
     primaryColour: 'rgba(255, 255, 255, 0.3)',
     secondaryColour: 'rgba(200, 0, 200, 0.5)',
   };
-
   const [themeColours, setThemeColours] = useState(
     theme == 'light' ? lightTheme : darkTheme,
   );
@@ -30,6 +43,10 @@ export default function SalesHistoryChart(props: any) {
   useEffect(() => {
     setTheme();
   }, [theme]);
+
+  useEffect(() => {
+    setChartOptions(reset());
+  }, [range]);
 
   function setTheme() {
     if (theme == 'dark') {
@@ -43,52 +60,39 @@ export default function SalesHistoryChart(props: any) {
   }
 
   useEffect(() => {
+    setIsShowing(false);
     setChartOptions(reset());
-  }, [props.data, daysRequired]);
+  }, [props.data]);
 
-  function reset() {
-    const dates = getPreviousDays(daysRequired.days, daysRequired.trim);
-    const trades = manipulateData(dates, daysRequired.trim);
-    const newOptions = getOptions(dates.days, trades);
+  useEffect(() => {
+    setChartOptions(reset(false));
+  }, [activeTrades]);
+
+  function reset(persist = true) {
+    const trades = manipulateData(persist);
+    const newOptions = getOptions(trades);
     return newOptions;
   }
 
-  function getPreviousDays(daysRequired: number, trim: number) {
-    const days = [];
-    const daysUnix = [];
-
-    for (let i = daysRequired; i >= 0; i = i - 1 * trim) {
-      const date = moment().subtract(i, 'days').format('DD/MM/YYYY');
-      days.push(date);
-      const unixDate =
-        +new Date(
-          +date.substring(6, 10),
-          +date.substring(3, 5) - 1,
-          +date.substring(0, 2),
-        ) / 1000;
-      daysUnix.push(unixDate);
-    }
-    return { days: days, daysUnix: daysUnix };
-  }
-
-  function manipulateData(
-    dates: { days: string[]; daysUnix: number[] },
-    trim: number,
-  ) {
+  function manipulateData(persist = true) {
     if (!props.data) return;
-    const minimumDate = Math.min(...dates.daysUnix);
+    const nowUnix = moment().unix();
+    const activeTab = range?.toString() || '24h';
+    const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
     const trades = props.data
       .filter((trade: any) => trade.timestamp > minimumDate)
       .map((trade: any) => [
-        (trade.timestamp - minimumDate) / 86400 / trim,
+        trade.timestamp * 1000,
         Number(trade.price),
+        trade.tokenId,
       ]);
+    if (persist) setActiveTrades(trades);
     setIsShowing(trades.length > 0);
-
+    console.log(trades.length);
     return trades;
   }
 
-  function getOptions(dates: any[], trades: any[]) {
+  function getOptions(trades: any[]) {
     const options = {
       chart: {
         type: 'scatter',
@@ -105,14 +109,21 @@ export default function SalesHistoryChart(props: any) {
       },
       xAxis: [
         {
-          categories: dates,
-          crosshair: true,
+          // categories: dates,
+          type: 'datetime',
           labels: {
-            padding: 15,
+            formatter: function () {
+              return Highcharts.dateFormat(
+                '%a %d %b %H:%M:%S',
+                (this as any).value,
+              );
+            },
+            padding: 30,
             style: {
               color: themeColours.text,
             },
           },
+          crosshair: true,
           title: {
             style: {
               color: themeColours.text,
@@ -122,6 +133,12 @@ export default function SalesHistoryChart(props: any) {
       ],
       yAxis: [
         {
+          startOnTick: false,
+          endOnTick: false,
+          type: 'logarithmic',
+          minorTickInterval: 0.1,
+          minorGridLineColor: 'rgba(30,30,30,1)',
+          gridLineColor: 'rgba(40,40,40,1)',
           labels: {
             style: {
               color: themeColours.text,
@@ -161,8 +178,17 @@ export default function SalesHistoryChart(props: any) {
       },
       plotOptions: {
         scatter: {
+          point: {
+            events: {
+              click: function () {
+                console.log(this);
+              },
+            },
+          },
           marker: {
-            radius: 5,
+            lineWidth: 1,
+            lineColor: themeColours.primaryColour,
+            radius: 3,
             states: {
               hover: {
                 enabled: true,
@@ -178,8 +204,30 @@ export default function SalesHistoryChart(props: any) {
             },
           },
           tooltip: {
-            headerFormat: '<b>Sale Price</b><br>',
-            pointFormat: '{point.y} ETH',
+            useHTML: true,
+            headerFormat: '<b>Sale Details</b><br/>',
+            pointFormatter: function (): string {
+              const i = activeTrades && activeTrades[(this as any).index];
+              const price = i && i[1];
+              const time = i && i[0];
+              const tokenId = i && i[2];
+              let tokenIdStr = undefined;
+
+              if ((this as any).y == price && (this as any).x == time) {
+                tokenIdStr = `<div><b>Token ID:</b> ${tokenId}</div><br>`;
+              } else {
+                tokenIdStr = '';
+              }
+
+              return `
+              </div>
+              <b>Price (ETH):</b> ${(this as any).y}</div><br>
+              ${tokenIdStr}
+              <div><b>Time:</b> ${moment
+                .unix((this as any).x / 1000)
+                .format('H:mm, DD/MM')}</div>
+              `;
+            },
           },
         },
       },
@@ -190,6 +238,7 @@ export default function SalesHistoryChart(props: any) {
 
   return (
     <Transition
+      key={`${theme}-${props.data[0].contract}-${range || '24h'}-co-shc`}
       show={isShowing}
       as="div"
       enter="transition ease-out duration-1000"

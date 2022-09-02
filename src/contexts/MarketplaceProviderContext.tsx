@@ -31,42 +31,92 @@ export const MarketplaceProvider = ({
   const [activeListings, setActiveListings] = useState<any[]>();
   const [totalListings, setTotalListings] = useState<number>(0);
 
+  async function fetchGet(url: string) {
+    const res = await (
+      await fetch(url, { method: 'GET', redirect: 'follow' })
+    ).json();
+    return res;
+  }
+
+  function mapX2Y2Trades(arr: any[]) {
+    return arr.map((trade: any) => ({
+      timestamp: parseInt(trade.order.updated_at),
+      price: parseFloat(ethers.utils.formatEther(trade.order.price)),
+      contract: trade.token.contract,
+      tokenId: trade.token.token_id.toString(),
+      txn: trade.tx,
+      marketplace: 'X2Y2',
+      looksRareId: null,
+      from: trade.from_address,
+      to: trade.to_address,
+      chainId: 1,
+    }));
+  }
+
+  function mapLooksRareTrades(arr: any[]) {
+    return arr.map((trade: any) => ({
+      timestamp: moment(trade.createdAt).unix(),
+      price: parseFloat(ethers.utils.formatEther(trade.order.price)),
+      contract: trade.collection.address,
+      tokenId: trade.token.tokenId.toString(),
+      txn: trade.hash,
+      marketplace: 'LooksRare',
+      looksRareId: parseInt(trade.id),
+      from: trade.from,
+      to: trade.to,
+      chainId: 1,
+    }));
+  }
+
+  function mapOSTrades(obj: any) {
+    return obj.trades.map((trade: any) => ({
+      timestamp: parseInt(trade.timestamp),
+      price: parseFloat(trade.priceETH),
+      contract: trade.collection.id,
+      tokenId: trade.tokenId,
+      txn: trade.transactionHash,
+      marketplace: 'Opensea',
+      looksRareId: null,
+      from: trade.seller,
+      to: trade.buyer,
+      chainId: 1,
+    }));
+  }
+
+  async function getTrades(sUrl: string, pUrl: string, func: any) {
+    const salesRaw = await fetchGet(sUrl);
+    const purchasesRaw = await fetchGet(pUrl);
+    let sales: any[] = [];
+    let purchases: any[] = [];
+    if (salesRaw.data) sales = func(salesRaw.data);
+    if (purchasesRaw.data) purchases = func(purchasesRaw.data);
+    return { sales: sales, purchases: purchases };
+  }
+
   async function getTradesX2Y2(user = '', contract = '') {
     const user_address = user != undefined ? '=' + user : '';
     const contract_address = contract != undefined ? '=' + contract : '';
     const salesUrl = `/.netlify/functions/getTradesX2Y2?from${user_address}&to&contract${contract_address}`;
     const purchasesUrl = `/.netlify/functions/getTradesX2Y2?from&to${user_address}&contract${contract_address}`;
+    return getTrades(salesUrl, purchasesUrl, mapX2Y2Trades);
+  }
 
-    const salesRaw = await (
-      await fetch(salesUrl, { method: 'GET', redirect: 'follow' })
-    ).json();
-    const purchasesRaw = await (
-      await fetch(purchasesUrl, { method: 'GET', redirect: 'follow' })
-    ).json();
+  async function getTradesLooksRare(user = '', contract = '') {
+    const user_address = user != undefined ? '=' + user : '';
+    const contract_address =
+      contract && contract.length > 1 ? '&contract=' + contract : '';
+    const salesUrl = `/.netlify/functions/getTradesLooksRare?from${user_address}${contract_address}`;
+    const purchasesUrl = `/.netlify/functions/getTradesLooksRare?to${user_address}${contract_address}`;
+    return getTrades(salesUrl, purchasesUrl, mapLooksRareTrades);
+  }
 
-    const sales = salesRaw.data.map((sale: any) => {
-      return {
-        timestamp: sale.order.updated_at,
-        price: ethers.utils.formatEther(sale.order.price),
-        contract: sale.token.contract,
-        tokenId: sale.token.token_id,
-        txn: sale.tx,
-        marketplace: 'X2Y2',
-      };
-    });
-
-    const purchases = purchasesRaw.data.map((purchase: any) => {
-      return {
-        timestamp: purchase.order.updated_at,
-        price: ethers.utils.formatEther(purchase.order.price),
-        contract: purchase.token.contract,
-        tokenId: purchase.token.token_id,
-        txn: purchase.tx,
-        marketplace: 'X2Y2',
-      };
-    });
-
-    return { sales: sales, purchases: purchases };
+  async function getTradesOS(user = '', contract = '') {
+    const user_address = user != undefined ? '=' + user : '';
+    const contract_address =
+      contract && contract.length > 1 ? '&contract=' + contract : '';
+    const salesUrl = `/.netlify/functions/getTradesOS?from${user_address}${contract_address}`;
+    const purchasesUrl = `/.netlify/functions/getTradesOS?to${user_address}${contract_address}`;
+    return getTrades(salesUrl, purchasesUrl, mapOSTrades);
   }
 
   async function getCollectionTradesX2Y2(
@@ -86,32 +136,12 @@ export const MarketplaceProvider = ({
     let isFinished = false;
 
     do {
-      const url = `/.netlify/functions/getTradesX2Y2?contract=${contract_address}${cursor}${createdAfter}`;
-
-      const res = await (
-        await fetch(url, { method: 'GET', redirect: 'follow' })
-      ).json();
-
-      if (!res.data) return resArr;
-
       let filteredResultArray = [];
-
-      filteredResultArray = res.data.map((trade: any) => {
-        return {
-          timestamp: parseInt(trade.order.updated_at),
-          price: parseFloat(ethers.utils.formatEther(trade.order.price)),
-          contract: trade.token.contract,
-          tokenId: trade.token.token_id.toString(),
-          txn: trade.tx,
-          marketplace: 'X2Y2',
-          looksRareId: null,
-          from: trade.from_address,
-          to: trade.to_address,
-          chainId: 1,
-        };
-      });
+      const url = `/.netlify/functions/getTradesX2Y2?contract=${contract_address}${cursor}${createdAfter}`;
+      const res = await fetchGet(url);
+      if (!res.data) return resArr;
+      filteredResultArray = mapX2Y2Trades(res.data);
       resArr = [...resArr, ...filteredResultArray];
-
       if (res.next && res.next.length > 1) {
         cursor = '&cursor=' + res.next;
       } else {
@@ -120,52 +150,6 @@ export const MarketplaceProvider = ({
     } while (!isFinished);
 
     return resArr;
-  }
-
-  async function getTradesLooksRare(user = '', contract = '') {
-    const user_address = user != undefined ? '=' + user : '';
-    const contract_address =
-      contract && contract.length > 1 ? '&contract=' + contract : '';
-    const salesUrl = `/.netlify/functions/getTradesLooksRare?from${user_address}${contract_address}`;
-    const purchasesUrl = `/.netlify/functions/getTradesLooksRare?to${user_address}${contract_address}`;
-
-    const salesRaw = await (
-      await fetch(salesUrl, { method: 'GET', redirect: 'follow' })
-    ).json();
-    const purchasesRaw = await (
-      await fetch(purchasesUrl, { method: 'GET', redirect: 'follow' })
-    ).json();
-
-    let sales = [];
-    let purchases = [];
-
-    if (salesRaw.data) {
-      sales = salesRaw.data?.map((sale: any) => {
-        return {
-          timestamp: moment(sale.createdAt).unix(),
-          price: ethers.utils.formatEther(sale.order.price),
-          contract: sale.collection.address,
-          tokenId: sale.token.tokenId,
-          txn: sale.hash,
-          marketplace: 'LooksRare',
-        };
-      });
-    }
-
-    if (purchasesRaw.data) {
-      purchases = purchasesRaw.data?.map((purchase: any) => {
-        return {
-          timestamp: moment(purchase.createdAt).unix(),
-          price: ethers.utils.formatEther(purchase.order.price),
-          contract: purchase.collection.address,
-          tokenId: purchase.token.tokenId,
-          txn: purchase.hash,
-          marketplace: 'LooksRare',
-        };
-      });
-    }
-
-    return { sales: sales, purchases: purchases };
   }
 
   async function getCollectionTradesLooksRare(
@@ -184,31 +168,12 @@ export const MarketplaceProvider = ({
         : '';
 
     do {
-      const url = `/.netlify/functions/getTradesLooksRare?contract=${contract_address}${cursor}`;
-
-      const res = await (
-        await fetch(url, { method: 'GET', redirect: 'follow' })
-      ).json();
-
+      const res = await fetchGet(
+        `/.netlify/functions/getTradesLooksRare?contract=${contract_address}${cursor}`,
+      );
       let filteredResultArray = [];
-
       if (!res.data) return resArr;
-
-      filteredResultArray = res.data?.map((trade: any) => {
-        return {
-          timestamp: moment(trade.createdAt).unix(),
-          price: parseFloat(ethers.utils.formatEther(trade.order.price)),
-          contract: trade.collection.address,
-          tokenId: trade.token.tokenId.toString(),
-          txn: trade.hash,
-          marketplace: 'LooksRare',
-          looksRareId: parseInt(trade.id),
-          from: trade.from,
-          to: trade.to,
-          chainId: 1,
-        };
-      });
-
+      filteredResultArray = mapLooksRareTrades(res.data);
       resArr = [...resArr, ...filteredResultArray];
 
       if (!!res.data[0]?.id && filteredResultArray.length < 150) {
@@ -221,10 +186,44 @@ export const MarketplaceProvider = ({
     return resArr;
   }
 
+  async function getCollectionTradesOS(
+    contract = '',
+    lastTxn: any = undefined,
+  ) {
+    const contract_address =
+      !!contract && contract.length > 1 ? contract : undefined;
+    if (!contract_address) return;
+
+    let cursor = '';
+    const createdAfter =
+      !!lastTxn && !!lastTxn?.timestamp
+        ? '&createdAfter=' + lastTxn.timestamp
+        : '';
+    let resArr: any[] = [];
+    let isFinished = false;
+    do {
+      const res = await fetchGet(
+        `/.netlify/functions/getTradesOS?contract=${contract_address}${cursor}${createdAfter}`,
+      );
+      let filteredResultArray = [];
+      if (!res.data) return resArr;
+      filteredResultArray = mapOSTrades(res.data);
+      resArr = [...resArr, ...filteredResultArray];
+      if (!filteredResultArray || filteredResultArray.length < 1000) {
+        isFinished = true;
+      } else {
+        cursor =
+          '&cursor=' + res.data.trades[res.data.trades.length - 1].blockNumber;
+      }
+    } while (!isFinished);
+    return resArr;
+  }
+
   async function getUserTrades(user = '', contract = '') {
     const x2y2res = await getTradesX2Y2(user, contract);
     const looksRes = await getTradesLooksRare(user, contract);
-    const aggregateTrades = getAggregateTrades(x2y2res, looksRes);
+    const osRes = await getTradesOS(user, contract);
+    const aggregateTrades = getAggregateTrades([x2y2res, looksRes, osRes]);
     setUserTrades(aggregateTrades);
     applyTradeFilters(aggregateTrades, tradeFilters);
   }
@@ -248,9 +247,11 @@ export const MarketplaceProvider = ({
     if (!collection) return;
     let dbTrades = await getCollectionTradesfromDb(collection);
     if (!Array.isArray(dbTrades)) dbTrades = [];
+    const unixNow = moment().unix() - 60 * 60 * 24 * 30;
     let maxValues: any = {
       LooksRare: { timestamp: 0, looksRareId: 0 },
       X2Y2: { timestamp: 0 },
+      Opensea: { timestamp: unixNow },
     };
     if (dbTrades.length > 0) {
       maxValues = dbTrades.reduce(
@@ -259,16 +260,22 @@ export const MarketplaceProvider = ({
             ? prev
             : { ...prev, ...{ [current.marketplace]: current } };
         },
-        { LooksRare: { timestamp: 0, looksRareId: 0 }, X2Y2: { timestamp: 0 } },
+        {
+          LooksRare: { timestamp: 0, looksRareId: 0 },
+          X2Y2: { timestamp: 0 },
+          Opensea: { timestamp: unixNow },
+        },
       );
     }
-    const [x2y2res, looksRes] = await Promise.all([
+    const [x2y2res, looksRes, os] = await Promise.all([
       getCollectionTradesX2Y2(collection, maxValues.X2Y2),
       getCollectionTradesLooksRare(collection, maxValues.LooksRare),
+      getCollectionTradesOS(collection, maxValues.Opensea),
     ]);
     let newTrades: any[] = [];
     if (x2y2res) newTrades = [...newTrades, ...x2y2res];
     if (looksRes) newTrades = [...newTrades, ...looksRes];
+    if (os) newTrades = [...newTrades, ...os];
     newTrades = newTrades.filter(
       (y) =>
         !dbTrades.some((x: any) =>
@@ -345,21 +352,16 @@ export const MarketplaceProvider = ({
       : obj;
   }
 
-  function getAggregateTrades(
-    x2y2res: { sales: any[]; purchases: any[] },
-    looksRes: { sales: any[]; purchases: any[] },
-  ) {
+  function getAggregateTrades(arr: { sales: any[]; purchases: any[] }[]) {
     let userSales: any[] = [];
     let userPurchases: any[] = [];
-    if (x2y2res.sales && x2y2res.sales.length > 0)
-      userSales = [...userSales, ...x2y2res.sales];
-    if (x2y2res.purchases && x2y2res.purchases.length > 0)
-      userPurchases = [...userPurchases, ...x2y2res.purchases];
-    if (looksRes.sales && looksRes.sales.length > 0)
-      userSales = [...userSales, ...looksRes.sales];
-    if (looksRes.purchases && looksRes.purchases.length > 0)
-      userPurchases = [...userPurchases, ...looksRes.purchases];
-
+    for (let i = 0; i < arr.length; i++) {
+      const res = arr[i];
+      if (res.sales && res.sales.length > 0)
+        userSales = [...userSales, ...res.sales];
+      if (res.purchases && res.purchases.length > 0)
+        userPurchases = [...userPurchases, ...res.purchases];
+    }
     return { sales: userSales, purchases: userPurchases };
   }
 

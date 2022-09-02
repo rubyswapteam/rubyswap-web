@@ -188,7 +188,7 @@ export default function UserTradeHistoryChart(props: any) {
       plotOptions: {
         scatter: {
           marker: {
-            radius: 5,
+            radius: 3,
             states: {
               hover: {
                 enabled: true,
