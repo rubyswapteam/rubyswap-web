@@ -114,7 +114,7 @@ export default function MintingCollectionTableBody(props: Props) {
                           </div>
                         )}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
+                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
                         link={
                           row.address &&
@@ -187,7 +187,7 @@ export default function MintingCollectionTableBody(props: Props) {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-wrap w-[10%] px-3 py-3 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.totalUniqueMinters}

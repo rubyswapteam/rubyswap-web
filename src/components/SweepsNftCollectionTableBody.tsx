@@ -121,7 +121,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         </div>
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
+                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
                         link={
                           (row.contractAddress || row.collections[0]) &&
