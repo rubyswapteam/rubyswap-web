@@ -57,11 +57,11 @@ export default function Dashboard(props: any) {
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
   }
-  
-  const bannerStyle = ''
+
+  const bannerStyle = '';
   // const bannerStyle = props?.banner
-    // ? `linear-gradient(rgba(256, 256, 256, 0.4), rgba(256, 256, 256, 0.7)), url('${props?.banner}')`
-    // : '';
+  // ? `linear-gradient(rgba(256, 256, 256, 0.4), rgba(256, 256, 256, 0.7)), url('${props?.banner}')`
+  // : '';
 
   return (
     <>
