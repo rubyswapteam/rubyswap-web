@@ -32,6 +32,7 @@ export default function Collection(props: any) {
     useState<boolean>(true);
   const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
   const [recentListings, setRecentListings] = useState<any[]>([]);
+  const [isBubbleAvailable, setIsBubbleAvailable] = useState(false);
   const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
     useState(false);
   const {

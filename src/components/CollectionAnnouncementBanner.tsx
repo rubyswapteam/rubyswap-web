@@ -55,7 +55,7 @@ export default function CollectionAnnouncementBanner(props: Props) {
               />
             </div>
             <div className="p-2 md:py-0 text-center">
-              <a className="block md:inline-block px-4 py-2 rounded-md hover:bg-gray-100 font-medium text-gray-900">
+              <a className="block md:inline-block px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 font-medium text-black dark:text-white">
                 Read More &rarr;
               </a>
             </div>

@@ -74,18 +74,41 @@ export default function SalesHistoryChart(props: any) {
     return newOptions;
   }
 
+  function filterOutliers(arrIn: any[], priceIndex: number) {
+    if (arrIn.length > 5) {
+      const arr = arrIn.concat();
+      arr.sort(function (a: any, b: any) {
+        return a[priceIndex] - b[priceIndex];
+      });
+      const q1 = arr[Math.floor(arr.length / 4)][priceIndex];
+      const q3 = arr[Math.ceil(arr.length * (3 / 4))][priceIndex];
+      const iqr = q3 - q1;
+      const maxValue = q3 + iqr * 1.5;
+      const minValue = q1 - iqr * 1.5;
+      const filteredValues = arr.filter(function (x: any) {
+        return x[priceIndex] <= maxValue && x[priceIndex] >= minValue;
+      });
+      return filteredValues;
+    } else {
+      return arrIn;
+    }
+  }
+
   function manipulateData(persist = true) {
     if (!props.data) return;
     const nowUnix = moment().unix();
     const activeTab = range?.toString() || '24h';
     const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
-    const trades = props.data
+    let trades = props.data
       .filter((trade: any) => trade.timestamp > minimumDate)
       .map((trade: any) => [
         trade.timestamp * 1000,
         Number(trade.price),
         trade.tokenId,
       ]);
+    if (trades.length > 0) {
+      trades = filterOutliers(trades, 1);
+    }
     if (persist) setActiveTrades(trades);
     setIsShowing(trades.length > 0);
     console.log(trades.length);

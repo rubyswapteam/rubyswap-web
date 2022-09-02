@@ -215,7 +215,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                             </button>
                           </SocialsWrapper>
                         </div>
-                        <Link href={`/collection/${row.slug}`}>
+                        <Link href={`/collection/${row.slug}?tab=listings`}>
                           <button
                             className="hover:bg-black/20 bg-blue-600/50 dark:hover:bg-blue-600/40 px-1.5 py-1 rounded-lg ml-2"
                             onClick={(event) => event.stopPropagation()}
