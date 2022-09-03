@@ -7,9 +7,14 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-function ErrorFallback({ error }: any) {
+function ErrorFallback({ error, resetErrorBoundary }: any) {
   return (
-    <div className="flex justify-center items-center h-[100px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
+    <div
+      onLoad={() => {
+        resetErrorBoundary;
+      }}
+      className="flex justify-center items-center h-[100px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]"
+    >
       {'Unable to load this chart.'}
     </div>
   );
@@ -188,7 +193,6 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           startOnTick: false,
           endOnTick: false,
-          type: 'logarithmic',
           minorTickInterval: 0.1,
           minorGridLineColor: 'rgba(30,30,30,1)',
           gridLineColor: 'rgba(40,40,40,1)',
