@@ -20,6 +20,7 @@ import RightArrow from '../../components/RightArrow';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { motion } from 'framer-motion';
+import moment from 'moment';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -170,27 +171,8 @@ export default function Collection(props: any) {
   const refreshButtonTabs = [undefined, 'listings', 'analytics'];
   const rangeButtonsTabs = [undefined, 'analytics'];
 
-  function getStats() {
-    const rng = range ? range?.toString() : '24h';
+  function getStatsTop() {
     return [
-      {
-        name: 'Floor Price',
-        value:
-          activeCollection?.osFloorPrice &&
-          `${(activeCollection?.osFloorPrice).toFixed(2)} ETH`,
-      },
-      {
-        name: `${rng} Volume`,
-        value:
-          activeCollection?.osThirtyDayVolume &&
-          `${(activeCollection?.osThirtyDayVolume).toFixed(2)} ETH`,
-      },
-      {
-        name: `${rng} Day Sales`,
-        value:
-          activeCollection?.osThirtyDaySales &&
-          `${activeCollection?.osThirtyDaySales}`,
-      },
       {
         name: 'Supply',
         value:
@@ -202,6 +184,38 @@ export default function Collection(props: any) {
           (activeCollection?.numOwners / activeCollection?.totalSupply) *
           100
         ).toFixed(2)}%`,
+      },
+      {
+        name: 'First Deployed',
+        value: `${
+          activeCollection.firstMint
+            ? moment.unix(activeCollection?.firstMint).fromNow()
+            : 'tbd'
+        }`,
+      },
+    ];
+  }
+
+  function getStatsBot() {
+    const rng = range || '24h';
+    return [
+      {
+        name: `${rng} Volume`,
+        value:
+          activeCollection?.osThirtyDayVolume &&
+          `${(activeCollection?.osThirtyDayVolume).toFixed(2)} ETH`,
+      },
+      {
+        name: `${rng} Sales`,
+        value:
+          activeCollection?.osThirtyDaySales &&
+          `${activeCollection?.osThirtyDaySales}`,
+      },
+      {
+        name: 'Floor Price',
+        value:
+          activeCollection?.osFloorPrice &&
+          `${(activeCollection?.osFloorPrice).toFixed(2)} ETH`,
       },
     ];
   }
@@ -227,7 +241,7 @@ export default function Collection(props: any) {
             <div className="py-8 bg-gray-100 dark:bg-black w-full">
               <div className="my-8">
                 <StatsBoxList
-                  stats={getStats()}
+                  stats={getStatsTop()}
                   route={`/collection/${id}?tab=analytics`}
                 />
               </div>
@@ -239,6 +253,12 @@ export default function Collection(props: any) {
                     ></SalesHistoryChart>
                   )}
                 </div>
+              </div>
+              <div className="my-8">
+                <StatsBoxList
+                  stats={getStatsBot()}
+                  route={`/collection/${id}?tab=analytics`}
+                />
               </div>
               <div className="block xl:flex mx-8">
                 <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
@@ -319,7 +339,7 @@ export default function Collection(props: any) {
             <CollectionTitleHeader title={'Summary Stats'} />
           </div>
           <StatsBoxList
-            stats={getStats()}
+            stats={getStatsTop()}
             route={`/collection/${id}?tab=analytics`}
           />
           <div className="bg-gray-50 dark:bg-white/[.02] my-12 py-16 px-4 sm:px-6 md:px-8">

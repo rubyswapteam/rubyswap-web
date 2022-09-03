@@ -1,16 +1,28 @@
-import { Transition } from '@headlessui/react';
-import * as HighCharts from 'highcharts';
+import Highcharts, * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
 import highchartsMore from 'highcharts/highcharts-more';
+import moment from 'moment';
+import { useTheme } from 'next-themes';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export default function AveragePriceVolumeChart(props: any) {
-  const [daysRequired, setDaysRequired] = useState({ days: 14, trim: 1 });
   const [isShowing, setIsShowing] = useState(false);
   const [chartOptions, setChartOptions] = useState(undefined as any);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const router = useRouter();
+  const { range } = router.query;
   const { theme } = useTheme();
+  const [rangeSettings] = useState<any>({
+    '5m': { duration: 300, intervals: 60 },
+    '15m': { duration: 900, intervals: 60 },
+    '30m': { duration: 1800, intervals: 60 },
+    '1h': { duration: 3600, intervals: 60 },
+    '6h': { duration: 21600, intervals: 300 },
+    '24h': { duration: 86400, intervals: 3600 },
+    '7d': { duration: 604800, intervals: 3600 },
+    '30d': { duration: 2592000, intervals: 86400 },
+  });
   const lightTheme = {
     background: '#ffffff',
     text: '#07062C',
@@ -20,7 +32,7 @@ export default function AveragePriceVolumeChart(props: any) {
   const darkTheme = {
     background: 'rgba(255,255,255, 0.04)',
     text: '#ffffff',
-    primaryColour: 'rgba(255,255,255,20)',
+    primaryColour: 'rgba(255, 255, 255, 0.3)',
     secondaryColour: 'rgb(70, 115, 250)',
   };
   const [themeColours, setThemeColours] = useState(
@@ -29,8 +41,13 @@ export default function AveragePriceVolumeChart(props: any) {
   highchartsMore(HighCharts);
 
   useEffect(() => {
+    setIsShowing(false);
     setChartOptions(reset());
-  }, [props.data, daysRequired]);
+  }, [props.data]);
+
+  useEffect(() => {
+    setChartOptions(reset());
+  }, [range]);
 
   useEffect(() => {
     setTheme();
@@ -55,65 +72,57 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   function reset() {
-    const dates = getPreviousDays(daysRequired.days, daysRequired.trim);
-    const trades = manipulateData(dates, daysRequired.trim);
-    const newOptions = getOptions(dates.days, trades);
+    const trades = manipulateData();
+    const newOptions = getOptions(trades);
     return newOptions;
   }
 
-  function getPreviousDays(daysRequired: number, trim: number) {
-    const days = [];
-    const daysUnix = [];
-
-    for (let i = daysRequired; i >= 0; i = i - 1 * trim) {
-      const date = moment().subtract(i, 'days').format('DD/MM/YYYY');
-      days.push(date);
-      const unixDate =
-        +new Date(
-          +date.substring(6, 10),
-          +date.substring(3, 5) - 1,
-          +date.substring(0, 2),
-        ) / 1000;
-      daysUnix.push(unixDate);
-    }
-    return { days: days, daysUnix: daysUnix };
-  }
-
-  function manipulateData(
-    dates: { days: string[]; daysUnix: number[] },
-    trim: number,
-  ) {
+  function manipulateData() {
     if (!props.data) return;
-    const minimumDate = Math.min(...dates.daysUnix);
+    const nowUnix = moment().unix();
+    const activeTab = range?.toString() || '24h';
+    const duration = rangeSettings[activeTab].duration;
+    const interval = rangeSettings[activeTab].intervals;
+    const minimumDate = Math.min(nowUnix - duration);
     const trades = props.data
       .filter((trade: any) => trade.timestamp > minimumDate)
-      .map((trade: any) => [
-        (trade.timestamp - minimumDate) / 86400 / trim,
-        Number(trade.price),
-      ]);
+      .map((trade: any) => [trade.timestamp * 1000, Number(trade.price)]);
 
-    const totalVolume: number[] = [];
-    const averagePrice: number[] = [];
+    const timeSlots = [];
+    for (let i = 0; i < duration / interval; i++) {
+      timeSlots.push((nowUnix - (i + 1) * interval) * 1000);
+    }
+
+    const totalVolume: any[] = [];
+    const averagePrice: any[] = [];
     const rangeValues: number[][] = [];
-    dates.days.forEach((x, i) => {
-      const filteredPriceTime = trades.filter(
-        (x: number[]) => Math.floor(x[0]) == i,
+    const persistedTimeslots: number[] = [];
+    let isNotEmpty = false;
+    timeSlots.reverse().forEach((x: number) => {
+      const filteredTrades = trades.filter(
+        (txn: any) =>
+          txn[0] > x && txn[0] < x + interval * 1000 && txn[1] > 0.0001,
       );
-      const isolatedVals = filteredPriceTime.map((x: number[]) => x[1]);
-      const volume = isolatedVals.reduce((a: number, b: number) => a + b, 0);
-      const range = [
-        roundData(Math.min(...isolatedVals)),
-        roundData(Math.max(...isolatedVals)),
-      ];
-      const price = volume / filteredPriceTime.length;
-      totalVolume.push(roundData(volume) || 0);
-      averagePrice.push(roundData(price) || 0);
-      rangeValues.push(range);
+      const prices = filteredTrades.map((txn: any) => txn[1]);
+      const volume = prices.reduce((a: number, b: number) => a + b, 0);
+      isNotEmpty = isNotEmpty || volume > 0;
+      if (isNotEmpty) {
+        const range = [
+          x,
+          roundData(Math.min(...prices)),
+          roundData(Math.max(...prices)),
+        ];
+        const price = volume / prices.length;
+        totalVolume.push([x, roundData(volume) || 0]);
+        averagePrice.push([x, roundData(price) || 0]);
+        rangeValues.push(range);
+        persistedTimeslots.push(x);
+      }
     });
-
-    setIsShowing(totalVolume.reduce((prev, curr) => prev + curr, 0) > 0);
-
+    setIsEmpty(totalVolume.reduce((prev, curr) => prev + curr, 0) > 0);
+    setIsShowing(true);
     return {
+      timeSlots: persistedTimeslots,
       averagePrice: averagePrice,
       volume: totalVolume,
       range: rangeValues,
@@ -121,8 +130,13 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   function getOptions(
-    dates: any[],
-    trades?: { averagePrice: number[]; volume: number[]; range: number[][] },
+    trades?: any,
+    //   {
+    //   timeSlots: number[];
+    //   averagePrice: number[];
+    //   volume: number[];
+    //   range: number[][];
+    // }
   ) {
     const options = {
       chart: {
@@ -141,14 +155,17 @@ export default function AveragePriceVolumeChart(props: any) {
       },
       xAxis: [
         {
-          categories: dates,
-          crosshair: true,
+          type: 'datetime',
           labels: {
-            padding: 15,
+            formatter: function () {
+              return Highcharts.dateFormat('%d/%m/%y', (this as any).value);
+            },
+            padding: 30,
             style: {
               color: themeColours.text,
             },
           },
+          crosshair: true,
           title: {
             style: {
               color: themeColours.text,
@@ -160,7 +177,6 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           startOnTick: false,
           endOnTick: false,
-          type: 'logarithmic',
           minorTickInterval: 0.1,
           minorGridLineColor: 'rgba(30,30,30,1)',
           gridLineColor: 'rgba(40,40,40,1)',
@@ -204,6 +220,9 @@ export default function AveragePriceVolumeChart(props: any) {
             enabled: false,
           },
         },
+        spline: {
+          connectNulls: true,
+        },
       },
       series: [
         {
@@ -221,13 +240,6 @@ export default function AveragePriceVolumeChart(props: any) {
           type: 'spline',
           data: trades?.averagePrice,
           color: themeColours.secondaryColour,
-          // color: {
-          //   linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-          //   stops: [
-          //     [0, '#bd0b00'],
-          //     [1, '#92124f'],
-          //   ],
-          // },
           tooltip: {
             valueSuffix: ' ETH',
           },
@@ -270,21 +282,26 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   return (
-    <Transition
-      show={isShowing}
-      as="div"
-      enter="transition ease-out duration-1000"
-      enterFrom="transform opacity-0 scale-95 -translate-y-6"
-      enterTo="transform opacity-100 scale-100 translate-y-0"
-      leave="transition ease-in duration-150"
-      leaveFrom="transform opacity-100 scale-100 translate-y-0"
-      leaveTo="transform opacity-0 scale-95 -translate-y-6"
-    >
-      <HighchartsReact
-        allowChartUpdate={true}
-        highcharts={HighCharts}
-        options={chartOptions}
-      ></HighchartsReact>
-    </Transition>
+    <div key={`${theme}-${props.data[0].contract}-${range || '24h'}-co-shc`}>
+      {!isShowing && (
+        <div
+          role="status"
+          className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.06]"
+        ></div>
+      )}
+      {isEmpty && (
+        <div className="flex justify-center items-center h-[450px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
+          {`No trades to display for this ${range} timespan.`}
+        </div>
+      )}
+      <div className={isShowing && !isEmpty ? '' : 'hidden'}>
+        <HighchartsReact
+          highcharts={HighCharts}
+          options={chartOptions}
+          updateArgs={[true]}
+          containerProps={{ style: { height: '100%' } }}
+        ></HighchartsReact>
+      </div>
+    </div>
   );
 }

@@ -6,10 +6,13 @@ import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Highcharts from 'highcharts';
 import { useRouter } from 'next/router';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function SalesHistoryChart(props: any) {
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
+  const [isEmpty, setIsEmpty] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
   const [rangeSeconds] = useState<any>({
     '5m': 300,
@@ -44,10 +47,6 @@ export default function SalesHistoryChart(props: any) {
     setTheme();
   }, [theme]);
 
-  useEffect(() => {
-    setChartOptions(reset());
-  }, [range]);
-
   function setTheme() {
     if (theme == 'dark') {
       setThemeColours(darkTheme);
@@ -61,16 +60,22 @@ export default function SalesHistoryChart(props: any) {
 
   useEffect(() => {
     setIsShowing(false);
-    setChartOptions(reset());
+    reset();
   }, [props.data]);
 
   useEffect(() => {
-    setChartOptions(reset(false));
+    reset();
+  }, [range]);
+
+  useEffect(() => {
+    reset(false);
   }, [activeTrades]);
 
   function reset(persist = true) {
     const trades = manipulateData(persist);
     const newOptions = getOptions(trades);
+    setChartOptions(newOptions);
+    setIsShowing(true);
     return newOptions;
   }
 
@@ -103,7 +108,7 @@ export default function SalesHistoryChart(props: any) {
     const activeTab = range?.toString() || '24h';
     const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
     let trades = props.data
-      .filter((trade: any) => trade.timestamp > minimumDate)
+      .filter((trade: any) => trade.timestamp > minimumDate || trade.price <= 0)
       .map((trade: any) => [
         trade.timestamp * 1000,
         Number(trade.price),
@@ -115,7 +120,7 @@ export default function SalesHistoryChart(props: any) {
       trades = filterOutliers(trades, 1);
     }
     if (persist) setActiveTrades(trades);
-    setIsShowing(trades.length > 0);
+    setIsEmpty(trades.length === 0);
     console.log(trades.length);
     return trades;
   }
@@ -263,23 +268,26 @@ export default function SalesHistoryChart(props: any) {
   }
 
   return (
-    <Transition
-      key={`${theme}-${props.data[0].contract}-${range || '24h'}-co-shc`}
-      show={isShowing}
-      as="div"
-      enter="transition ease-out duration-1000"
-      enterFrom="transform opacity-0 scale-95 -translate-y-6"
-      enterTo="transform opacity-100 scale-100 translate-y-0"
-      leave="transition ease-in duration-150"
-      leaveFrom="transform opacity-100 scale-100 translate-y-0"
-      leaveTo="transform opacity-0 scale-95 -translate-y-6"
-    >
-      <HighchartsReact
-        highcharts={HighCharts}
-        options={chartOptions}
-        updateArgs={[true]}
-        containerProps={{ style: { height: '100%' } }}
-      ></HighchartsReact>
-    </Transition>
+    <div key={`${theme}-${props.data[0].contract}-${range || '24h'}-co-shc`}>
+      {!isShowing && (
+        <div
+          role="status"
+          className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.06]"
+        ></div>
+      )}
+      {isEmpty && (
+        <div className="flex justify-center items-center h-[450px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
+          {`No trades to display for this ${range} timespan.`}
+        </div>
+      )}
+      <div className={isShowing && !isEmpty ? '' : 'hidden'}>
+        <HighchartsReact
+          highcharts={HighCharts}
+          options={chartOptions}
+          updateArgs={[true]}
+          containerProps={{ style: { height: '100%' } }}
+        ></HighchartsReact>
+      </div>
+    </div>
   );
 }

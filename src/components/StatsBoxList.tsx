@@ -13,7 +13,7 @@ const StatsBoxList: React.FC<Props> = ({ stats, route }): JSX.Element => {
   return (
     <Link href={route || ''} passHref>
       <div className="px-4 sm:px-6 md:px-8">
-        <dl className="grid grid-cols-1 gap-5 sm:grid-cols-5">
+        <dl className="grid grid-cols-1 gap-5 sm:grid-cols-3">
           {stats.map((item: any) => (
             <div
               key={item.name}
