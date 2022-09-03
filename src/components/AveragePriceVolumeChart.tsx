@@ -5,6 +5,15 @@ import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+
+function ErrorFallback({ error }: any) {
+  return (
+    <div className="flex justify-center items-center h-[100px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
+      {'Unable to load this chart.'}
+    </div>
+  );
+}
 
 export default function AveragePriceVolumeChart(props: any) {
   const [isShowing, setIsShowing] = useState(false);
@@ -138,6 +147,8 @@ export default function AveragePriceVolumeChart(props: any) {
     //   range: number[][];
     // }
   ) {
+    console.log('trades');
+    console.log(trades);
     const options = {
       chart: {
         type: 'series',
@@ -177,6 +188,7 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           startOnTick: false,
           endOnTick: false,
+          type: 'logarithmic',
           minorTickInterval: 0.1,
           minorGridLineColor: 'rgba(30,30,30,1)',
           gridLineColor: 'rgba(40,40,40,1)',
@@ -295,12 +307,14 @@ export default function AveragePriceVolumeChart(props: any) {
         </div>
       )}
       <div className={isShowing && !isEmpty ? '' : 'hidden'}>
-        <HighchartsReact
-          highcharts={HighCharts}
-          options={chartOptions}
-          updateArgs={[true]}
-          containerProps={{ style: { height: '100%' } }}
-        ></HighchartsReact>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <HighchartsReact
+            highcharts={HighCharts}
+            options={chartOptions}
+            updateArgs={[true]}
+            containerProps={{ style: { height: '100%' } }}
+          ></HighchartsReact>
+        </ErrorBoundary>
       </div>
     </div>
   );
