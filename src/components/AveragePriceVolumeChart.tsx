@@ -133,7 +133,10 @@ export default function AveragePriceVolumeChart(props: any) {
         persistedTimeslots.push(x);
       }
     });
-    setIsEmpty(totalVolume.reduce((prev, curr) => prev + curr, 0) > 0);
+    const aggVol = totalVolume.reduce((prev, curr) => {
+      return prev[1] + curr[1];
+    }, 0);
+    setIsEmpty(aggVol == 0);
     setIsShowing(true);
     return {
       timeSlots: persistedTimeslots,
@@ -195,7 +198,9 @@ export default function AveragePriceVolumeChart(props: any) {
           endOnTick: false,
           minorTickInterval: 0.1,
           minorGridLineColor: 'rgba(30,30,30,1)',
-          gridLineColor: 'rgba(40,40,40,1)',
+          gridLineColor: 'rgb(40,40,40)',
+          lineColor: 'rgb(40,40,40)',
+          tickColor: 'rgb(40,40,40)',
           labels: {
             style: {
               color: themeColours.text,

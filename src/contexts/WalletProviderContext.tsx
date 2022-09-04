@@ -32,6 +32,7 @@ export const WalletProvider = ({
   }>({});
   const [userNftCollections, setUserNftCollections] = useState<any[]>();
   const [userNftsByCollection, setUserNftsByCollection] = useState<any[]>();
+  const [walletDetails, setWalletDetails] = useState<any[]>();
   const [activeNfts, setActiveNfts] = useState<{
     collection: string;
     nfts: INft[];
@@ -52,6 +53,17 @@ export const WalletProvider = ({
             contractRes.data.contractMetadata.name?.trim();
           setCollectionNames({ ...activeMapping });
         });
+    }
+  }, []);
+
+  const fetchWallet = useCallback(async (address: string) => {
+    if (address) {
+      fetch(`/.netlify/functions/getWalletOverview?address=${address}`).then(
+        (res: any) =>
+          res.json().then((jsonRes: any) => {
+            setWalletDetails(jsonRes.data.wallet[0]);
+          }),
+      );
     }
   }, []);
 
@@ -127,26 +139,35 @@ export const WalletProvider = ({
     if (userNfts) {
       setActiveNfts({ collection: '', nfts: [] });
       const filteredNfts = userNfts.ownedNfts.filter(
-        (x) => x.contract.address === contractAddress,
+        (x: { contract: { address: string } }) =>
+          x.contract.address === contractAddress,
       );
       const nfts: INft[] = [];
-      filteredNfts?.forEach((nft) => {
-        const newNFT: INft = {
-          tokenId: Number(nft.id.tokenId).toString(),
-          collectionName: collectionNames[contractAddress],
-          contractAddress: contractAddress,
-          image: optimisedImageLinks([
-            nft?.media[0]?.raw,
-            nft?.media[0]?.gateway,
-            nft?.media[0]?.thumbnail,
-            nft.metadata.image,
-          ]),
-          chainId: NftChainId.ETHEREUM,
-          imageAlt: nft.title + ' - ' + nft.description,
-          name: nft.title || '#'.concat(Number(nft.id.tokenId).toString()),
-        };
-        nfts.push(newNFT);
-      });
+      filteredNfts?.forEach(
+        (nft: {
+          id: any;
+          media: any;
+          metadata: { image: string };
+          title: string;
+          description: string;
+        }) => {
+          const newNFT: INft = {
+            tokenId: Number(nft.id.tokenId).toString(),
+            collectionName: collectionNames[contractAddress],
+            contractAddress: contractAddress,
+            image: optimisedImageLinks([
+              nft?.media[0]?.raw,
+              nft?.media[0]?.gateway,
+              nft?.media[0]?.thumbnail,
+              nft.metadata.image,
+            ]),
+            chainId: NftChainId.ETHEREUM,
+            imageAlt: nft.title + ' - ' + nft.description,
+            name: nft.title || '#'.concat(Number(nft.id.tokenId).toString()),
+          };
+          nfts.push(newNFT);
+        },
+      );
       setActiveNfts({ collection: contractAddress, nfts: nfts });
     }
   }
@@ -205,6 +226,8 @@ export const WalletProvider = ({
       getCollectionNfts,
       activeNfts,
       setActiveNfts,
+      fetchWallet,
+      walletDetails,
     }),
     [
       userNfts,
@@ -222,6 +245,8 @@ export const WalletProvider = ({
       getCollectionNfts,
       activeNfts,
       setActiveNfts,
+      fetchWallet,
+      walletDetails,
     ],
   );
 

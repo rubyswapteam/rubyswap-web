@@ -188,7 +188,7 @@ export default function Collection(props: any) {
       {
         name: 'First Deployed',
         value: `${
-          activeCollection.firstMint
+          activeCollection?.firstMint
             ? moment.unix(activeCollection?.firstMint).fromNow()
             : 'tbd'
         }`,

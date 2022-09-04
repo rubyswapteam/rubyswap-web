@@ -36,7 +36,7 @@ export default function Collection(props: any) {
       border: true,
     },
     {
-      name: 'Portfolio',
+      name: 'Activity',
       href: id ? `/wallet/${id}?tab=portfolio` : '/',
       current: tab == 'updates',
       border: true,
@@ -55,6 +55,8 @@ export default function Collection(props: any) {
     activeNfts,
     setActiveNfts,
     getCollectionNfts,
+    fetchWallet,
+    walletDetails,
   } = useWalletProvider();
 
   const marketplaceOptions = [
@@ -122,6 +124,7 @@ export default function Collection(props: any) {
   useEffect(() => {
     id ? getUserTrades(id) : '';
     fetchUserNfts(id?.toString());
+    fetchWallet(id);
     setActiveNfts({ collection: '', nfts: [] });
   }, [id?.toString()]);
 
@@ -215,7 +218,11 @@ export default function Collection(props: any) {
         <Dashboard
           setSearchModalState={props.setSearchModalState}
           title={
-            <UserProfileHeader name={id?.toString()} wallet={id?.toString()} />
+            <UserProfileHeader
+              name={id?.toString()}
+              wallet={id?.toString()}
+              walletDetails={walletDetails}
+            />
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
