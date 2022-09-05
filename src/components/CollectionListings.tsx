@@ -7,11 +7,13 @@ import { motion } from 'framer-motion';
 interface Props {
   selectedNfts: any;
   totalListings: number;
+  keyPrefix: any;
 }
 
 const CollectionListings: React.FC<Props> = ({
   selectedNfts,
   totalListings = 0,
+  keyPrefix = '',
 }): JSX.Element => {
   const duration = 200; // ms
   const delay = 100;
@@ -114,6 +116,7 @@ const CollectionListings: React.FC<Props> = ({
             initial="hidden"
             animate="show"
             className={'flex flex-wrap w-full'}
+            key={keyPrefix}
           >
             {nfts &&
               nfts.map((nft: any, i: number) => (

@@ -27,13 +27,14 @@ export default function Collection(props: any) {
   const { id, tab, range } = router.query;
   const { theme } = useTheme();
   const [isLoadingCollection, setIsLoadingCollection] = useState<boolean>(true);
+  const [counter, setCounter] = useState<number>(0);
   const [isLoadingCollectionTrades, setIsLoadingCollectionTrades] =
     useState<boolean>(true);
   const [isLoadingRecentTrades, setIsLoadingRecentTrades] =
     useState<boolean>(true);
   const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
   const [recentListings, setRecentListings] = useState<any[]>([]);
-  const [isBubbleAvailable, setIsBubbleAvailable] = useState(false);
+  const [showBubbleMap, setShowBubbleMap] = useState(false);
   const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
     useState(false);
   const {
@@ -45,6 +46,8 @@ export default function Collection(props: any) {
     fetchActiveListings,
     totalListings,
   } = useMarketplaceProvider();
+  const controller = new AbortController();
+  const { signal } = controller;
 
   useEffect(() => {
     if (
@@ -72,6 +75,7 @@ export default function Collection(props: any) {
           await fetch(
             `/.netlify/functions/getDbCollectionUpdatesByContract?contract=${contractAddress}`,
             {
+              signal: signal,
               method: 'GET',
               redirect: 'follow',
             },
@@ -83,6 +87,7 @@ export default function Collection(props: any) {
               return { ...item, ...{ data: JSON.parse(item.data) } };
             });
             setCollectionUpdates(res);
+            controller.abort();
           });
       } catch {
         collection = [];
@@ -121,6 +126,22 @@ export default function Collection(props: any) {
       );
     }
   }, [activeCollection?.contractAddress, tab]);
+
+  useEffect(() => {
+    fetch(
+      'https://europe-west1-cryptos-tools.cloudfunctions.net/get-bubble-map-availability?chain=bsc&token=0x603c7f932ed1fc6575303d8fb018fdcbb0f39a95',
+    ).then((res) => setShowBubbleMap(res?.availability && res?.status == 'OK'));
+    const interval = setInterval(() => {
+      setCounter((prev) => prev + 1);
+    }, 20000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (tab == 'listings' && activeCollection?.contractAddress) {
+      fetchActiveListings(activeCollection.contractAddress, 1000);
+    }
+  }, [counter]);
 
   useEffect(() => {
     setIsLoadingCollectionTrades(false);
@@ -309,10 +330,18 @@ export default function Collection(props: any) {
         <>
           {/* <div className="-mt-6"> */}
           {activeListings && activeListings.length > 0 && (
-            <CollectionListings
-              selectedNfts={activeListings && [...activeListings]}
-              totalListings={totalListings}
-            />
+            <div
+              className="h-inherit"
+              // onMouseEnter={
+              //   () => {} //set live view to pause
+              // }
+            >
+              <CollectionListings
+                selectedNfts={activeListings && [...activeListings]}
+                totalListings={totalListings}
+                keyPrefix={`${activeCollection?.contractAddress}-${counter}`}
+              />
+            </div>
           )}
           {/* </div> */}
         </>
@@ -365,23 +394,25 @@ export default function Collection(props: any) {
               contractAddress={activeCollection?.contractAddress}
             ></HolderDistrbutionChart>
           </div>
-          <div className="bg-gray-50 dark:bg-white/[.02]">
-            <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-              <CollectionTitleHeader
-                title={'Bubble Chart - Holder Relationships'}
-              />
-            </div>
-            <div className="w-full my-10 px-4 sm:px-6 md:px-8 rounded-xl overflow-hidden">
-              {activeCollection && activeCollection.contractAddress && (
-                <iframe
-                  className="w-full h-[50vh] rounded-xl"
-                  src={`https://app.bubblemaps.io/eth/token/${
-                    activeCollection.contractAddress
-                  }?theme=${theme == 'light' ? 'gemxyz' : 'dark'}`}
+          {!showBubbleMap && (
+            <div className="bg-gray-50 dark:bg-white/[.02]">
+              <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+                <CollectionTitleHeader
+                  title={'Bubble Chart - Holder Relationships'}
                 />
-              )}
+              </div>
+              <div className="w-full my-10 px-4 sm:px-6 md:px-8 rounded-xl overflow-hidden">
+                {activeCollection && activeCollection.contractAddress && (
+                  <iframe
+                    className="w-full h-[50vh] rounded-xl"
+                    src={`https://app.bubblemaps.io/eth/token/${
+                      activeCollection.contractAddress
+                    }?theme=${theme == 'light' ? 'gemxyz' : 'dark'}`}
+                  />
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       );
     }

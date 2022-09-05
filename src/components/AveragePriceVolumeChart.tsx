@@ -303,7 +303,7 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   return (
-    <div key={`${theme}-${props.data[0].contract}-${range || '24h'}-co-shc`}>
+    <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-shc`}>
       {!isShowing && (
         <div
           role="status"
