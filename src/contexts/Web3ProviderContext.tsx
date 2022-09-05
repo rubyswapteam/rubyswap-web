@@ -2,6 +2,7 @@ import coinbaseWalletModule from '@web3-onboard/coinbase';
 import Onboard from '@web3-onboard/core';
 import injectedModule from '@web3-onboard/injected-wallets';
 import walletConnectModule from '@web3-onboard/walletconnect';
+import mixpanel from 'mixpanel-browser';
 import React, {
   JSXElementConstructor,
   ReactChildren,
@@ -94,6 +95,9 @@ export const Web3Provider = ({
       setIsLoading(true);
       const { accounts, chains, provider } = wallets[0];
       setActiveWallet(accounts[0].address);
+      mixpanel.track('Connect Wallet', {
+        address: accounts[0].address,
+      });
       fetchEthBalance(accounts[0]);
       setChainId(chains[0].id);
       setProvider(provider);
