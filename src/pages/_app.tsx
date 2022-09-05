@@ -17,28 +17,42 @@ function App({ Component, pageProps }: AppProps) {
   mixpanel.init('015dee14470ae0f2af01b2fa9bb8391d', { debug: true });
   mixpanel.track('Website visit');
   return (
-    <ThemeProvider attribute="class">
-      <Web3Provider>
-        <WalletProvider>
-          <MarketplaceProvider>
-            <NftProvider>
-              <>
-                <SearchModal
-                  open={searchModalState}
-                  setOpen={setSearchModalState}
-                />
-                <AnimatePresence mode="wait">
-                  <Component
-                    setSearchModalState={setSearchModalState}
-                    {...pageProps}
-                  />
-                </AnimatePresence>
-              </>
-            </NftProvider>
-          </MarketplaceProvider>
-        </WalletProvider>
-      </Web3Provider>
-    </ThemeProvider>
+    <>
+      <div className="hidden lg:block">
+        <ThemeProvider attribute="class">
+          <Web3Provider>
+            <WalletProvider>
+              <MarketplaceProvider>
+                <NftProvider>
+                  <>
+                    <SearchModal
+                      open={searchModalState}
+                      setOpen={setSearchModalState}
+                    />
+                    <AnimatePresence mode="wait">
+                      <Component
+                        setSearchModalState={setSearchModalState}
+                        {...pageProps}
+                      />
+                    </AnimatePresence>
+                  </>
+                </NftProvider>
+              </MarketplaceProvider>
+            </WalletProvider>
+          </Web3Provider>
+        </ThemeProvider>
+      </div>
+      <div className="flex lg:hidden w-screen h-screen bg-black">
+        <div className="justify-center self-center mx-auto">
+          <div className="m-auto text-white text-center px-5 bg-theme-gradient bg-cover rounded-md w-min mb-2">
+            Ruby
+          </div>
+          <div className="m-auto text-white text-center px-5">
+            Please open on desktop for an optimal experience.
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
