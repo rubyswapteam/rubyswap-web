@@ -3,18 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import CollectionNftCard from './CollectionNftCard';
 import { motion } from 'framer-motion';
-import { animations } from '@/utils/framerAnimations';
 
 interface Props {
   selectedNfts: any;
   totalListings: number;
-  scroll?: boolean;
 }
 
 const CollectionListings: React.FC<Props> = ({
   selectedNfts,
   totalListings = 0,
-  scroll,
 }): JSX.Element => {
   const duration = 200; // ms
   const delay = 100;

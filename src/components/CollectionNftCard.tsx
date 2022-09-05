@@ -11,14 +11,19 @@ interface Props {
   selectedNft: any;
   collectionName?: string;
   chainId?: number;
+  handleNftClick?: any;
+  selectDisabled?: boolean;
 }
 
 const CollectionNftCard: React.FC<Props> = ({
   selectedNft,
   collectionName,
   chainId,
+  handleNftClick,
+  selectDisabled = false,
 }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isActive, setIsActive] = useState(false);
 
   const handleName = () => {
     if (selectedNft && selectedNft?.name) {
@@ -33,10 +38,20 @@ const CollectionNftCard: React.FC<Props> = ({
   };
 
   return (
-    <div className="group relative">
+    <div
+      onClick={() => {
+        if (handleNftClick) handleNftClick(selectedNft);
+        setIsActive(!isActive);
+      }}
+      className={
+        'group relative rounded-xl transition-all ' +
+        (isActive && !selectDisabled && ' bg-theme-gradient bg-cover p-1')
+      }
+    >
       <div
         className={
-          'drop-shadow-md rounded-xl text-sm bg-white dark:bg-white/5 hover:drop-shadow-xl'
+          'transistion-all drop-shadow-md rounded-xl text-sm bg-white dark:bg-white/5 hover:drop-shadow-xl' +
+          (isActive && !selectDisabled && ' dark:bg-black')
         }
       >
         <div
@@ -58,6 +73,7 @@ const CollectionNftCard: React.FC<Props> = ({
               }`}
               onLoadStart={() => setIsLoading(true)}
               onLoad={() => setIsLoading(false)}
+              onDragStart={(event) => event.preventDefault()}
             />
           }
           <a
