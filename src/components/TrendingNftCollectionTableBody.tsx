@@ -2,10 +2,15 @@ import moment from 'moment';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import DiscordLogo from './DiscordLogo';
 import EthereumIcon from './EthereumIcon';
+import EtherscanLogo from './EtherscanLogo';
 import NftCollectionTableStandardCell from './NftCollectionTableStandardCell';
+import SocialsWrapper from './SocialsWrapper';
 import StarIcon from './StarIcon';
 import TableProgressBar from './TableProgressBar';
+import TwitterLogo from './TwitterLogo';
+import WebsiteIcon from './WebsiteIcon';
 
 interface Props {
   trendingCollections: any[];
@@ -116,23 +121,47 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                           )}
                       </div>
                     </td>
+                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
+                      <SocialsWrapper
+                        link={
+                          nftCollection.contractAddress &&
+                          `https://etherscan.io/address/${nftCollection.contractAddress}`
+                        }
+                      >
+                        <EtherscanLogo />
+                      </SocialsWrapper>
+                      <SocialsWrapper link={nftCollection.website}>
+                        <WebsiteIcon />
+                      </SocialsWrapper>
+                      <SocialsWrapper link={nftCollection.discordUrl}>
+                        <DiscordLogo />
+                      </SocialsWrapper>
+                      <SocialsWrapper
+                        link={
+                          nftCollection.twitterUsername &&
+                          `https://twitter.com/${nftCollection.twitterUsername}`
+                        }
+                      >
+                        <TwitterLogo />
+                      </SocialsWrapper>
+                    </td>
                     <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       <EthereumIcon width={16} height={16} />
                     </td>
-                    <NftCollectionTableStandardCell
-                      value={nftCollection.osOneDayVolume?.toFixed(2)}
-                      includeIcon={true}
-                    />
-                    <td className="whitespace-nowrap px-3 py-3 text-xs font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
-                      <div className="flex items-center mt-1">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                      <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
+                        <div className="pt-1 whitespace-normal flex">
+                          {nftCollection.osOneDayVolume.toFixed(2)}
+                          <EthereumIcon width={16} height={16} />
+                        </div>
                         <div
                           className={
-                            'pt-1 pb-0.5 px-3 rounded-full text-white ' +
-                            (nftCollection.osOneDayChange > 0
-                              ? 'bg-green-200 text-green-800 dark:bg-green-200/90'
-                              : nftCollection.osOneDayChange == 0
-                              ? 'bg-gray-200 text-gray-800 dark:bg-gray-200/90'
-                              : 'bg-red-200 text-red-800 dark:bg-red-200/90')
+                            'w-fit text-white text-xs flex ' +
+                            (nftCollection?.osOneDayChange == 0
+                              ? ' text-gray-600 dark:text-gray-200/90'
+                              : nftCollection?.osOneDayChange > 0
+                              ? ' text-green-600 dark:text-green-200/90'
+                              : ' text-red-600 dark:text-red-200/90')
                           }
                         >
                           {nftCollection.osOneDayChange > 10000

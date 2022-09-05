@@ -96,6 +96,12 @@ export default function TrendingNftCollectionTable() {
                               scope="col"
                               className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
+                              Socials
+                            </th>
+                            <th
+                              scope="col"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                            >
                               Chain
                             </th>
                             <th
@@ -103,12 +109,6 @@ export default function TrendingNftCollectionTable() {
                               className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
                             >
                               Volume
-                            </th>
-                            <th
-                              scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
-                            >
-                              Change
                             </th>
                             <th
                               scope="col"
