@@ -130,7 +130,9 @@ export default function Collection(props: any) {
   useEffect(() => {
     fetch(
       'https://europe-west1-cryptos-tools.cloudfunctions.net/get-bubble-map-availability?chain=bsc&token=0x603c7f932ed1fc6575303d8fb018fdcbb0f39a95',
-    ).then((res) => setShowBubbleMap(res?.availability && res?.status == 'OK'));
+    ).then((res: any) =>
+      setShowBubbleMap(res?.availability && res?.status == 'OK'),
+    );
     const interval = setInterval(() => {
       setCounter((prev) => prev + 1);
     }, 20000);
