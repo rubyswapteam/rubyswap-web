@@ -94,7 +94,7 @@ export default function AveragePriceVolumeChart(props: any) {
   function manipulateData() {
     if (!props.data) return;
     const nowUnix = moment().unix();
-    const activeTab = range?.toString() || '24h';
+    const activeTab = range?.toString() || '30d';
     const duration = rangeSettings[activeTab].duration;
     const interval = rangeSettings[activeTab].intervals;
     const minimumDate = Math.min(nowUnix - duration);

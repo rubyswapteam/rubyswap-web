@@ -8,12 +8,14 @@ interface Props {
   selectedNfts: any;
   totalListings: number;
   keyPrefix: any;
+  collectionName?: string;
 }
 
 const CollectionListings: React.FC<Props> = ({
   selectedNfts,
   totalListings = 0,
   keyPrefix = '',
+  collectionName = '',
 }): JSX.Element => {
   const duration = 200; // ms
   const delay = 100;
@@ -126,7 +128,10 @@ const CollectionListings: React.FC<Props> = ({
                   style={{ animation: animStr(i) }}
                   className="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2"
                 >
-                  <CollectionNftCard selectedNft={nft} />
+                  <CollectionNftCard
+                    selectedNft={nft}
+                    collectionName={collectionName}
+                  />
                 </motion.div>
               ))}
           </motion.div>

@@ -105,7 +105,7 @@ export default function SalesHistoryChart(props: any) {
   function manipulateData(persist = true) {
     if (!props.data) return;
     const nowUnix = moment().unix();
-    const activeTab = range?.toString() || '24h';
+    const activeTab = range?.toString() || '30d';
     const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
     let trades = props.data
       .filter((trade: any) => trade.timestamp > minimumDate || trade.price <= 0)

@@ -220,7 +220,7 @@ export default function Collection(props: any) {
   }
 
   function getStatsBot() {
-    const rng = range || '24h';
+    const rng = range || '30d';
     return [
       {
         name: `${rng} Volume`,
@@ -339,6 +339,7 @@ export default function Collection(props: any) {
               // }
             >
               <CollectionListings
+                collectionName={activeCollection?.name}
                 selectedNfts={activeListings && [...activeListings]}
                 totalListings={totalListings}
                 keyPrefix={`${activeCollection?.contractAddress}-${counter}`}
@@ -451,7 +452,7 @@ export default function Collection(props: any) {
       return (
         <>
           <Tab
-            tabs={rangeTabs(tab, range, `/collection/${id}`)}
+            tabs={rangeTabs(tab, range, `/collection/${id}`, '30d')}
             condense={true}
           />
         </>

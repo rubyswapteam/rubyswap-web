@@ -6,6 +6,7 @@ import EthereumIcon from '@/components/EthereumIcon';
 import X2Y2Icon from './X2Y2Icon';
 import LooksRareIcon from './LooksRareIcon';
 import 'react-loading-skeleton/dist/skeleton.css';
+import PendingTxnsSpinner from './PendingTxnsSpinner';
 
 interface Props {
   selectedNft: any;
@@ -120,9 +121,15 @@ const CollectionNftCard: React.FC<Props> = ({
         </div>
         <div className="p-2">
           <div className="justify-between flex py-2 mb-2 border-b border-gray-50">
-            <div className="text-[10px] font-bold">
-              {collectionName || selectedNft?.collectionName}
+            <div className="text-[10px] font-bold flex self-center">
+              <div className="pt-0.5">
+                {collectionName || selectedNft?.collectionName}
+              </div>
+              {selectedNft?.pendingTxns?.length > 0 && (
+                <PendingTxnsSpinner txns={selectedNft.pendingTxns} />
+              )}
             </div>
+
             <div className="px-2 pt-[2px] border border-gray-100 dark:bg-black rounded-md transition-all hover:bg-gray-100 dark:hover:bg-theme-gradient dark:bg-cover cursor-pointer">
               <div className="text-[10px] font-bold text-transparent dark:text-white bg-clip-text bg-cover bg-theme-gradient">
                 Details

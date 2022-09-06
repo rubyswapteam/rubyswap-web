@@ -19,6 +19,7 @@ export default function SocialsWrapper({
           href={link}
           rel="noopener noreferrer"
           onClick={(event) => event.stopPropagation()}
+          className="self-center"
         >
           <main>{children}</main>
         </a>

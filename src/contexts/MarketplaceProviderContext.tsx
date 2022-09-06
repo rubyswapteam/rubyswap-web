@@ -398,6 +398,7 @@ export const MarketplaceProvider = ({
           name: item.name,
           traits: item.traits,
           rarityScore: item.rarityScore,
+          pendingTxns: item?.pendingTrxs,
         };
       });
     } catch {

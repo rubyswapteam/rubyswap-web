@@ -1,6 +1,5 @@
 import SearchModal from '@/components/SearchModal';
 import { MarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
-import { NftProvider } from '@/contexts/NftProviderContext';
 import { WalletProvider } from '@/contexts/WalletProviderContext';
 import { Web3Provider } from '@/contexts/Web3ProviderContext';
 import { AppProps } from 'next/app';
@@ -23,20 +22,18 @@ function App({ Component, pageProps }: AppProps) {
           <Web3Provider>
             <WalletProvider>
               <MarketplaceProvider>
-                <NftProvider>
-                  <>
-                    <SearchModal
-                      open={searchModalState}
-                      setOpen={setSearchModalState}
+                <>
+                  <SearchModal
+                    open={searchModalState}
+                    setOpen={setSearchModalState}
+                  />
+                  <AnimatePresence mode="wait">
+                    <Component
+                      setSearchModalState={setSearchModalState}
+                      {...pageProps}
                     />
-                    <AnimatePresence mode="wait">
-                      <Component
-                        setSearchModalState={setSearchModalState}
-                        {...pageProps}
-                      />
-                    </AnimatePresence>
-                  </>
-                </NftProvider>
+                  </AnimatePresence>
+                </>
               </MarketplaceProvider>
             </WalletProvider>
           </Web3Provider>
