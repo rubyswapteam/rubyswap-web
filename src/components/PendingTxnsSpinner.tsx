@@ -32,8 +32,8 @@ export default function PendingTxnsSpinner(props: any) {
       <div className="cursor-pointer text-[9px] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pt-0.5">
         {props?.txns?.length}
       </div>
-      <div className="group">
-        <div className="absolute bottom-0 flex flex-col items-center hidden w-max group-hover:flex left-1/2 -translate-x-1/2 -top-full -mt-5">
+      <div className="">
+        <div className="absolute bottom-0 transition-opacity hover:opacity-100 opacity-0 flex flex-col items-center w-max left-1/2 -translate-x-1/2 -top-full -mt-5">
           <span className="relative z-10 p-2 text-xs leading-none text-white dark:text-black whitespace-no-wrap bg-black dark:bg-white rounded-lg shadow-lg block self-center gap-x-2 gap-y-2">
             {props?.txns.map((txn: any, i: number) => (
               <div
