@@ -118,13 +118,13 @@ const CollectionListings: React.FC<Props> = ({
             initial="hidden"
             animate="show"
             className={'flex flex-wrap w-full'}
-            key={keyPrefix}
+            key={`${keyPrefix}-${collectionName}`}
           >
             {nfts &&
               nfts.map((nft: any, i: number) => (
                 <motion.div
                   variants={listItem}
-                  key={nft?.tokenId + nft?.contract + nft?.chainId + nft?.name}
+                  key={`${keyPrefix}-${nft?.tokenId}-${nft?.contract}-${nft?.chainId}-${nft?.name}`}
                   style={{ animation: animStr(i) }}
                   className="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2"
                 >

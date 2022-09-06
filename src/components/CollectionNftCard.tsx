@@ -45,7 +45,7 @@ const CollectionNftCard: React.FC<Props> = ({
         setIsActive(!isActive);
       }}
       className={
-        'group relative rounded-xl transition-all ' +
+        'group-scoped relative rounded-xl transition-all ' +
         (isActive && !selectDisabled && ' bg-theme-gradient bg-cover p-1')
       }
     >
@@ -108,7 +108,7 @@ const CollectionNftCard: React.FC<Props> = ({
               </div>
             )}
           </a>
-          <div className="absolute right-2 top-2 w-5 h-5 flex items-center justify-center group-hover:opacity-100 transition-opacity duration-200 transition opacity-0">
+          <div className="absolute right-2 top-2 w-5 h-5 flex items-center justify-center group-scoped-hover:opacity-100 transition-opacity duration-200 transition opacity-0">
             <div className="absolute opacity-20 rounded-full w-full h-full left-0 top-0 bg-white" />
             <div className="w-3 h-3">
               <PlusIcon />
@@ -141,7 +141,9 @@ const CollectionNftCard: React.FC<Props> = ({
               {handleName() || '#'.concat(selectedNft?.tokenId)}
             </div>
             <div className="flex place-items-center">
-              <div className="pt-1">{selectedNft?.price}</div>
+              <div className="pt-1">
+                {selectedNft?.price || selectedNft?.currentEthPrice}
+              </div>
               {(chainId == 1 || selectedNft?.chainId == 1) && (
                 <>
                   <EthereumIcon width={12} height={12} />

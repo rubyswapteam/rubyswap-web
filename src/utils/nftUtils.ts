@@ -90,7 +90,7 @@ export const rangeMapping = {
   '30d': '30 day',
 };
 
-export function getTrimmedAddressEllipsisMiddle(val: string, length?: number) {
+export function trimHex(val: string, length?: number) {
   if (!val) return '...';
   if (length) {
     return (

@@ -11,7 +11,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import React from 'react';
 import { useMarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
+import { trimHex } from '@/utils/nftUtils';
 import VerifiedBadgeIcon from './VerifiedBadgeIcon';
 import Link from 'next/link';
 import EthereumIcon from './EthereumIcon';
@@ -189,10 +189,7 @@ export default function SearchModal(props: Props) {
                                 </div>
                                 <div className="text-black/75">
                                   {res?.contractAddress &&
-                                    getTrimmedAddressEllipsisMiddle(
-                                      res?.contractAddress,
-                                      5,
-                                    )}
+                                    trimHex(res?.contractAddress, 5)}
                                 </div>
                               </div>
 

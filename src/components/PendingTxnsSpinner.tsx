@@ -1,8 +1,18 @@
 import React from 'react';
+import { trimHex } from '../utils/nftUtils';
+import EtherscanLogo from './EtherscanLogo';
+import SocialsWrapper from './SocialsWrapper';
 
 export default function PendingTxnsSpinner(props: any) {
+  function formatGwei(value: number) {
+    return (value / 10 ** 9).toFixed(1);
+  }
+
   return (
-    <div className="w-4 h-4 relative text-left self-center ml-1" role="status">
+    <div
+      className="w-4 h-4 relative text-left self-center ml-1 group"
+      role="status"
+    >
       <svg
         aria-hidden="true"
         className="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -22,7 +32,32 @@ export default function PendingTxnsSpinner(props: any) {
       <div className="cursor-pointer text-[9px] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pt-0.5">
         {props?.txns?.length}
       </div>
-      <span className="sr-only">Loading...</span>
+      <div className="group">
+        <div className="absolute bottom-0 flex flex-col items-center hidden w-max group-hover:flex left-1/2 -translate-x-1/2 -top-full -mt-5">
+          <span className="relative z-10 p-2 text-xs leading-none text-white dark:text-black whitespace-no-wrap bg-black dark:bg-white rounded-lg shadow-lg block self-center gap-x-2 gap-y-2">
+            {props?.txns.map((txn: any, i: number) => (
+              <div
+                key={`${txn?.hash}-${i}`}
+                className="flex gap-x-2 self-center"
+              >
+                <div className="pt-0.5">{`${formatGwei(
+                  txn?.maxPriorityFeePerGas,
+                )} prio`}</div>
+                <div className="pt-0.5">{`${formatGwei(
+                  txn?.gasPrice,
+                )} gas`}</div>
+                {txn?.hash && (
+                  <SocialsWrapper link={`https://etherscan.io/tx/${txn?.hash}`}>
+                    <EtherscanLogo />
+                  </SocialsWrapper>
+                )}
+              </div>
+            ))}
+          </span>
+          <div className="w-3 h-3 -mt-2 rotate-45 bg-black dark:bg-white/80"></div>
+        </div>
+        <span className="sr-only">Loading...</span>
+      </div>
     </div>
   );
 }

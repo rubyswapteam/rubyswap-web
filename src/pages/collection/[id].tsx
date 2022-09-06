@@ -334,6 +334,7 @@ export default function Collection(props: any) {
           {activeListings && activeListings.length > 0 && (
             <div
               className="h-inherit"
+              key={`${activeCollection?.contractAddress}-${counter}-outer`}
               // onMouseEnter={
               //   () => {} //set live view to pause
               // }

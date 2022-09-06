@@ -1,4 +1,4 @@
-import { getTrimmedAddressEllipsisMiddle } from '@/utils/nftUtils';
+import { trimHex } from '@/utils/nftUtils';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -105,7 +105,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                           {row.name || row.collectionName}
                         </div>
                         <div className="text-xs dark:text-white/60">
-                          {getTrimmedAddressEllipsisMiddle(
+                          {trimHex(
                             row.contractAddress || row.collections[0],
                           )}
                         </div>
@@ -169,7 +169,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                           seed={jsNumberForAddress(row.buyer)}
                         />
                         <div className="pt-1 lg:pl-1 whitespace-normal hover:text-yellow-300/90">
-                          {getTrimmedAddressEllipsisMiddle(row.buyer, 4)}
+                          {trimHex(row.buyer, 4)}
                         </div>
                       </div>
                     </td>
