@@ -105,9 +105,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                           {row.name || row.collectionName}
                         </div>
                         <div className="text-xs dark:text-white/60">
-                          {trimHex(
-                            row.contractAddress || row.collections[0],
-                          )}
+                          {trimHex(row.contractAddress || row.collections[0])}
                         </div>
                       </div>
                       {row.firstmint && row.firstmint > newlyMintedTimestamp && (
