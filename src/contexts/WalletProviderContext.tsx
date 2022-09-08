@@ -5,8 +5,9 @@ import React, {
   ReactChildren,
   ReactElement,
   useCallback,
-  useContext, useMemo,
-  useState
+  useContext,
+  useMemo,
+  useState,
 } from 'react';
 
 const WalletProviderContext = React.createContext<any>({});
