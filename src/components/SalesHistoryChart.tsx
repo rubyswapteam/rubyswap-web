@@ -1,15 +1,14 @@
-import { Transition } from '@headlessui/react';
-import * as HighCharts from 'highcharts';
+import Highcharts, * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import Boost from 'highcharts/modules/boost';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import Highcharts from 'highcharts';
 import { useRouter } from 'next/router';
-import Skeleton from 'react-loading-skeleton';
+import { useEffect, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function SalesHistoryChart(props: any) {
+  Boost(Highcharts);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -121,6 +120,10 @@ export default function SalesHistoryChart(props: any) {
 
   function getOptions(trades: any[]) {
     const options = {
+      boost: {
+        enabled: true,
+        seriesThreshold: 1,
+      },
       chart: {
         type: 'scatter',
         zoomType: 'xy',

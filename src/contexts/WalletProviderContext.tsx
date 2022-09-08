@@ -5,12 +5,9 @@ import React, {
   ReactChildren,
   ReactElement,
   useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
+  useContext, useMemo,
+  useState
 } from 'react';
-import { addAbortSignal } from 'stream';
 
 const WalletProviderContext = React.createContext<any>({});
 
