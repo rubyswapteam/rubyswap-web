@@ -154,10 +154,10 @@ export default function Dashboard(props: any) {
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto overflow-y-visible z-50">
               <nav className="mt-0 flex-1 px-2">
                 <div className="mb-5">
-                  {!provider && (
+                  {!activeWallet && (
                     <ConnectWalletButton connectWallet={connectWallet} />
                   )}
-                  {provider && (
+                  {activeWallet && (
                     <DashboardUserDropdown
                       address={condensedWalletName()}
                       balance={ethBalance}

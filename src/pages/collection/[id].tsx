@@ -462,7 +462,12 @@ export default function Collection(props: any) {
   }
 
   return (
-    <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
+    <motion.div
+      key={`collection-${id}`}
+      exit={{ opacity: 0 }}
+      initial={'initial'}
+      animate={'animate'}
+    >
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}

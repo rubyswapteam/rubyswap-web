@@ -67,29 +67,61 @@ export const Web3Provider = ({
     }
   }, [provider]);
 
+  // useEffect(() => {
+  //   const connectWalletOnPageLoad = async () => {
+  //     if (
+  //       !!localStorage &&
+  //       !!localStorage.getItem('isWalletConnectedRuby') &&
+  //       (localStorage.getItem('isWalletConnectedRuby') || '').length > 10
+  //     ) {
+  //       try {
+  //         const cachedData = JSON.parse(
+  //           localStorage.getItem('isWalletConnectedRuby') || '',
+  //         );
+  //         setActiveWallet(cachedData.wallet);
+  //         setChainId(cachedData.chainId);
+  //         setProvider(cachedData.provider);
+  //       } catch (ex) {
+  //         console.log(ex);
+  //       }
+  //     }
+  //   };
+  //   connectWalletOnPageLoad();
+  // }, []);
+
   useEffect(() => {
-    const connectWalletOnPageLoad = async () => {
-      if (
-        !!localStorage &&
-        !!localStorage.getItem('isWalletConnectedRuby') &&
-        (localStorage.getItem('isWalletConnectedRuby') || '').length > 10
-      ) {
-        try {
-          const cachedData = JSON.parse(
-            localStorage.getItem('isWalletConnectedRuby') || '',
-          );
-          setActiveWallet(cachedData.wallet);
-          setChainId(cachedData.chainId);
-          setProvider(cachedData.provider);
-        } catch (ex) {
-          console.log(ex);
-        }
-      }
-    };
-    connectWalletOnPageLoad();
+    loadPreviouslyConnectedWallet().then((res) => setActiveWallet(res));
   }, []);
 
+  async function loadPreviouslyConnectedWallet() {
+    const previouslyConnectedWallets = JSON.parse(
+      localStorage.getItem('connectedWallets') || '{}',
+    );
+    if (previouslyConnectedWallets) {
+      console.log('autoconnect');
+      await onboard.connectWallet({
+        autoSelect: {
+          label: previouslyConnectedWallets[0],
+          disableModals: true,
+        },
+      });
+    }
+    const wallet = await onboard.state.get().wallets[0].accounts[0].address;
+    console.table({ previousWallet: wallet });
+    console.log(onboard.state);
+    return wallet;
+  }
+
   async function connectWallet() {
+    const walletsSub = onboard.state.select('wallets');
+    const { unsubscribe } = walletsSub.subscribe((wallets) => {
+      console.log(wallets);
+      const connectedWallets = wallets.map(({ label }) => label);
+      window.localStorage.setItem(
+        'connectedWallets',
+        JSON.stringify(connectedWallets),
+      );
+    });
     try {
       const wallets = await onboard.connectWallet();
       setIsLoading(true);
@@ -102,11 +134,10 @@ export const Web3Provider = ({
       setChainId(chains[0].id);
       setProvider(provider);
       localStorage.setItem(
-        'isWalletConnectedRuby',
+        `isWalletConnectedRuby-${chains[0].id}`,
         JSON.stringify({
           wallet: accounts[0].address,
           chainId: chains[0].id,
-          provider: provider,
         }),
       );
       setIsLoading(false);
