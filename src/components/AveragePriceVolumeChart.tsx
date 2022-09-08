@@ -10,6 +10,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 function ErrorFallback({ error, resetErrorBoundary }: any) {
   return (
     <div
+      // eslint-disable-next-line react/no-unknown-property
       onLoad={() => {
         resetErrorBoundary;
       }}
@@ -66,7 +67,6 @@ export default function AveragePriceVolumeChart(props: any) {
   useEffect(() => {
     setTheme();
     // make sure the theme is being reset with the new chart option colours
-    // console.log('{ ...chartOptions }');
     if (chartOptions) setChartOptions(JSON.parse(JSON.stringify(chartOptions)));
   }, [theme]);
 
@@ -155,8 +155,6 @@ export default function AveragePriceVolumeChart(props: any) {
     //   range: number[][];
     // }
   ) {
-    console.log('trades');
-    console.log(trades);
     const options = {
       chart: {
         type: 'series',

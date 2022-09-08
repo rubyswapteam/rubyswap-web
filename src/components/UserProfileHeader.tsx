@@ -30,7 +30,7 @@ const UserProfileHeader: React.FC<Props> = ({
                 </div>
                 <div className="ml-2">
                   <div className="flex">
-                    <div className="truncate text-2xl font-semibold text-gray-700 dark:text-white">
+                    <div className="truncate text-base xl:text-2xl font-semibold text-gray-700 dark:text-white">
                       {name}
                     </div>
                     <span className="ml-2">

@@ -81,7 +81,6 @@ export default function SalesHistoryChart(props: any) {
 
   function filterOutliers(arrIn: any[], priceIndex: number) {
     if (arrIn.length > 5) {
-      console.log('filterOut');
       const arr = arrIn.concat();
       arr.sort(function (a: any, b: any) {
         return a[priceIndex] - b[priceIndex];
@@ -91,8 +90,6 @@ export default function SalesHistoryChart(props: any) {
       const iqr = q3 - q1;
       const maxValue = q3 + iqr * 4;
       const minValue = q1 - iqr * 1.3;
-      console.log(maxValue);
-      console.log(minValue);
       const filteredValues = arr.filter(function (x: any) {
         return x[priceIndex] <= maxValue && x[priceIndex] >= minValue;
       });
@@ -115,13 +112,10 @@ export default function SalesHistoryChart(props: any) {
         trade.tokenId,
       ]);
     if (trades.length > 0) {
-      console.log('filter');
-      console.log(persist);
       trades = filterOutliers(trades, 1);
     }
     if (persist) setActiveTrades(trades);
     setIsEmpty(trades.length === 0);
-    console.log(trades.length);
     return trades;
   }
 

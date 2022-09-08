@@ -37,10 +37,4 @@ export async function handler(event) {
       body: JSON.stringify({ error: error }),
     };
   }
-  // request(options, function (error, response) {
-  //   if (error) throw new Error(error);
-  //   console.log(response.body);
-  // });
-
-  return { statusCode: 200, body: JSON.stringify(response) };
 }
