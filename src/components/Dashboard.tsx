@@ -15,8 +15,7 @@ export default function Dashboard(props: any) {
   const parentRoute = () => {
     return router.route.split('/')[1];
   };
-  const { provider, connectWallet, activeWallet, ethBalance } =
-    useWeb3Provider();
+  const { connectWallet, activeWallet, ethBalance } = useWeb3Provider();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const condensedWalletName = () => {

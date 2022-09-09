@@ -8,6 +8,7 @@ import '../styles/globals.css';
 import { ThemeProvider } from 'next-themes';
 import { AnimatePresence } from 'framer-motion';
 import mixpanel from 'mixpanel-browser';
+import LoginPage from '@/components/LoginPage';
 
 function App({ Component, pageProps }: AppProps) {
   const [searchModalState, setSearchModalState] = useState(false);
@@ -22,18 +23,20 @@ function App({ Component, pageProps }: AppProps) {
           <Web3Provider>
             <WalletProvider>
               <MarketplaceProvider>
-                <>
-                  <SearchModal
-                    open={searchModalState}
-                    setOpen={setSearchModalState}
-                  />
-                  <AnimatePresence mode="wait">
-                    <Component
-                      setSearchModalState={setSearchModalState}
-                      {...pageProps}
+                <LoginPage>
+                  <>
+                    <SearchModal
+                      open={searchModalState}
+                      setOpen={setSearchModalState}
                     />
-                  </AnimatePresence>
-                </>
+                    <AnimatePresence mode="wait">
+                      <Component
+                        setSearchModalState={setSearchModalState}
+                        {...pageProps}
+                      />
+                    </AnimatePresence>
+                  </>
+                </LoginPage>
               </MarketplaceProvider>
             </WalletProvider>
           </Web3Provider>

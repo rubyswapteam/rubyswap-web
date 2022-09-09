@@ -87,7 +87,7 @@ export default function SalesHistoryChart(props: any) {
       const q1 = arr[Math.floor(arr.length / 4)][priceIndex];
       const q3 = arr[Math.ceil(arr.length * (3 / 4))][priceIndex];
       const iqr = q3 - q1;
-      const maxValue = q3 + iqr * 4;
+      const maxValue = q3 + iqr * 15;
       const minValue = q1 - iqr * 1.3;
       const filteredValues = arr.filter(function (x: any) {
         return x[priceIndex] <= maxValue && x[priceIndex] >= minValue;
@@ -104,7 +104,9 @@ export default function SalesHistoryChart(props: any) {
     const activeTab = range?.toString() || '30d';
     const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
     let trades = props.data
-      .filter((trade: any) => trade.timestamp > minimumDate || trade.price <= 0)
+      .filter(
+        (trade: any) => trade.timestamp > minimumDate || trade.price <= 0.0001,
+      )
       .map((trade: any) => [
         trade.timestamp * 1000,
         Number(trade.price),

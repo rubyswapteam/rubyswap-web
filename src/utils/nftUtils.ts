@@ -94,7 +94,7 @@ export function trimHex(val: string, length?: number) {
   if (!val) return '...';
   if (length) {
     return (
-      val.substring(0, length - 1) +
+      val.substring(0, length) +
       '...' +
       val.substring(val.length - length, val.length)
     );

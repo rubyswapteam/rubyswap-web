@@ -98,7 +98,6 @@ export const Web3Provider = ({
       localStorage.getItem('connectedWallets') || '{}',
     );
     if (previouslyConnectedWallets) {
-      console.log('autoconnect');
       await onboard.connectWallet({
         autoSelect: {
           label: previouslyConnectedWallets[0],
@@ -106,13 +105,14 @@ export const Web3Provider = ({
         },
       });
     }
-    const wallet = await onboard.state.get().wallets[0].accounts[0].address;
+    const wallet = await onboard.state.get().wallets[0]?.accounts[0]?.address;
     console.table({ previousWallet: wallet });
     console.log(onboard.state);
     return wallet;
   }
 
   async function connectWallet() {
+    console.log('connectWallet');
     const walletsSub = onboard.state.select('wallets');
     const { unsubscribe } = walletsSub.subscribe((wallets) => {
       console.log(wallets);
