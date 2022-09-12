@@ -72,7 +72,6 @@ const CollectionNftCard: React.FC<Props> = ({
               className={`w-full h-full transition-all hover:scale-110 object-center object-cover ${
                 isLoading ? 'hidden' : 'block'
               }`}
-              onLoadStart={() => setIsLoading(true)}
               onLoad={() => setIsLoading(false)}
               onDragStart={(event) => event.preventDefault()}
             />
