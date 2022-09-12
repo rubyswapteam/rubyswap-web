@@ -6,10 +6,8 @@ import {
   useEffect,
 } from 'react';
 import { trimHex } from '../utils/nftUtils';
-import { createClient } from '@supabase/supabase-js';
 import { getAuth, signInWithPopup, TwitterAuthProvider } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 
 export default function LoginPage({
   children,
