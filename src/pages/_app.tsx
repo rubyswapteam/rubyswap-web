@@ -9,8 +9,9 @@ import { ThemeProvider } from 'next-themes';
 import { AnimatePresence } from 'framer-motion';
 import mixpanel from 'mixpanel-browser';
 import LoginPage from '@/components/LoginPage';
+import { SessionProvider } from 'next-auth/react';
 
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [searchModalState, setSearchModalState] = useState(false);
   // Enabling the debug mode flag is useful during implementation,
   // but it's recommended you remove it for production
@@ -23,20 +24,22 @@ function App({ Component, pageProps }: AppProps) {
           <Web3Provider>
             <WalletProvider>
               <MarketplaceProvider>
-                <LoginPage>
-                  <>
-                    <SearchModal
-                      open={searchModalState}
-                      setOpen={setSearchModalState}
-                    />
-                    <AnimatePresence mode="wait">
-                      <Component
-                        setSearchModalState={setSearchModalState}
-                        {...pageProps}
+                <SessionProvider session={session}>
+                  <LoginPage>
+                    <>
+                      <SearchModal
+                        open={searchModalState}
+                        setOpen={setSearchModalState}
                       />
-                    </AnimatePresence>
-                  </>
-                </LoginPage>
+                      <AnimatePresence mode="wait">
+                        <Component
+                          setSearchModalState={setSearchModalState}
+                          {...pageProps}
+                        />
+                      </AnimatePresence>
+                    </>
+                  </LoginPage>
+                </SessionProvider>
               </MarketplaceProvider>
             </WalletProvider>
           </Web3Provider>

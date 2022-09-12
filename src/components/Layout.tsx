@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { JSXElementConstructor, ReactChildren, ReactElement } from 'react';
 import Head from 'next/head';
-import seo from '@/data/seo';
+import seo from '@/data/seo'
 
 export default function Layout({
   children,

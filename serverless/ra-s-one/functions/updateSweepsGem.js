@@ -6,7 +6,7 @@ const supabase = process.env.SUPABASE;
 
 const gemHeaders = {
   'Content-Type': 'application/json',
-  origin: ' https://www.gem.xyz',
+  origin: 'https://www.gem.xyz',
   'x-api-key': gem,
 };
 
