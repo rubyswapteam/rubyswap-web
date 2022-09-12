@@ -16,12 +16,8 @@ export default function LoginPage({
 }) {
   const { connectWallet, activeWallet } = useWeb3Provider();
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [session, setSession] = useState<any>(null);
-  const [res, setRes] = useState<any>(null);
   const provider = new TwitterAuthProvider();
   const [user, setUser] = useState<any>(undefined);
-  const [isFollowing, setIsFollowing] = useState<any>(false);
   const [isLinkClicked, setIsLinkClicked] = useState<any>(false);
   const [isVerified, setIsVerified] = useState<any>(false);
   const [creds, setCreds] = useState<any>(null);
