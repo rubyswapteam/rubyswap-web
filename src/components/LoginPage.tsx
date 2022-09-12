@@ -53,16 +53,14 @@ export default function LoginPage({
         setCreds(TwitterAuthProvider.credentialFromResult(result));
       })
       .catch((error) => {
+        console.log(error?.message);
+        console.log(error?.code);
         console.table({
-          errorCode: error.code,
-          errorMessage: error.message,
-          email: error.customData.email,
+          errorCode: error?.code,
+          errorMessage: error?.message,
+          email: error.customData?.email,
           credential: TwitterAuthProvider.credentialFromError(error),
         });
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = TwitterAuthProvider.credentialFromError(error);
       });
   }
 
