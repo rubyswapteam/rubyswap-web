@@ -45,16 +45,10 @@ export default function LoginPage({
   function signInWithTwitter() {
     signInWithPopup(auth, provider)
       .then((result) => {
-        console.table({ result: result });
-        // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
-        // You can use these server side with your app's credentials to access the Twitter API.
-        // The signed-in user info.
         setUser(result.user);
         setCreds(TwitterAuthProvider.credentialFromResult(result));
       })
       .catch((error) => {
-        console.log(error?.message);
-        console.log(error?.code);
         console.table({
           errorCode: error?.code,
           errorMessage: error?.message,
