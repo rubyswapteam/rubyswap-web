@@ -1,4 +1,3 @@
-import { SignEthereumTransactionResponse } from '@coinbase/wallet-sdk/dist/relay/Web3Response';
 import Highcharts, * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Boost from 'highcharts/modules/boost';
@@ -11,6 +10,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function SalesHistoryChart(props: any) {
   Boost(Highcharts);
+
   // exporting(Highcharts);
   const [isLogarithmic, setIsLogarithmic] = useState(true);
   const [showOutliers, setShowOutliers] = useState(false);
@@ -30,8 +30,6 @@ export default function SalesHistoryChart(props: any) {
     '30d': 2592000,
   });
   const { theme } = useTheme();
-  const router = useRouter();
-  const { range } = router.query;
   const lightTheme = {
     background: '#ffffff',
     text: '#07062C',
@@ -47,6 +45,8 @@ export default function SalesHistoryChart(props: any) {
   const [themeColours, setThemeColours] = useState(
     theme == 'light' ? lightTheme : darkTheme,
   );
+  const router = useRouter();
+  const { tab, range } = router.query;
 
   useEffect(() => {
     setTheme();
@@ -69,6 +69,12 @@ export default function SalesHistoryChart(props: any) {
   }, [props.data]);
 
   useEffect(() => {
+    console.log('trigger')
+    setCounter(-1);
+    reset(true, true);
+  }, [tab]);
+
+  useEffect(() => {
     reset();
   }, [range]);
 
@@ -77,7 +83,7 @@ export default function SalesHistoryChart(props: any) {
   }, [activeTrades]);
 
   function reset(persist = true, increment = false) {
-    if (counter == 2) {
+    if (counter >= 2) {
       setCounter(0);
       return;
     }
@@ -158,11 +164,10 @@ export default function SalesHistoryChart(props: any) {
           color: themeColours.text,
         },
         backgroundColor: themeColours.background,
-        // height: '30%',
         height: '450px',
         marginLeft: 80,
         marginRight: 40,
-        marginTop: 80,
+        marginTop: 125,
       },
       xAxis: [
         {
@@ -206,11 +211,7 @@ export default function SalesHistoryChart(props: any) {
         },
       ],
       title: {
-        text: 'Sales History',
-        style: {
-          color: themeColours.text,
-        },
-        y: 40,
+        text: '',
       },
       series: [
         {
@@ -220,6 +221,10 @@ export default function SalesHistoryChart(props: any) {
         },
       ],
       legend: {
+        align: 'left',
+        x: 30,
+        y: -10,
+        margin: 40,
         itemStyle: {
           color: themeColours.text,
         },
@@ -310,9 +315,14 @@ export default function SalesHistoryChart(props: any) {
           updateArgs={[true]}
           containerProps={{ style: { height: '100%' } }}
         ></HighchartsReact>
+        <div className="absolute top-8 left-10">
+          <div className="px-2 pt-2 rounded-md mb-3 font-medium">
+            <p>Sale History</p>
+          </div>
+        </div>
         <div className="absolute top-8 right-10">
           <div className="flex gap-x-5">
-            <div className="bg-white/10 px-2 pt-2 rounded-md mb-3">
+            <div className="bg-white/5 px-2 pt-2 rounded-md mb-3">
               <label
                 htmlFor="sh-outliers"
                 className="inline-flex relative items-center cursor-pointer"
@@ -326,12 +336,12 @@ export default function SalesHistoryChart(props: any) {
                   onClick={toggleOutliers}
                 />
                 <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span className="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300">
+                <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
                   Outliers
                 </span>
               </label>
             </div>
-            <div className="bg-white/10 px-2 pt-2 rounded-md mb-3">
+            <div className="bg-white/5 px-2 pt-2 rounded-md mb-3">
               <label
                 htmlFor="sh-logarithmic"
                 className="inline-flex relative items-center cursor-pointer"
@@ -345,7 +355,7 @@ export default function SalesHistoryChart(props: any) {
                   onClick={toggleScale}
                 />
                 <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span className="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300">
+                <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
                   Logarithmic
                 </span>
               </label>

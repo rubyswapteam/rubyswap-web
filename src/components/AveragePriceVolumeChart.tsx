@@ -61,6 +61,7 @@ export default function AveragePriceVolumeChart(props: any) {
   }, [props.data]);
 
   useEffect(() => {
+    setInterval(rangeSettings[range?.toString() || '30d'].intervals);
     setChartOptions(reset());
   }, [range]);
 
@@ -167,8 +168,8 @@ export default function AveragePriceVolumeChart(props: any) {
         // height: props.chart?.height || '60%',
         height: '450px',
         marginLeft: 80,
-        marginRight: 70,
-        marginTop: 80,
+        marginRight: 80,
+        marginTop: 125,
       },
       xAxis: [
         {
@@ -227,11 +228,7 @@ export default function AveragePriceVolumeChart(props: any) {
         },
       ],
       title: {
-        text: 'Average Price and Volume',
-        style: {
-          color: themeColours.text,
-        },
-        y: 40,
+        text: '',
       },
       plotOptions: {
         series: {
@@ -285,6 +282,10 @@ export default function AveragePriceVolumeChart(props: any) {
         shared: true,
       },
       legend: {
+        align: 'left',
+        x: 30,
+        y: -10,
+        margin: 40,
         itemStyle: {
           color: themeColours.text,
         },
@@ -313,7 +314,7 @@ export default function AveragePriceVolumeChart(props: any) {
           {`No trades to display for this ${range} timespan.`}
         </div>
       )}
-      <div className={isShowing && !isEmpty ? '' : 'hidden'}>
+      <div className={(isShowing && !isEmpty ? '' : 'hidden') + ' relative'}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <HighchartsReact
             highcharts={HighCharts}
@@ -322,6 +323,11 @@ export default function AveragePriceVolumeChart(props: any) {
             containerProps={{ style: { height: '100%' } }}
           ></HighchartsReact>
         </ErrorBoundary>
+        <div className="absolute top-8 left-10">
+          <div className="px-2 pt-2 rounded-md mb-3 font-medium">
+            <p>Average Price and Volume</p>
+          </div>
+        </div>
       </div>
     </div>
   );
