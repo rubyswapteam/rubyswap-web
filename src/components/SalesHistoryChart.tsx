@@ -5,10 +5,12 @@ import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import exporting from 'highcharts/modules/exporting';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function SalesHistoryChart(props: any) {
   Boost(Highcharts);
+  exporting(Highcharts);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -76,6 +78,10 @@ export default function SalesHistoryChart(props: any) {
     setChartOptions(newOptions);
     setIsShowing(true);
     return newOptions;
+  }
+
+  function test() {
+    alert('clicked');
   }
 
   function filterOutliers(arrIn: any[], priceIndex: number) {
@@ -181,6 +187,30 @@ export default function SalesHistoryChart(props: any) {
           },
         },
       ],
+      // exporting: {
+      //   buttons: [
+      //     {
+      //       y: 20,
+      //       x: -30,
+      //       text: 'Logarithmic',
+      //       // onclick: function () {
+      //       //   alert('clicked');
+      //       // },
+      //       theme: {
+      //         fill: 'linear-gradient(135deg, orange 60%, cyan)',
+      //       },
+      //     },
+      //     {
+      //       y: 20,
+      //       x: -115,
+      //       text: 'Outliers',
+      //       onclick: test,
+      //       theme: {
+      //         class: 'rounded-md bg-white/10 hover:bg-white/20',
+      //       },
+      //     },
+      //   ],
+      // },
       title: {
         text: 'Sales History',
         style: {

@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import { createNoSubstitutionTemplateLiteral } from 'typescript';
 
 const headers = {
   'X-API-Key': '38d74028-ca13-48df-ab81-bdfa4f3ab834',
@@ -20,7 +19,8 @@ export async function handler(event) {
     let res = [];
     let last = undefined;
     const limit = 1000;
-    const endpoint = `https://api.thegraph.com/subgraphs/id/${id}`;
+    // const endpoint = `https://api.thegraph.com/subgraphs/id/${id}`;
+    const endpoint = `https://api.studio.thegraph.com/query/28247/messari-${id}/v0.0.1`;
 
     let x = await Promise.all(
       [0, 1, 2, 3, 4, 5].map((x) =>
@@ -50,6 +50,8 @@ export async function handler(event) {
       x[4].json(),
       x[5].json(),
     ]);
+
+    console.log(x);
 
     for (let i = 0; i < x.length; i++) {
       res = [...res, ...x[i].data?.trades];
@@ -83,16 +85,21 @@ export async function handler(event) {
       ? `blockNumber_gte: \"${event.queryStringParameters.cursor}\"`
       : '';
 
-  const osId = 'QmQNckUZWgeYDQ39Rf3tgfK3pc1ca14mKhUBztNVdE3Gu7';
-  const seaportId = 'Qmex4g7mgwCKrWvTXw3KyuKi9nLUswWqYHjoRPJ4i8hTRk';
-  const x2y2Id = 'Qmaj3MHPQ5AecbPuzUyLo9rFvuQwcAYpkXrf3dTUPV8rRu';
-  const looksRareId = 'QmNYTXSo2BikMa1JxPaMqQDLZVnNPdYTJdGTQzKFERNXTk';
+  // const osId = 'QmcWQPQMdiAkMCZw85R8FE6XXLe6kRrTYfcYHBFCM4GW5q';
+  const osId = 'opensea';
+  // const seaportId = 'Qmex4g7mgwCKrWvTXw3KyuKi9nLUswWqYHjoRPJ4i8hTRk';
+  const seaportId = 'seaport';
+  // const x2y2Id = 'Qmaj3MHPQ5AecbPuzUyLo9rFvuQwcAYpkXrf3dTUPV8rRu';
+  const x2y2Id = 'x2y2';
+  // const looksRareId = 'QmWag73NCHKY423XPZVT9WpHUg4cKqcidHUB5GSchcBpmT';
+  const looksRareId = 'looksrare';
   const skipOs = event.queryStringParameters.Opensea == 0;
   const skipSeaport = event.queryStringParameters.Seaport == 0;
   const skipX2Y2 = event.queryStringParameters.X2Y2 == 0;
   const skipLooksRare = event.queryStringParameters.LooksRare == 0;
 
   try {
+    console.log(x2y2Id);
     const [os, seaport, x2y2, looksRare] = await Promise.all([
       skipOs
         ? Promise.resolve()
