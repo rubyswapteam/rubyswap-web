@@ -1,3 +1,4 @@
+import { SignEthereumTransactionResponse } from '@coinbase/wallet-sdk/dist/relay/Web3Response';
 import Highcharts, * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Boost from 'highcharts/modules/boost';
@@ -13,6 +14,7 @@ export default function SalesHistoryChart(props: any) {
   // exporting(Highcharts);
   const [isLogarithmic, setIsLogarithmic] = useState(true);
   const [showOutliers, setShowOutliers] = useState(false);
+  const [counter, setCounter] = useState(0);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -71,10 +73,17 @@ export default function SalesHistoryChart(props: any) {
   }, [range]);
 
   useEffect(() => {
-    reset(false);
+    reset(true, true);
   }, [activeTrades]);
 
-  function reset(persist = true) {
+  function reset(persist = true, increment = false) {
+    if (counter == 2) {
+      setCounter(0);
+      return;
+    }
+    if (increment) {
+      setCounter((prev) => prev + 1);
+    }
     const trades = manipulateData(persist);
     const newOptions = getOptions(trades);
     setChartOptions(newOptions);
@@ -113,6 +122,7 @@ export default function SalesHistoryChart(props: any) {
   }
 
   function manipulateData(persist = true) {
+    console.log('manipulateData');
     if (!props.data) return;
     const nowUnix = moment().unix();
     const activeTab = range?.toString() || '30d';
