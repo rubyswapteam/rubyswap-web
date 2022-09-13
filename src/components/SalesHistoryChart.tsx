@@ -69,7 +69,7 @@ export default function SalesHistoryChart(props: any) {
   }, [props.data]);
 
   useEffect(() => {
-    console.log('trigger')
+    console.log('trigger');
     setCounter(-1);
     reset(true, true);
   }, [tab]);
