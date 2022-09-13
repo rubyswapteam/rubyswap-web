@@ -5,12 +5,14 @@ import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import exporting from 'highcharts/modules/exporting';
+// import exporting from 'highcharts/modules/exporting';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function SalesHistoryChart(props: any) {
   Boost(Highcharts);
-  exporting(Highcharts);
+  // exporting(Highcharts);
+  const [isLogarithmic, setIsLogarithmic] = useState(true);
+  const [showOutliers, setShowOutliers] = useState(false);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -80,8 +82,14 @@ export default function SalesHistoryChart(props: any) {
     return newOptions;
   }
 
-  function test() {
-    alert('clicked');
+  function toggleOutliers() {
+    setShowOutliers(!showOutliers);
+    reset();
+  }
+
+  function toggleScale() {
+    setIsLogarithmic(!isLogarithmic);
+    reset();
   }
 
   function filterOutliers(arrIn: any[], priceIndex: number) {
@@ -118,7 +126,7 @@ export default function SalesHistoryChart(props: any) {
         Number(trade.price),
         trade.tokenId,
       ]);
-    if (trades.length > 0) {
+    if (trades.length > 0 && !showOutliers) {
       trades = filterOutliers(trades, 1);
     }
     if (persist) setActiveTrades(trades);
@@ -171,7 +179,7 @@ export default function SalesHistoryChart(props: any) {
         {
           startOnTick: false,
           endOnTick: false,
-          type: 'logarithmic',
+          type: isLogarithmic ? 'logarithmic' : 'linear',
           minorTickInterval: 0.1,
           minorGridLineColor: 'rgba(30,30,30,1)',
           gridLineColor: 'rgba(40,40,40,1)',
@@ -187,30 +195,6 @@ export default function SalesHistoryChart(props: any) {
           },
         },
       ],
-      // exporting: {
-      //   buttons: [
-      //     {
-      //       y: 20,
-      //       x: -30,
-      //       text: 'Logarithmic',
-      //       // onclick: function () {
-      //       //   alert('clicked');
-      //       // },
-      //       theme: {
-      //         fill: 'linear-gradient(135deg, orange 60%, cyan)',
-      //       },
-      //     },
-      //     {
-      //       y: 20,
-      //       x: -115,
-      //       text: 'Outliers',
-      //       onclick: test,
-      //       theme: {
-      //         class: 'rounded-md bg-white/10 hover:bg-white/20',
-      //       },
-      //     },
-      //   ],
-      // },
       title: {
         text: 'Sales History',
         style: {
@@ -309,13 +293,55 @@ export default function SalesHistoryChart(props: any) {
           {`No trades to display for this ${range} timespan.`}
         </div>
       )}
-      <div className={isShowing && !isEmpty ? '' : 'hidden'}>
+      <div className={(isShowing && !isEmpty ? '' : 'hidden') + ' relative'}>
         <HighchartsReact
           highcharts={HighCharts}
           options={chartOptions}
           updateArgs={[true]}
           containerProps={{ style: { height: '100%' } }}
         ></HighchartsReact>
+        <div className="absolute top-8 right-10">
+          <div className="flex gap-x-5">
+            <div className="bg-white/10 px-2 pt-2 rounded-md mb-3">
+              <label
+                htmlFor="sh-outliers"
+                className="inline-flex relative items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  value=""
+                  id="sh-outliers"
+                  className="sr-only peer"
+                  checked={showOutliers}
+                  onClick={toggleOutliers}
+                />
+                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300">
+                  Outliers
+                </span>
+              </label>
+            </div>
+            <div className="bg-white/10 px-2 pt-2 rounded-md mb-3">
+              <label
+                htmlFor="sh-logarithmic"
+                className="inline-flex relative items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  value=""
+                  id="sh-logarithmic"
+                  className="sr-only peer"
+                  checked={isLogarithmic}
+                  onClick={toggleScale}
+                />
+                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300">
+                  Logarithmic
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ const headers = {
 
 export async function handler(event) {
   async function fetchData(id, time) {
+    const timeoutID = setTimeout(() => Promise.resolve([]), 8000);
     const timeAdj = time || event.queryStringParameters.createdAfter;
     const baseTimestamp = timeAdj > 1 ? `timestamp_gte: \"${timeAdj}\"` : '';
     const filter = [from, to, contract, baseTimestamp, blockNumber].join(', ');
@@ -41,6 +42,10 @@ export async function handler(event) {
         }),
       ),
     );
+
+    if (x) {
+      clearTimeout(timeoutID);
+    }
 
     x = await Promise.all([
       x[0].json(),
