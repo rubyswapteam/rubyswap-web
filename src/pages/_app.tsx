@@ -16,6 +16,7 @@ function App({ Component, pageProps }: AppProps) {
   // but it's recommended you remove it for production
   mixpanel.init('015dee14470ae0f2af01b2fa9bb8391d', { debug: true });
   mixpanel.track('Website visit');
+
   return (
     <>
       <div className="hidden lg:block">

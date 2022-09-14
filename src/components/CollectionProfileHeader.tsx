@@ -9,10 +9,12 @@ import WebsiteIcon from './WebsiteIcon';
 
 interface Props {
   collection: any;
+  listingPrice?: any;
 }
 
 const CollectionProfileHeader: React.FC<Props> = ({
   collection,
+  listingPrice,
 }): JSX.Element => {
   return (
     <>
@@ -80,7 +82,9 @@ const CollectionProfileHeader: React.FC<Props> = ({
                     Floor:&nbsp;
                   </span>
                   <span className="flex items-center text-gray-600 dark:text-gray-100">
-                    {collection?.osFloorPrice?.toFixed(2)}&nbsp;
+                    {(listingPrice && Number(listingPrice)?.toFixed(2)) ||
+                      collection?.osFloorPrice?.toFixed(2)}
+                    &nbsp;
                     <EthereumIcon height={14} width={14} />
                   </span>
                 </span>

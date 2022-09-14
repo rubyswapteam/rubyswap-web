@@ -26,11 +26,8 @@ export default function Collection(props: any) {
   const router = useRouter();
   const { id, tab, range } = router.query;
   const { theme } = useTheme();
-  const [isLoadingCollection, setIsLoadingCollection] = useState<boolean>(true);
   const [counter, setCounter] = useState<number>(0);
   const [isLoadingCollectionTrades, setIsLoadingCollectionTrades] =
-    useState<boolean>(true);
-  const [isLoadingRecentTrades, setIsLoadingRecentTrades] =
     useState<boolean>(true);
   const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
   const [recentListings, setRecentListings] = useState<any[]>([]);
@@ -58,9 +55,7 @@ export default function Collection(props: any) {
     ) {
       setLoading(true);
       getCollectionBySlug(id, true).then((res: any) => {
-        setIsLoadingCollection(false);
         setIsLoadingCollectionTrades(false);
-        setIsLoadingRecentTrades(false);
       });
     }
   }, [id]);
@@ -149,14 +144,8 @@ export default function Collection(props: any) {
     setIsLoadingCollectionTrades(false);
   }, [collectionTrades]);
 
-  useEffect(() => {
-    setIsLoadingRecentTrades(false);
-  }, [recentTrades]);
-
   function setLoading(state: boolean) {
-    setIsLoadingCollection(state);
     setIsLoadingCollectionTrades(state);
-    setIsLoadingRecentTrades(state);
   }
 
   const primaryTabs = [
@@ -272,6 +261,7 @@ export default function Collection(props: any) {
                 <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <SalesHistoryChart
+                      activeContract={activeCollection?.contractAddress}
                       data={collectionTrades}
                     ></SalesHistoryChart>
                   )}
@@ -287,6 +277,7 @@ export default function Collection(props: any) {
                 <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <AveragePriceVolumeChart
+                      activeContract={activeCollection?.contractAddress}
                       data={collectionTrades}
                     ></AveragePriceVolumeChart>
                   )}
@@ -321,6 +312,7 @@ export default function Collection(props: any) {
                 collectionName={activeCollection?.name}
                 chainId={activeCollection?.chainId}
                 keyPrefix={'recentTrades'}
+                selectDisabled={true}
               />
             </div>
           </div>
@@ -380,6 +372,7 @@ export default function Collection(props: any) {
               <div className="w-full rounded-xl overflow-hidden mr-8">
                 {collectionTrades && (
                   <SalesHistoryChart
+                    activeContract={activeCollection?.contractAddress}
                     data={collectionTrades}
                   ></SalesHistoryChart>
                 )}
@@ -387,6 +380,7 @@ export default function Collection(props: any) {
               <div className="w-full rounded-xl overflow-hidden">
                 {collectionTrades && (
                   <AveragePriceVolumeChart
+                    activeContract={activeCollection?.contractAddress}
                     data={collectionTrades}
                   ></AveragePriceVolumeChart>
                 )}
@@ -471,7 +465,14 @@ export default function Collection(props: any) {
       <Layout>
         <Dashboard
           setSearchModalState={props.setSearchModalState}
-          title={<CollectionProfileHeader collection={activeCollection} />}
+          title={
+            <CollectionProfileHeader
+              collection={activeCollection}
+              listingPrice={
+                recentListings[0]?.price || recentListings[0]?.currentEthPrice
+              }
+            />
+          }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
           refresh={setRefreshButton()}

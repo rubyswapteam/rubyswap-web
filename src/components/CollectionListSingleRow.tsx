@@ -8,6 +8,7 @@ interface Props {
   collectionName?: string;
   chainId?: number;
   keyPrefix?: string;
+  selectDisabled?: boolean;
 }
 
 const CollectionListSingleRow: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const CollectionListSingleRow: React.FC<Props> = ({
   collectionName,
   chainId,
   keyPrefix,
+  selectDisabled,
 }): JSX.Element => {
   return (
     <div>
@@ -31,6 +33,7 @@ const CollectionListSingleRow: React.FC<Props> = ({
                 selectedNft={selectedNft}
                 collectionName={collectionName}
                 chainId={chainId}
+                selectDisabled={selectDisabled}
               />
             ))}
           </motion.div>

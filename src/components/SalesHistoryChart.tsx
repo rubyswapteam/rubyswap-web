@@ -69,7 +69,6 @@ export default function SalesHistoryChart(props: any) {
   }, [props.data]);
 
   useEffect(() => {
-    console.log('trigger');
     setCounter(-1);
     reset(true, true);
   }, [tab]);
@@ -141,6 +140,7 @@ export default function SalesHistoryChart(props: any) {
         trade.timestamp * 1000,
         Number(trade.price),
         trade.tokenId,
+        trade.contract,
       ]);
     if (trades.length > 0 && !showOutliers) {
       trades = filterOutliers(trades, 1);
@@ -297,18 +297,29 @@ export default function SalesHistoryChart(props: any) {
 
   return (
     <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-shc`}>
-      {!isShowing && (
-        <div
-          role="status"
-          className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.06]"
-        ></div>
-      )}
+      {!isShowing ||
+        (!activeTrades && !isEmpty) ||
+        (activeTrades && activeTrades[0][3] !== props?.activeContract && (
+          <div
+            role="status"
+            className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.08]"
+          ></div>
+        ))}
       {isEmpty && (
         <div className="flex justify-center items-center h-[450px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
           {`No trades to display for this ${range} timespan.`}
         </div>
       )}
-      <div className={(isShowing && !isEmpty ? '' : 'hidden') + ' relative'}>
+      <div
+        className={
+          (isShowing &&
+          !isEmpty &&
+          activeTrades &&
+          activeTrades[0][3] === props?.activeContract
+            ? ''
+            : 'hidden') + ' relative'
+        }
+      >
         <HighchartsReact
           highcharts={HighCharts}
           options={chartOptions}

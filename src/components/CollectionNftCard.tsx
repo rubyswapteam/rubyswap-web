@@ -7,7 +7,8 @@ import X2Y2Icon from './X2Y2Icon';
 import LooksRareIcon from './LooksRareIcon';
 import 'react-loading-skeleton/dist/skeleton.css';
 import PendingTxnsSpinner from './PendingTxnsSpinner';
-
+import { SudoswapIcon } from './SudoswapIcon';
+import { NFTXIcon } from './NFTXIcon';
 interface Props {
   selectedNft: any;
   collectionName?: string;
@@ -96,14 +97,19 @@ const CollectionNftCard: React.FC<Props> = ({
                 <X2Y2Icon height={28} width={28} />
               </div>
             )}
-            {selectedNft?.marketplace === NftMarketplace.NFTRADE && (
+            {selectedNft?.marketplace === NftMarketplace.SUDOSWAP && (
               <div className="rounded-full">
-                <OpenSeaIcon height={28} width={28} />
+                <SudoswapIcon height={28} width={28} />
               </div>
             )}
             {selectedNft?.marketplace === NftMarketplace.SEAPORT && (
               <div className="rounded-full">
                 <OpenSeaIcon height={28} width={28} />
+              </div>
+            )}
+            {selectedNft?.marketplace === NftMarketplace.NFTX && (
+              <div className="rounded-full bg-black h-[28px] w-[28px] p-[5px] justify-center self-center items-center">
+                <NFTXIcon height={18} width={18} />
               </div>
             )}
           </a>

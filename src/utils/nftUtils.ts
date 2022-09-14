@@ -69,7 +69,9 @@ export enum NftMarketplace {
   NFTRADE = 'nftrade',
   OPENSEA = 'opensea',
   LOOKSRARE = 'looksrare',
+  NFTX = 'nftx',
   SEAPORT = 'seaport',
+  SUDOSWAP = 'sudoswap',
   X2Y2 = 'x2y2',
 }
 

@@ -89,6 +89,7 @@ export default function AveragePriceVolumeChart(props: any) {
   function reset() {
     const trades = manipulateData();
     const newOptions = getOptions(trades);
+    console.log(props);
     return newOptions;
   }
 
@@ -303,7 +304,10 @@ export default function AveragePriceVolumeChart(props: any) {
 
   return (
     <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-shc`}>
-      {!isShowing && (
+      {(!isShowing ||
+        (!props?.data && !isEmpty) ||
+        (props?.data &&
+          props?.data[0]?.contract !== props?.activeContract)) && (
         <div
           role="status"
           className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.06]"
@@ -314,7 +318,16 @@ export default function AveragePriceVolumeChart(props: any) {
           {`No trades to display for this ${range} timespan.`}
         </div>
       )}
-      <div className={(isShowing && !isEmpty ? '' : 'hidden') + ' relative'}>
+      <div
+        className={
+          (isShowing &&
+          !isEmpty &&
+          props?.data &&
+          props?.data[0]?.contract === props?.activeContract
+            ? ''
+            : 'hidden') + ' relative'
+        }
+      >
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <HighchartsReact
             highcharts={HighCharts}
