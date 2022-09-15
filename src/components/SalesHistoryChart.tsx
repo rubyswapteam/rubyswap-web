@@ -19,6 +19,7 @@ export default function SalesHistoryChart(props: any) {
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
+  const [dateFormat, setDateFormat] = useState('%d.%m');
   const [rangeSeconds] = useState<any>({
     '5m': 300,
     '15m': 900,
@@ -84,6 +85,7 @@ export default function SalesHistoryChart(props: any) {
   function reset(persist = true, increment = false) {
     if (counter >= 2) {
       setCounter(0);
+      setIsShowing(true);
       return;
     }
     if (increment) {
@@ -145,6 +147,16 @@ export default function SalesHistoryChart(props: any) {
     if (trades.length > 0 && !showOutliers) {
       trades = filterOutliers(trades, 1);
     }
+    if (trades.length > 0) {
+      const times = trades.map((txn: any[]) => txn[0]);
+      const timeRange = (Math.max(...times) - Math.min(...times)) / 1000;
+      timeRange > 1209600
+        ? setDateFormat('%d.%m')
+        : timeRange > 86400
+        ? setDateFormat('%l%P %d.%m')
+        : setDateFormat('%k:%M');
+      console.table({ times: times, timeRange: timeRange });
+    }
     if (persist) setActiveTrades(trades);
     setIsEmpty(trades.length === 0);
     return trades;
@@ -175,7 +187,7 @@ export default function SalesHistoryChart(props: any) {
           type: 'datetime',
           labels: {
             formatter: function () {
-              return Highcharts.dateFormat('%d/%m/%y', (this as any).value);
+              return Highcharts.dateFormat(dateFormat, (this as any).value);
             },
             padding: 30,
             style: {

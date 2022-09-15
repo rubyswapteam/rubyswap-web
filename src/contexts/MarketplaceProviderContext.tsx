@@ -119,7 +119,10 @@ export const MarketplaceProvider = ({
       adj = '';
       for (let i = 0; i < marketplaces.length; i++) {
         const marketplace = marketplaces[i];
-        resArr = [...resArr, ...mapTrades(res, marketplace)];
+        const mappedTrades = mapTrades(res, marketplace);
+        if (mappedTrades) {
+          resArr = [...resArr, ...mappedTrades];
+        }
         repeat = repeat || !!res[marketplace]?.last;
         adj =
           adj +
