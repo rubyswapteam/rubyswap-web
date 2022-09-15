@@ -47,7 +47,6 @@ export default function SearchModal(props: Props) {
           redirect: 'follow',
         });
         const responseJson = await response.json();
-        console.log(responseJson);
         setSearchResults(responseJson);
       }
     };
@@ -113,7 +112,7 @@ export default function SearchModal(props: Props) {
             >
               <div className="relative w-full max-w-lg transform px-4 transition-all opacity-100 scale-100">
                 <div
-                  className="overflow-hidden rounded-lg bg-white shadow-md"
+                  className="overflow-hidden rounded-lg bg-white dark:bg-white/40 shadow-md"
                   id="headlessui-dialog-panel-26"
                   onClick={(e) => handleClick(e)}
                 >
@@ -147,12 +146,12 @@ export default function SearchModal(props: Props) {
                   leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                   <div
-                    className="h-64 bg-white rounded-lg w-full mt-5 shadow-md overflow-scroll"
+                    className="h-64 bg-white dark:bg-white/40  rounded-lg w-full mt-5 shadow-md overflow-scroll"
                     onClick={(e) => handleClick(e)}
                   >
                     {searchResults.map((res: any) => (
                       <div
-                        className="hover:bg-gray-50"
+                        className="hover:bg-gray-50 dark:hover:bg-white/50 transition-colors"
                         key={'searchModalItem-' + res?.contractAddress}
                       >
                         {res && (
@@ -162,16 +161,22 @@ export default function SearchModal(props: Props) {
                           >
                             <div className="px-4 py-2 flex">
                               {res?.imageUrl && (
-                                <img
-                                  className="h-10 w-10 rounded-full self-center"
-                                  src={res?.imageUrl}
-                                />
+                                <div className="h-10 w-10 relative contents rounded-full self-center">
+                                  <img
+                                    className="h-[40px] w-[40px] flex-grow block rounded-full self-center"
+                                    src={res?.imageUrl}
+                                  />
+                                </div>
                               )}
                               {!res?.imageUrl && (
-                                <Jazzicon
-                                  diameter={39}
-                                  seed={jsNumberForAddress(res.contractAddress)}
-                                />
+                                <div className="h-10 w-10 rounded-full self-center">
+                                  <Jazzicon
+                                    diameter={39}
+                                    seed={jsNumberForAddress(
+                                      res.contractAddress,
+                                    )}
+                                  />
+                                </div>
                               )}
                               <div className="text-left text-sm ml-3 text-black">
                                 <div className="w-max flex items-center">

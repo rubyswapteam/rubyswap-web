@@ -16,6 +16,10 @@ const CollectionProfileHeader: React.FC<Props> = ({
   collection,
   listingPrice,
 }): JSX.Element => {
+  function handleWatchlist() {
+    // collection?.contractAddress;
+  }
+
   return (
     <>
       <div className="mb-4 md:mb-0 flex-col w-full z-5 pb-6">
@@ -103,7 +107,9 @@ const CollectionProfileHeader: React.FC<Props> = ({
             <div className="flex gap-x-3">
               <button className="block text-right rounded-md p-2 border-white/20 border self-center dark:hover:bg-white/10">
                 <div className="flex">
-                  <div className="text-sm">Add To Watchlist</div>
+                  <div onClick={handleWatchlist} className="text-sm">
+                    Add To Watchlist
+                  </div>
                 </div>
               </button>
             </div>

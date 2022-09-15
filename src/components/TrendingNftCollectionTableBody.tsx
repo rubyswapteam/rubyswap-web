@@ -69,7 +69,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                 prefetch={false}
               >
                 <tr
-                  className="hover:bg-gray-50 dark:hover:bg-white/[.02] transition-colors cursor-pointer flex"
+                  className="hover:bg-gray-50 dark:hover:bg-white/[.05] transition-all cursor-pointer flex"
                   key={nftCollection.id}
                 >
                   <>

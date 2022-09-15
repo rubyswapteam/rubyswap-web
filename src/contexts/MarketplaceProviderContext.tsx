@@ -92,8 +92,6 @@ export const MarketplaceProvider = ({
     const purchasesRaw = await fetchGet(purchasesUrl);
     let sales: any[] = [];
     let purchases: any[] = [];
-    console.log(salesRaw);
-    console.log(purchasesRaw);
     for (let i = 0; i < marketplaces.length; i++) {
       const marketplace = marketplaces[i];
       if (salesRaw && salesRaw)
@@ -101,7 +99,6 @@ export const MarketplaceProvider = ({
       if (purchasesRaw)
         purchases = [...purchases, ...mapTrades(purchasesRaw, marketplace)];
     }
-    console.log(sales);
     return { sales: sales, purchases: purchases };
   }
 

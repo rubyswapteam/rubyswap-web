@@ -89,7 +89,6 @@ export default function AveragePriceVolumeChart(props: any) {
   function reset() {
     const trades = manipulateData();
     const newOptions = getOptions(trades);
-    console.log(props);
     return newOptions;
   }
 
@@ -307,6 +306,7 @@ export default function AveragePriceVolumeChart(props: any) {
       {(!isShowing ||
         (!props?.data && !isEmpty) ||
         (props?.data &&
+          props?.data.length > 0 &&
           props?.data[0]?.contract !== props?.activeContract)) && (
         <div
           role="status"
@@ -323,6 +323,7 @@ export default function AveragePriceVolumeChart(props: any) {
           (isShowing &&
           !isEmpty &&
           props?.data &&
+          props?.data.length > 0 &&
           props?.data[0]?.contract === props?.activeContract
             ? ''
             : 'hidden') + ' relative'

@@ -10,7 +10,6 @@ function formatText(text: string) {
   let newText = text.split('\n').join('<br />');
   newText = convertBolds(newText);
   newText = convertTags(newText);
-  console.log(newText);
   newText = convertUrl(newText);
   return newText;
 }

@@ -240,7 +240,7 @@ export default function SalesHistoryChart(props: any) {
           point: {
             events: {
               click: function () {
-                console.log(this);
+                // console.log(this);
               },
             },
           },
@@ -299,12 +299,15 @@ export default function SalesHistoryChart(props: any) {
     <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-shc`}>
       {!isShowing ||
         (!activeTrades && !isEmpty) ||
-        (activeTrades && activeTrades[0][3] !== props?.activeContract && (
-          <div
-            role="status"
-            className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.08]"
-          ></div>
-        ))}
+        (activeTrades &&
+          activeTrades.length > 0 &&
+          activeTrades[0].length == 4 &&
+          activeTrades[0][3] !== props?.activeContract && (
+            <div
+              role="status"
+              className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.08]"
+            ></div>
+          ))}
       {isEmpty && (
         <div className="flex justify-center items-center h-[450px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
           {`No trades to display for this ${range} timespan.`}
@@ -315,6 +318,8 @@ export default function SalesHistoryChart(props: any) {
           (isShowing &&
           !isEmpty &&
           activeTrades &&
+          activeTrades.length > 0 &&
+          activeTrades[0].length == 4 &&
           activeTrades[0][3] === props?.activeContract
             ? ''
             : 'hidden') + ' relative'
