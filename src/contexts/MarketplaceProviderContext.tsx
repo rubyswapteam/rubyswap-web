@@ -28,6 +28,7 @@ export const MarketplaceProvider = ({
     contract: '',
   });
   const [activeCollection, setActiveCollection] = useState<any>(undefined);
+  const [tokenRanks, setTokenRanks] = useState<any>(undefined);
   const [activeListings, setActiveListings] = useState<any[]>();
   const [totalListings, setTotalListings] = useState<number>(0);
   const [marketplaces] = useState(['Opensea', 'Seaport', 'X2Y2', 'LooksRare']);
@@ -153,6 +154,21 @@ export const MarketplaceProvider = ({
       )
     ).json();
     return collection;
+  }
+
+  async function getTokenRanks(contract = '', slug = '') {
+    const suffix = contract ? `contract=${contract}` : `slug=${slug}`;
+
+    const ranks = await (
+      await fetch(`/.netlify/functions/getDbRarity?${suffix}`, {
+        method: 'GET',
+        redirect: 'follow',
+      })
+    ).json();
+    ranks && ranks?.length == 1
+      ? setTokenRanks(ranks[0])
+      : setTokenRanks(undefined);
+    return ranks;
   }
 
   function getBasetimeByMarketplace(trades: any) {
@@ -391,6 +407,8 @@ export const MarketplaceProvider = ({
       fetchActiveListings,
       activeListings,
       totalListings,
+      getTokenRanks,
+      tokenRanks,
     }),
     [
       userTrades,
@@ -409,6 +427,8 @@ export const MarketplaceProvider = ({
       fetchActiveListings,
       activeListings,
       totalListings,
+      getTokenRanks,
+      tokenRanks,
     ],
   );
 

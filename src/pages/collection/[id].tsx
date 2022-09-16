@@ -42,6 +42,7 @@ export default function Collection(props: any) {
     activeListings,
     fetchActiveListings,
     totalListings,
+    getTokenRanks,
   } = useMarketplaceProvider();
   const controller = new AbortController();
   const { signal } = controller;
@@ -139,6 +140,12 @@ export default function Collection(props: any) {
       fetchActiveListings(activeCollection.contractAddress, 1000);
     }
   }, [counter]);
+
+  useEffect(() => {
+    if (activeCollection?.contractAddress) {
+      getTokenRanks(activeCollection.contractAddress);
+    }
+  }, [activeCollection?.contractAddress]);
 
   useEffect(() => {
     setIsLoadingCollectionTrades(false);
