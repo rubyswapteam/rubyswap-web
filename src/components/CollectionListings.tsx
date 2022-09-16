@@ -9,6 +9,7 @@ interface Props {
   totalListings: number;
   keyPrefix: any;
   collectionName?: string;
+  tokenRanks: any;
 }
 
 const CollectionListings: React.FC<Props> = ({
@@ -16,6 +17,7 @@ const CollectionListings: React.FC<Props> = ({
   totalListings = 0,
   keyPrefix = '',
   collectionName = '',
+  tokenRanks = undefined,
 }): JSX.Element => {
   const duration = 200; // ms
   const delay = 100;
@@ -131,6 +133,23 @@ const CollectionListings: React.FC<Props> = ({
                   <CollectionNftCard
                     selectedNft={nft}
                     collectionName={collectionName}
+                    rank={
+                      tokenRanks &&
+                      tokenRanks?.ranks &&
+                      tokenRanks?.ranks[nft.tokenId]
+                    }
+                    tier={
+                      tokenRanks &&
+                      tokenRanks?.ranks &&
+                      tokenRanks?.ranks[nft?.tokenId] &&
+                      tokenRanks?.ranks[nft?.tokenId] > tokenRanks?.tiers[2]
+                        ? 3
+                        : tokenRanks?.ranks[nft?.tokenId] > tokenRanks?.tiers[1]
+                        ? 2
+                        : tokenRanks?.ranks[nft?.tokenId] > tokenRanks?.tiers[0]
+                        ? 1
+                        : 0
+                    }
                   />
                 </motion.div>
               ))}

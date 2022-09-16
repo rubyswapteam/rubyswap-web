@@ -43,6 +43,7 @@ export default function Collection(props: any) {
     fetchActiveListings,
     totalListings,
     getTokenRanks,
+    tokenRanks,
   } = useMarketplaceProvider();
   const controller = new AbortController();
   const { signal } = controller;
@@ -270,6 +271,7 @@ export default function Collection(props: any) {
                     <SalesHistoryChart
                       activeContract={activeCollection?.contractAddress}
                       data={collectionTrades}
+                      tokenRanks={tokenRanks}
                     ></SalesHistoryChart>
                   )}
                 </div>
@@ -342,6 +344,11 @@ export default function Collection(props: any) {
                 collectionName={activeCollection?.name}
                 selectedNfts={activeListings && [...activeListings]}
                 totalListings={totalListings}
+                tokenRanks={
+                  tokenRanks &&
+                  tokenRanks?.contract == activeCollection?.contractAddress &&
+                  tokenRanks
+                }
                 keyPrefix={`${activeCollection?.contractAddress}-${counter}`}
               />
             </div>
@@ -381,6 +388,7 @@ export default function Collection(props: any) {
                   <SalesHistoryChart
                     activeContract={activeCollection?.contractAddress}
                     data={collectionTrades}
+                    tokenRanks={tokenRanks}
                   ></SalesHistoryChart>
                 )}
               </div>

@@ -1,4 +1,3 @@
-import { useMarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
 import Highcharts, * as HighCharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Boost from 'highcharts/modules/boost';
@@ -13,7 +12,7 @@ export default function SalesHistoryChart(props: any) {
   Boost(Highcharts);
 
   // exporting(Highcharts);
-  const [isLogarithmic, setIsLogarithmic] = useState(true);
+  const [isLogarithmic, setIsLogarithmic] = useState(false);
   const [showOutliers, setShowOutliers] = useState(false);
   const [counter, setCounter] = useState(0);
   const [chartOptions, setChartOptions] = useState(undefined as any);
@@ -42,13 +41,15 @@ export default function SalesHistoryChart(props: any) {
     background: 'rgba(255,255,255, 0.04)',
     text: '#ffffff',
     primaryColour: 'rgba(255, 255, 255, 0.3)',
-    secondaryColour: 'rgba(200, 0, 200, 0.5)',
+    secondaryColour: 'rgba(200, 0, 200, 1)',
+    t1: 'rgba(239, 68, 68, 1)',
+    t2: 'rgba(249, 115, 22, 1)',
+    t3: 'rgba(234, 179, 8, 0.5)',
   };
-  const [themeColours, setThemeColours] = useState(
+  const [themeColours, setThemeColours] = useState<any>(
     theme == 'light' ? lightTheme : darkTheme,
   );
   const [ranks, setRanks] = useState<any>(undefined);
-  const { tokenRanks } = useMarketplaceProvider();
   const router = useRouter();
   const { tab, range } = router.query;
 
@@ -57,15 +58,15 @@ export default function SalesHistoryChart(props: any) {
   }, [theme]);
 
   useEffect(() => {
-    if (tokenRanks && tokenRanks?.contractAddress === props?.activeContract) {
-      setRanks({
-        contract: tokenRanks.contractAddress,
-        ranks: JSON.parse(tokenRanks.ranks),
-      });
+    if (
+      props?.tokenRanks &&
+      props?.tokenRanks?.contract === props?.activeContract
+    ) {
+      setRanks(props?.tokenRanks);
     } else {
       setRanks(undefined);
     }
-  }, [tokenRanks]);
+  }, [props?.tokenRanks]);
 
   function setTheme() {
     if (theme == 'dark') {
@@ -84,7 +85,7 @@ export default function SalesHistoryChart(props: any) {
   }, [props.data]);
 
   useEffect(() => {
-    setCounter(-1);
+    setCounter(-2);
     reset(true, true);
   }, [tab]);
 
@@ -105,6 +106,14 @@ export default function SalesHistoryChart(props: any) {
     if (increment) {
       setCounter((prev) => prev + 1);
     }
+    if (
+      props?.tokenRanks &&
+      props?.tokenRanks?.contract === props?.activeContract
+    ) {
+      setRanks(props?.tokenRanks);
+    } else {
+      setRanks(undefined);
+    }
     const trades = manipulateData(persist);
     const newOptions = getOptions(trades);
     setChartOptions(newOptions);
@@ -122,19 +131,19 @@ export default function SalesHistoryChart(props: any) {
     reset();
   }
 
-  function filterOutliers(arrIn: any[], priceIndex: number) {
+  function filterOutliers(arrIn: any[]) {
     if (arrIn.length > 5) {
       const arr = arrIn.concat();
       arr.sort(function (a: any, b: any) {
-        return a[priceIndex] - b[priceIndex];
+        return a.y - b.y;
       });
-      const q1 = arr[Math.floor(arr.length / 4)][priceIndex];
-      const q3 = arr[Math.ceil(arr.length * (3 / 4))][priceIndex];
+      const q1 = arr[Math.floor(arr.length / 4)].y;
+      const q3 = arr[Math.ceil(arr.length * (3 / 4))].y;
       const iqr = q3 - q1;
-      const maxValue = q3 + iqr * 15;
+      const maxValue = q3 + iqr * 5;
       const minValue = q1 - iqr * 1.3;
       const filteredValues = arr.filter(function (x: any) {
-        return x[priceIndex] <= maxValue && x[priceIndex] >= minValue;
+        return x.y <= maxValue && x.y >= minValue;
       });
       return filteredValues;
     } else {
@@ -142,73 +151,46 @@ export default function SalesHistoryChart(props: any) {
     }
   }
 
-  function splitByRarity(trades: any[], includeRanks: boolean) {
-    // if (!ranks || !ranks?.ranks || (ranks?.ranks?.length < 10 && includeRanks))
-    //   return [
-    //     {
-    //       name: 'Sales',
-    //       color: themeColours.primaryColour,
-    //       data: trades,
-    //     },
-    //   ];
-    // const supply = ranks.ranks.legnth;
-    // const tiers = [
-    //   { limit: -1 },
-    //   { limit: Math.floor(supply / 100), title: 'Top 1%' },
-    //   { limit: Math.floor(supply / 10), title: 'Top 10%' },
-    //   { limit: Math.floor(supply / 4), title: 'Top 25%' },
-    //   { limit: Math.floor(supply / 2), title: 'Top 50%' },
-    //   { limit: 99999999, title: 'Bottom 50%' },
-    // ];
-    // const res = [];
-    // for (let i = 0; i < tiers.length - 1; i++) {
-    //   res.push([
-    //     {
-    //       name: tiers[i + 1].title,
-    //       color: themeColours.primaryColour,
-    //       data: trades.filter(
-    //         (t) => t[4] > tiers[i].limit && t[4] <= tiers[i + 1].limit,
-    //       ),
-    //     },
-    //   ]);
-    // }
-
-    // FORMTTER AND EVERYTHING REQUIRE STANDARD TRADES ARRAY, RETHINK APPROACH OR DROP CHECKS TO ENSURE ALIGNMENT
-    return trades;
-  }
-
   function manipulateData(persist = true) {
-    console.log('manipulateData');
     if (!props.data) return;
     const nowUnix = moment().unix();
     const activeTab = range?.toString() || '30d';
     const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
     const includeRanks = ranks && ranks?.contract == props?.activeContract;
-    let trades = props.data
-      .filter(
-        (trade: any) => trade.timestamp > minimumDate || trade.price <= 0.0001,
-      )
-      .map((trade: any) => [
-        trade.timestamp * 1000,
-        Number(trade.price),
-        trade.tokenId,
-        trade.contract,
-        includeRanks && trade?.tokenId && ranks?.ranks[trade.tokenId],
-      ]);
+    let trades = props.data.filter(
+      (trade: any) => trade.timestamp > minimumDate || trade.price <= 0.0001,
+    );
+    trades = trades.map((trade: any) => {
+      return {
+        x: Number(trade.timestamp) * 1000,
+        y: Number(trade.price),
+        id: trade.tokenId.toString(),
+        contract: trade.contract,
+        rank: includeRanks && trade.tokenId && ranks?.ranks[trade.tokenId],
+        color:
+          !ranks ||
+          !ranks?.ranks[trade.tokenId] ||
+          ranks?.ranks[trade.tokenId] > ranks?.tiers[2]
+            ? themeColours.primaryColour
+            : ranks?.ranks[trade.tokenId] > ranks?.tiers[1]
+            ? themeColours?.t3
+            : ranks?.ranks[trade.tokenId] > ranks?.tiers[0]
+            ? themeColours?.t2
+            : themeColours?.t1,
+      };
+    });
     if (trades.length > 0 && !showOutliers) {
-      trades = filterOutliers(trades, 1);
+      trades = filterOutliers(trades);
     }
     if (trades.length > 0) {
-      const times = trades.map((txn: any[]) => txn[0]);
+      const times = trades.map((txn: any) => txn.x);
       const timeRange = (Math.max(...times) - Math.min(...times)) / 1000;
       timeRange > 1209600
         ? setDateFormat('%d.%m')
         : timeRange > 86400
         ? setDateFormat('%l%P %d.%m')
         : setDateFormat('%k:%M');
-      console.table({ times: times, timeRange: timeRange });
     }
-    trades = splitByRarity(trades, includeRanks);
     if (persist) setActiveTrades(trades);
     setIsEmpty(trades.length === 0);
     return trades;
@@ -282,6 +264,7 @@ export default function SalesHistoryChart(props: any) {
           name: 'Sales',
           color: themeColours.primaryColour,
           data: trades,
+          turboThreshold: 20000,
         },
       ],
       legend: {
@@ -331,17 +314,10 @@ export default function SalesHistoryChart(props: any) {
             headerFormat: '<b>Sale Details</b><br/>',
             pointFormatter: function (): string {
               const i = activeTrades && activeTrades[(this as any).index];
-              const time = i && i[0];
-              const price = i && i[1];
-              const tokenId = i && i[2];
-              const rank = i && i[4];
-              let tokenIdStr = undefined;
-
-              if ((this as any).y == price && (this as any).x == time) {
-                tokenIdStr = `<div><b>Token ID:</b> ${tokenId}</div><br>`;
-              } else {
-                tokenIdStr = '';
-              }
+              const time = i && i?.x;
+              const price = i && i?.y;
+              const tokenId = i && i?.id;
+              const rank = i && i?.rank;
 
               return `
               </div>
@@ -371,8 +347,8 @@ export default function SalesHistoryChart(props: any) {
         (!activeTrades && !isEmpty) ||
         (activeTrades &&
           activeTrades.length > 0 &&
-          activeTrades[0].length == 4 &&
-          activeTrades[0][3] !== props?.activeContract && (
+          Object.keys(activeTrades[0]).length >= 4 &&
+          activeTrades[0].contract !== props?.activeContract && (
             <div
               role="status"
               className="flex justify-center h-[450px] w-full bg-gray-300 rounded-lg animate-pulse dark:bg-white/[0.08]"
@@ -389,8 +365,8 @@ export default function SalesHistoryChart(props: any) {
           !isEmpty &&
           activeTrades &&
           activeTrades.length > 0 &&
-          activeTrades[0].length >= 4 &&
-          activeTrades[0][3] === props?.activeContract
+          Object.keys(activeTrades[0]).length >= 4 &&
+          activeTrades[0]?.contract === props?.activeContract
             ? ''
             : 'hidden') + ' relative'
         }

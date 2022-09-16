@@ -5,6 +5,9 @@ module.exports = {
     './src/**/*.{html,js,jsx,tsx}',
     './src/pages/**/*.{html,js,jsx,tsx}',
   ],
+  options: {
+    safelist: ['bg-gray-500', 'bg-amber-500', 'bg-red-500'],
+  },
   theme: {
     extend: {
       fontFamily: {

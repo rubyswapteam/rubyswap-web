@@ -48,7 +48,8 @@ export default function AveragePriceVolumeChart(props: any) {
     background: 'rgba(255,255,255, 0.04)',
     text: '#ffffff',
     primaryColour: 'rgba(255, 255, 255, 0.3)',
-    secondaryColour: 'rgb(70, 115, 250)',
+    secondaryColour: 'rgba(234, 179, 8, 1)',
+    area: 'rgba(249, 115, 22, 0.5)',
   };
   const [themeColours, setThemeColours] = useState(
     theme == 'light' ? lightTheme : darkTheme,
@@ -266,7 +267,7 @@ export default function AveragePriceVolumeChart(props: any) {
           type: 'arearange',
           lineWidth: 0,
           linkedTo: ':previous',
-          color: 'rgba(200, 0, 200, 0.2)',
+          color: themeColours?.area,
           fillOpacity: 0.3,
           zIndex: 0,
           marker: {

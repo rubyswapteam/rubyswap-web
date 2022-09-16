@@ -15,6 +15,8 @@ interface Props {
   chainId?: number;
   handleNftClick?: any;
   selectDisabled?: boolean;
+  rank?: any;
+  tier?: number;
 }
 
 const CollectionNftCard: React.FC<Props> = ({
@@ -23,6 +25,8 @@ const CollectionNftCard: React.FC<Props> = ({
   chainId,
   handleNftClick,
   selectDisabled = false,
+  rank = undefined,
+  tier = 3,
 }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState(false);
@@ -120,9 +124,13 @@ const CollectionNftCard: React.FC<Props> = ({
             </div>
           </div>
           {/* This should be the rarity (where it's known) */}
-          <span className="border-2 border-white rounded-md absolute left-3 bottom-3 dark:bg-black dark:text-white bg-white text-black h-6 px-2 font-bold text-xs flex items-center justify-center">
-            <div>#&nbsp;{selectedNft?.rarityScore || selectedNft?.tokenId}</div>
-          </span>
+          {rank && (
+            <span className="bg-black border-2 border-white rounded-md absolute left-3 bottom-3 dark:text-white bg-white text-black h-6 font-bold text-xs flex items-center justify-center px-2">
+              <div>
+                <div>#&nbsp;{rank}</div>
+              </div>
+            </span>
+          )}
         </div>
         <div className="p-2">
           <div className="justify-between flex py-2 mb-2 border-b border-gray-50">

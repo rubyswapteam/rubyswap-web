@@ -39,36 +39,6 @@ export const MarketplaceProvider = ({
     return res;
   }
 
-  function mapX2Y2Trades(arr: any[]) {
-    return arr.map((trade: any) => ({
-      timestamp: parseInt(trade.order.updated_at),
-      price: parseFloat(ethers.utils.formatEther(trade.order.price)),
-      contract: trade.token.contract,
-      tokenId: trade.token.token_id.toString(),
-      txn: trade.tx,
-      marketplace: 'X2Y2',
-      looksRareId: null,
-      from: trade.from_address,
-      to: trade.to_address,
-      chainId: 1,
-    }));
-  }
-
-  function mapLooksRareTrades(arr: any[]) {
-    return arr.map((trade: any) => ({
-      timestamp: moment(trade.createdAt).unix(),
-      price: parseFloat(ethers.utils.formatEther(trade.order.price)),
-      contract: trade.collection.address,
-      tokenId: trade.token.tokenId.toString(),
-      txn: trade.hash,
-      marketplace: 'LooksRare',
-      looksRareId: parseInt(trade.id),
-      from: trade.from,
-      to: trade.to,
-      chainId: 1,
-    }));
-  }
-
   function mapTrades(obj: any, marketplace: string) {
     return obj[marketplace]?.trades?.map((trade: any) => ({
       timestamp: parseInt(trade.timestamp),
@@ -165,9 +135,19 @@ export const MarketplaceProvider = ({
         redirect: 'follow',
       })
     ).json();
-    ranks && ranks?.length == 1
-      ? setTokenRanks(ranks[0])
-      : setTokenRanks(undefined);
+    if (ranks && ranks?.length == 1) {
+      const contract = ranks[0].contractAddress;
+      const tokenRanks = JSON.parse(ranks[0].ranks);
+      const supply = Object.keys(tokenRanks).length;
+      const tiers = [
+        Math.floor(supply / 100),
+        Math.floor(supply / 10),
+        Math.floor(supply / 2),
+      ];
+      setTokenRanks({ contract: contract, ranks: tokenRanks, tiers: tiers });
+    } else {
+      setTokenRanks(undefined);
+    }
     return ranks;
   }
 
