@@ -138,17 +138,17 @@ const CollectionListings: React.FC<Props> = ({
                       tokenRanks?.ranks &&
                       tokenRanks?.ranks[nft.tokenId]
                     }
-                    tier={
+                    rankColor={
                       tokenRanks &&
                       tokenRanks?.ranks &&
                       tokenRanks?.ranks[nft?.tokenId] &&
                       tokenRanks?.ranks[nft?.tokenId] > tokenRanks?.tiers[2]
-                        ? 3
+                        ? 'rgba(70, 70, 70, 1)'
                         : tokenRanks?.ranks[nft?.tokenId] > tokenRanks?.tiers[1]
-                        ? 2
+                        ? 'rgba(0, 0, 0, 1)'
                         : tokenRanks?.ranks[nft?.tokenId] > tokenRanks?.tiers[0]
-                        ? 1
-                        : 0
+                        ? 'rgba(249, 115, 22, 1)'
+                        : 'rgba(239, 68, 68, 1)'
                     }
                   />
                 </motion.div>
