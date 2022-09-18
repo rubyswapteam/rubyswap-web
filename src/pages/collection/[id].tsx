@@ -36,7 +36,7 @@ export default function Collection(props: any) {
     useState(false);
   const {
     activeCollection,
-    getCollectionBySlug,
+    getCollection,
     collectionTrades,
     recentTrades,
     activeListings,
@@ -56,7 +56,7 @@ export default function Collection(props: any) {
         id?.toString().toLowerCase()
     ) {
       setLoading(true);
-      getCollectionBySlug(id, true).then((res: any) => {
+      getCollection(id, true).then((res: any) => {
         setIsLoadingCollectionTrades(false);
       });
     }
@@ -179,6 +179,18 @@ export default function Collection(props: any) {
       name: 'Analytics',
       href: `/collection/${id}?tab=analytics`,
       current: tab == 'analytics',
+      border: true,
+    },
+    {
+      name: 'Activity',
+      href: `/collection/${id}?tab=activity`,
+      current: tab == 'activity',
+      border: true,
+    },
+    {
+      name: 'Holders',
+      href: `/collection/${id}?tab=holders`,
+      current: tab == 'holders',
       border: true,
     },
     {

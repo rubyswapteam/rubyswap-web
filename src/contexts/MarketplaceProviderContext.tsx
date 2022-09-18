@@ -328,18 +328,18 @@ export const MarketplaceProvider = ({
     return listings;
   }
 
-  async function fetchCollectionFromDb(slug: string) {
+  async function fetchCollectionFromDb(query: string) {
     let collection: any = {};
+    const url = query.toLowerCase().startsWith('0x')
+      ? `/.netlify/functions/getDbCollectionByContract?contract=${query}`
+      : `/.netlify/functions/getDbCollectionBySlug?slug=${query}`;
     try {
       collection = (
         await (
-          await fetch(
-            `/.netlify/functions/getDbCollectionBySlug?slug=${slug}`,
-            {
-              method: 'GET',
-              redirect: 'follow',
-            },
-          )
+          await fetch(url, {
+            method: 'GET',
+            redirect: 'follow',
+          })
         ).json()
       )[0];
     } catch {
@@ -349,15 +349,16 @@ export const MarketplaceProvider = ({
     return collection;
   }
 
-  async function getCollectionBySlug(
-    slug = '',
+  async function getCollection(
+    query = '',
     getTrades = false,
     setActive = true,
     persist = false,
   ) {
-    if (!slug || slug.length < 3 || slug === undefined || slug == '')
+    if (!query || query.length < 3 || query === undefined || query == '')
       return false;
-    const collection: any = await fetchCollectionFromDb(slug);
+    let collection: any = undefined;
+    collection = await fetchCollectionFromDb(query);
     if (collection && collection?.contractAddress) {
       if (setActive) setActiveCollection(collection);
       if (getTrades) {
@@ -380,7 +381,7 @@ export const MarketplaceProvider = ({
       userTradesFiltered,
       setUserTradesFiltered,
       activeCollection,
-      getCollectionBySlug,
+      getCollection,
       collectionTrades,
       getCollectionTrades,
       recentTrades,
@@ -400,7 +401,7 @@ export const MarketplaceProvider = ({
       userTradesFiltered,
       setUserTradesFiltered,
       activeCollection,
-      getCollectionBySlug,
+      getCollection,
       collectionTrades,
       getCollectionTrades,
       recentTrades,

@@ -25,7 +25,7 @@ export default function SearchModal(props: Props) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<any>([]);
-  const { getCollectionBySlug } = useMarketplaceProvider();
+  const { getCollection } = useMarketplaceProvider();
 
   function reset() {
     setSearchResults([]);
