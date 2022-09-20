@@ -83,7 +83,7 @@ const CollectionListings: React.FC<Props> = ({
     `fadeIn ${duration}ms ease-out ${delay}ms forwards`;
   return (
     <div
-      className="w-full overflow-scroll h-inherit mt-2 flex flex-col items-start flex-1 pb-96 "
+      className="w-full overflow-scroll max-h-screen h-screen mt-2 flex flex-col items-start flex-1"
       ref={ref}
       id="scroller"
     >

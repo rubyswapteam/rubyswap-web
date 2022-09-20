@@ -154,12 +154,12 @@ export async function handler() {
 
   try {
     console.log('Persist start');
+    await fetchDbData('LiveMints', postDbHeaders, 'POST', tblRow);
     await fetchDbData('LatestMintInfo', postDbHeaders, 'POST', {
       id: 0,
       block: newLatestBlock,
       lastIndex: latestMintInfo[0].lastIndex + 1,
     });
-    await fetchDbData('LiveMints', postDbHeaders, 'POST', tblRow);
     console.log('Persist end');
   } catch (error) {
     return {

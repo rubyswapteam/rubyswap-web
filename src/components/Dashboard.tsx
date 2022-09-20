@@ -11,13 +11,14 @@ import DashboardUserDropdown from './DashboardUserDropdown';
 
 export default function Dashboard(props: any) {
   const router = useRouter();
+  const path = router.pathname;
 
   const parentRoute = () => {
     return router.route.split('/')[1];
   };
   const { connectWallet, activeWallet, ethBalance } = useWeb3Provider();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const [isScrollable] = useState(path.startsWith('/collection'));
   const condensedWalletName = () => {
     return activeWallet
       ? activeWallet.substring(0, 4) +
@@ -202,7 +203,10 @@ export default function Dashboard(props: any) {
             </button>
           </div>
           <main className="flex-1">
-            <div className={'h-screen overflow-hidden flex-col flex'}>
+            <div
+              style={{ overflow: isScrollable ? 'scroll' : 'hidden' }}
+              className={'h-screen flex-col flex'}
+            >
               <div
                 className="py-6 bg-black/[.02] dark:bg-blackish z-10 bg-cover"
                 style={{
@@ -225,7 +229,10 @@ export default function Dashboard(props: any) {
                 </div>
               </div>
               {/* <div className="border-t w-full"></div> */}
-              <div className="max-w-8xl mx-auto grow w-full h-inherit">
+              <div
+                className="max-w-8xl mx-auto grow w-full"
+                style={{ height: isScrollable ? '' : 'inherit' }}
+              >
                 <div className="w-full" />
                 <div className="flex-1 flex justify-center lg:justify-end">
                   {(props.refresh || props.secondaryTabs) && (

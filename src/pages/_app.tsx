@@ -22,8 +22,8 @@ function App({ Component, pageProps }: AppProps) {
       <div className="hidden lg:block">
         <ThemeProvider attribute="class">
           <Web3Provider>
-            <WalletProvider>
-              <MarketplaceProvider>
+            <MarketplaceProvider>
+              <WalletProvider>
                 <LoginPage>
                   <>
                     <SearchModal
@@ -38,8 +38,8 @@ function App({ Component, pageProps }: AppProps) {
                     </AnimatePresence>
                   </>
                 </LoginPage>
-              </MarketplaceProvider>
-            </WalletProvider>
+              </WalletProvider>
+            </MarketplaceProvider>
           </Web3Provider>
         </ThemeProvider>
       </div>

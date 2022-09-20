@@ -287,14 +287,6 @@ export default function Collection(props: any) {
                     ></SalesHistoryChart>
                   )}
                 </div>
-              </div>
-              <div className="my-8">
-                <StatsBoxList
-                  stats={getStatsBot()}
-                  route={`/collection/${id}?tab=analytics`}
-                />
-              </div>
-              <div className="block xl:flex mx-8">
                 <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <AveragePriceVolumeChart
@@ -303,6 +295,12 @@ export default function Collection(props: any) {
                     ></AveragePriceVolumeChart>
                   )}
                 </div>
+              </div>
+              <div className="my-8">
+                <StatsBoxList
+                  stats={getStatsBot()}
+                  route={`/collection/${id}?tab=analytics`}
+                />
               </div>
             </div>
             <div className="my-14">

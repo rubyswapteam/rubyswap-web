@@ -18,6 +18,7 @@ import UserProfileHeader from '../../components/UserProfileHeader';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
 import { motion } from 'framer-motion';
+import UserActivityTable from '@/components/UserActivityTable';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -37,8 +38,8 @@ export default function Collection(props: any) {
     },
     {
       name: 'Activity',
-      href: id ? `/wallet/${id}?tab=portfolio` : '/',
-      current: tab == 'updates',
+      href: id ? `/wallet/${id}?tab=activity` : '/',
+      current: tab == 'activity',
       border: true,
     },
     {
@@ -122,10 +123,10 @@ export default function Collection(props: any) {
     useMarketplaceProvider();
 
   useEffect(() => {
-    id ? getUserTrades(id) : '';
     fetchUserNfts(id?.toString());
     fetchWallet(id);
     setActiveNfts({ collection: '', nfts: [] });
+    id ? getUserTrades(id) : '';
   }, [id?.toString()]);
 
   const refreshButtonTabs: (string | undefined)[] = [];
@@ -189,6 +190,14 @@ export default function Collection(props: any) {
             </div>
           </div>
         </>
+      );
+    } else if (tab == 'activity') {
+      return (
+        <UserActivityTable
+          trades={userTradesFiltered || userTrades}
+          user={id}
+          collectionNames={collectionNames}
+        />
       );
     }
   }

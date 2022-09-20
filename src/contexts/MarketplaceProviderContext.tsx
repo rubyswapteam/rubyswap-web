@@ -53,7 +53,7 @@ export const MarketplaceProvider = ({
     }));
   }
 
-  async function getTrades(user = '', contract = '') {
+  async function getTrades(user = '', contract = '', includeMints = false) {
     const user_address = user != undefined ? '=' + user : '';
     const contract_address =
       contract && contract.length > 1 ? '&contract=' + contract : '';
