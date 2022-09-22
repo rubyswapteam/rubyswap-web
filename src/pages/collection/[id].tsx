@@ -21,6 +21,7 @@ import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { motion } from 'framer-motion';
 import moment from 'moment';
+import ListingDistributionChart from '../../components/ListingDistributionChart';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -111,7 +112,7 @@ export default function Collection(props: any) {
       (tab == 'listings' && activeCollection?.contractAddress) ||
       (activeCollection?.contractAddress && tab == undefined)
     ) {
-      const limit = tab == undefined ? 25 : 1000;
+      const limit = 1000;
       fetchActiveListings(activeCollection.contractAddress, limit).then(
         (listings: any[]) => {
           const recentListings = [];
@@ -293,6 +294,16 @@ export default function Collection(props: any) {
                       activeContract={activeCollection?.contractAddress}
                       data={collectionTrades}
                     ></AveragePriceVolumeChart>
+                  )}
+                </div>
+              </div>
+              <div className="block xl:flex mx-8">
+                <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                  {collectionTrades && !isLoadingCollectionTrades && (
+                    <ListingDistributionChart
+                      activeContract={activeCollection?.contractAddress}
+                      data={activeListings}
+                    ></ListingDistributionChart>
                   )}
                 </div>
               </div>

@@ -19,6 +19,7 @@ export const MarketplaceProvider = ({
     string | JSXElementConstructor<unknown>
   >;
 }) => {
+  const NULL_ADDRESSS = '0x0000000000000000000000000000000000000000';
   const [userTrades, setUserTrades] = useState<any>(undefined);
   const [collectionTrades, setCollectionTrades] = useState<any>(undefined);
   const [userTradesFiltered, setUserTradesFiltered] = useState<any>(undefined);
@@ -53,24 +54,51 @@ export const MarketplaceProvider = ({
     }));
   }
 
-  async function getTrades(user = '', contract = '', includeMints = false) {
+  async function getTrades(user = '', contract = '', includeMints = true) {
+    if (!user) return { sales: [], purchases: [] };
     const user_address = user != undefined ? '=' + user : '';
     const contract_address =
       contract && contract.length > 1 ? '&contract=' + contract : '';
     const salesUrl = `/.netlify/functions/getTrades?order=desc&from${user_address}${contract_address}`;
     const purchasesUrl = `/.netlify/functions/getTrades?order=desc&to${user_address}${contract_address}`;
-    const salesRaw = await fetchGet(salesUrl);
-    const purchasesRaw = await fetchGet(purchasesUrl);
+    const mintsUrl = `/.netlify/functions/getUserMints?address${user_address}`;
+    const salesRaw = fetchGet(salesUrl);
+    const purchasesRaw = fetchGet(purchasesUrl);
+    const mintsRaw = fetchGet(mintsUrl);
+
+    const [salesResult, purchasesResult, mintsResult] = await Promise.all([
+      salesRaw,
+      purchasesRaw,
+      mintsRaw,
+    ]);
     let sales: any[] = [];
     let purchases: any[] = [];
+    const mints: any[] = [];
+    console.log(mintsResult);
     for (let i = 0; i < marketplaces.length; i++) {
       const marketplace = marketplaces[i];
-      if (salesRaw && salesRaw)
-        sales = [...sales, ...mapTrades(salesRaw, marketplace)];
-      if (purchasesRaw)
-        purchases = [...purchases, ...mapTrades(purchasesRaw, marketplace)];
+      if (salesResult && salesResult)
+        sales = [...sales, ...mapTrades(salesResult, marketplace)];
+      if (purchasesResult)
+        purchases = [...purchases, ...mapTrades(purchasesResult, marketplace)];
     }
-    return { sales: sales, purchases: purchases };
+    mintsResult?.result?.transfers.forEach((txn: any) => {
+      mints.push({
+        timestamp: Date.parse(txn?.metadata?.blockTimestamp) / 1000,
+        price: null,
+        contract: txn?.rawContract?.address || 'unknown',
+        tokenId: parseInt(txn.tokenId).toLocaleString('fullwide', {
+          useGrouping: false,
+        }),
+        txn: txn.hash,
+        marketplace: undefined,
+        from: txn?.from || '',
+        to: txn?.to || '',
+        chainId: 1,
+      });
+    });
+    console.table({ sales: sales, purchases: purchases, mints: mints });
+    return { sales: sales, purchases: purchases, mints: mints };
   }
 
   async function fetchCollectionTrades(contract = '', baseTimeFilter = '') {
@@ -108,7 +136,7 @@ export const MarketplaceProvider = ({
   }
 
   async function getUserTrades(user = '', contract = '') {
-    const trades = await getTrades(user, contract);
+    const trades = await getTrades(user, contract, true);
     setUserTrades(trades);
     applyTradeFilters(trades, tradeFilters);
   }

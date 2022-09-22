@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 html {
-  position: unset!important;
+  position: unset !important;
 }
 
 html,
@@ -186,4 +186,8 @@ html {
 
 onboard-v2 {
   display: none;
+}
+
+.infinite-scroll-container > div:first-child {
+  width: 100%;
 }

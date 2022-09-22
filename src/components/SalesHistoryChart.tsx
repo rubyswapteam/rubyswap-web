@@ -264,7 +264,7 @@ export default function SalesHistoryChart(props: any) {
           name: 'Sales',
           color: themeColours.primaryColour,
           data: trades,
-          turboThreshold: 20000,
+          turboThreshold: 30000,
         },
       ],
       legend: {

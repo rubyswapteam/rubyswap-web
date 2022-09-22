@@ -33,6 +33,7 @@ module.exports = {
       },
       colors: {
         blackish: 'rgb(0,0,0)',
+        themeYellow: '#F2C94C',
       },
     },
   },

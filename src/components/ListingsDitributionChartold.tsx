@@ -9,12 +9,12 @@ import { useRouter } from 'next/router';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { listingDistrbutionArray } from '../utils/nftUtils';
-export default function SalesHistoryChart(props: any) {
+  const [listingDistrbution] = useState(listingDistrbutionArray);
+  export default function SalesHistoryChart(props: any) {
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
-  const [listingDistrbution] = useState(listingDistrbutionArray);
   const [rangeSeconds] = useState<any>({
     '5m': 300,
     '15m': 900,
