@@ -4,7 +4,7 @@ import highchartsMore from 'highcharts/highcharts-more';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { listingDistrbutionArray } from '../utils/nftUtils';
+import { listingDistributionArray } from '../utils/nftUtils';
 
 export default function ListingDistributionChart(props: any) {
   const [isShowing, setIsShowing] = useState(false);
@@ -83,18 +83,20 @@ export default function ListingDistributionChart(props: any) {
     const mappedData: any = {};
     const marketplaceTotals: any = {};
     const labels: string[] = [];
-    const seriesData: { name: string; data: number[]; color: string }[] = [];
+    // const seriesData: { name: string; data: number[]; color: string }[] = [];
+    const seriesData: any[] = [];
     const minPrice = props.data[0]?.price;
     const maxPrice = props.data[props.data.length - 1]?.price;
     const minIndex = Math.max(
-      listingDistrbutionArray.findIndex((x: number) => x > minPrice) - 1,
+      listingDistributionArray.findIndex((x: number) => x > minPrice) - 1,
       0,
     );
     const maxIndex = Math.min(
-      listingDistrbutionArray.findIndex((x: number) => x > maxPrice),
+      listingDistributionArray.findIndex((x: number) => x > maxPrice),
       minIndex + 25,
     );
-    const trimDistArr = listingDistrbutionArray.slice(minIndex, maxIndex);
+    const finalLabel = listingDistributionArray[maxIndex];
+    const trimDistArr = listingDistributionArray.slice(minIndex, maxIndex);
     props.data.forEach((x: any) => {
       Array.isArray(listingsByMarketplace[x.marketplace])
         ? listingsByMarketplace[x.marketplace].push(x.price)
@@ -120,8 +122,8 @@ export default function ListingDistributionChart(props: any) {
             );
       });
       i == trimDistArr.length - 1 && trimDistArr.length == 25
-        ? labels.push(trimDistArr[i - 1] + 'Ξ+')
-        : labels.push('<' + trimDistArr[i] + 'Ξ');
+        ? labels.push(listingDistributionArray[minIndex + i] + 'Ξ+')
+        : labels.push('<' + listingDistributionArray[minIndex + i + 1] + 'Ξ');
     }
 
     marketplaces.forEach((marketplace: string) => {
@@ -257,11 +259,12 @@ export default function ListingDistributionChart(props: any) {
       plotOptions: {
         column: {
           stacking: 'normal',
-          states: {
-            inactive: {
-              enabled: false,
-            },
-          },
+          // groupPadding: 0.05,
+          // states: {
+          //   inactive: {
+          //     enabled: false,
+          //   },
+          // },
         },
       },
       series: data.seriesData,
@@ -321,7 +324,7 @@ export default function ListingDistributionChart(props: any) {
         ></HighchartsReact>
         <div className="absolute top-5 left-10">
           <div className="px-2 pt-2 rounded-md mb-3 font-medium">
-            <p>Listing Walls</p>
+            <p>Collection Listings</p>
           </div>
         </div>
       </div>

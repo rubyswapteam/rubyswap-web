@@ -18,7 +18,7 @@ interface Props {
 
 export default function TrendingNftCollectionTableBody(props: Props) {
   const [renderedData, setRenderedData] = useState<any[]>(
-    props.trendingCollections.slice(0, 50),
+    props.trendingCollections.slice(0, 150),
   );
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [newlyMintedTimestamp] = useState<number>(

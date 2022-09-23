@@ -6,6 +6,8 @@ import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const HC_rounded = require('highcharts-rounded-corners');
 
 function ErrorFallback({ error, resetErrorBoundary }: any) {
   return (
@@ -56,6 +58,7 @@ export default function AveragePriceVolumeChart(props: any) {
     theme == 'light' ? lightTheme : darkTheme,
   );
   highchartsMore(HighCharts);
+  HC_rounded(Highcharts);
 
   useEffect(() => {
     setIsShowing(false);
@@ -178,9 +181,8 @@ export default function AveragePriceVolumeChart(props: any) {
           type: 'datetime',
           labels: {
             formatter: function () {
-              return Highcharts.dateFormat('%d/%m/%y', (this as any).value);
+              return Highcharts.dateFormat('%l%P %d.%m', (this as any).value);
             },
-            padding: 30,
             style: {
               color: themeColours.text,
             },
@@ -236,6 +238,8 @@ export default function AveragePriceVolumeChart(props: any) {
           marker: {
             enabled: false,
           },
+          borderRadiusTopLeft: '10%',
+          borderRadiusTopRight: '10%',
         },
         spline: {
           connectNulls: true,

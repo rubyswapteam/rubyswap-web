@@ -399,6 +399,21 @@ export const MarketplaceProvider = ({
     }
   }
 
+  function getFirstMint(contract: string, chainId = 1) {
+    fetch(
+      `/.netlify/functions/getFirstMint?contract=${contract}&chainId=${chainId}`,
+      {
+        method: 'GET',
+        redirect: 'follow',
+      },
+    ).then((res) => {
+        console.table({ res: res });
+        res.json().then((parsedRes) => {
+        console.table({ parsedRes: parsedRes });
+      });
+    });
+  }
+
   const contextValue = useMemo(
     () => ({
       userTrades,
@@ -419,6 +434,7 @@ export const MarketplaceProvider = ({
       totalListings,
       getTokenRanks,
       tokenRanks,
+      getFirstMint,
     }),
     [
       userTrades,
@@ -439,6 +455,7 @@ export const MarketplaceProvider = ({
       totalListings,
       getTokenRanks,
       tokenRanks,
+      getFirstMint,
     ],
   );
 

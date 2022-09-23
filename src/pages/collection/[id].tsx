@@ -46,6 +46,7 @@ export default function Collection(props: any) {
     getTokenRanks,
     tokenRanks,
     totalListings,
+    getFirstMint,
   } = useMarketplaceProvider();
   const controller = new AbortController();
   const { signal } = controller;
@@ -147,6 +148,8 @@ export default function Collection(props: any) {
   useEffect(() => {
     if (activeCollection?.contractAddress) {
       getTokenRanks(activeCollection.contractAddress);
+      if (!activeCollection?.firstMint)
+        getFirstMint(activeCollection.contractAddress);
     }
   }, [activeCollection?.contractAddress]);
 

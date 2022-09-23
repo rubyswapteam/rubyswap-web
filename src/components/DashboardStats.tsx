@@ -2,6 +2,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import React from 'react';
 import { DashboardStatsPriceAndChange } from './DashboardStatsPriceAndChange';
+import { DashboardStatsPriceAndInfo } from './DashboardStatsPriceAndInfo';
 import { DashboardStatsStandardItem } from './DashboardStatsStandardItem';
 
 interface Props {
@@ -19,7 +20,11 @@ export const DashboardStats: React.FC<Props> = ({
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 flex-col h-full">
       <DashboardStatsStandardItem
         name="First Mint"
-        value={moment.unix(collection?.firstMint).fromNow()}
+        value={
+          collection?.firstMint
+            ? moment.unix(collection?.firstMint).fromNow()
+            : 'tbd'
+        }
         id={collection?.contractAddress}
       />
       <DashboardStatsPriceAndChange
@@ -33,7 +38,11 @@ export const DashboardStats: React.FC<Props> = ({
       />
       <DashboardStatsStandardItem
         name="First Mint"
-        value={moment.unix(collection?.firstMint).fromNow()}
+        value={
+          collection?.firstMint
+            ? moment.unix(collection?.firstMint).fromNow()
+            : 'tbd'
+        }
         id={collection?.contractAddress}
       />
       <DashboardStatsPriceAndChange
@@ -54,27 +63,37 @@ export const DashboardStats: React.FC<Props> = ({
         percent={collection?.osThirtyDayChange.toFixed(2)}
         id={collection?.contractAddress}
       />
-      <DashboardStatsPriceAndChange
+      <DashboardStatsPriceAndInfo
         name="1d Avg Price vs Sales"
         value={(collection?.osOneDayVolume / collection?.osOneDaySales).toFixed(
           2,
         )}
-        percent={collection?.osThirtyDayChange.toFixed(2)}
+        info={`${collection?.osOneDaySales} sales`}
         id={collection?.contractAddress}
       />
-      <DashboardStatsStandardItem
+      <DashboardStatsPriceAndInfo
         name="7d Avg Price vs Sales"
-        value={moment.unix(collection?.firstMint).fromNow()}
+        value={(
+          collection?.osSevenDayVolume / collection?.osSevenDaySales
+        ).toFixed(2)}
+        info={`${collection?.osSevenDaySales} sales`}
         id={collection?.contractAddress}
       />
-      <DashboardStatsStandardItem
+      <DashboardStatsPriceAndInfo
         name="30d Avg Price vs Sales"
-        value={moment.unix(collection?.firstMint).fromNow()}
+        value={(
+          collection?.osThirtyDayVolume / collection?.osThirtyDaySales
+        ).toFixed(2)}
+        info={`${collection?.osThirtyDaySales} sales`}
         id={collection?.contractAddress}
       />
       <DashboardStatsStandardItem
         name="Highest Offer"
-        value={moment.unix(collection?.firstMint).fromNow()}
+        value={
+          collection?.firstMint
+            ? moment.unix(collection?.firstMint).fromNow()
+            : 'tbd'
+        }
         id={collection?.contractAddress}
       />
       <DashboardStatsPriceAndChange
