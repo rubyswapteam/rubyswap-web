@@ -41,7 +41,7 @@ export default function CollectionAnnouncementBanner(props: Props) {
   return (
     <Link href={props.route} passHref>
       <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8 flex w-full text-sm cursor-pointer">
-        <div className="w-full bg-white dark:bg-white/[.02] drop-shadow border-l-4 border-gray-800 dark:border-white">
+        <div className="w-full bg-white dark:bg-white/[.04] drop-shadow border-l-4 border-gray-800 dark:border-white">
           <div className=""></div>
           <div className="mx-auto md:flex items-center justify-between">
             <div className="px-4 md:pl-8 md:pr-2 py-4">

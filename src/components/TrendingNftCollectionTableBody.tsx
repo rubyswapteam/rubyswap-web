@@ -61,7 +61,8 @@ export default function TrendingNftCollectionTableBody(props: Props) {
     >
       {renderedData.map(
         (nftCollection) =>
-          nftCollection.imageUrl && (
+          nftCollection.imageUrl &&
+          nftCollection.contractAddress && (
             <React.Fragment key={nftCollection.index + nftCollection.slug}>
               <Link
                 key={nftCollection.id}

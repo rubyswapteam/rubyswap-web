@@ -22,6 +22,7 @@ import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContex
 import { motion } from 'framer-motion';
 import moment from 'moment';
 import ListingDistributionChart from '../../components/ListingDistributionChart';
+import { DashboardStats } from '@/components/DashboardStats';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -42,9 +43,9 @@ export default function Collection(props: any) {
     recentTrades,
     activeListings,
     fetchActiveListings,
-    totalListings,
     getTokenRanks,
     tokenRanks,
+    totalListings,
   } = useMarketplaceProvider();
   const controller = new AbortController();
   const { signal } = controller;
@@ -272,14 +273,8 @@ export default function Collection(props: any) {
               )}
             </div>
             <div className="py-8 bg-gray-100 dark:bg-black w-full">
-              <div className="my-8">
-                <StatsBoxList
-                  stats={getStatsTop()}
-                  route={`/collection/${id}?tab=analytics`}
-                />
-              </div>
               <div className="block xl:flex mx-8">
-                <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <SalesHistoryChart
                       activeContract={activeCollection?.contractAddress}
@@ -288,7 +283,7 @@ export default function Collection(props: any) {
                     ></SalesHistoryChart>
                   )}
                 </div>
-                <div className="w-full ml-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
+                <div className="w-full ml-2 rounded-xl drop-shadow-md overflow-hidden">
                   {collectionTrades && !isLoadingCollectionTrades && (
                     <AveragePriceVolumeChart
                       activeContract={activeCollection?.contractAddress}
@@ -297,21 +292,22 @@ export default function Collection(props: any) {
                   )}
                 </div>
               </div>
-              <div className="block xl:flex mx-8">
-                <div className="w-full mr-2 mt-5 rounded-xl drop-shadow-md overflow-hidden">
-                  {collectionTrades && !isLoadingCollectionTrades && (
-                    <ListingDistributionChart
-                      activeContract={activeCollection?.contractAddress}
-                      data={activeListings}
-                    ></ListingDistributionChart>
-                  )}
-                </div>
-              </div>
-              <div className="my-8">
-                <StatsBoxList
-                  stats={getStatsBot()}
-                  route={`/collection/${id}?tab=analytics`}
+            </div>
+            <div className="block xl:flex mx-8 gap-x-4">
+              <div className="w-full overflow-hidden">
+                <DashboardStats
+                  collection={activeCollection}
+                  listings={activeListings}
+                  totalListings={totalListings}
                 />
+              </div>
+              <div className="w-full rounded-xl drop-shadow-md overflow-hidden">
+                {activeListings && activeListings.length > 0 && (
+                  <ListingDistributionChart
+                    activeContract={activeCollection?.contractAddress}
+                    data={activeListings}
+                  ></ListingDistributionChart>
+                )}
               </div>
             </div>
             <div className="my-14">
@@ -395,17 +391,10 @@ export default function Collection(props: any) {
     if (tab == 'analytics') {
       return (
         <div className="h-inherit overflow-scroll pb-80">
-          <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
-            <CollectionTitleHeader title={'Summary Stats'} />
-          </div>
-          <StatsBoxList
-            stats={getStatsTop()}
-            route={`/collection/${id}?tab=analytics`}
-          />
-          <div className="bg-gray-50 dark:bg-white/[.02] my-12 py-16 px-4 sm:px-6 md:px-8">
-            <div className="flex w-full">
-              <div className="w-full rounded-xl overflow-hidden mr-8">
-                {collectionTrades && (
+          <div className="py-8 bg-gray-100 dark:bg-black w-full">
+            <div className="block xl:flex mx-8">
+              <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
+                {collectionTrades && !isLoadingCollectionTrades && (
                   <SalesHistoryChart
                     activeContract={activeCollection?.contractAddress}
                     data={collectionTrades}
@@ -413,8 +402,8 @@ export default function Collection(props: any) {
                   ></SalesHistoryChart>
                 )}
               </div>
-              <div className="w-full rounded-xl overflow-hidden">
-                {collectionTrades && (
+              <div className="w-full ml-2 rounded-xl drop-shadow-md overflow-hidden">
+                {collectionTrades && !isLoadingCollectionTrades && (
                   <AveragePriceVolumeChart
                     activeContract={activeCollection?.contractAddress}
                     data={collectionTrades}
@@ -423,6 +412,24 @@ export default function Collection(props: any) {
               </div>
             </div>
           </div>
+          <div className="block xl:flex mx-8 gap-x-4">
+            <div className="w-full overflow-hidden">
+              <DashboardStats
+                collection={activeCollection}
+                listings={activeListings}
+                totalListings={totalListings}
+              />
+            </div>
+            <div className="w-full rounded-xl drop-shadow-md overflow-hidden">
+              {activeListings && activeListings.length > 0 && (
+                <ListingDistributionChart
+                  activeContract={activeCollection?.contractAddress}
+                  data={activeListings}
+                ></ListingDistributionChart>
+              )}
+            </div>
+          </div>
+
           <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
             <HolderDistrbutionChart
               contractAddress={activeCollection?.contractAddress}

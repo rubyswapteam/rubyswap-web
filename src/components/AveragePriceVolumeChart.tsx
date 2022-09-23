@@ -46,7 +46,7 @@ export default function AveragePriceVolumeChart(props: any) {
     area: 'rgba(249, 115, 22, 0.5)',
   };
   const darkTheme = {
-    background: 'rgba(255,255,255, 0.04)',
+    background: 'rgba(255,255,255, 0.05)',
     text: '#ffffff',
     primaryColour: 'rgba(255, 255, 255, 0.3)',
     secondaryColour: 'rgba(234, 179, 8, 1)',
@@ -197,8 +197,6 @@ export default function AveragePriceVolumeChart(props: any) {
         {
           startOnTick: false,
           endOnTick: false,
-          minorTickInterval: 0.1,
-          minorGridLineColor: 'rgba(30,30,30,1)',
           gridLineColor: 'rgb(40,40,40)',
           lineColor: 'rgb(40,40,40)',
           tickColor: 'rgb(40,40,40)',
@@ -215,6 +213,7 @@ export default function AveragePriceVolumeChart(props: any) {
           },
         },
         {
+          gridLineColor: 'rgb(40,40,40)',
           labels: {
             style: {
               color: themeColours.text,
@@ -304,7 +303,7 @@ export default function AveragePriceVolumeChart(props: any) {
   }
 
   return (
-    <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-shc`}>
+    <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-apvc`}>
       {(!isShowing ||
         (!props?.data && !isEmpty) ||
         (props?.data &&

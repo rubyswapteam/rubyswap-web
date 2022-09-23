@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
-const EthereumIcon: React.FC = (): JSX.Element => {
+const ThemeToggle: React.FC = (): JSX.Element => {
   const { theme, setTheme } = useTheme();
   setDefaultTheme();
   const [isChecked, setIsChecked] = useState(theme !== 'light');
@@ -74,4 +74,4 @@ const EthereumIcon: React.FC = (): JSX.Element => {
   );
 };
 
-export default EthereumIcon;
+export default ThemeToggle;

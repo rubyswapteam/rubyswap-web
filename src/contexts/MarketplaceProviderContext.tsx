@@ -327,6 +327,7 @@ export const MarketplaceProvider = ({
         }),
       });
       listings = await listingsRaw.json();
+      console.table({ rawListings: listings });
       setTotalListings(listings.total);
       listings = listings.data.map((item: any) => {
         return {
