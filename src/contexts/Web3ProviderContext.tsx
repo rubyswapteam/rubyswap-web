@@ -143,9 +143,7 @@ export const Web3Provider = ({
     }
   }
 
-  async function fetchActiveUser() {
-    
-  }
+  async function fetchActiveUser() {}
 
   // const switchNetwork = async () => {
   //   await onboard.setChain({ chainId: toHex(network) });

@@ -407,8 +407,8 @@ export const MarketplaceProvider = ({
         redirect: 'follow',
       },
     ).then((res) => {
-        console.table({ res: res });
-        res.json().then((parsedRes) => {
+      console.table({ res: res });
+      res.json().then((parsedRes) => {
         console.table({ parsedRes: parsedRes });
       });
     });
