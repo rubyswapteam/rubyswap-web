@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function TwitterLogo() {
+export default function TwitterLogo(props: any) {
   return (
     <svg
-      width="15"
-      height="12"
+      width={props?.width || '15'}
+      height={props?.height || '12'}
       viewBox="0 0 15 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

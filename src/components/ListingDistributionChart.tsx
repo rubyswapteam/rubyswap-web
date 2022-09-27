@@ -40,18 +40,19 @@ export default function ListingDistributionChart(props: any) {
     theme == 'light' ? lightTheme : darkTheme,
   );
   const router = useRouter();
-  const { tab } = router.query;
+  const { id } = router.query;
 
   highchartsMore(HighCharts);
 
   useEffect(() => {
-    setIsShowing(false);
     setChartOptions(reset());
   }, [props.data]);
 
   useEffect(() => {
+    console.table({ routerquery: router.query });
+    setChartOptions(getOptions({ seriesData: [], labels: [] }));
     setChartOptions(reset());
-  }, [tab]);
+  }, [id]);
 
   useEffect(() => {
     setTheme();
@@ -149,19 +150,19 @@ export default function ListingDistributionChart(props: any) {
     setIsEmpty(marketplaces.length == 0);
     setIsShowing(true);
 
-    console.table({
-      listings: props.data,
-      minPrice: minPrice,
-      minIndex: minIndex,
-      trimDistArr: trimDistArr,
-      listingsByMarketplace: listingsByMarketplace,
-      marketplaces: marketplaces,
-      mappedData: mappedData,
-      labels: labels,
-      seriesData: seriesData,
-      marketplaceTotals: marketplaceTotals,
-      keysSorted: keysSorted,
-    });
+    // console.table({
+    //   listings: props.data,
+    //   minPrice: minPrice,
+    //   minIndex: minIndex,
+    //   trimDistArr: trimDistArr,
+    //   listingsByMarketplace: listingsByMarketplace,
+    //   marketplaces: marketplaces,
+    //   mappedData: mappedData,
+    //   labels: labels,
+    //   seriesData: seriesData,
+    //   marketplaceTotals: marketplaceTotals,
+    //   keysSorted: keysSorted,
+    // });
 
     return { seriesData: seriesData, labels: labels };
   }
@@ -219,7 +220,7 @@ export default function ListingDistributionChart(props: any) {
       },
       tooltip: {
         formatter: function (): any {
-          console.table({ this: this });
+          // console.table({ this: this });
           const currentPoint = this as any,
             currentSeries = currentPoint?.series,
             currentMarketplace = currentSeries?.name,
@@ -319,8 +320,9 @@ export default function ListingDistributionChart(props: any) {
         <HighchartsReact
           highcharts={HighCharts}
           options={chartOptions}
-          updateArgs={[true]}
+          // updateArgs={[true]}
           containerProps={{ style: { height: '100%' } }}
+          key={`${theme}-${props?.data[0]?.contract}-${id}-co-ldc-hcr`}
         ></HighchartsReact>
         <div className="absolute top-5 left-10">
           <div className="px-2 pt-2 rounded-md mb-3 font-medium">

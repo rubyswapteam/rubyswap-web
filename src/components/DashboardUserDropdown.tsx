@@ -5,6 +5,7 @@ import React, { Fragment } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import EthereumIcon from './EthereumIcon';
 import { useTheme } from 'next-themes';
+import { CopyIcon } from './CopyIcon';
 
 interface Props {
   address: string;
@@ -76,23 +77,9 @@ const DashboardUserDropdown: React.FC<Props> = ({
                           : 'text-gray-700') + ' flex w-full p-2'
                       }
                     >
-                      <svg
-                        className="mr-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M14 8H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V10c0-1.103-.897-2-2-2z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M20 2H10a2 2 0 0 0-2 2v2h8a2 2 0 0 1 2 2v8h2a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"
-                        />
-                      </svg>
+                      <div className="mr-3">
+                        <CopyIcon width="1em" height="1em" />
+                      </div>
                       Copy Address
                     </a>
                   )}

@@ -7,7 +7,7 @@ interface Props {
   value: string;
 }
 
-export const DashboardStatsStandardItem: React.FC<Props> = ({
+export const DashboardStatStandard: React.FC<Props> = ({
   id,
   name,
   value,

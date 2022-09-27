@@ -4,16 +4,19 @@ import { JSXElementConstructor, ReactChildren, ReactElement } from 'react';
 export default function SocialsWrapper({
   children,
   link,
+  show,
+  width,
+  height,
 }: {
-  children: ReactElement<
-    ReactChildren,
-    string | JSXElementConstructor<unknown>
-  >;
+  children: ReactElement<JSX.Element>;
   link: string;
+  show?: boolean;
+  width?: any;
+  height?: any;
 }) {
   return (
     <>
-      {link && (
+      {(link || show) && (
         <a
           target="_blank"
           href={link}

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import VerifiedBadgeIcon from '@/components/VerifiedBadgeIcon';
 import EthereumIcon from '@/components/EthereumIcon';
+import VerifiedBadgeIcon from '@/components/VerifiedBadgeIcon';
+import React, { useState } from 'react';
+import { CopyIcon } from './CopyIcon';
 import DiscordLogo from './DiscordLogo';
 import EtherscanLogo from './EtherscanLogo';
 import SocialsWrapper from './SocialsWrapper';
@@ -16,6 +17,10 @@ const CollectionProfileHeader: React.FC<Props> = ({
   collection,
   listingPrice,
 }): JSX.Element => {
+  const copyAddress = () => {
+    navigator.clipboard.writeText(collection?.contractAddress);
+  };
+
   function handleWatchlist() {
     // collection?.contractAddress;
   }
@@ -49,7 +54,7 @@ const CollectionProfileHeader: React.FC<Props> = ({
                     </span>
                   )}
                 </div>
-                <div className="flex gap-x-2 self-center">
+                <div className="flex gap-x-2 self-center text-white/80">
                   <SocialsWrapper
                     link={
                       collection?.contractAddress &&
@@ -72,6 +77,9 @@ const CollectionProfileHeader: React.FC<Props> = ({
                   >
                     <TwitterLogo />
                   </SocialsWrapper>
+                  <div className="dark:hover:text-white" onClick={copyAddress}>
+                    <CopyIcon width={14} height={14} />
+                  </div>
                 </div>
                 <div className="flex h-4 md:mb-0 text-xs self-center pt-0.5">
                   <span className="flex">

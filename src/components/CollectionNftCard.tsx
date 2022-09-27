@@ -56,8 +56,8 @@ const CollectionNftCard: React.FC<Props> = ({
     >
       <div
         className={
-          'transistion-all drop-shadow-md rounded-xl text-sm bg-white dark:bg-white/5 hover:drop-shadow-xl' +
-          (isActive && !selectDisabled && ' dark:bg-black')
+          'transistion-all drop-shadow-md rounded-xl text-sm bg-white dark:bg-white/[.07] hover:drop-shadow-xl' +
+          (isActive && !selectDisabled && ' dark:bg-black/[1]')
         }
       >
         <div

@@ -1,9 +1,11 @@
 import moment from 'moment';
 import Link from 'next/link';
 import React from 'react';
-import { DashboardStatsPriceAndChange } from './DashboardStatsPriceAndChange';
-import { DashboardStatsPriceAndInfo } from './DashboardStatsPriceAndInfo';
-import { DashboardStatsStandardItem } from './DashboardStatsStandardItem';
+import { DashboardStatsPriceAndChange } from './DashboardStatAndChange';
+import { DashboardStatsPriceAndInfo } from './DashboardStatAndInfo';
+import { DashboardStatSocials } from './DashboardStatSocials';
+import { DashboardStatStandard } from './DashboardStatStandard';
+import { DashboardStatSocialsBasic } from './DashboardStatSocialsBasic';
 
 interface Props {
   collection?: any;
@@ -18,7 +20,7 @@ export const DashboardStats: React.FC<Props> = ({
 }): JSX.Element => {
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 flex-col h-full">
-      <DashboardStatsStandardItem
+      <DashboardStatStandard
         name="First Mint"
         value={
           collection?.firstMint
@@ -36,7 +38,7 @@ export const DashboardStats: React.FC<Props> = ({
         id={collection?.contractAddress}
         color={false}
       />
-      <DashboardStatsStandardItem
+      <DashboardStatSocialsBasic
         name="First Mint"
         value={
           collection?.firstMint
@@ -44,6 +46,10 @@ export const DashboardStats: React.FC<Props> = ({
             : 'tbd'
         }
         id={collection?.contractAddress}
+        discord={collection?.discordUrl}
+        twitter={collection?.twitterUsername}
+        website={collection?.website}
+        contract={collection?.contractAddress}
       />
       <DashboardStatsPriceAndChange
         name="1d Volume"
@@ -87,7 +93,7 @@ export const DashboardStats: React.FC<Props> = ({
         info={`${collection?.osThirtyDaySales} sales`}
         id={collection?.contractAddress}
       />
-      <DashboardStatsStandardItem
+      <DashboardStatStandard
         name="Highest Offer"
         value={
           collection?.firstMint
@@ -106,7 +112,7 @@ export const DashboardStats: React.FC<Props> = ({
         color={false}
         id={collection?.contractAddress}
       />
-      <DashboardStatsStandardItem
+      <DashboardStatStandard
         name="Floor Price"
         value={
           (listings && listings[0]?.price) ||

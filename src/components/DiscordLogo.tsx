@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function DiscordLogo() {
+export default function DiscordLogo(props: any) {
   return (
     <svg
-      width="14"
-      height="12"
+      width={props?.width || '14'}
+      height={props?.height || '12'}
       viewBox="0 0 14 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

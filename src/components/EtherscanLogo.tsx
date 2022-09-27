@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function EtherscanLogo() {
+export default function EtherscanLogo(props: any) {
   return (
     <svg
-      className="h-4 w-4 group"
+      className={`${props.class || 'h-4 w-4'} group`}
       xmlns="http://www.w3.org/2000/svg"
       width="293.775"
       height="293.671"

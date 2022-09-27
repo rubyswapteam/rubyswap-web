@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function WebsiteIcon() {
+export default function WebsiteIcon(props: any) {
   return (
     <svg
       className="group"
-      width="15"
-      height="14"
+      width={props?.width || '15'}
+      height={props?.height || '14'}
       viewBox="0 0 15 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

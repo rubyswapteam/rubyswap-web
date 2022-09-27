@@ -60,6 +60,7 @@ export const Web3Provider = ({
   const [chainId, setChainId] = useState<string>('');
   const [network, setNetwork] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<any>(undefined);
 
   useEffect(() => {
     if (provider) {
@@ -142,14 +143,18 @@ export const Web3Provider = ({
     }
   }
 
-  const switchNetwork = async () => {
-    await onboard.setChain({ chainId: toHex(network) });
-  };
+  async function fetchActiveUser() {
+    
+  }
 
-  const handleNetwork = (e: any) => {
-    const id = e.target.value;
-    setNetwork(Number(id));
-  };
+  // const switchNetwork = async () => {
+  //   await onboard.setChain({ chainId: toHex(network) });
+  // };
+
+  // const handleNetwork = (e: any) => {
+  //   const id = e.target.value;
+  //   setNetwork(Number(id));
+  // };
 
   const disconnect = async () => {
     const [primaryWallet] = await onboard.state.get().wallets;
@@ -185,6 +190,7 @@ export const Web3Provider = ({
       setActiveWallet,
       ethBalance,
       disconnect,
+      setUser,
     }),
     [
       provider,
@@ -194,6 +200,7 @@ export const Web3Provider = ({
       setActiveWallet,
       ethBalance,
       disconnect,
+      setUser,
     ],
   );
 
