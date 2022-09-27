@@ -48,7 +48,7 @@ export const DashboardStatSocialsBasic: React.FC<Props> = ({
         <dt className="font-medium truncate text-transparent bg-clip-text bg-cover text-gray-600 dark:text-white/80">
           <a
             target="_blank"
-            href={contract}
+            href={`https://etherscan.io/address/${contract}`}
             rel="noopener noreferrer"
             onClick={(event) => event.stopPropagation()}
             className="self-center"
@@ -74,7 +74,7 @@ export const DashboardStatSocialsBasic: React.FC<Props> = ({
         <dt className="font-medium truncate text-transparent bg-clip-text bg-cover text-gray-600 dark:text-white/80">
           <a
             target="_blank"
-            href={twitter}
+            href={`https://twitter.com/${twitter}`}
             rel="noopener noreferrer"
             onClick={(event) => event.stopPropagation()}
             className="self-center"
