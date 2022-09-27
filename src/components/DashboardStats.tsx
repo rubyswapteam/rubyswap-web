@@ -37,6 +37,7 @@ export const DashboardStats: React.FC<Props> = ({
         )}
         id={collection?.contractAddress}
         color={false}
+        ethIcon={false}
       />
       <DashboardStatSocialsBasic
         name="First Mint"
@@ -102,15 +103,15 @@ export const DashboardStats: React.FC<Props> = ({
         }
         id={collection?.contractAddress}
       />
-      <DashboardStatsPriceAndChange
+      <DashboardStatsPriceAndInfo
         name="Active Listings"
         value={totalListings?.toString() || ''}
-        percent={
+        info={`${
           totalListings &&
           Number(((totalListings / collection?.totalSupply) * 100).toFixed(2))
-        }
-        color={false}
+        }%`}
         id={collection?.contractAddress}
+        ethIcon={false}
       />
       <DashboardStatStandard
         name="Floor Price"

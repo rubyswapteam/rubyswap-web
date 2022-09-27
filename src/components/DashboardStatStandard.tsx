@@ -15,7 +15,7 @@ export const DashboardStatStandard: React.FC<Props> = ({
   return (
     <div
       key={id + '-' + name}
-      className="transition-colors text-sm text-left px-2 py-3 bg-white dark:bg-white/[.07] dark:hover:bg-white/[.12] drop-shadow-md rounded-lg overflow-hidden sm:p-4 hover:bg-gray-50 cursor-pointer  self-center items-center"
+      className="transition-colors text-sm text-left px-2 py-3 bg-white dark:bg-white/[.07] hover:bg-gray-50 dark:hover:bg-white/[.12] drop-shadow-md rounded-lg overflow-hidden sm:p-4 cursor-pointer  self-center items-center"
     >
       <dt className="font-medium truncate text-transparent bg-clip-text bg-cover text-gray-600 dark:text-white/80 mb-2">
         {name}

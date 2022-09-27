@@ -7,6 +7,7 @@ interface Props {
   name: string;
   value: string;
   info: string;
+  ethIcon?: boolean;
 }
 
 export const DashboardStatsPriceAndInfo: React.FC<Props> = ({
@@ -14,11 +15,12 @@ export const DashboardStatsPriceAndInfo: React.FC<Props> = ({
   name,
   value,
   info,
+  ethIcon = true,
 }): JSX.Element => {
   return (
     <div
       key={id + '-' + name}
-      className="transition-colors text-sm text-left px-2 py-3 bg-white dark:bg-white/[.07] dark:hover:bg-white/[.07] drop-shadow-md rounded-lg overflow-hidden sm:p-4 hover:bg-gray-50 cursor-pointer self-center items-center"
+      className="transition-colors text-sm text-left px-2 py-3 bg-white dark:bg-white/[.07] dark:hover:bg-white/[.12] drop-shadow-md rounded-lg overflow-hidden sm:p-4 hover:bg-gray-50 cursor-pointer self-center items-center"
     >
       <div className="font-medium truncate text-transparent bg-clip-text bg-cover text-gray-600 dark:text-white/80 mb-2">
         {name}
@@ -28,7 +30,7 @@ export const DashboardStatsPriceAndInfo: React.FC<Props> = ({
           <div className="pt-1 font-semibold text-gray-900 dark:text-white">
             {value}
           </div>
-          <EthereumIcon width={14} height={14} />
+          {ethIcon && <EthereumIcon width={14} height={14} />}
         </div>
         <div
           className={

@@ -111,6 +111,7 @@ export default function Collection(props: any) {
 
   useEffect(() => {
     if (
+      (tab == 'analytics' && activeCollection?.contractAddress) ||
       (tab == 'listings' && activeCollection?.contractAddress) ||
       (activeCollection?.contractAddress && tab == undefined)
     ) {
