@@ -115,7 +115,7 @@ export default function Collection(props: any) {
       (tab == 'listings' && activeCollection?.contractAddress) ||
       (activeCollection?.contractAddress && tab == undefined)
     ) {
-      const limit = 1000;
+      const limit = 3000;
       fetchActiveListings(activeCollection.contractAddress, limit).then(
         (listings: any[]) => {
           const recentListings = [];
@@ -142,7 +142,7 @@ export default function Collection(props: any) {
 
   useEffect(() => {
     if (tab == 'listings' && activeCollection?.contractAddress) {
-      fetchActiveListings(activeCollection.contractAddress, 1000);
+      fetchActiveListings(activeCollection.contractAddress, 3000);
     }
   }, [counter]);
 

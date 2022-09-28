@@ -32,11 +32,12 @@ const CollectionNftCard: React.FC<Props> = ({
   const [isActive, setIsActive] = useState(false);
 
   const handleName = () => {
-    if (selectedNft && selectedNft?.name) {
-      if (selectedNft?.length > 20) {
-        return selectedNft?.substring(0, 20) + '...';
+    if (selectedNft && (selectedNft?.name || selectedNft?.tokenId)) {
+      const name = selectedNft?.name || '#'.concat(selectedNft?.tokenId);
+      if (name.length > 20) {
+        return name.substring(0, 15) + '...';
       } else {
-        return selectedNft?.name;
+        return name;
       }
     } else {
       return undefined;
@@ -153,9 +154,7 @@ const CollectionNftCard: React.FC<Props> = ({
             </div>
           </div>
           <div className="flex justify-between items-center text-xs">
-            <div className="pt-1">
-              {handleName() || '#'.concat(selectedNft?.tokenId)}
-            </div>
+            <div className="pt-1 break-all">{handleName()}</div>
             <div className="flex place-items-center">
               <div className="pt-1">
                 {selectedNft?.price || selectedNft?.currentEthPrice}
