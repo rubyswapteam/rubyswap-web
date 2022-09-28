@@ -70,7 +70,7 @@ export default function Mints(props: any) {
             />
           }
           body={setBody()}
-          refresh={<RefreshButton />}
+          liveView={<RefreshButton />}
         />
       </Layout>
     </div>

@@ -77,7 +77,7 @@ export default function Index(props: any) {
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={<Tab tabs={rangeTabs(tab, range)} condense={true} />}
           body={setBody()}
-          refresh={<RefreshButton />}
+          liveView={<RefreshButton />}
         />
       </Layout>
     </motion.div>

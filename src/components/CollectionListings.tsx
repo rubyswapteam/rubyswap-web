@@ -86,6 +86,7 @@ const CollectionListings: React.FC<Props> = ({
       className="w-full overflow-scroll max-h-screen h-screen mt-2 flex flex-col items-start flex-1"
       ref={ref}
       id="scroller"
+      key={`nft-listings-${collectionName}`}
     >
       {selectedNfts && (
         <InfiniteScroll
@@ -120,7 +121,8 @@ const CollectionListings: React.FC<Props> = ({
             initial="hidden"
             animate="show"
             className={'flex flex-wrap w-full'}
-            key={`${keyPrefix}-${collectionName}`}
+            key={`clmd-${collectionName}`}
+            // key={`${keyPrefix}-${collectionName}`}
           >
             {nfts &&
               nfts.map((nft: any, i: number) => (

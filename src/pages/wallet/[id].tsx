@@ -235,7 +235,7 @@ export default function Collection(props: any) {
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
-          refresh={setRefreshButton()}
+          liveView={setRefreshButton()}
           body={setBody()}
         />
       </Layout>

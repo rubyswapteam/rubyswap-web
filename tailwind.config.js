@@ -35,6 +35,26 @@ module.exports = {
         blackish: 'rgb(0,0,0)',
         themeYellow: '#F2C94C',
       },
+      keyframes: {
+        'rotate-one': {
+          '0%': { transform: 'rotateX(35deg) rotateY(-45deg) rotateZ(0deg)' },
+          '100%': {
+            transform: 'rotateX(35deg) rotateY(-45deg) rotateZ(360deg)',
+          },
+        },
+        'rotate-two': {
+          '0%': { transform: 'rotateX(50deg) rotateY(10deg) rotateZ(0deg)' },
+          '100%': {
+            transform: 'rotateX(50deg) rotateY(10deg) rotateZ(360deg)',
+          },
+        },
+        'rotate-three': {
+          '0%': { transform: 'rotateX(35deg) rotateY(55deg) rotateZ(0deg)' },
+          '100%': {
+            transform: 'rotateX(35deg) rotateY(55deg) rotateZ(360deg)',
+          },
+        },
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],

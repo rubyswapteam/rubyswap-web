@@ -4,25 +4,24 @@ import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
 import CollectionTitleHeader from '@/components/CollectionTitleHeader';
 import Dashboard from '@/components/Dashboard';
+import { DashboardStats } from '@/components/DashboardStats';
 import HolderDistrbutionChart from '@/components/HolderDistributionChart';
 import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
 import SalesHistoryChart from '@/components/SalesHistoryChart';
-import StatsBoxList from '@/components/StatsBoxList';
 import Tab from '@/components/Tab';
 import { rangeTabs } from '@/utils/nftUtils';
+import { motion } from 'framer-motion';
+import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AveragePriceVolumeChart from '../../components/AveragePriceVolumeChart';
 import CollectionUpdates from '../../components/CollectionUpdates';
+import ListingDistributionChart from '../../components/ListingDistributionChart';
 import RightArrow from '../../components/RightArrow';
 import TraitsSidebarFilter from '../../components/TraitsSidebarFilter';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
-import { motion } from 'framer-motion';
-import moment from 'moment';
-import ListingDistributionChart from '../../components/ListingDistributionChart';
-import { DashboardStats } from '@/components/DashboardStats';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -33,6 +32,7 @@ export default function Collection(props: any) {
     useState<boolean>(true);
   const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
   const [recentListings, setRecentListings] = useState<any[]>([]);
+  const [pauseListings, setPauseListings] = useState(false);
   const [showBubbleMap, setShowBubbleMap] = useState(false);
   const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
     useState(false);
@@ -111,9 +111,10 @@ export default function Collection(props: any) {
 
   useEffect(() => {
     if (
-      (tab == 'analytics' && activeCollection?.contractAddress) ||
-      (tab == 'listings' && activeCollection?.contractAddress) ||
-      (activeCollection?.contractAddress && tab == undefined)
+      ((tab == 'analytics' && activeCollection?.contractAddress) ||
+        (tab == 'listings' && activeCollection?.contractAddress) ||
+        (activeCollection?.contractAddress && tab == undefined)) &&
+      !pauseListings
     ) {
       const limit = 3000;
       fetchActiveListings(activeCollection.contractAddress, limit).then(
@@ -129,19 +130,31 @@ export default function Collection(props: any) {
   }, [activeCollection?.contractAddress, tab]);
 
   useEffect(() => {
+    setPauseListings(false);
     fetch(
       'https://europe-west1-cryptos-tools.cloudfunctions.net/get-bubble-map-availability?chain=bsc&token=0x603c7f932ed1fc6575303d8fb018fdcbb0f39a95',
     ).then((res: any) =>
       setShowBubbleMap(res?.availability && res?.status == 'OK'),
     );
     const interval = setInterval(() => {
-      setCounter((prev) => prev + 1);
+      if (!pauseListings) {
+        setPauseListings((prev) => {
+          if (!prev) {
+            setCounter((prev) => prev + 1);
+          }
+          return prev;
+        });
+      }
     }, 20000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (tab == 'listings' && activeCollection?.contractAddress) {
+    if (
+      tab == 'listings' &&
+      activeCollection?.contractAddress &&
+      !pauseListings
+    ) {
       fetchActiveListings(activeCollection.contractAddress, 3000);
     }
   }, [counter]);
@@ -208,55 +221,6 @@ export default function Collection(props: any) {
   ];
   const refreshButtonTabs = [undefined, 'listings', 'analytics'];
   const rangeButtonsTabs = [undefined, 'analytics'];
-
-  function getStatsTop() {
-    return [
-      {
-        name: 'Supply',
-        value:
-          activeCollection?.totalSupply && `${activeCollection?.totalSupply}`,
-      },
-      {
-        name: 'Unique Ownership',
-        value: `${(
-          (activeCollection?.numOwners / activeCollection?.totalSupply) *
-          100
-        ).toFixed(2)}%`,
-      },
-      {
-        name: 'First Deployed',
-        value: `${
-          activeCollection?.firstMint
-            ? moment.unix(activeCollection?.firstMint).fromNow()
-            : 'tbd'
-        }`,
-      },
-    ];
-  }
-
-  function getStatsBot() {
-    const rng = range || '30d';
-    return [
-      {
-        name: `${rng} Volume`,
-        value:
-          activeCollection?.osThirtyDayVolume &&
-          `${(activeCollection?.osThirtyDayVolume).toFixed(2)} ETH`,
-      },
-      {
-        name: `${rng} Sales`,
-        value:
-          activeCollection?.osThirtyDaySales &&
-          `${activeCollection?.osThirtyDaySales}`,
-      },
-      {
-        name: 'Floor Price',
-        value:
-          activeCollection?.osFloorPrice &&
-          `${(activeCollection?.osFloorPrice).toFixed(2)} ETH`,
-      },
-    ];
-  }
 
   function setBody() {
     if (!tab) {
@@ -356,10 +320,16 @@ export default function Collection(props: any) {
           {activeListings && activeListings.length > 0 && (
             <div
               className="h-inherit"
-              key={`${activeCollection?.contractAddress}-${counter}-outer`}
-              // onMouseEnter={
-              //   () => {} //set live view to pause
-              // }
+              // key={`${activeCollection?.contractAddress}-${counter}-outer`}
+              key={`${activeCollection?.contractAddress}-outer`}
+              onMouseEnter={() => {
+                setPauseListings(true);
+                console.log('on');
+              }}
+              onMouseLeave={() => {
+                setPauseListings(false);
+                console.log('off');
+              }}
             >
               <CollectionListings
                 collectionName={activeCollection?.name}
@@ -522,9 +492,10 @@ export default function Collection(props: any) {
           }
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
-          refresh={setRefreshButton()}
+          liveView={setRefreshButton()}
           body={setBody()}
           banner={activeCollection?.bannerImageUrl}
+          pauseLiveView={pauseListings}
         />
       </Layout>
     </motion.div>
