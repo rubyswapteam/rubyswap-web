@@ -1,4 +1,3 @@
-import { ethers } from 'ethers';
 import moment from 'moment';
 import React, {
   JSXElementConstructor,
@@ -19,7 +18,6 @@ export const MarketplaceProvider = ({
     string | JSXElementConstructor<unknown>
   >;
 }) => {
-  const NULL_ADDRESSS = '0x0000000000000000000000000000000000000000';
   const [userTrades, setUserTrades] = useState<any>(undefined);
   const [collectionTrades, setCollectionTrades] = useState<any>(undefined);
   const [userTradesFiltered, setUserTradesFiltered] = useState<any>(undefined);
@@ -32,7 +30,11 @@ export const MarketplaceProvider = ({
   const [tokenRanks, setTokenRanks] = useState<any>(undefined);
   const [activeListings, setActiveListings] = useState<any[]>();
   const [totalListings, setTotalListings] = useState<number>(0);
+  const [collectionHolders, setCollectionHolders] = useState<any[]>([]);
   const [marketplaces] = useState(['Opensea', 'Seaport', 'X2Y2', 'LooksRare']);
+  const controller = new AbortController();
+  const { signal } = controller;
+
   async function fetchGet(url: string) {
     const res = await (
       await fetch(url, { method: 'GET', redirect: 'follow' })
@@ -298,19 +300,6 @@ export const MarketplaceProvider = ({
       : obj;
   }
 
-  function getAggregateTrades(arr: { sales: any[]; purchases: any[] }[]) {
-    let userSales: any[] = [];
-    let userPurchases: any[] = [];
-    for (let i = 0; i < arr.length; i++) {
-      const res = arr[i];
-      if (res.sales && res.sales.length > 0)
-        userSales = [...userSales, ...res.sales];
-      if (res.purchases && res.purchases.length > 0)
-        userPurchases = [...userPurchases, ...res.purchases];
-    }
-    return { sales: userSales, purchases: userPurchases };
-  }
-
   async function fetchActiveListings(
     contractAddress: string,
     limit = 1000,
@@ -414,6 +403,24 @@ export const MarketplaceProvider = ({
     });
   }
 
+  async function getCollectionHolders(
+    contract: string,
+    persist = true,
+    signal: AbortSignal | undefined = undefined,
+  ) {
+    const resInit = await fetch(
+      `/.netlify/functions/safeGetDbCollectionHoldersByContract?contract=${contract}`,
+      {
+        signal: signal,
+        method: 'GET',
+        redirect: 'follow',
+      },
+    );
+    const res = await resInit.json();
+    if (persist) setCollectionHolders(res);
+    return res;
+  }
+
   const contextValue = useMemo(
     () => ({
       userTrades,
@@ -435,6 +442,8 @@ export const MarketplaceProvider = ({
       getTokenRanks,
       tokenRanks,
       getFirstMint,
+      collectionHolders,
+      getCollectionHolders,
     }),
     [
       userTrades,
@@ -456,6 +465,8 @@ export const MarketplaceProvider = ({
       getTokenRanks,
       tokenRanks,
       getFirstMint,
+      collectionHolders,
+      getCollectionHolders,
     ],
   );
 

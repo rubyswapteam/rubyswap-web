@@ -14,9 +14,6 @@ export default function HolderDistrbutionChart(props: any) {
   const [holderCounts, setHolderCounts] = useState(undefined as any);
   const [holders, setHolders] = useState(undefined as any);
   const [total, setTotal] = useState(undefined as any);
-  const controller = new AbortController();
-  const { signal } = controller;
-
   const { theme } = useTheme();
   highchartsDrilldown(Highcharts);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -48,37 +45,27 @@ export default function HolderDistrbutionChart(props: any) {
   }
 
   useEffect(() => {
-    reset(props.contractAddress);
-  }, [props.contractAddress]);
+    console.log('props.holders');
+    processHolders();
+  }, [props.holders]);
 
   useEffect(() => {
     setTheme();
     if (chartOptions) setChartOptions(JSON.parse(JSON.stringify(chartOptions)));
   }, [theme]);
 
-  async function getHolders(contract: string) {
-    const resInit = await fetch(
-      `/.netlify/functions/safeGetDbCollectionHoldersByContract?contract=${contract}`,
-      {
-        signal: signal,
-        method: 'GET',
-        redirect: 'follow',
-      },
-    );
-    const res = await resInit.json();
-    controller.abort();
-
-    if (res && res[0]) {
-      const holders = res[0].data;
+  function processHolders() {
+    console.log(props.holders);
+    if (props?.holders && props?.holders[0]) {
+      const holders = props.holders[0].data;
       const whaleCount = 25;
-      const whaleHolders = res[0].data.slice(0, whaleCount);
+      const whaleHolders = props.holders[0].data.slice(0, whaleCount);
       const holderCounts = holders.reduce(
         (acc: any, curr: any) => (
           (acc[curr.tokenBalance] = (acc[curr.tokenBalance] || 0) + 1), acc
         ),
         {},
       );
-      const values = Object.values(holderCounts) as number[];
       const total = holders.reduce(
         (prev: number, curr: { tokenBalance: number }) =>
           prev + curr.tokenBalance,
@@ -146,14 +133,6 @@ export default function HolderDistrbutionChart(props: any) {
       setThemeColours(lightTheme);
       return lightTheme;
     }
-  }
-
-  function reset(contract: string) {
-    const holdersData = async () => {
-      const result: any = await getHolders(contract);
-      return result;
-    };
-    holdersData();
   }
 
   function getOptions(topLevelData: any, drilldownData: any) {
@@ -244,7 +223,10 @@ export default function HolderDistrbutionChart(props: any) {
       leaveFrom="transform opacity-100 scale-100 translate-y-0"
       leaveTo="transform opacity-0 scale-95 -translate-y-6"
     >
-      <div className="flex mb-8">
+      <div
+        key={`${props?.contractAddress}-hdc-container`}
+        className="flex mb-8"
+      >
         <CollectionTitleHeader title={'Holder Analysis'} />
         <div className="my-auto ml-5 pt-2">
           <div className="sm:hidden">

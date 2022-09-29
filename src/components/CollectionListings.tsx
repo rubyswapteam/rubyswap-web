@@ -19,8 +19,8 @@ const CollectionListings: React.FC<Props> = ({
   collectionName = '',
   tokenRanks = undefined,
 }): JSX.Element => {
-  const duration = 200; // ms
-  const delay = 100;
+  // const duration = 200; // ms
+  // const delay = 100;
   const [nfts, setNfts] = useState<any[]>(selectedNfts?.slice(0, 50));
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [height, setHeight] = useState(0);
@@ -79,8 +79,8 @@ const CollectionListings: React.FC<Props> = ({
     return newHolders;
   };
 
-  const animStr = (i: number) =>
-    `fadeIn ${duration}ms ease-out ${delay}ms forwards`;
+  // const animStr = () => `fadeIn ${duration}ms ease-out ${delay}ms forwards`;
+
   return (
     <div
       className="w-full overflow-scroll max-h-screen h-screen mt-2 flex flex-col items-start flex-1"
@@ -128,8 +128,8 @@ const CollectionListings: React.FC<Props> = ({
               nfts.map((nft: any, i: number) => (
                 <motion.div
                   variants={listItem}
-                  key={`${keyPrefix}-${nft?.tokenId}-${nft?.contract}-${nft?.chainId}-${nft?.name}`}
-                  style={{ animation: animStr(i) }}
+                  key={`${keyPrefix}-${nft?.tokenId}-${nft?.contract}-${nft?.chainId}-${nft?.name}-${i}`}
+                  // style={{ animation: animStr(i) }}
                   className="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2"
                 >
                   <CollectionNftCard

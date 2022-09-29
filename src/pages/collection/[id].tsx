@@ -12,7 +12,6 @@ import SalesHistoryChart from '@/components/SalesHistoryChart';
 import Tab from '@/components/Tab';
 import { rangeTabs } from '@/utils/nftUtils';
 import { motion } from 'framer-motion';
-import moment from 'moment';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -47,6 +46,8 @@ export default function Collection(props: any) {
     tokenRanks,
     totalListings,
     getFirstMint,
+    collectionHolders,
+    getCollectionHolders,
   } = useMarketplaceProvider();
   const controller = new AbortController();
   const { signal } = controller;
@@ -110,6 +111,13 @@ export default function Collection(props: any) {
   }, [activeCollection?.contractAddress]);
 
   useEffect(() => {
+    console.log('useEffect listings');
+    console.log(
+      ((tab == 'holders' && activeCollection?.contractAddress) ||
+        (tab == 'analytics' && activeCollection?.contractAddress)) &&
+        (!collectionHolders ||
+          activeCollection?.contractAddress !== collectionHolders[0]?.contract),
+    );
     if (
       ((tab == 'analytics' && activeCollection?.contractAddress) ||
         (tab == 'listings' && activeCollection?.contractAddress) ||
@@ -126,6 +134,18 @@ export default function Collection(props: any) {
           setRecentListings(recentListings);
         },
       );
+    }
+    if (
+      ((tab == 'holders' && activeCollection?.contractAddress) ||
+        (tab == 'analytics' && activeCollection?.contractAddress)) &&
+      (!collectionHolders ||
+        activeCollection?.contractAddress !== collectionHolders[0]?.contract)
+    ) {
+      getCollectionHolders(
+        activeCollection?.contractAddress,
+        true,
+        signal,
+      ).then(() => controller.abort());
     }
   }, [activeCollection?.contractAddress, tab]);
 
@@ -407,6 +427,7 @@ export default function Collection(props: any) {
           <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
             <HolderDistrbutionChart
               contractAddress={activeCollection?.contractAddress}
+              holders={collectionHolders}
             ></HolderDistrbutionChart>
           </div>
           {!showBubbleMap && (
