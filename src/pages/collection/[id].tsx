@@ -272,7 +272,7 @@ export default function Collection(props: any) {
                 />
               )}
             </div>
-            <div className="py-8 bg-gray-100 dark:bg-black w-full">
+            <div className="py-8 w-full">
               <div className="mx-8">
                 <CollectionTitleHeader
                   title={'Summary Stats'}
@@ -404,7 +404,7 @@ export default function Collection(props: any) {
     if (tab == 'analytics') {
       return (
         <div className="h-inherit overflow-scroll pb-80">
-          <div className="py-8 bg-gray-100 dark:bg-black w-full">
+          <div className="py-8 w-full">
             <div className="block xl:flex mx-8">
               <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
                 {collectionTrades && !isLoadingCollectionTrades && (
@@ -476,17 +476,12 @@ export default function Collection(props: any) {
         <div className="mt-0 h-inherit overflow-scroll px-8 pb-80">
           <CollectionTitleHeader title={'Collection Overlap Statistics'} />
           <div className="flex">
-            <div className="w-1/2">
-              <CollectionHoldersOverlapCardsContainer
-                key={`ruby-chocc-${activeCollection?.contractAddress}`}
-                holders={collectionHolders}
-                targetHolders={comparisonCollectionHolders}
-                activeCollection={activeCollection}
-              />
-            </div>
-            <div className="w-1/2">
-              <div className="w-full h-full border border-white/10 rounded-md"></div>
-            </div>
+            <CollectionHoldersOverlapCardsContainer
+              key={`ruby-chocc-${activeCollection?.contractAddress}`}
+              holders={collectionHolders}
+              targetHolders={comparisonCollectionHolders}
+              activeCollection={activeCollection}
+            />
           </div>
         </div>
       );

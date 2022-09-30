@@ -76,68 +76,68 @@ export default function TrendingNftCollectionTable() {
                           <tr className="flex">
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 dark:text-white sm:pl-6 w-[5%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 dark:text-white sm:pl-6 w-[5%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               &nbsp;
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 text-left text-sm text-gray-900 dark:text-white w-[5%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold py-3.5 text-left text-sm text-gray-900 dark:text-white w-[5%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               &nbsp;
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 dark:text-white w-[20%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 dark:text-white w-[20%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Collection
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Socials
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Chain
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Volume
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Floor
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Average Price
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Sales
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky border-b border-gray-100 dark:border-white/20"
                             >
                               Unique Holders
                             </th>
                           </tr>
                         </thead>
                         <tbody
-                          className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-blackish"
+                          className="divide-y divide-gray-100 dark:divide-gray-800"
                           id="scrollableTarget"
                         >
                           {trendingCollections &&

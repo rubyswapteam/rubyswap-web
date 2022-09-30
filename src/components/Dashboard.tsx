@@ -150,7 +150,7 @@ export default function Dashboard(props: any) {
         </Transition.Root>
 
         <div className="hidden md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 drop-shadow dark:drop-shadow-md-w z-50">
-          <div className="flex-1 flex flex-col px-5 py-2 min-h-0 bg-white dark:bg-blackish">
+          <div className="flex-1 flex flex-col px-5 py-2 min-h-0">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto overflow-y-visible z-50">
               <nav className="mt-0 flex-1 px-2">
                 <div className="mb-5">
@@ -208,7 +208,7 @@ export default function Dashboard(props: any) {
               className={'h-screen flex-col flex'}
             >
               <div
-                className="py-6 bg-black/[.02] dark:bg-blackish z-10 bg-cover"
+                className="py-6 z-10 bg-cover"
                 style={{
                   backgroundImage: `${bannerStyle}`,
                 }}
@@ -229,8 +229,8 @@ export default function Dashboard(props: any) {
                 </div>
               </div>
               {(props.liveView || props.secondaryTabs) && (
-                <div className="flex-1 flex justify-center lg:justify-end sticky top-0 dark:bg-black z-40">
-                  <div className="w-full">
+                <div className="flex-1 flex justify-center lg:justify-end sticky top-0 z-40">
+                  <div className="w-full backdrop-blur">
                     <div className="sm:flex sm:items-center sm:justify-between mt-4 mb-4 px-4 sm:px-6 md:px-8">
                       {props.liveView && (
                         <div className="flex items-center">

@@ -166,7 +166,7 @@ export default function CollectionUpdates(props: Props) {
                       );
                   })}
                 <div className="mt-5">
-                  <div className="py-2 px-2 rounded-md bg-gray-100 dark:bg-blackish self-center inline cursor-pointer hover:bg-gray-200">
+                  <div className="py-2 px-2 rounded-md bg-gray-100 dark:bg-black self-center inline cursor-pointer hover:bg-gray-200">
                     {'👍'} {update.data.likes}
                   </div>
                 </div>

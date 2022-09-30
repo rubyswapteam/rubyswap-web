@@ -19,7 +19,7 @@ export default function ListingDistributionChart(props: any) {
     secondaryColour: 'rgb(70, 115, 250)',
   };
   const darkTheme = {
-    background: 'rgba(255,255,255, 0.05)',
+    background: 'rgba(255,255,255, 0.03)',
     text: '#ffffff',
     primaryColour: 'rgba(255, 255, 255, 0.3)',
     secondaryColour: 'rgba(234, 179, 8, 1)',

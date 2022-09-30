@@ -31,10 +31,6 @@ module.exports = {
           '0 4px 3px rgba(255, 255, 255, 0.1)',
         ],
       },
-      colors: {
-        blackish: 'rgb(0,0,0)',
-        themeYellow: '#F2C94C',
-      },
       keyframes: {
         'rotate-one': {
           '0%': { transform: 'rotateX(35deg) rotateY(-45deg) rotateZ(0deg)' },

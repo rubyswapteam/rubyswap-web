@@ -112,68 +112,68 @@ export default function MintingCollectionTable() {
                           <tr className="flex">
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 dark:text-white sm:pl-6 w-[5%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 dark:text-white sm:pl-6 w-[5%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               &nbsp;
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 text-left text-sm text-gray-900 dark:text-white w-[5%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold py-3.5 text-left text-sm text-gray-900 dark:text-white w-[5%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               &nbsp;
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 dark:text-white w-[20%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold py-3.5 pr-3 text-left text-sm text-gray-900 dark:text-white w-[20%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Collection
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Socials
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Chain
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               New Mints
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Total Mints
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Unique Minters
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Unique Holders
                             </th>
                             <th
                               scope="col"
-                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-blackish border-b border-gray-100 dark:border-white/20"
+                              className="font-semibold px-3 py-3.5 text-left text-sm text-gray-900 dark:text-white w-[10%] top-0 sticky bg-white dark:bg-black border-b border-gray-100 dark:border-white/20"
                             >
                               Rank
                             </th>
                           </tr>
                         </thead>
                         <tbody
-                          className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-blackish"
+                          className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-black"
                           id="scrollableTarget"
                           key={
                             'MCT' +

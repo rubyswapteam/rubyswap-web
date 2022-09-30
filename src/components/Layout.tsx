@@ -41,7 +41,7 @@ export default function Layout({
         <link rel="apple-touch-icon" href={seo.linkIconAppleTouchIcon} />
       </Head>
       <div>
-        <div className="bg-cover bg-white dark:bg-blackish min-h-screen">
+        <div className="bg-cover bg-white dark:bg-gradient-to-br dark:from-black dark:to-black/95 min-h-screen">
           <main>{children}</main>
         </div>
       </div>

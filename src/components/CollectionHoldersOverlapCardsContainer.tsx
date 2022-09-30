@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useRouter } from 'next/router';
 import { CollectionHoldersOverlapCard } from './CollectionHoldersOverlapCard';
 
 interface Props {
@@ -13,40 +14,31 @@ export const CollectionHoldersOverlapCardsContainer: React.FC<Props> = ({
   targetHolders,
   activeCollection,
 }): JSX.Element => {
-  const [holderAddressList, setHolderAddressList] = useState<string[]>();
-  const [targetCollectionsAddressList, setTargetCollectionsAddressList] =
-    useState<string[][] | undefined>(undefined);
-
-  function getAddressList(raw: any): string[] {
-    return raw?.data?.map(
-      (x: { ownerAddress: string; tokenBalance: number }) => x.ownerAddress,
-    );
-  }
-
-  useEffect(() => {
-    setHolderAddressList(getAddressList(holders[0]));
-  }, [holders]);
+  useState<string[][] | undefined>(undefined);
 
   return (
-    <div className="flex flex-wrap w-full h-full -m-2">
+    <div className="flex flex-wrap w-full h-full -m-2 justify-center">
       {activeCollection &&
-        holderAddressList &&
         targetHolders &&
-        targetHolders.map((targetHolder: any, i: number) => (
-          <div
-            className="sm:w-full xl:w-1/3 p-2"
-            key={`${activeCollection?.contractAddress}-${targetHolder?.contract}-${i}-ruby-choc`}
-          >
-            <CollectionHoldersOverlapCard
-              key={`${activeCollection?.contractAddress}-${targetHolder?.contract}-${i}-ruby-choc-inner`}
-              holders={holders}
-              targetHolders={targetHolder}
-              activeCollection={activeCollection}
-              holderAddressList={holderAddressList}
-              getAddressList={getAddressList}
-            />
-          </div>
-        ))}
+        holders &&
+        holders[0] &&
+        activeCollection.contractAddress === holders[0].contract &&
+        targetHolders.map(
+          (targetHolder: any, i: number) =>
+            targetHolder.contract !== holders[0].contract && (
+              <div
+                className="sm:w-full lg:w-1/3 xl:w-1/4 p-2"
+                key={`${activeCollection?.contractAddress}-${holders[0]?.contract}-${targetHolder?.contract}-${i}-ruby-choc`}
+              >
+                <CollectionHoldersOverlapCard
+                  key={`${activeCollection?.contractAddress}-${holders[0]?.contract}-${targetHolder?.contract}-${i}-ruby-choc-inner`}
+                  holders={holders}
+                  targetHolders={targetHolder}
+                  activeCollection={activeCollection}
+                />
+              </div>
+            ),
+        )}
     </div>
   );
 };

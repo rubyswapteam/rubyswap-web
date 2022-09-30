@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { trimHex } from '../utils/nftUtils';
 interface Props {
   holdersIn: any[];
   total: number;
@@ -116,9 +117,16 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
                   </td>
                 </div>
                 <div className="w-[40%] self-center">
-                  <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
-                    {holder.ownerAddress}
-                  </td>
+                  <Link href={`/wallet/${holder.ownerAddress}`} passHref>
+                    <>
+                      <td className="hidden xl:flex dark:hover:text-yellow-300/90 h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80 cursor-pointer">
+                        {holder.ownerAddress}
+                      </td>
+                      <td className="flex xl:hidden dark:hover:text-yellow-300/90 h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80 cursor-pointer">
+                        {trimHex(holder.ownerAddress, 7)}
+                      </td>
+                    </>
+                  </Link>
                 </div>
                 <div className="w-[10%] self-center">
                   <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">

@@ -41,7 +41,7 @@ export default function SalesHistoryChart(props: any) {
     t3: 'rgba(234, 179, 8, 0.5)',
   };
   const darkTheme = {
-    background: 'rgba(255,255,255, 0.05)',
+    background: 'rgba(255,255,255, 0.03)',
     text: '#ffffff',
     primaryColour: 'rgba(255, 255, 255, 0.3)',
     secondaryColour: 'rgba(200, 0, 200, 1)',
