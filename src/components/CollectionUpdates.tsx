@@ -1,4 +1,4 @@
-import { Switch, Transition } from '@headlessui/react';
+import { Transition } from '@headlessui/react';
 import moment from 'moment';
 import { useState } from 'react';
 
@@ -7,17 +7,20 @@ interface Props {
   isLoading: boolean;
 }
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
 function formatText(text: string) {
   if (!text) return '';
   let newText = text.split('\n').join('<br />');
+  newText = removeExcessLines(newText);
   newText = convertBolds(newText);
   newText = convertTags(newText);
   newText = convertUrls(newText);
   return newText;
+}
+
+function removeExcessLines(text: string) {
+  return text
+    .replace('<br /><br /><br />', '<br />')
+    .replace('<br /><br /><br />', '<br />');
 }
 
 function convertTags(text: string) {
@@ -81,92 +84,90 @@ export default function CollectionUpdates(props: Props) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="bg-white dark:bg-white/[0.05] dark:text-white drop-shadow-md dark:drop-shadow-md-w rounded-lg text-sm overflow-hidden my-8">
-              <div className="drop-shadow-none dark:bg-blackish">
-                <div className="bg-white/[0.05] p-4">
-                  <div className="justify-between w-full flex mb-5">
-                    <div className="flex items-center">
-                      <img
-                        className="h-10 w-10 rounded-full my-auto"
-                        src={`https://cdn.discordapp.com/avatars/${update.data?.author?.id}/${update.data?.author?.avatar}.webp?size=160`}
-                      />
-                      <a className="text-sm font-medium text-transparent bg-clip-text bg-cover bg-theme-gradient mx-3">
-                        {update.data?.author?.username}
-                      </a>
-                      <a className="text-sm font-medium text-gray-400">
-                        {moment(update.data?.timestamp)
-                          .local()
-                          .startOf('seconds')
-                          .fromNow()}
-                      </a>
-                    </div>
+            <div className="bg-white dark:bg-white/5 dark:text-white drop-shadow-md rounded-lg text-sm overflow-hidden my-8">
+              <div className="bg-white/[0.05] p-4">
+                <div className="justify-between w-full flex mb-5">
+                  <div className="flex items-center">
+                    <img
+                      className="h-10 w-10 rounded-full my-auto"
+                      src={`https://cdn.discordapp.com/avatars/${update.data?.author?.id}/${update.data?.author?.avatar}.webp?size=160`}
+                    />
+                    <a className="text-sm font-medium text-transparent bg-clip-text bg-cover bg-theme-gradient mx-3">
+                      {update.data?.author?.username}
+                    </a>
+                    <a className="text-sm font-medium text-gray-400">
+                      {moment(update.data?.timestamp)
+                        .local()
+                        .startOf('seconds')
+                        .fromNow()}
+                    </a>
                   </div>
-                  <div className="font-bold mb-3">{update.data?.title}</div>
-                  <div
-                    className="leading-[175%]"
-                    dangerouslySetInnerHTML={{
-                      __html: formatText(update.data?.content),
-                    }}
-                  ></div>
-                  {update.data?.embeds &&
-                    update.data.embeds.map((embed: any, i: number) => {
-                      if (embed?.type == 'rich')
-                        return (
-                          <div className="flex my-4">
-                            <div className="w-1 bg-cover bg-theme-gradient bg-gray-900 flex"></div>
-                            <a
-                              className="bl-2 w-full max-w-md p-4 bg-gray-100 dark:bg-black rounded-r-md"
-                              href={embed.url}
-                              rel="noopener noreferrer"
-                              target="_blank"
-                            >
-                              {embed.author && (
-                                <div className="flex my-2">
-                                  <img
-                                    className="rounded-full h-10 w-10"
-                                    src={embed.author.proxy_icon_url}
-                                  />
-                                  <div className="ml-2 bl-2 pt-3 w-full rounded-md font-medium">
-                                    {embed.author.name}
-                                  </div>
-                                </div>
-                              )}
-                              {embed.description && (
-                                <div className="bl-2 w-full my-2 rounded-md">
-                                  {embed.description}
-                                </div>
-                              )}
-                              {embed.image && (
+                </div>
+                <div className="font-bold mb-3">{update.data?.title}</div>
+                <div
+                  className="leading-[175%]"
+                  dangerouslySetInnerHTML={{
+                    __html: formatText(update.data?.content),
+                  }}
+                ></div>
+                {update.data?.embeds &&
+                  update.data.embeds.map((embed: any, i: number) => {
+                    if (embed?.type == 'rich')
+                      return (
+                        <div className="flex my-4">
+                          <div className="w-1 bg-cover bg-theme-gradient bg-gray-900 flex"></div>
+                          <a
+                            className="bl-2 w-full max-w-md p-4 bg-gray-100 dark:bg-black rounded-r-md"
+                            href={embed.url}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            {embed.author && (
+                              <div className="flex my-2">
                                 <img
-                                  className="rounded-md"
-                                  src={embed.image.proxy_url}
+                                  className="rounded-full h-10 w-10"
+                                  src={embed.author.proxy_icon_url}
                                 />
-                              )}
-                              {embed.thumbnail && (
-                                <img
-                                  className="rounded-md"
-                                  src={embed.thumbnail.proxy_url}
-                                />
-                              )}
-                              {embed.footer && (
-                                <div className="flex my-2">
-                                  <img
-                                    className="rounded-full h-5 w-5"
-                                    src={embed.footer.proxy_icon_url}
-                                  />
-                                  <div className="ml-2 bl-2 pt-1 w-full bg-gray-100 dark:bg-black rounded-md font-medium text-sm">
-                                    {embed.footer.text}
-                                  </div>
+                                <div className="ml-2 bl-2 pt-3 w-full rounded-md font-medium">
+                                  {embed.author.name}
                                 </div>
-                              )}
-                            </a>
-                          </div>
-                        );
-                    })}
-                  <div className="mt-5">
-                    <div className="py-2 px-2 rounded-md bg-gray-100 dark:bg-blackish self-center inline cursor-pointer hover:bg-gray-200">
-                      {'👍'} {update.data.likes}
-                    </div>
+                              </div>
+                            )}
+                            {embed.description && (
+                              <div className="bl-2 w-full my-2 rounded-md">
+                                {embed.description}
+                              </div>
+                            )}
+                            {embed.image && (
+                              <img
+                                className="rounded-md"
+                                src={embed.image.proxy_url}
+                              />
+                            )}
+                            {embed.thumbnail && (
+                              <img
+                                className="rounded-md"
+                                src={embed.thumbnail.proxy_url}
+                              />
+                            )}
+                            {embed.footer && (
+                              <div className="flex my-2">
+                                <img
+                                  className="rounded-full h-5 w-5"
+                                  src={embed.footer.proxy_icon_url}
+                                />
+                                <div className="ml-2 bl-2 pt-1 w-full bg-gray-100 dark:bg-black rounded-md font-medium text-sm">
+                                  {embed.footer.text}
+                                </div>
+                              </div>
+                            )}
+                          </a>
+                        </div>
+                      );
+                  })}
+                <div className="mt-5">
+                  <div className="py-2 px-2 rounded-md bg-gray-100 dark:bg-blackish self-center inline cursor-pointer hover:bg-gray-200">
+                    {'👍'} {update.data.likes}
                   </div>
                 </div>
               </div>

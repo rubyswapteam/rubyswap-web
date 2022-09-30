@@ -48,7 +48,6 @@ export default function LoginPage({
     } else {
       reset();
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export default function LoginPage({
   }, [activeWallet]);
 
   useEffect(() => {
-    verify();
+    verify().then(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {

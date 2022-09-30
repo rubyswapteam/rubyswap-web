@@ -31,6 +31,8 @@ export const MarketplaceProvider = ({
   const [activeListings, setActiveListings] = useState<any[]>();
   const [totalListings, setTotalListings] = useState<number>(0);
   const [collectionHolders, setCollectionHolders] = useState<any[]>([]);
+  const [comparisonCollectionHolders, setComparisonCollectionHolders] =
+    useState<any>(undefined);
   const [marketplaces] = useState(['Opensea', 'Seaport', 'X2Y2', 'LooksRare']);
   const controller = new AbortController();
   const { signal } = controller;
@@ -406,16 +408,19 @@ export const MarketplaceProvider = ({
   async function getCollectionHolders(
     contract: string,
     persist = true,
-    signal: AbortSignal | undefined = undefined,
+    withDetails = false,
   ) {
-    const resInit = await fetch(
-      `/.netlify/functions/safeGetDbCollectionHoldersByContract?contract=${contract}`,
-      {
-        signal: signal,
-        method: 'GET',
-        redirect: 'follow',
-      },
-    );
+    const url = withDetails
+      ? `/.netlify/functions/getDbCollectionHoldersByContract${
+          contract ? '?contract=' + contract : ''
+        }`
+      : `/.netlify/functions/safeGetDbCollectionHoldersByContract?contract=${
+          contract || ''
+        }`;
+    const resInit = await fetch(url, {
+      method: 'GET',
+      redirect: 'follow',
+    });
     const res = await resInit.json();
     if (persist) setCollectionHolders(res);
     return res;
@@ -444,6 +449,8 @@ export const MarketplaceProvider = ({
       getFirstMint,
       collectionHolders,
       getCollectionHolders,
+      comparisonCollectionHolders,
+      setComparisonCollectionHolders,
     }),
     [
       userTrades,
@@ -467,6 +474,8 @@ export const MarketplaceProvider = ({
       getFirstMint,
       collectionHolders,
       getCollectionHolders,
+      comparisonCollectionHolders,
+      setComparisonCollectionHolders,
     ],
   );
 

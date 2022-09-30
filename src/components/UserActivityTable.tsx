@@ -126,9 +126,9 @@ export default function UserActivityTable(props: any) {
                           <div className="flex gap-x-1">
                             <Jazzicon
                               diameter={12}
-                              seed={jsNumberForAddress(trade.to)}
+                              seed={jsNumberForAddress(trade.from)}
                             />
-                            {trimHex(trade.to, 4)}
+                            {trimHex(trade.from, 4)}
                           </div>
                         </div>
                         <div className="w-[10%] px-3 self-center">
@@ -136,9 +136,9 @@ export default function UserActivityTable(props: any) {
                           <div className="flex gap-x-1">
                             <Jazzicon
                               diameter={12}
-                              seed={jsNumberForAddress(trade.from)}
+                              seed={jsNumberForAddress(trade.to)}
                             />
-                            {trimHex(trade.from, 4)}
+                            {trimHex(trade.to, 4)}
                           </div>
                         </div>
                         <div className="w-[10%] px-3 self-center">

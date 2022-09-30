@@ -179,7 +179,7 @@ export default function ListingDistributionChart(props: any) {
         backgroundColor: themeColours.background,
         height: '400px',
         marginLeft: 80,
-        marginRight: 80,
+        marginRight: 40,
         marginTop: 80,
       },
       xAxis: [

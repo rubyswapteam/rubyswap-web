@@ -1,4 +1,5 @@
 import CollectionAnnouncementBanner from '@/components/CollectionAnnouncementBanner';
+import { CollectionHoldersOverlapCardsContainer } from '@/components/CollectionHoldersOverlapCardsContainer';
 import CollectionListings from '@/components/CollectionListings';
 import CollectionListSingleRow from '@/components/CollectionListSingleRow';
 import CollectionProfileHeader from '@/components/CollectionProfileHeader';
@@ -48,6 +49,8 @@ export default function Collection(props: any) {
     getFirstMint,
     collectionHolders,
     getCollectionHolders,
+    comparisonCollectionHolders,
+    setComparisonCollectionHolders,
   } = useMarketplaceProvider();
   const controller = new AbortController();
   const { signal } = controller;
@@ -141,11 +144,20 @@ export default function Collection(props: any) {
       (!collectionHolders ||
         activeCollection?.contractAddress !== collectionHolders[0]?.contract)
     ) {
-      getCollectionHolders(
-        activeCollection?.contractAddress,
-        true,
-        signal,
-      ).then(() => controller.abort());
+      getCollectionHolders(activeCollection?.contractAddress, true).then(() =>
+        controller.abort(),
+      );
+    }
+    console.log('cond');
+    if (
+      tab == 'holders' &&
+      activeCollection?.contractAddress &&
+      !comparisonCollectionHolders
+    ) {
+      console.log('cond success');
+      getCollectionHolders(undefined, false, true).then((res: any) =>
+        setComparisonCollectionHolders(res),
+      );
     }
   }, [activeCollection?.contractAddress, tab]);
 
@@ -261,23 +273,30 @@ export default function Collection(props: any) {
               )}
             </div>
             <div className="py-8 bg-gray-100 dark:bg-black w-full">
-              <div className="block xl:flex mx-8">
-                <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
-                  {collectionTrades && !isLoadingCollectionTrades && (
-                    <SalesHistoryChart
-                      activeContract={activeCollection?.contractAddress}
-                      data={collectionTrades}
-                      tokenRanks={tokenRanks}
-                    ></SalesHistoryChart>
-                  )}
-                </div>
-                <div className="w-full ml-2 rounded-xl drop-shadow-md overflow-hidden">
-                  {collectionTrades && !isLoadingCollectionTrades && (
-                    <AveragePriceVolumeChart
-                      activeContract={activeCollection?.contractAddress}
-                      data={collectionTrades}
-                    ></AveragePriceVolumeChart>
-                  )}
+              <div className="mx-8">
+                <CollectionTitleHeader
+                  title={'Summary Stats'}
+                  buttonText={'See More'}
+                  route={`/collection/${id}?tab=analytics`}
+                />
+                <div className="mt-4 block xl:flex">
+                  <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
+                    {collectionTrades && !isLoadingCollectionTrades && (
+                      <SalesHistoryChart
+                        activeContract={activeCollection?.contractAddress}
+                        data={collectionTrades}
+                        tokenRanks={tokenRanks}
+                      ></SalesHistoryChart>
+                    )}
+                  </div>
+                  <div className="w-full ml-2 rounded-xl drop-shadow-md overflow-hidden">
+                    {collectionTrades && !isLoadingCollectionTrades && (
+                      <AveragePriceVolumeChart
+                        activeContract={activeCollection?.contractAddress}
+                        data={collectionTrades}
+                      ></AveragePriceVolumeChart>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -449,6 +468,26 @@ export default function Collection(props: any) {
               </div>
             </div>
           )}
+        </div>
+      );
+    }
+    if (tab == 'holders') {
+      return (
+        <div className="mt-0 h-inherit overflow-scroll px-8 pb-80">
+          <CollectionTitleHeader title={'Collection Overlap Statistics'} />
+          <div className="flex">
+            <div className="w-1/2">
+              <CollectionHoldersOverlapCardsContainer
+                key={`ruby-chocc-${activeCollection?.contractAddress}`}
+                holders={collectionHolders}
+                targetHolders={comparisonCollectionHolders}
+                activeCollection={activeCollection}
+              />
+            </div>
+            <div className="w-1/2">
+              <div className="w-full h-full border border-white/10 rounded-md"></div>
+            </div>
+          </div>
         </div>
       );
     }

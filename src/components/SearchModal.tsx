@@ -1,20 +1,11 @@
 /* This example requires Tailwind CSS v2.0+ */
-import {
-  Fragment,
-  useState,
-  JSXElementConstructor,
-  ReactChildren,
-  ReactElement,
-  useEffect,
-} from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import React from 'react';
-import { useMarketplaceProvider } from '@/contexts/MarketplaceProviderContext';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { trimHex } from '@/utils/nftUtils';
-import VerifiedBadgeIcon from './VerifiedBadgeIcon';
+import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
+import React, { Fragment, useEffect, useState } from 'react';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import EthereumIcon from './EthereumIcon';
+import VerifiedBadgeIcon from './VerifiedBadgeIcon';
 
 interface Props {
   open: boolean;
@@ -25,7 +16,6 @@ export default function SearchModal(props: Props) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<any>([]);
-  const { getCollection } = useMarketplaceProvider();
 
   function reset() {
     setSearchResults([]);

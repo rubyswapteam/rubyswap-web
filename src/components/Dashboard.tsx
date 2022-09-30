@@ -228,8 +228,8 @@ export default function Dashboard(props: any) {
                   <div className="mt-6 mb-6">{props.primaryTabs}</div>
                 </div>
               </div>
-              <div className="flex-1 flex justify-center lg:justify-end sticky top-0 dark:bg-black z-40">
-                {(props.liveView || props.secondaryTabs) && (
+              {(props.liveView || props.secondaryTabs) && (
+                <div className="flex-1 flex justify-center lg:justify-end sticky top-0 dark:bg-black z-40">
                   <div className="w-full">
                     <div className="sm:flex sm:items-center sm:justify-between mt-4 mb-4 px-4 sm:px-6 md:px-8">
                       {props.liveView && (
@@ -258,8 +258,8 @@ export default function Dashboard(props: any) {
                       )}
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               <div
                 className="max-w-8xl mx-auto grow w-full"
                 style={{ height: isScrollable ? '' : 'inherit' }}
