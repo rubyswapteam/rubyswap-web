@@ -49,10 +49,7 @@ const onboard = Onboard({
 export const Web3Provider = ({
   children,
 }: {
-  children: ReactElement<
-    ReactChildren,
-    string | JSXElementConstructor<unknown>
-  >;
+  children: ReactElement<string | JSXElementConstructor<unknown>>;
 }) => {
   const [provider, setProvider] = useState<any>(undefined);
   const [activeWallet, setActiveWallet] = useState<any>(undefined);

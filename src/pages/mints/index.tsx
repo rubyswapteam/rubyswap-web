@@ -49,7 +49,7 @@ export default function Mints(props: any) {
     <div>
       <Layout>
         <Dashboard
-          setSearchModalState={props.setSearchModalState}
+          setModal={props.setModal}
           title={'Mints'}
           subtitle={'Access real time mint info'}
           primaryTabs={<Tab tabs={primaryTabs} />}

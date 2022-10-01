@@ -37,11 +37,11 @@ export const CollectionHoldersOverlapCard: React.FC<Props> = ({
     if (tab == 'holders' && targetHolders) {
       const targetCollectionAddressList = getAddressList(targetHolders);
       const filteredHolders = holders[0].data.filter((holder: IHolder) =>
-        targetCollectionAddressList.includes(holder.ownerAddress),
+        targetCollectionAddressList.includes(holder?.ownerAddress),
       );
       setTotalSourceNfts(
         filteredHolders.reduce(
-          (prev: number, curr: IHolder) => prev + curr.tokenBalance,
+          (prev: number, curr: IHolder) => prev + curr?.tokenBalance,
           0,
         ),
       );
@@ -50,7 +50,7 @@ export const CollectionHoldersOverlapCard: React.FC<Props> = ({
           (prev: number, curr: IHolder) =>
             prev +
             targetHolders.data.find(
-              (x: IHolder) => x.ownerAddress == curr.ownerAddress,
+              (x: IHolder) => x?.ownerAddress == curr?.ownerAddress,
             ).tokenBalance,
           0,
         ),
@@ -64,31 +64,30 @@ export const CollectionHoldersOverlapCard: React.FC<Props> = ({
 
   return (
     <div
-      key={targetHolders.name + activeCollection.name + 'comparison' + counter}
-      className="bg-white/10 rounded-md h-full text-sm hover:bg-white/[.15] cursor-pointer transition-all"
+      key={targetHolders?.name + activeCollection?.name + 'comparison'}
+      className="overflow-auto bg-white/10 rounded-md h-full text-sm hover:bg-white/[.15] cursor-pointer transition-all"
     >
       <div
-        style={{ backgroundImage: `url('${targetHolders.bannerImageUrl}')` }}
-        className="-p-5 flex w-full h-32 bg-cover"
-        // src={targetHolders.bannerImageUrl}
+        style={{ backgroundImage: `url('${targetHolders?.bannerImageUrl}')` }}
+        className="rounded-md flex w-full h-32 bg-cover"
       />
       <div className="px-5 inline-flex text-xl">
-        <div className="bg-black/70 rounded-md inline-flex px-2 py-1 -mt-5 gap-x-2 items-center">
+        <div className="bg-black/70 inline-flex px-2 py-1 -mt-5 gap-x-2 items-center">
           <img
             className="h-[40px] w-[40px] flex-grow block rounded-full self-center"
-            src={targetHolders.imageUrl}
+            src={targetHolders?.imageUrl}
           />
           {'x'}
           <img
             className="h-[40px] w-[40px] flex-grow block rounded-full self-center"
-            src={activeCollection.imageUrl}
+            src={activeCollection?.imageUrl}
           />
         </div>
       </div>
       <div className="p-5">
-        <div className="font-bold">{targetHolders.name}</div>
+        <div className="font-bold">{targetHolders?.name}</div>
         <div className="dark:text-white/75">
-          {trimHex(targetHolders.contract)}
+          {trimHex(targetHolders?.contract)}
         </div>
         <div className="mt-4 gap-y-2 flex flex-col text-xs">
           <div className="bg-white/10 rounded-md px-2 py-1 w-fit">
@@ -97,11 +96,11 @@ export const CollectionHoldersOverlapCard: React.FC<Props> = ({
           </div>
           <div className="">
             <span className="font-bold">{totalTargetNfts}</span>
-            {` ${targetHolders.name} NFTs`}
+            {` ${targetHolders?.name} NFTs`}
           </div>
           <div className="">
             <span className="font-bold">{totalSourceNfts}</span>
-            {` ${activeCollection.name} NFTs`}
+            {` ${activeCollection?.name} NFTs`}
           </div>
         </div>
         <button className="mt-4 px-3 pt-2 pb-1.5 bg-white/10 hover:bg-white/[.15] rounded-md">

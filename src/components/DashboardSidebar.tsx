@@ -5,13 +5,13 @@ import SearchModal from './SearchModal';
 interface Props {
   sidebarNavigation: any;
   classNames: any;
-  setSearchModalState: any;
+  setModal: any;
 }
 
 const DashboardSidebar: React.FC<Props> = ({
   sidebarNavigation,
   classNames,
-  setSearchModalState,
+  setModal,
 }): JSX.Element => {
   return (
     <>
@@ -28,7 +28,7 @@ const DashboardSidebar: React.FC<Props> = ({
             key={item.name}
             className="cursor-pointer text-gray-900 dark:text-white hover:bg-gray-100/75 dark:hover:bg-white/5 group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-5"
             onClick={() => {
-              setSearchModalState(true);
+              setModal('search');
             }}
           >
             {item.name}

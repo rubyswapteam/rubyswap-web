@@ -71,7 +71,7 @@ export default function Index(props: any) {
     <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
       <Layout>
         <Dashboard
-          setSearchModalState={props.setSearchModalState}
+          setModal={props.setModal}
           title={'Collections'}
           subtitle={setSubtitle()}
           primaryTabs={<Tab tabs={primaryTabs} />}

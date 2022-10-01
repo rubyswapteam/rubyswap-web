@@ -31,6 +31,11 @@ module.exports = {
           '0 4px 3px rgba(255, 255, 255, 0.1)',
         ],
       },
+      animation: {
+        'rotate-one': 'rotate-one 1s ease-in-out infinite',
+        'rotate-two': 'rotate-two 1s ease-in-out infinite',
+        'rotate-three': 'rotate-three 1s ease-in-out infinite',
+      },
       keyframes: {
         'rotate-one': {
           '0%': { transform: 'rotateX(35deg) rotateY(-45deg) rotateZ(0deg)' },

@@ -4,10 +4,12 @@ import Dashboard from '@/components/Dashboard';
 import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
 import Tab from '@/components/Tab';
+import UserActivityTable from '@/components/UserActivityTable';
 import UserAnalyticsMarketplaceFilter from '@/components/UserAnalyticsFilter';
 import UserTradeHistoryChart from '@/components/UserTradeHistoryChart';
 import X2Y2Icon from '@/components/X2Y2Icon';
 import { rangeTabs } from '@/utils/nftUtils';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import LooksRareIcon from '../../components/LooksRareIcon';
@@ -17,8 +19,6 @@ import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarF
 import UserProfileHeader from '../../components/UserProfileHeader';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
-import { motion } from 'framer-motion';
-import UserActivityTable from '@/components/UserActivityTable';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -225,7 +225,7 @@ export default function Collection(props: any) {
     <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
       <Layout>
         <Dashboard
-          setSearchModalState={props.setSearchModalState}
+          setModal={props.setModal}
           title={
             <UserProfileHeader
               name={id?.toString()}

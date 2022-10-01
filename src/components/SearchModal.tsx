@@ -2,14 +2,20 @@
 import { trimHex } from '@/utils/nftUtils';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import EthereumIcon from './EthereumIcon';
 import VerifiedBadgeIcon from './VerifiedBadgeIcon';
 
 interface Props {
   open: boolean;
-  setOpen: React.Dispatch<any>;
+  setOpen: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export default function SearchModal(props: Props) {
@@ -61,7 +67,7 @@ export default function SearchModal(props: Props) {
         as="div"
         className="relative z-50"
         onClose={() => {
-          props.setOpen(false);
+          props.setOpen(undefined);
           reset();
         }}
       >
@@ -77,7 +83,7 @@ export default function SearchModal(props: Props) {
           <div
             className="fixed inset-0 bg-slate-900/25 backdrop-blur transition-opacity opacity-100"
             onClick={() => {
-              props.setOpen(false);
+              props.setOpen(undefined);
               reset();
             }}
           />
@@ -85,7 +91,7 @@ export default function SearchModal(props: Props) {
 
         <div
           onClick={() => {
-            props.setOpen(false);
+            props.setOpen(undefined);
             reset();
           }}
           className="fixed z-10 inset-0 overflow-y-auto"
@@ -102,13 +108,13 @@ export default function SearchModal(props: Props) {
             >
               <div className="relative w-full max-w-lg transform px-4 transition-all opacity-100 scale-100">
                 <div
-                  className="overflow-hidden rounded-lg bg-white dark:bg-white/40 shadow-md"
+                  className="overflow-hidden rounded-lg bg-white dark:bg-white/60 shadow-md"
                   id="headlessui-dialog-panel-26"
                   onClick={(e) => handleClick(e)}
                 >
                   <div className="relative">
                     <input
-                      className="block w-full appearance-none bg-transparent py-4 pl-4 pr-12 text-base text-slate-900 placeholder:text-slate-600 focus:outline-none sm:text-sm sm:leading-6"
+                      className="block w-full appearance-none bg-transparent py-4 pl-4 pr-12 text-base text-black placeholder:text-black/60 focus:outline-none sm:text-sm sm:leading-6"
                       placeholder="Search collections..."
                       aria-label="Search components"
                       id="headlessui-combobox-input-27"
@@ -136,12 +142,12 @@ export default function SearchModal(props: Props) {
                   leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                   <div
-                    className="h-64 bg-white dark:bg-white/40  rounded-lg w-full mt-5 shadow-md overflow-scroll"
+                    className="h-64 bg-white dark:bg-white/60  rounded-lg w-full mt-5 shadow-md overflow-scroll"
                     onClick={(e) => handleClick(e)}
                   >
                     {searchResults.map((res: any) => (
                       <div
-                        className="hover:bg-gray-50 dark:hover:bg-white/50 transition-colors"
+                        className="hover:bg-gray-50 dark:hover:bg-white/50 transition-colors cursor-pointer"
                         key={'searchModalItem-' + res?.contractAddress}
                       >
                         {res && (

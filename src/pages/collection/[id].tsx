@@ -11,6 +11,7 @@ import Layout from '@/components/Layout';
 import RefreshButton from '@/components/RefreshButton';
 import SalesHistoryChart from '@/components/SalesHistoryChart';
 import Tab from '@/components/Tab';
+import { useModalProvider } from '@/contexts/ModalContext';
 import { rangeTabs } from '@/utils/nftUtils';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
@@ -52,6 +53,12 @@ export default function Collection(props: any) {
     comparisonCollectionHolders,
     setComparisonCollectionHolders,
   } = useMarketplaceProvider();
+  const { setLoadingData } = useModalProvider();
+  setLoadingData(true);
+  useEffect(() => {
+    if (tab === 'listings') setLoadingData(!activeListings);
+  }, [tab]);
+
   const controller = new AbortController();
   const { signal } = controller;
 
@@ -536,7 +543,7 @@ export default function Collection(props: any) {
     >
       <Layout>
         <Dashboard
-          setSearchModalState={props.setSearchModalState}
+          setModal={props.setModal}
           title={
             <CollectionProfileHeader
               collection={activeCollection}

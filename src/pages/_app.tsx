@@ -9,9 +9,12 @@ import { ThemeProvider } from 'next-themes';
 import { AnimatePresence } from 'framer-motion';
 import mixpanel from 'mixpanel-browser';
 import LoginPage from '@/components/LoginPage';
+import ModalSelector from '@/components/ModalSelector';
+import LoadingModal from '../components/LoadingModal';
+import { ModalProvider } from '../contexts/ModalContext';
 
 function App({ Component, pageProps }: AppProps) {
-  const [searchModalState, setSearchModalState] = useState(false);
+  const [modal, setModal] = useState<string>();
   // Enabling the debug mode flag is useful during implementation,
   // but it's recommended you remove it for production
   mixpanel.init('015dee14470ae0f2af01b2fa9bb8391d', { debug: true });
@@ -24,20 +27,17 @@ function App({ Component, pageProps }: AppProps) {
           <Web3Provider>
             <MarketplaceProvider>
               <WalletProvider>
-                <LoginPage>
-                  <>
-                    <SearchModal
-                      open={searchModalState}
-                      setOpen={setSearchModalState}
-                    />
-                    <AnimatePresence mode="wait">
-                      <Component
-                        setSearchModalState={setSearchModalState}
-                        {...pageProps}
-                      />
-                    </AnimatePresence>
-                  </>
-                </LoginPage>
+                <ModalProvider>
+                  <LoginPage>
+                    <>
+                      <LoadingModal />
+                      <ModalSelector modal={modal} setModal={setModal} />
+                      <AnimatePresence mode="wait">
+                        <Component setModal={setModal} {...pageProps} />
+                      </AnimatePresence>
+                    </>
+                  </LoginPage>
+                </ModalProvider>
               </WalletProvider>
             </MarketplaceProvider>
           </Web3Provider>

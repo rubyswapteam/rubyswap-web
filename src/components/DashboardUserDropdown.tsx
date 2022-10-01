@@ -74,7 +74,7 @@ const DashboardUserDropdown: React.FC<Props> = ({
                       className={
                         (active
                           ? 'bg-gray-100 text-gray-900 rounded-md'
-                          : 'text-gray-700') + ' flex w-full p-2'
+                          : 'text-gray-700') + ' flex w-full p-2 cursor-pointer'
                       }
                     >
                       <div className="mr-3">
@@ -93,7 +93,7 @@ const DashboardUserDropdown: React.FC<Props> = ({
                       className={
                         (active
                           ? 'bg-gray-100 text-gray-900 rounded-md'
-                          : 'text-gray-700') + ' flex w-full p-2'
+                          : 'text-gray-700') + ' flex w-full p-2 cursor-pointer'
                       }
                     >
                       <svg
@@ -123,7 +123,8 @@ const DashboardUserDropdown: React.FC<Props> = ({
                         className={
                           (active
                             ? 'bg-gray-100 text-gray-900 rounded-md'
-                            : 'text-gray-700') + ' flex w-full p-2'
+                            : 'text-gray-700') +
+                          ' flex w-full p-2 cursor-pointer'
                         }
                       >
                         <svg
@@ -149,7 +150,8 @@ const DashboardUserDropdown: React.FC<Props> = ({
                         className={
                           (active
                             ? 'bg-gray-100 text-gray-900 rounded-md'
-                            : 'text-gray-700') + ' flex w-full p-2'
+                            : 'text-gray-700') +
+                          ' flex w-full p-2 cursor-pointer'
                         }
                       >
                         <svg
@@ -177,7 +179,7 @@ const DashboardUserDropdown: React.FC<Props> = ({
                       className={
                         (active
                           ? 'bg-gray-100 text-gray-900 rounded-md'
-                          : 'text-gray-700') + ' flex w-full p-2'
+                          : 'text-gray-700') + ' flex w-full p-2 cursor-pointer'
                       }
                     >
                       <svg
