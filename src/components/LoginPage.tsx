@@ -40,10 +40,13 @@ export default function LoginPage({
   }
 
   const verify = async () => {
-    const user = await fetchGet(
-      `/.netlify/functions/getDbUser?wallet=${activeWallet}`,
-    );
-    if (user.wallet === activeWallet) {
+    let user = undefined;
+    if (activeWallet) {
+      user = await fetchGet(
+        `/.netlify/functions/getDbUser?wallet=${activeWallet}`,
+      );
+    }
+    if (user && user.wallet === activeWallet) {
       setIsVerified('access granted');
     } else {
       reset();
