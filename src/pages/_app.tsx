@@ -14,7 +14,6 @@ import LoadingModal from '../components/LoadingModal';
 import { ModalProvider } from '../contexts/ModalContext';
 
 function App({ Component, pageProps }: AppProps) {
-  const [modal, setModal] = useState<string>();
   // Enabling the debug mode flag is useful during implementation,
   // but it's recommended you remove it for production
   mixpanel.init('015dee14470ae0f2af01b2fa9bb8391d', { debug: true });
@@ -31,9 +30,9 @@ function App({ Component, pageProps }: AppProps) {
                   <LoginPage>
                     <>
                       <LoadingModal />
-                      <ModalSelector modal={modal} setModal={setModal} />
+                      <ModalSelector />
                       <AnimatePresence mode="wait">
-                        <Component setModal={setModal} {...pageProps} />
+                        <Component />
                       </AnimatePresence>
                     </>
                   </LoginPage>

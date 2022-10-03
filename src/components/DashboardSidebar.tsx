@@ -1,18 +1,17 @@
 import Link from 'next/link';
 import React from 'react';
-import SearchModal from './SearchModal';
+import { useModalProvider } from '@/contexts/ModalContext';
 
 interface Props {
   sidebarNavigation: any;
   classNames: any;
-  setModal: any;
 }
 
 const DashboardSidebar: React.FC<Props> = ({
   sidebarNavigation,
   classNames,
-  setModal,
 }): JSX.Element => {
+  const { setModal } = useModalProvider();
   return (
     <>
       {sidebarNavigation.map((item: any) =>

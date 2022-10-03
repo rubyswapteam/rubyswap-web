@@ -14,13 +14,31 @@ export const ModalProvider = ({
   children: ReactElement<string | JSXElementConstructor<unknown>>;
 }) => {
   const [loadingData, setLoadingData] = useState<any>(undefined);
+  const [loadingRoute, setLoadingRoute] = useState<any>(undefined);
+  const [modalData, setModalData] = useState<any>(undefined);
+  const [modal, setModal] = useState<string>();
 
   const contextValue = useMemo(
     () => ({
       loadingData,
       setLoadingData,
+      loadingRoute,
+      setLoadingRoute,
+      modal,
+      setModal,
+      modalData,
+      setModalData,
     }),
-    [loadingData, setLoadingData],
+    [
+      loadingData,
+      setLoadingData,
+      loadingRoute,
+      setLoadingRoute,
+      modal,
+      setModal,
+      modalData,
+      setModalData,
+    ],
   );
 
   return (

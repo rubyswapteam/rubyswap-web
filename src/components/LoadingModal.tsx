@@ -1,4 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
+import { useModalProvider } from '@/contexts/ModalContext';
 import { Dialog, Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
@@ -11,13 +12,13 @@ import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
 // export default function LoadingModal(props: Props) {
 export default function LoadingModal() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { loadingData, loadingRoute, setLoadingRoute } = useModalProvider();
 
   useEffect(() => {
     const handleStart = (url: string) =>
-      url !== router.asPath && setLoading(true);
+      url !== router.asPath && setLoadingRoute(true);
     const handleComplete = (url: string) =>
-      url === router.asPath && setLoading(false);
+      url === router.asPath && setLoadingRoute(false);
 
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
@@ -32,8 +33,8 @@ export default function LoadingModal() {
 
   return (
     <>
-      {loading && (
-        <Transition.Root show={loading} as={Fragment}>
+      {(loadingRoute || loadingData) && (
+        <Transition.Root show={loadingRoute || loadingData} as={Fragment}>
           <Dialog
             as="div"
             className="relative z-50"

@@ -53,11 +53,55 @@ export default function Collection(props: any) {
     comparisonCollectionHolders,
     setComparisonCollectionHolders,
   } = useMarketplaceProvider();
-  const { setLoadingData } = useModalProvider();
-  setLoadingData(true);
+  const { loadingData, setLoadingData } = useModalProvider();
   useEffect(() => {
-    if (tab === 'listings') setLoadingData(!activeListings);
-  }, [tab]);
+    if (
+      !loadingData &&
+      tab &&
+      !['activity', 'traits', 'updates'].includes(tab.toString())
+    ) {
+      if (
+        (tab === 'listings' && !activeListings) ||
+        (tab === 'holders' &&
+          (!collectionHolders || !comparisonCollectionHolders)) ||
+        ((!tab || tab == 'analytics') &&
+          (!activeListings || !collectionTrades || !activeCollection))
+      ) {
+        setLoadingData(true);
+      }
+    }
+  }, [activeCollection, tab]);
+
+  useEffect(() => {
+    if (loadingData) {
+      if (tab === 'listings' && activeListings) setLoadingData(false);
+      else if (
+        tab === 'holders' &&
+        collectionHolders &&
+        comparisonCollectionHolders
+      )
+        setLoadingData(false);
+      else if (
+        (!tab || tab == 'analytics') &&
+        activeListings &&
+        collectionTrades &&
+        activeCollection
+      )
+        setLoadingData(false);
+      else if (
+        tab &&
+        ['activity', 'traits', 'updates'].includes(tab?.toString())
+      )
+        setLoadingData(false);
+    }
+  }, [
+    tab,
+    activeListings,
+    collectionTrades,
+    activeCollection,
+    comparisonCollectionHolders,
+    collectionHolders,
+  ]);
 
   const controller = new AbortController();
   const { signal } = controller;
@@ -287,7 +331,7 @@ export default function Collection(props: any) {
                   route={`/collection/${id}?tab=analytics`}
                 />
                 <div className="mt-4 block xl:flex">
-                  <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
+                  <div className="w-full mb-8 xl:mb-0 rounded-xl drop-shadow-md overflow-hidden">
                     {collectionTrades && !isLoadingCollectionTrades && (
                       <SalesHistoryChart
                         activeContract={activeCollection?.contractAddress}
@@ -296,7 +340,7 @@ export default function Collection(props: any) {
                       ></SalesHistoryChart>
                     )}
                   </div>
-                  <div className="w-full ml-2 rounded-xl drop-shadow-md overflow-hidden">
+                  <div className="w-full ml-0 xl:ml-4 rounded-xl drop-shadow-md overflow-hidden">
                     {collectionTrades && !isLoadingCollectionTrades && (
                       <AveragePriceVolumeChart
                         activeContract={activeCollection?.contractAddress}
@@ -315,7 +359,7 @@ export default function Collection(props: any) {
                   totalListings={totalListings}
                 />
               </div>
-              <div className="w-full rounded-xl drop-shadow-md overflow-hidden">
+              <div className="w-full mt-8 xl:mt-0 rounded-xl drop-shadow-md overflow-hidden">
                 {activeListings && activeListings.length > 0 && (
                   <ListingDistributionChart
                     activeContract={activeCollection?.contractAddress}
@@ -413,7 +457,7 @@ export default function Collection(props: any) {
         <div className="h-inherit overflow-scroll pb-80">
           <div className="py-8 w-full">
             <div className="block xl:flex mx-8">
-              <div className="w-full mr-2 rounded-xl drop-shadow-md overflow-hidden">
+              <div className="w-full mb-8 xl:mb-0 rounded-xl drop-shadow-md overflow-hidden">
                 {collectionTrades && !isLoadingCollectionTrades && (
                   <SalesHistoryChart
                     activeContract={activeCollection?.contractAddress}
@@ -422,7 +466,7 @@ export default function Collection(props: any) {
                   ></SalesHistoryChart>
                 )}
               </div>
-              <div className="w-full ml-2 rounded-xl drop-shadow-md overflow-hidden">
+              <div className="w-full ml-0 xl:ml-4 rounded-xl drop-shadow-md overflow-hidden">
                 {collectionTrades && !isLoadingCollectionTrades && (
                   <AveragePriceVolumeChart
                     activeContract={activeCollection?.contractAddress}
@@ -440,7 +484,7 @@ export default function Collection(props: any) {
                 totalListings={totalListings}
               />
             </div>
-            <div className="w-full rounded-xl drop-shadow-md overflow-hidden">
+            <div className="w-full mt-8 xl:mt-0 rounded-xl drop-shadow-md overflow-hidden">
               {activeListings && activeListings.length > 0 && (
                 <ListingDistributionChart
                   activeContract={activeCollection?.contractAddress}

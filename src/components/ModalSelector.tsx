@@ -1,25 +1,21 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Dispatch, SetStateAction } from 'react';
+import { useModalProvider } from '../contexts/ModalContext';
+import HolderComparisonDetailsModal from './HolderComparisonDetailsModal';
 import SearchModal from './SearchModal';
-import LoadingModal from './LoadingModal';
 
-interface Props {
-  modal: string | undefined;
-  setModal: Dispatch<SetStateAction<string | undefined>>;
-}
-
-export default function ModalSelector(props: Props) {
+export default function ModalSelector() {
+  const { modal, setModal } = useModalProvider();
   return (
     <>
-      {props.modal === 'search' && (
-        <SearchModal open={props.modal === 'search'} setOpen={props.setModal} />
+      {modal === 'search' && (
+        <SearchModal open={modal === 'search'} setOpen={setModal} />
       )}
-      {/* {props.modal === undefined && (
-        <LoadingModal
-          open={props.modal === undefined}
-          setOpen={props.setModal}
+      {modal === 'holder-comparison-details' && (
+        <HolderComparisonDetailsModal
+          open={modal === 'holder-comparison-details'}
+          setOpen={setModal}
         />
-      )} */}
+      )}
     </>
   );
 }

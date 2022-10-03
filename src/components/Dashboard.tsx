@@ -125,7 +125,6 @@ export default function Dashboard(props: any) {
                       <DashboardSidebar
                         sidebarNavigation={topNavigation}
                         classNames={classNames}
-                        setModal={props.setModal}
                       />
                     </nav>
                   </div>
@@ -136,7 +135,6 @@ export default function Dashboard(props: any) {
                           <DashboardSidebar
                             sidebarNavigation={bottomNavigation}
                             classNames={classNames}
-                            setModal={props.setModal}
                           />
                         </nav>
                       </div>
@@ -167,7 +165,6 @@ export default function Dashboard(props: any) {
                 <DashboardSidebar
                   sidebarNavigation={topNavigation}
                   classNames={classNames}
-                  setModal={props.setModal}
                 />
               </nav>
             </div>

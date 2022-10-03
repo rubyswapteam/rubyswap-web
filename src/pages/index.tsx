@@ -9,10 +9,13 @@ import WatchlistNftCollectionTable from '@/components/WatchlistNftCollectionTabl
 import { rangeTabs } from '@/utils/nftUtils';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { useModalProvider } from '@/contexts/ModalContext';
 
-export default function Index(props: any) {
+export default function Index() {
   const router = useRouter();
   const { tab, range } = router.query;
+  const { setLoadingData } = useModalProvider();
+  setLoadingData(false);
 
   const primaryTabs = [
     {
@@ -71,7 +74,6 @@ export default function Index(props: any) {
     <motion.div exit={{ opacity: 0 }} initial={'initial'} animate={'animate'}>
       <Layout>
         <Dashboard
-          setModal={props.setModal}
           title={'Collections'}
           subtitle={setSubtitle()}
           primaryTabs={<Tab tabs={primaryTabs} />}
