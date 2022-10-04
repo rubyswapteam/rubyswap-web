@@ -42,7 +42,6 @@ export default function Index() {
       href: '?tab=owned',
       current: tab == 'owned',
       border: true,
-      tooltip: true,
     },
   ];
 

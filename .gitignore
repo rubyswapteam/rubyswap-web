@@ -39,3 +39,7 @@ yarn-error.log*
 # Local Netlify folder
 .netlify
 test.js
+bullet99Ids.js
+bullet999Ids.js
+bullet9999Ids.js
+bullets.js

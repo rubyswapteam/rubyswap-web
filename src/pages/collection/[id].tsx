@@ -525,7 +525,14 @@ export default function Collection(props: any) {
     if (tab == 'holders') {
       return (
         <div className="mt-0 h-inherit overflow-scroll px-8 pb-80">
-          <CollectionTitleHeader title={'Collection Overlap Statistics'} />
+          <div className="pb-4">
+            <p className="text-lg text-black dark:text-white leading-6 font-medium">
+              Collection Overlap Statistics
+            </p>
+            <p className="text-xs text-white/70 pt-2">
+              Click and drag the cards to reshuffle
+            </p>
+          </div>
           <div className="flex">
             <CollectionHoldersOverlapCardsContainer
               key={`ruby-chocc-${activeCollection?.contractAddress}`}

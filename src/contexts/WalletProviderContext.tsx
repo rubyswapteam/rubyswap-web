@@ -29,6 +29,7 @@ export const WalletProvider = ({
   const [collectionNames, setCollectionNames] = useState<{
     [key: string]: string;
   }>({});
+  const [userCollections, setUserCollections] = useState<any[]>();
   const [userNftCollections, setUserNftCollections] = useState<any[]>();
   const [userNftsByCollection, setUserNftsByCollection] = useState<any[]>();
   const [walletDetails, setWalletDetails] = useState<any[]>();
@@ -197,6 +198,18 @@ export const WalletProvider = ({
     [],
   );
 
+  const fetchUserCollections = useCallback(async (user: string) => {
+    fetch(`/.netlify/functions/getUserCollections?wallet=${user}`).then(
+      (res) => {
+        res.json().then((resJson) => {
+          console.table({ resJson: resJson });
+          setUserCollections(resJson);
+          return resJson;
+        });
+      },
+    );
+  }, []);
+
   const fetchUserNftCollections = useCallback(async (user: string) => {
     axios
       .get(
@@ -227,6 +240,8 @@ export const WalletProvider = ({
       setActiveNfts,
       fetchWallet,
       walletDetails,
+      userCollections,
+      fetchUserCollections,
     }),
     [
       userNfts,
@@ -246,6 +261,8 @@ export const WalletProvider = ({
       setActiveNfts,
       fetchWallet,
       walletDetails,
+      userCollections,
+      fetchUserCollections,
     ],
   );
 

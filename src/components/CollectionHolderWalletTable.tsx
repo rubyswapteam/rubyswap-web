@@ -117,16 +117,18 @@ const CollectionHolderWalletTable: React.FC<Props> = ({
                   </td>
                 </div>
                 <div className="w-[40%] self-center">
-                  <Link href={`/wallet/${holder.ownerAddress}`} passHref>
-                    <>
+                  <>
+                    <Link href={`/wallet/${holder.ownerAddress}`} passHref>
                       <td className="hidden xl:flex dark:hover:text-yellow-300/90 h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80 cursor-pointer">
                         {holder.ownerAddress}
                       </td>
+                    </Link>
+                    <Link href={`/wallet/${holder.ownerAddress}`} passHref>
                       <td className="flex xl:hidden dark:hover:text-yellow-300/90 h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80 cursor-pointer">
                         {trimHex(holder.ownerAddress, 7)}
                       </td>
-                    </>
-                  </Link>
+                    </Link>
+                  </>
                 </div>
                 <div className="w-[10%] self-center">
                   <td className="h-full py-2 text-sm text-gray-900 pl-4 dark:text-white/80">
