@@ -9,12 +9,19 @@ export default function LoginPhaseTwoModal(props: any) {
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const verify = async () => {
-    const verificationResult = await props.fetchGet(
-      `/.netlify/functions/verifyWalletHoldingsBatch?wallet=${activeWallet}`,
-    );
+    const verificationResult: any[] = await Promise.all([
+      props.fetchGet(
+        `/.netlify/functions/verifyWalletHoldingsBatch?wallet=${activeWallet}`,
+      ),
+      props.fetchGet(
+        `/.netlify/functions/verifyWalletENSHoldings?wallet=${activeWallet}`,
+      ),
+    ]);
+    console.table({ verificationResult: verificationResult });
     if (
-      verificationResult.result === true &&
-      verificationResult.wallet === activeWallet
+      (verificationResult[0].result === true ||
+        verificationResult[1] === true) &&
+      verificationResult[0].wallet === activeWallet
     ) {
       await props.fetchGet(
         `/.netlify/functions/createAccount?wallet=${activeWallet}&twitter=${

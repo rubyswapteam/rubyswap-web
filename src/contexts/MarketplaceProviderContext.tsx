@@ -91,9 +91,7 @@ export const MarketplaceProvider = ({
         timestamp: Date.parse(txn?.metadata?.blockTimestamp) / 1000,
         price: null,
         contract: txn?.rawContract?.address || 'unknown',
-        tokenId: parseInt(txn.tokenId).toLocaleString('fullwide', {
-          useGrouping: false,
-        }),
+        tokenId: txn?.tokenId && BigInt(txn.tokenId).toString(),
         txn: txn.hash,
         marketplace: undefined,
         from: txn?.from || '',

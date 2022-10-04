@@ -9,6 +9,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { ethers } from 'ethers';
 
 const WalletProviderContext = React.createContext<any>({});
 
@@ -150,7 +151,7 @@ export const WalletProvider = ({
           description: string;
         }) => {
           const newNFT: INft = {
-            tokenId: Number(nft.id.tokenId).toString(),
+            tokenId: BigInt(nft.id.tokenId).toString(),
             collectionName: collectionNames[contractAddress],
             contractAddress: contractAddress,
             image: optimisedImageLinks([
@@ -161,7 +162,7 @@ export const WalletProvider = ({
             ]),
             chainId: NftChainId.ETHEREUM,
             imageAlt: nft.title + ' - ' + nft.description,
-            name: nft.title || '#'.concat(Number(nft.id.tokenId).toString()),
+            name: nft.title || '#'.concat(BigInt(nft.id.tokenId).toString()),
           };
           nfts.push(newNFT);
         },
