@@ -13,7 +13,7 @@ export default function LoginPage({
 }: {
   children: ReactElement<string | JSXElementConstructor<unknown>>;
 }) {
-  const { activeWallet } = useWeb3Provider();
+  const { activeWallet, setUser } = useWeb3Provider();
   const [isLoading, setIsLoading] = useState(true);
   const [isVerified, setIsVerified] = useState<any>('');
   const [phaseOne, setPhaseOne] = useState<any>('');
@@ -47,6 +47,7 @@ export default function LoginPage({
       );
     }
     if (user && user.wallet === activeWallet) {
+      setUser(user);
       setIsVerified('access granted');
     } else {
       reset();
@@ -63,8 +64,7 @@ export default function LoginPage({
 
   useEffect(() => {
     if (phaseOne == 'complete' && phaseTwo == 'verified') {
-      // persist
-      setIsVerified('access granted');
+      verify();
     }
     setIsLoading(false);
   }, [phaseTwo]);
