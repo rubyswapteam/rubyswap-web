@@ -11,7 +11,7 @@ export default function LoginPhaseTwoModal(props: any) {
   const verify = async () => {
     const verificationResult: any[] = await Promise.all([
       props.fetchGet(
-        `/.netlify/functions/verifyWalletHoldingsBatch?wallet=${activeWallet}`,
+        `/.netlify/functions/verifyWalletHoldings?wallet=${activeWallet}`,
       ),
       props.fetchGet(
         `/.netlify/functions/verifyWalletENSHoldings?wallet=${activeWallet}`,
