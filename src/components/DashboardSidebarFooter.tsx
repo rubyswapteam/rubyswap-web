@@ -25,18 +25,11 @@ export function DashboardSidebarFooter() {
   return (
     <>
       {item && (
-        <>
+        <div className="w-full gap-x-2 flex">
           <EthPriceTracker item={item?.ethPrice} />
-          <div className="h-4 border-l border-gray-200 border-0.5" />
-        </>
-      )}
-      {item && (
-        <>
           <GasTracker item={item?.gasPrice} />
-          <div className="h-4 border-l border-gray-200 border-0.5" />
-        </>
+        </div>
       )}
-      <ThemeToggle />
     </>
   );
 }

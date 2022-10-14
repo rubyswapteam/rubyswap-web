@@ -159,13 +159,14 @@ export default function UserActivityTable(props: any) {
                         </div>
                         <div className="w-[10%] px-3 self-center">
                           <div className="self-center">
-                            {props.collectionNames[trade.contract] ||
+                            {(props.collectionNames &&
+                              props.collectionNames[trade.contract]) ||
                               trimHex(trade.contract, 4)}
                           </div>
                         </div>
                         <div className="w-[10%] px-3 self-center">
                           <div className="self-center">
-                            {trade.tokenId.length > 7
+                            {trade?.tokenId?.length > 7
                               ? trimHex(trade.tokenId, 3)
                               : trade.tokenId}
                           </div>

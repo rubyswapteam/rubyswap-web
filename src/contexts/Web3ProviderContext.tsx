@@ -5,7 +5,6 @@ import walletConnectModule from '@web3-onboard/walletconnect';
 import mixpanel from 'mixpanel-browser';
 import React, {
   JSXElementConstructor,
-  ReactChildren,
   ReactElement,
   useContext,
   useEffect,
@@ -54,6 +53,7 @@ export const Web3Provider = ({
   const [provider, setProvider] = useState<any>(undefined);
   const [activeWallet, setActiveWallet] = useState<any>(undefined);
   const [ethBalance, setEthBalance] = useState<string | undefined>(undefined);
+  const [ethPrice, setEthPrice] = useState<number>();
   const [chainId, setChainId] = useState<string>('');
   const [network, setNetwork] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +104,11 @@ export const Web3Provider = ({
       });
     }
     const wallet = await onboard.state.get().wallets[0]?.accounts[0]?.address;
+    if (wallet) {
+      mixpanel.track('Connect Wallet', {
+        address: wallet,
+      });
+    }
     return wallet;
   }
 
@@ -186,6 +191,8 @@ export const Web3Provider = ({
       ethBalance,
       disconnect,
       setUser,
+      ethPrice,
+      setEthPrice,
     }),
     [
       provider,
@@ -196,6 +203,8 @@ export const Web3Provider = ({
       ethBalance,
       disconnect,
       setUser,
+      ethPrice,
+      setEthPrice,
     ],
   );
 

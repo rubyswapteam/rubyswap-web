@@ -34,6 +34,7 @@ export default function Collection(props: any) {
   const [collectionUpdates, setCollectionUpdates] = useState<any[]>([]);
   const [recentListings, setRecentListings] = useState<any[]>([]);
   const [pauseListings, setPauseListings] = useState(false);
+  const [activeTrait, setActiveTrait] = useState<any>();
   const [showBubbleMap, setShowBubbleMap] = useState(false);
   const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
     useState(false);
@@ -119,6 +120,12 @@ export default function Collection(props: any) {
       });
     }
   }, [id]);
+
+  function camelize(str: string) {
+    return str.replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+      letter.toUpperCase(),
+    );
+  }
 
   useEffect(() => {
     let isSubscribed = true;
@@ -546,19 +553,81 @@ export default function Collection(props: any) {
     }
     if (tab == 'traits') {
       return (
-        <div className="flex w-full justify-between flex-col h-inherit">
-          <div className="flex w-full justify-between flex-row h-inherit">
-            <div className="w-full">
-              {' '}
-              <div className="items-center mt-[30vh] justify-center mx-auto text-gray-500 flex">
-                <div className="pt-1 mr-2">Please select a trait</div>
-                <RightArrow height={16} width={16} />
+        <div className="flex w-full justify-between flex-col h-full">
+          <div className="flex w-full justify-between flex-row h-inherit px-8 gap-x-4">
+            {/* <div className="w-full"> */}
+            {activeTrait ? (
+              <div className="border dark:border-white/5 dark:bg-white/5 p-4 sm:p-6 md:p-8 rounded-md w-full">
+                {/* SORT IT */}
+                <div className="flex p-2 text-sm font-bold">
+                  <div className="w-[25%]">Trait</div>
+                  <div className="w-[15%]">Rarity</div>
+                  <div className="w-[15%]">No. of Items</div>
+                  <div className="w-[15%]">% of Collection</div>
+                  <div className="w-[30%]">
+                    <label hidden>Buttons</label>
+                  </div>
+                </div>
+                {Object.keys(activeTrait).map((trait: string) => (
+                  <div
+                    key={`${trait}-${activeTrait[trait]}-${activeCollection}`}
+                    className="flex gap-x-2 items-center p-2 rounded-md text-sm hover:bg-yellow-500/5 transition-colors cursor-pointer"
+                  >
+                    <div className="w-[25%]">{camelize(trait)}</div>
+                    <div className="w-[15%]">{'Legendary'}</div>
+                    <div className="w-[15%]">{activeTrait[trait]}</div>
+                    <div className="w-[15%]">
+                      {`${(
+                        (100 * activeTrait[trait]) /
+                        activeCollection.totalSupply
+                      ).toFixed(2)}%`}
+                    </div>
+                    <div className="w-[30%] gap-x-4 flex">
+                      <button className="px-2 py-1 bg-white/5 hover:bg-white/10 transition-colors border border-white/5 rounded-md">
+                        {'View Example'}
+                      </button>
+                      <button className="px-2 py-1 bg-white/5 hover:bg-white/10 transition-colors border border-white/5 rounded-md">
+                        {'See Listings'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {/* <div>None</div>
+                <div>
+                  {`${(
+                    (100 * activeTrait[trait]) /
+                    activeCollection.totalSupply
+                  ).toFixed(2)}%`}
+                </div>
+                <div>
+                  {activeCollection.totalSupply -
+                    (Object.values(activeTrait).reduce(
+                      (a: number, b: number) => a + b,
+                      0
+                    ) as number)}
+                </div>
+                <button className="px-2 py-1 bg-white/5 hover:bg-white/10 transition-colors border border-white/5 rounded-md">
+                  {'View Example'}
+                </button>
+                <button className="px-2 py-1 bg-white/5 hover:bg-white/10 transition-colors border border-white/5 rounded-md">
+                  {'See Listings'}
+                </button>*/}
               </div>
-            </div>
+            ) : (
+              <div className="items-center justify-center mx-auto text-gray-500 flex flex-col">
+                <div className="inline-flex items-center justify-center">
+                  <div className="pt-1 mr-2">Please select a trait</div>
+                  <RightArrow height={16} width={16} />
+                </div>
+              </div>
+            )}
+            {/* </div> */}
             <TraitsSidebarFilter
+              camelize={camelize}
               traits={
                 activeCollection?.traits && JSON.parse(activeCollection?.traits)
               }
+              setActiveTrait={setActiveTrait}
             />
           </div>
         </div>
@@ -606,6 +675,7 @@ export default function Collection(props: any) {
           primaryTabs={<Tab tabs={primaryTabs} />}
           secondaryTabs={setSecondaryTabs()}
           liveView={setRefreshButton()}
+          listingChartsIcon={tab == 'listings'}
           body={setBody()}
           banner={activeCollection?.bannerImageUrl}
           pauseLiveView={pauseListings}

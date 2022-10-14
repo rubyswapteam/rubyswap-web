@@ -1,4 +1,4 @@
-import { INft, NftChainId } from '@/utils/nftUtils';
+import { NftChainId } from '@/utils/nftUtils';
 import axios from 'axios';
 import React, {
   JSXElementConstructor,
@@ -10,6 +10,7 @@ import React, {
   useState,
 } from 'react';
 import { ethers } from 'ethers';
+import { IUserNftSummary } from '../utils/nftUtils';
 
 const WalletProviderContext = React.createContext<any>({});
 
@@ -23,38 +24,44 @@ export const WalletProvider = ({
 }) => {
   const [userNfts, setUserNfts] = useState<{
     ownedNfts: any[];
-    summary: any;
+    summary: IUserNftSummary[];
     totalCount: number;
   }>();
-  const [collectionNames, setCollectionNames] = useState<{
-    [key: string]: string;
-  }>({});
+  const [collectionNames, setCollectionNames] =
+    useState<{ name: string; contractAddress: string }[]>();
   const [userCollections, setUserCollections] = useState<any[]>();
   const [userNftCollections, setUserNftCollections] = useState<any[]>();
-  const [userNftsByCollection, setUserNftsByCollection] = useState<any[]>();
   const [walletDetails, setWalletDetails] = useState<any[]>();
   const [activeNfts, setActiveNfts] = useState<{
     collection: string;
-    nfts: INft[];
+    nfts: any[];
+    name?: string;
+    totalSupply?: number;
+    collectionData?: any;
   }>({
     collection: '',
     nfts: [],
   });
 
-  const fetchCollectionNames = useCallback(async (contractAddress: string) => {
-    const activeMapping = collectionNames;
-    if (!collectionNames[contractAddress]) {
-      axios
-        .get(
-          `https://eth-mainnet.g.alchemy.com/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getContractMetadata/?contractAddress=${contractAddress}`,
-        )
-        .then((contractRes) => {
-          activeMapping[contractAddress] =
-            contractRes.data.contractMetadata.name?.trim();
-          setCollectionNames({ ...activeMapping });
-        });
+  function fetchCollectionNames() {
+    if (userNfts) {
+      const collections = userNfts.summary.map((x: IUserNftSummary) => ({
+        name: x.name,
+        contractAddress: x.contractAddress,
+      }));
+      fetch('/.netlify/functions/getDbCollectionNames').then((rawRes: any) =>
+        rawRes
+          .json()
+          .then((res: { name: string; contractAddress: string }[]) => {
+            Array.prototype.push.apply(collections, res);
+            console.table({ res: res, collections: collections });
+            const data: any = {};
+            collections.forEach((x) => (data[x.contractAddress] = x.name));
+            setCollectionNames(data);
+          }),
+      );
     }
-  }, []);
+  }
 
   const fetchWallet = useCallback(async (address: string) => {
     if (address) {
@@ -71,89 +78,76 @@ export const WalletProvider = ({
     let pageKey = '';
     const userNfts: {
       ownedNfts: any[];
-      summary: any[];
+      summary: IUserNftSummary[];
       totalCount: number;
     } = {
       ownedNfts: [],
-      summary: [],
+      summary: [] as unknown as IUserNftSummary[],
       totalCount: 0,
     };
     if (user) {
       do {
         await axios
-          .get(
-            `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}${pageKey}`,
-          )
+          .get(`/.netlify/functions/getUserNfts?user=${user}${pageKey}`)
           .then(async (res) => {
             Array.prototype.push.apply(userNfts.ownedNfts, res.data.ownedNfts);
             userNfts.totalCount = res.data.totalCount;
             pageKey = res.data.pageKey ? '&pageKey=' + res.data.pageKey : '';
-
-            const summary: { contract: string; count: number }[] =
-              userNfts.summary;
-
-            await res.data.ownedNfts.forEach(async (element: any) => {
-              const activeContract = element.contract.address;
-              const index = summary.findIndex(
-                (collection: { contract: string; count: number }) => {
-                  return collection.contract == activeContract;
-                },
-              );
-              if (index !== -1) {
-                summary[index].count++;
-              } else {
-                summary.push({
-                  contract: activeContract,
-                  count: 1,
-                });
-              }
-
-              await fetchCollectionNames(activeContract);
-            });
-            summary.sort((a, b) => {
-              const nameA = collectionNames[a.contract]?.toLowerCase();
-              const nameB = collectionNames[b.contract]?.toLowerCase();
-              if (nameA < nameB) return -1;
-              if (nameA > nameB) return 1;
-              return 0;
-            });
-            userNfts.summary = [...summary];
-          })
-          .finally(() => {
-            const newUserNfts = { ...userNfts };
-            const newSummary = newUserNfts.summary.sort((a, b) => {
-              const nameA = collectionNames[a.contract]?.toLowerCase();
-              const nameB = collectionNames[b.contract]?.toLowerCase();
-              if (nameA < nameB) return -1;
-              if (nameA > nameB) return 1;
-              return 0;
-            });
-            newUserNfts.summary = [...newSummary];
-            setUserNfts({ ...newUserNfts });
           });
       } while (pageKey !== '');
+      const arrCount = userNfts.ownedNfts.length;
+      const summary: IUserNftSummary[] = [] as unknown as IUserNftSummary[];
+      for (let i = 0; i < arrCount; i++) {
+        const nft = userNfts.ownedNfts[i];
+        const index = summary.findIndex(
+          (x: IUserNftSummary) => x?.contractAddress === nft.contract.address,
+        );
+        index == -1
+          ? summary.push({
+              name: nft?.contractMetadata?.name
+                ? nft?.contractMetadata?.name
+                : nft.contract.address ==
+                  '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85'
+                ? 'ENS Domains'
+                : 'Unknown',
+              contractAddress: nft.contract.address,
+              balance: parseInt(nft.balance),
+            })
+          : (summary[index].balance =
+              summary[index].balance + parseInt(nft.balance));
+      }
+      summary.sort((a, b) =>
+        a.name.toLowerCase() < b.name.toLowerCase()
+          ? -1
+          : a.name.toLowerCase() > b.name.toLowerCase()
+          ? 1
+          : 0,
+      );
+      userNfts.summary = summary;
     }
+    setUserNfts(userNfts);
   };
 
   function getCollectionNfts(contractAddress: string) {
     if (userNfts) {
+      console.table({ userNfts: userNfts, contractAddress: contractAddress });
       setActiveNfts({ collection: '', nfts: [] });
       const filteredNfts = userNfts.ownedNfts.filter(
         (x: { contract: { address: string } }) =>
           x.contract.address === contractAddress,
       );
-      const nfts: INft[] = [];
+      const nfts: any[] = [];
       filteredNfts?.forEach(
         (nft: {
           id: any;
           media: any;
-          metadata: { image: string };
+          metadata: any;
           title: string;
           description: string;
         }) => {
-          const newNFT: INft = {
+          const newNFT: any = {
             tokenId: BigInt(nft.id.tokenId).toString(),
-            collectionName: collectionNames[contractAddress],
+            // collectionName: collectionNames[contractAddress],
             contractAddress: contractAddress,
             image: optimisedImageLinks([
               nft?.media[0]?.raw,
@@ -161,6 +155,7 @@ export const WalletProvider = ({
               nft?.media[0]?.thumbnail,
               nft.metadata.image,
             ]),
+            traits: nft.metadata.attributes,
             chainId: NftChainId.ETHEREUM,
             imageAlt: nft.title + ' - ' + nft.description,
             name: nft.title || '#'.concat(BigInt(nft.id.tokenId).toString()),
@@ -168,7 +163,12 @@ export const WalletProvider = ({
           nfts.push(newNFT);
         },
       );
-      setActiveNfts({ collection: contractAddress, nfts: nfts });
+      setActiveNfts({
+        collection: contractAddress,
+        nfts: nfts,
+        name: filteredNfts[0]?.contractMetadata.name,
+        totalSupply: filteredNfts[0]?.contractMetadata.totalSupply,
+      });
     }
   }
 
@@ -183,20 +183,6 @@ export const WalletProvider = ({
     const index = scores.findIndex((score) => score == Math.max(...scores));
     return links[index].replace('ipfs://', 'https://ipfs.io/ipfs/');
   }
-
-  const fetchUserNftsByCollection = useCallback(
-    async (user: string, contract: string) => {
-      axios
-        .get(
-          `https://eth-mainnet.alchemyapi.io/nft/v2/63TUZT19v5atqFMTgBaWKdjvuIvaYud1/getNFTs/?owner=${user}&contractAddresses[]=${contract}`,
-        )
-        .then((res) => {
-          const userNfts = res.data.ownedNfts;
-          setUserNftsByCollection(userNfts);
-        });
-    },
-    [],
-  );
 
   const fetchUserCollections = useCallback(async (user: string) => {
     fetch(`/.netlify/functions/getUserCollections?wallet=${user}`).then(
@@ -226,15 +212,9 @@ export const WalletProvider = ({
       userNfts,
       setUserNfts,
       fetchUserNfts,
-      collectionNames,
-      setCollectionNames,
-      fetchCollectionNames,
       userNftCollections,
       setUserNftCollections,
       fetchUserNftCollections,
-      userNftsByCollection,
-      setUserNftsByCollection,
-      fetchUserNftsByCollection,
       getCollectionNfts,
       activeNfts,
       setActiveNfts,
@@ -242,20 +222,16 @@ export const WalletProvider = ({
       walletDetails,
       userCollections,
       fetchUserCollections,
+      collectionNames,
+      fetchCollectionNames,
     }),
     [
       userNfts,
       setUserNfts,
       fetchUserNfts,
-      collectionNames,
-      setCollectionNames,
-      fetchCollectionNames,
       userNftCollections,
       setUserNftCollections,
       fetchUserNftCollections,
-      userNftsByCollection,
-      setUserNftsByCollection,
-      fetchUserNftsByCollection,
       getCollectionNfts,
       activeNfts,
       setActiveNfts,
@@ -263,6 +239,8 @@ export const WalletProvider = ({
       walletDetails,
       userCollections,
       fetchUserCollections,
+      collectionNames,
+      fetchCollectionNames,
     ],
   );
 

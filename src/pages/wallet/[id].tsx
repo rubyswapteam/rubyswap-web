@@ -11,7 +11,7 @@ import X2Y2Icon from '@/components/X2Y2Icon';
 import { rangeTabs } from '@/utils/nftUtils';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LooksRareIcon from '../../components/LooksRareIcon';
 import OpenSeaIcon from '../../components/OpenseaIcon';
 import RightArrow from '../../components/RightArrow';
@@ -19,10 +19,17 @@ import UserCollectionSidebarFilter from '../../components/UserCollectionSidebarF
 import UserProfileHeader from '../../components/UserProfileHeader';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
+import { IUserNftSummary } from '../../utils/nftUtils';
 
 export default function Collection(props: any) {
   const router = useRouter();
   const { id, tab, range } = router.query;
+  const [contractOptions, setContractOptions] = useState<
+    {
+      name: string;
+      icon?: any | undefined;
+    }[]
+  >([]);
   const primaryTabs = [
     {
       name: 'Assets',
@@ -53,6 +60,7 @@ export default function Collection(props: any) {
     userNfts,
     fetchUserNfts,
     collectionNames,
+    fetchCollectionNames,
     activeNfts,
     setActiveNfts,
     getCollectionNfts,
@@ -101,19 +109,17 @@ export default function Collection(props: any) {
     icon: undefined,
   };
 
-  const contractOptions: {
-    name: string;
-    icon?: any | undefined;
-  }[] = [];
-  Object.values(
-    collectionNames as {
-      [key: string]: string;
-    },
-  ).forEach((name) => {
-    if (name) {
-      contractOptions.push({ name: name });
+  useEffect(() => {
+    if (userNfts) {
+      const options: { name: string }[] = [];
+      userNfts?.summary.forEach((x: IUserNftSummary) => {
+        if (x?.name) {
+          options.push({ name: x.name });
+        }
+      });
+      setContractOptions(options);
     }
-  });
+  }, [userNfts]);
 
   const contractDropdownDefault = {
     name: 'Collections',
@@ -129,6 +135,10 @@ export default function Collection(props: any) {
     id ? getUserTrades(id) : '';
   }, [id?.toString()]);
 
+  useEffect(() => {
+    fetchCollectionNames();
+  }, [userNfts]);
+
   const refreshButtonTabs: (string | undefined)[] = [];
   const rangeButtonsTabs: (string | undefined)[] = [];
 
@@ -136,6 +146,11 @@ export default function Collection(props: any) {
     if (!tab) {
       return (
         <div className="flex w-full justify-between flex-col h-inherit">
+          <div className="px-4 sm:px-6 md:px-8">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+              {activeNfts.name}
+            </h3>
+          </div>
           <div className="flex w-full justify-between flex-row h-inherit">
             {activeNfts.nfts.length == 0 && (
               <div className="w-full">
@@ -164,7 +179,9 @@ export default function Collection(props: any) {
         <>
           <div className="h-inherit overflow-scroll pb-80">
             <div className="flex justify-between px-4 sm:px-6 md:px-8">
-              <CollectionTitleHeader title={'Summary Stats'} />
+              <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                {'Summary Stats'}
+              </h3>
               <div className="flex gap-x-2">
                 <UserAnalyticsMarketplaceFilter
                   options={marketplaceOptions}

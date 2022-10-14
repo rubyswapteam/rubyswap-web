@@ -5,12 +5,6 @@ import { useWalletProvider } from '../contexts/WalletProviderContext';
 import { useWeb3Provider } from '@/contexts/Web3ProviderContext';
 
 export default function OwnedNftCollectionTable() {
-  const [fullOwnedCollections, setFullOwnedCollections] = useState<
-    undefined | any[]
-  >(undefined);
-  const [ownedCollections, setOwnedollections] = useState<undefined | any[]>(
-    undefined,
-  );
   const [lastFetch, setLastFetch] = useState<number>(0);
   const { userCollections, fetchUserCollections } = useWalletProvider();
   const { activeWallet } = useWeb3Provider();
@@ -53,10 +47,6 @@ export default function OwnedNftCollectionTable() {
   }
 
   function applyUpdate(collections: any, time: number, persist = true) {
-    // setFullOwnedCollections(collections);
-    // setOwnedollections(
-    //   collections.filter((collection: any) => collection.period === 'one_day'),
-    // );
     setLastFetch(time);
     if (persist) {
       sessionStorage.setItem('r-onct-ftc', JSON.stringify(collections));

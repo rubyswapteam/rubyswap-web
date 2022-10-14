@@ -16,18 +16,8 @@ const headers = {
 };
 
 export async function handler(event) {
-  const PARAM_ERROR_NO_WALLET_PROVIDED = 'No wallet provided.',
-    ERROR_FETCHING = 'Failed to fetch the data.';
-
-  const wallet = event.queryStringParameters.wallet;
-
-  if (!event.queryStringParameters.wallet)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: PARAM_ERROR_NO_WALLET_PROVIDED }),
-    };
-
-  const API_ENDPOINT = `https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/Users?select=*&wallet=ilike.${wallet.toLowerCase()}`;
+  const API_ENDPOINT =
+    'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/CollectionDetails?select=name,contractAddress';
 
   try {
     const response = await fetch(API_ENDPOINT, {
@@ -36,11 +26,12 @@ export async function handler(event) {
       redirect: 'follow',
     });
     const data = await response.json();
-    return { statusCode: 200, body: JSON.stringify(data[0]) };
+
+    return { statusCode: 200, body: JSON.stringify(data) };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: ERROR_FETCHING + '\n' + error }),
+      body: JSON.stringify({ error: error }),
     };
   }
 }

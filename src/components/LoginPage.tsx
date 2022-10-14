@@ -1,4 +1,5 @@
 import { useWeb3Provider } from '@/contexts/Web3ProviderContext';
+import { useTheme } from 'next-themes';
 import {
   JSXElementConstructor,
   ReactElement,
@@ -19,6 +20,7 @@ export default function LoginPage({
   const [phaseOne, setPhaseOne] = useState<any>('');
   const [phaseTwo, setPhaseTwo] = useState<any>('');
   const [twtr, setTwtr] = useState<any>(undefined);
+  const { theme, setTheme } = useTheme();
 
   const fetchGet = async (url: string) => {
     try {
@@ -37,6 +39,7 @@ export default function LoginPage({
     setIsVerified('');
     setPhaseOne('');
     setPhaseTwo('');
+    setTheme('dark');
   }
 
   const verify = async () => {

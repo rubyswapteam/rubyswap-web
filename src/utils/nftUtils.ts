@@ -11,60 +11,6 @@ export interface INft {
   marketplace?: string | NftMarketplace;
 }
 
-export interface INftCollection {
-  id?: string;
-  contractAddress?: string;
-  tokenStandard?: string;
-  description?: string;
-  isVerified?: boolean;
-  image: string | undefined | null;
-  bannerImage?: string | undefined | null;
-  slug: string | undefined | null;
-  name: string | undefined | null;
-  chainId: number;
-  oneDayVolume: number | undefined | null;
-  oneDaySales: number | undefined | null;
-  floor: number | undefined | null;
-  oneDayAveragePrice: number | undefined | null;
-  sevenDayVolume?: number | undefined | null;
-  sevenDaySales?: number | undefined | null;
-  thirtyDaySales?: number | undefined | null;
-  thirtyDayVolume?: number | undefined | null;
-  supply?: number;
-  count?: number;
-  owners: number | undefined | null;
-  traits?: any;
-}
-
-export interface INftCollectionUpdate {
-  id: string;
-  username: string;
-  userAddress: string;
-  posted: number;
-  collectionName: string;
-  imageUrl: string;
-  smallImageUrl: string;
-  holdersOnly: boolean;
-  updateType: string;
-  title: string;
-  message: string;
-  likes: number | null;
-}
-
-export interface INftSweepCollection {
-  id: string;
-  collectionAddress: string;
-  image: string | undefined | null;
-  isVerified?: boolean;
-  name: string | undefined | null;
-  chainId: number;
-  value: number | undefined | null;
-  sales: number | undefined | null;
-  buyer: string | undefined | null;
-  transaction: string | undefined | null;
-  timestamp: number | undefined | null;
-}
-
 export enum NftMarketplace {
   NFTRADE = 'nftrade',
   OPENSEA = 'opensea',
@@ -73,6 +19,11 @@ export enum NftMarketplace {
   SEAPORT = 'seaport',
   SUDOSWAP = 'sudoswap',
   X2Y2 = 'x2y2',
+}
+export interface IUserNftSummary {
+  name: string;
+  contractAddress: string;
+  balance: number;
 }
 
 export enum NftChainId {
