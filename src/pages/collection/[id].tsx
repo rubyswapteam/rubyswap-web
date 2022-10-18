@@ -429,7 +429,7 @@ export default function Collection(props: any) {
           {/* <div className="-mt-6"> */}
           {activeListings && activeListings.length > 0 && (
             <div
-              className="h-inherit"
+              className="h-inherit flex"
               // key={`${activeCollection?.contractAddress}-${counter}-outer`}
               key={`${activeCollection?.contractAddress}-outer`}
               onMouseEnter={() => {
@@ -452,6 +452,37 @@ export default function Collection(props: any) {
                 }
                 keyPrefix={`${activeCollection?.contractAddress}-${counter}`}
               />
+              {showListingCharts && (
+                <div className="w-1/4">
+                  <div className="pl-5 pr-8 gap-y-4 flex-col flex">
+                    <ListingDistributionChart
+                      settings={{
+                        height: '300px',
+                        slices: 15,
+                        legend: false,
+                        mx: 20,
+                      }}
+                      activeContract={activeCollection?.contractAddress}
+                      data={activeListings}
+                    />
+                    {tokenRanks && (
+                      <ListingRanksChart
+                        settings={{
+                          height: '300px',
+                          slices: 15,
+                          legend: false,
+                          ml: 20,
+                          mr: 20,
+                          chunks: 30,
+                        }}
+                        activeContract={activeCollection?.contractAddress}
+                        data={activeListings}
+                        tokenRanks={tokenRanks}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
           {/* </div> */}

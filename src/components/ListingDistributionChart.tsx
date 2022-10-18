@@ -86,16 +86,18 @@ export default function ListingDistributionChart(props: any) {
     const labels: string[] = [];
     // const seriesData: { name: string; data: number[]; color: string }[] = [];
     const seriesData: any[] = [];
+    const slices = props?.settings?.slices || 25;
     const minPrice = props.data[0]?.price;
     const maxPrice = props.data[props.data.length - 1]?.price;
     const minIndex = Math.max(
       listingDistributionArray.findIndex((x: number) => x > minPrice) - 1,
       0,
     );
-    const maxIndex = Math.min(
+    const maxIndexInit = Math.min(
       listingDistributionArray.findIndex((x: number) => x > maxPrice),
-      minIndex + 25,
+      minIndex + slices,
     );
+    const maxIndex = maxIndexInit == -1 ? minIndex + slices : maxIndexInit;
     const finalLabel = listingDistributionArray[maxIndex];
     const trimDistArr = listingDistributionArray.slice(minIndex, maxIndex);
     props.data.forEach((x: any) => {
@@ -122,7 +124,7 @@ export default function ListingDistributionChart(props: any) {
               ).length,
             );
       });
-      i == trimDistArr.length - 1 && trimDistArr.length == 25
+      i == trimDistArr.length - 1 && trimDistArr.length == slices
         ? labels.push(listingDistributionArray[minIndex + i] + 'Ξ+')
         : labels.push('<' + listingDistributionArray[minIndex + i + 1] + 'Ξ');
     }
@@ -150,19 +152,21 @@ export default function ListingDistributionChart(props: any) {
     setIsEmpty(marketplaces.length == 0);
     setIsShowing(true);
 
-    // console.table({
-    //   listings: props.data,
-    //   minPrice: minPrice,
-    //   minIndex: minIndex,
-    //   trimDistArr: trimDistArr,
-    //   listingsByMarketplace: listingsByMarketplace,
-    //   marketplaces: marketplaces,
-    //   mappedData: mappedData,
-    //   labels: labels,
-    //   seriesData: seriesData,
-    //   marketplaceTotals: marketplaceTotals,
-    //   keysSorted: keysSorted,
-    // });
+    console.table({
+      listings: props.data,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      minIndex: minIndex,
+      maxIndex: maxIndex,
+      trimDistArr: trimDistArr,
+      listingsByMarketplace: listingsByMarketplace,
+      marketplaces: marketplaces,
+      mappedData: mappedData,
+      labels: labels,
+      seriesData: seriesData,
+      marketplaceTotals: marketplaceTotals,
+      keysSorted: keysSorted,
+    });
 
     return { seriesData: seriesData, labels: labels };
   }
@@ -177,15 +181,16 @@ export default function ListingDistributionChart(props: any) {
           color: themeColours.background,
         },
         backgroundColor: themeColours.background,
-        height: '400px',
-        marginLeft: 80,
-        marginRight: 40,
+        height: props?.settings?.height || '400px',
+        marginLeft: props.settings ? props?.settings?.mx : 80,
+        marginRight: props.settings ? props?.settings?.mx : 40,
         marginTop: 80,
       },
       xAxis: [
         {
           categories: data.labels,
           labels: {
+            enabled: props.settings ? props?.settings?.xAxis : true,
             padding: 30,
             style: {
               color: themeColours.text,
@@ -203,12 +208,13 @@ export default function ListingDistributionChart(props: any) {
         {
           gridLineColor: 'rgba(40,40,40,1)',
           title: {
-            text: 'Listing count',
+            text: props.settings ? props?.settings?.yAxis : 'Listing count',
             style: {
               color: themeColours.text,
             },
           },
           labels: {
+            enabled: props.settings ? props?.settings?.yAxis : true,
             style: {
               color: themeColours.text,
             },
@@ -270,6 +276,7 @@ export default function ListingDistributionChart(props: any) {
       },
       series: data.seriesData,
       legend: {
+        enabled: props.settings ? props?.settings?.legend : true,
         align: 'left',
         x: 30,
         y: -10,
@@ -321,14 +328,22 @@ export default function ListingDistributionChart(props: any) {
           highcharts={HighCharts}
           options={chartOptions}
           // updateArgs={[true]}
-          containerProps={{ style: { height: '100%' } }}
+          containerProps={{ style: { height: '100%', borderRadius: '10px' } }}
           key={`${theme}-${props?.data[0]?.contract}-${id}-co-ldc-hcr`}
         ></HighchartsReact>
-        <div className="absolute top-5 left-10">
-          <div className="px-2 pt-2 rounded-md mb-3 font-medium">
-            <p>Collection Listings</p>
+        {props?.settings ? (
+          <div className="absolute top-5 left-5">
+            <div className="text-sm px-2 pt-2 rounded-md mb-3 font-medium">
+              <p>Collection Listings</p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="absolute top-5 left-10">
+            <div className="px-2 pt-2 rounded-md mb-3 font-medium">
+              <p>Collection Listings</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

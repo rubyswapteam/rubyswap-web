@@ -141,9 +141,9 @@ export default function ListingRanksChart(props: any) {
 
   function setKeyValues(arrIn: any[]) {
     const size = arrIn.length;
-    if (size < 200) return arrIn;
+    if (size < 200 && !props?.settings?.chunks) return arrIn;
     const newArr: any[] = [];
-    const chunks = 100;
+    const chunks = props?.settings?.chunks || 100;
     const arrSorted = arrIn.sort((a, b) => a.x - b.x);
     const chunkSize = Math.floor(size / chunks);
     for (let i = 0; i < chunks; i++) {
@@ -204,9 +204,9 @@ export default function ListingRanksChart(props: any) {
           color: themeColours.text,
         },
         backgroundColor: themeColours.background,
-        height: '450px',
-        marginLeft: 80,
-        marginRight: 40,
+        height: props?.settings?.height || '400px',
+        marginLeft: props.settings ? props?.settings?.ml : 80,
+        marginRight: props.settings ? props?.settings?.mr : 40,
         marginTop: 125,
       },
       xAxis: [
@@ -232,11 +232,13 @@ export default function ListingRanksChart(props: any) {
           type: isLogarithmic ? 'logarithmic' : 'linear',
           gridLineColor: 'rgba(40,40,40,1)',
           labels: {
+            enabled: props.settings ? props?.settings?.yAxis : true,
             style: {
               color: themeColours.text,
             },
           },
           title: {
+            text: props.settings ? props?.settings?.yAxis : 'Price',
             style: {
               color: themeColours.text,
             },
@@ -255,6 +257,7 @@ export default function ListingRanksChart(props: any) {
         },
       ],
       legend: {
+        enabled: props.settings ? props?.settings?.legend : true,
         align: 'left',
         x: 30,
         y: -10,
@@ -358,54 +361,64 @@ export default function ListingRanksChart(props: any) {
           highcharts={HighCharts}
           options={chartOptions}
           updateArgs={[true]}
-          containerProps={{ style: { height: '100%' } }}
+          containerProps={{ style: { height: '100%', borderRadius: '10px' } }}
         ></HighchartsReact>
-        <div className="absolute top-8 left-10">
-          <div className="px-2 pt-2 rounded-md mb-3 font-medium">
-            <p>Listing Price By Rank</p>
+        {props?.settings ? (
+          <div className="absolute top-5 left-5">
+            <div className="text-sm px-2 pt-2 rounded-md mb-3 font-medium">
+              <p>Price vs Rank</p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="absolute top-8 left-10">
+            <div className="px-2 pt-2 rounded-md mb-3 font-medium">
+              <p>Price vs Rank</p>
+            </div>
+          </div>
+        )}
         <div className="absolute top-8 right-10">
-          <div className="flex gap-x-5">
-            <div className="bg-white/5 px-2 pt-2 rounded-md mb-4">
-              <label
-                htmlFor="lrc-outliers"
-                className="inline-flex relative items-center cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  value=""
-                  id="lrc-outliers"
-                  className="sr-only peer"
-                  checked={applyFilter}
-                  onClick={toggleFilter}
-                />
-                <div className="w-6 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2.5 after:w-2.5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
-                  Filter
-                </span>
-              </label>
+          {!props?.settings && (
+            <div className="flex gap-x-5">
+              <div className="bg-white/5 px-2 pt-2 rounded-md mb-4">
+                <label
+                  htmlFor="lrc-outliers"
+                  className="inline-flex relative items-center cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    value=""
+                    id="lrc-outliers"
+                    className="sr-only peer"
+                    checked={applyFilter}
+                    onClick={toggleFilter}
+                  />
+                  <div className="w-6 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2.5 after:w-2.5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                  <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
+                    Filter
+                  </span>
+                </label>
+              </div>
+              <div className="bg-white/5 px-1.5 pt-1.5 rounded-md mb-4">
+                <label
+                  htmlFor="lrc-logarithmic"
+                  className="inline-flex relative items-center cursor-pointer p-0"
+                >
+                  <input
+                    type="checkbox"
+                    value=""
+                    id="lrc-logarithmic"
+                    className="sr-only peer"
+                    checked={isLogarithmic}
+                    onClick={toggleScale}
+                  />
+                  <div className="w-6 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2.5 after:w-2.5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                  <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
+                    Logarithmic
+                  </span>
+                </label>
+              </div>
             </div>
-            <div className="bg-white/5 px-1.5 pt-1.5 rounded-md mb-4">
-              <label
-                htmlFor="lrc-logarithmic"
-                className="inline-flex relative items-center cursor-pointer p-0"
-              >
-                <input
-                  type="checkbox"
-                  value=""
-                  id="lrc-logarithmic"
-                  className="sr-only peer"
-                  checked={isLogarithmic}
-                  onClick={toggleScale}
-                />
-                <div className="w-6 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2.5 after:w-2.5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
-                  Logarithmic
-                </span>
-              </label>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
