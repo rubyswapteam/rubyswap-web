@@ -7,6 +7,8 @@ const supabase = process.env.SUPABASE;
 const gemHeaders = {
   'Content-Type': 'application/json',
   'X-API-KEY': gem,
+  Origin: 'https://www.gem.xyz',
+  Referer: 'https://www.gem.xyz/',
 };
 
 const supabaseHeaders = {
@@ -24,7 +26,7 @@ const supabaseHeaders = {
 };
 
 export async function handler() {
-  const GEM_API_ENDPOINT = 'https://gem-public-api.herokuapp.com/collections';
+  const GEM_API_ENDPOINT = 'https://gem-api-v2-4.herokuapp.com/collections';
 
   var gemRequestOptions = {
     method: 'POST',

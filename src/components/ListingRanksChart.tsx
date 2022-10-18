@@ -13,7 +13,7 @@ export default function ListingRanksChart(props: any) {
 
   // exporting(Highcharts);
   const [isLogarithmic, setIsLogarithmic] = useState(true);
-  const [applyFilter, setApplyFilter] = useState(false);
+  const [applyFilter, setApplyFilter] = useState(true);
   const [counter, setCounter] = useState(0);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
@@ -141,13 +141,13 @@ export default function ListingRanksChart(props: any) {
 
   function setKeyValues(arrIn: any[]) {
     const size = arrIn.length;
-    if (size < 100) return arrIn;
+    if (size < 200) return arrIn;
     const newArr: any[] = [];
-    const chunks = 20;
+    const chunks = 100;
     const arrSorted = arrIn.sort((a, b) => a.x - b.x);
     const chunkSize = Math.floor(size / chunks);
     for (let i = 0; i < chunks; i++) {
-      const arrSlice = arrIn.slice(i * chunkSize, i * (chunkSize + 1));
+      const arrSlice = arrSorted.slice(i * chunkSize, i * (chunkSize + 1));
       const minVal = Math.min(...arrSlice.map((listing) => listing.y));
       const flteredVals = arrSlice.filter((listing) => listing.y === minVal);
       Array.prototype.push.apply(newArr, flteredVals);
@@ -181,7 +181,7 @@ export default function ListingRanksChart(props: any) {
         };
       })
       .filter((x: any) => x.x > 0);
-    if (listings.length > 0 && !applyFilter) {
+    if (listings.length > 0 && applyFilter) {
       listings = filterListings(listings);
       listings = setKeyValues(listings);
     }
