@@ -8,6 +8,7 @@ import Dashboard from '@/components/Dashboard';
 import { DashboardStats } from '@/components/DashboardStats';
 import HolderDistrbutionChart from '@/components/HolderDistributionChart';
 import Layout from '@/components/Layout';
+import ListingRanksChart from '@/components/ListingRanksChart';
 import RefreshButton from '@/components/RefreshButton';
 import SalesHistoryChart from '@/components/SalesHistoryChart';
 import Tab from '@/components/Tab';
@@ -36,6 +37,7 @@ export default function Collection(props: any) {
   const [pauseListings, setPauseListings] = useState(false);
   const [activeTrait, setActiveTrait] = useState<any>();
   const [showBubbleMap, setShowBubbleMap] = useState(false);
+  const [showListingCharts, setShowListingCharts] = useState<boolean>(false);
   const [isLoadingCollectionUpdates, setIsLoadingCollectionUpdates] =
     useState(false);
   const {
@@ -371,10 +373,21 @@ export default function Collection(props: any) {
                   <ListingDistributionChart
                     activeContract={activeCollection?.contractAddress}
                     data={activeListings}
-                  ></ListingDistributionChart>
+                  />
                 )}
               </div>
             </div>
+            {activeListings && tokenRanks && (
+              <div className="block xl:flex mx-8 gap-x-4 pt-8">
+                <div className="w-full overflow-hidden rounded-xl">
+                  <ListingRanksChart
+                    activeContract={activeCollection?.contractAddress}
+                    data={activeListings}
+                    tokenRanks={tokenRanks}
+                  />
+                </div>
+              </div>
+            )}
             <div className="my-14">
               <div className="max-w-8xl mx-auto pb-4 px-4 sm:px-6 md:px-8">
                 <CollectionTitleHeader
@@ -500,6 +513,18 @@ export default function Collection(props: any) {
               )}
             </div>
           </div>
+
+          {activeListings && tokenRanks && (
+            <div className="block xl:flex mx-8 gap-x-4 pt-8">
+              <div className="w-full overflow-hidden rounded-xl">
+                <ListingRanksChart
+                  activeContract={activeCollection?.contractAddress}
+                  data={activeListings}
+                  tokenRanks={tokenRanks}
+                />
+              </div>
+            </div>
+          )}
 
           <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
             <HolderDistrbutionChart
@@ -679,6 +704,8 @@ export default function Collection(props: any) {
           body={setBody()}
           banner={activeCollection?.bannerImageUrl}
           pauseLiveView={pauseListings}
+          setShowListingCharts={setShowListingCharts}
+          showListingCharts={showListingCharts}
         />
       </Layout>
     </motion.div>

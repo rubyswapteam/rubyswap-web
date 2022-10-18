@@ -254,7 +254,16 @@ export default function Dashboard(props: any) {
                         <div className="flex">{props.secondaryTabs}</div>
                       )}
                       {props.listingChartsIcon && (
-                        <div className="p-1 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white rounded-md cursor-pointer">
+                        <div
+                          onClick={() =>
+                            props.setShowListingCharts(!props.showListingCharts)
+                          }
+                          className={`${
+                            props.showListingCharts
+                              ? 'bg-white/10'
+                              : 'bg-white/5'
+                          } p-1 hover:bg-white/10 text-white/80 hover:text-white rounded-md cursor-pointer`}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

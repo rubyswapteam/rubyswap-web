@@ -8,28 +8,17 @@ import { useEffect, useState } from 'react';
 // import exporting from 'highcharts/modules/exporting';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-export default function SalesHistoryChart(props: any) {
+export default function ListingRanksChart(props: any) {
   Boost(Highcharts);
 
   // exporting(Highcharts);
-  const [isLogarithmic, setIsLogarithmic] = useState(false);
-  const [showOutliers, setShowOutliers] = useState(false);
+  const [isLogarithmic, setIsLogarithmic] = useState(true);
+  const [applyFilter, setApplyFilter] = useState(false);
   const [counter, setCounter] = useState(0);
   const [chartOptions, setChartOptions] = useState(undefined as any);
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
-  const [dateFormat, setDateFormat] = useState('%d.%m');
-  const [rangeSeconds] = useState<any>({
-    '5m': 300,
-    '15m': 900,
-    '30m': 1800,
-    '1h': 3600,
-    '6h': 21600,
-    '24h': 86400,
-    '7d': 604800,
-    '30d': 2592000,
-  });
   const { theme } = useTheme();
   const lightTheme = {
     background: '#ffffff',
@@ -54,7 +43,7 @@ export default function SalesHistoryChart(props: any) {
   );
   const [ranks, setRanks] = useState<any>(undefined);
   const router = useRouter();
-  const { tab, range } = router.query;
+  const { tab } = router.query;
 
   useEffect(() => {
     setTheme();
@@ -93,10 +82,6 @@ export default function SalesHistoryChart(props: any) {
   }, [tab]);
 
   useEffect(() => {
-    reset();
-  }, [range]);
-
-  useEffect(() => {
     reset(true, true);
   }, [activeTrades]);
 
@@ -124,8 +109,8 @@ export default function SalesHistoryChart(props: any) {
     return newOptions;
   }
 
-  function toggleOutliers() {
-    setShowOutliers(!showOutliers);
+  function toggleFilter() {
+    setApplyFilter(!applyFilter);
     reset();
   }
 
@@ -134,7 +119,7 @@ export default function SalesHistoryChart(props: any) {
     reset();
   }
 
-  function filterOutliers(arrIn: any[]) {
+  function filterListings(arrIn: any[]) {
     if (arrIn.length > 5) {
       const arr = arrIn.concat();
       arr.sort(function (a: any, b: any) {
@@ -154,49 +139,55 @@ export default function SalesHistoryChart(props: any) {
     }
   }
 
+  function setKeyValues(arrIn: any[]) {
+    const size = arrIn.length;
+    if (size < 100) return arrIn;
+    const newArr: any[] = [];
+    const chunks = 20;
+    const arrSorted = arrIn.sort((a, b) => a.x - b.x);
+    const chunkSize = Math.floor(size / chunks);
+    for (let i = 0; i < chunks; i++) {
+      const arrSlice = arrIn.slice(i * chunkSize, i * (chunkSize + 1));
+      const minVal = Math.min(...arrSlice.map((listing) => listing.y));
+      const flteredVals = arrSlice.filter((listing) => listing.y === minVal);
+      Array.prototype.push.apply(newArr, flteredVals);
+    }
+    return newArr;
+  }
+
   function manipulateData(persist = true) {
+    // If listings > 200 then filter for the highest rank for every x listings
     if (!props.data) return;
-    const nowUnix = moment().unix();
-    const activeTab = range?.toString() || '30d';
-    const minimumDate = Math.min(nowUnix - rangeSeconds[activeTab]);
     const includeRanks = ranks && ranks?.contract == props?.activeContract;
-    let trades = props.data.filter(
-      (trade: any) => trade.timestamp > minimumDate || trade.price <= 0.0001,
-    );
-    trades = trades.map((trade: any) => {
-      return {
-        x: Number(trade.timestamp) * 1000,
-        y: parseFloat(trade.price),
-        id: trade.tokenId.toString(),
-        contract: trade.contract,
-        rank: includeRanks && trade.tokenId && ranks?.ranks[trade.tokenId],
-        color:
-          !ranks ||
-          !ranks?.ranks[trade.tokenId] ||
-          ranks?.ranks[trade.tokenId] > ranks?.tiers[2]
-            ? themeColours.primaryColour
-            : ranks?.ranks[trade.tokenId] > ranks?.tiers[1]
-            ? themeColours?.t3
-            : ranks?.ranks[trade.tokenId] > ranks?.tiers[0]
-            ? themeColours?.t2
-            : themeColours?.t1,
-      };
-    });
-    if (trades.length > 0 && !showOutliers) {
-      trades = filterOutliers(trades);
+    let listings = props.data;
+    console.table({ listings: listings });
+    listings = listings
+      .map((listing: any) => {
+        return {
+          x: ranks?.ranks[listing.tokenId] || -999,
+          y: Number(listing.price),
+          id: listing.tokenId.toString(),
+          contract: listing.contract,
+          color:
+            !ranks ||
+            !ranks?.ranks[listing.tokenId] ||
+            ranks?.ranks[listing.tokenId] > ranks?.tiers[2]
+              ? themeColours.primaryColour
+              : ranks?.ranks[listing.tokenId] > ranks?.tiers[1]
+              ? themeColours?.t3
+              : ranks?.ranks[listing.tokenId] > ranks?.tiers[0]
+              ? themeColours?.t2
+              : themeColours?.t1,
+        };
+      })
+      .filter((x: any) => x.x > 0);
+    if (listings.length > 0 && !applyFilter) {
+      listings = filterListings(listings);
+      listings = setKeyValues(listings);
     }
-    if (trades.length > 0) {
-      const times = trades.map((txn: any) => txn.x);
-      const timeRange = (Math.max(...times) - Math.min(...times)) / 1000;
-      timeRange > 1209600
-        ? setDateFormat('%d.%m')
-        : timeRange > 86400
-        ? setDateFormat('%l%P %d.%m')
-        : setDateFormat('%k:%M');
-    }
-    if (persist) setActiveTrades(trades);
-    setIsEmpty(trades.length === 0);
-    return trades;
+    if (persist) setActiveTrades(listings);
+    setIsEmpty(listings.length === 0);
+    return listings;
   }
 
   function getOptions(trades: any[]) {
@@ -220,12 +211,7 @@ export default function SalesHistoryChart(props: any) {
       },
       xAxis: [
         {
-          // categories: dates,
-          type: 'datetime',
           labels: {
-            formatter: function () {
-              return Highcharts.dateFormat(dateFormat, (this as any).value);
-            },
             padding: 30,
             style: {
               color: themeColours.text,
@@ -262,7 +248,7 @@ export default function SalesHistoryChart(props: any) {
       },
       series: [
         {
-          name: 'Sales',
+          name: 'Listing',
           color: themeColours.primaryColour,
           data: trades,
           turboThreshold: 30000,
@@ -315,23 +301,19 @@ export default function SalesHistoryChart(props: any) {
             headerFormat: '<b>Sale Details</b><br/>',
             pointFormatter: function (): string {
               const i = activeTrades && activeTrades[(this as any).index];
-              const time = i && i?.x;
+              const rank = i && i?.x;
               const price = i && i?.y;
               const tokenId = i && i?.id;
-              const rank = i && i?.rank;
 
               return `
               </div>
               ${rank ? `<b>Rank:</b> ${rank}</div><br>` : ''}
               ${
-                (this as any).y == price && (this as any).x == time
+                (this as any).y == price && (this as any).x == rank
                   ? `<div style="padding=10px"><b>Token ID:</b> ${tokenId}</div><br>`
                   : ''
               }
               <b>Price (ETH):</b> ${(this as any).y}</div><br>
-              <div><b>Time:</b> ${moment
-                .unix((this as any).x / 1000)
-                .format('h:mma, DD/MM')}</div>
               `;
             },
           },
@@ -343,7 +325,7 @@ export default function SalesHistoryChart(props: any) {
   }
 
   return (
-    <div key={`${theme}-${props.data[0]?.contract}-${range || '24h'}-co-shc`}>
+    <div key={`${theme}-${props.data[0]?.contract}-co-lrc`}>
       {!isShowing ||
         (!activeTrades && !isEmpty) ||
         (activeTrades &&
@@ -357,7 +339,7 @@ export default function SalesHistoryChart(props: any) {
           ))}
       {isEmpty && (
         <div className="flex justify-center items-center h-[450px] w-full bg-gray-300 rounded-lg dark:bg-white/[0.06]">
-          {`No trades to display for this ${range} timespan.`}
+          No listings to display.
         </div>
       )}
       <div
@@ -380,39 +362,39 @@ export default function SalesHistoryChart(props: any) {
         ></HighchartsReact>
         <div className="absolute top-8 left-10">
           <div className="px-2 pt-2 rounded-md mb-3 font-medium">
-            <p>Recent Sales</p>
+            <p>Listing Price By Rank</p>
           </div>
         </div>
         <div className="absolute top-8 right-10">
           <div className="flex gap-x-5">
             <div className="bg-white/5 px-2 pt-2 rounded-md mb-4">
               <label
-                htmlFor="sh-outliers"
+                htmlFor="lrc-outliers"
                 className="inline-flex relative items-center cursor-pointer"
               >
                 <input
                   type="checkbox"
                   value=""
-                  id="sh-outliers"
+                  id="lrc-outliers"
                   className="sr-only peer"
-                  checked={showOutliers}
-                  onClick={toggleOutliers}
+                  checked={applyFilter}
+                  onClick={toggleFilter}
                 />
                 <div className="w-6 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-2.5 after:w-2.5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span className="ml-2 text-xs font-medium text-black/50 dark:text-white/50">
-                  Outliers
+                  Filter
                 </span>
               </label>
             </div>
             <div className="bg-white/5 px-1.5 pt-1.5 rounded-md mb-4">
               <label
-                htmlFor="sh-logarithmic"
+                htmlFor="lrc-logarithmic"
                 className="inline-flex relative items-center cursor-pointer p-0"
               >
                 <input
                   type="checkbox"
                   value=""
-                  id="sh-logarithmic"
+                  id="lrc-logarithmic"
                   className="sr-only peer"
                   checked={isLogarithmic}
                   onClick={toggleScale}

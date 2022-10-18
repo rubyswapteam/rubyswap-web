@@ -51,7 +51,7 @@ export async function handler(event) {
     const data = await response.json();
     return { statusCode: 200, body: JSON.stringify(data) };
   } catch (error) {
-    const API_ENDPOINT = 'https://api-2.gemlabs.xyz/assets';
+    const API_ENDPOINT = 'https://gem-api-v2-1.herokuapp.com/assets';
     const postBody = JSON.stringify({
       filters: {
         traits: {},

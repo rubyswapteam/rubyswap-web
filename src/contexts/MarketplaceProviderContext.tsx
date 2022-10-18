@@ -321,9 +321,12 @@ export const MarketplaceProvider = ({
       listings = listings.data.map((item: any) => {
         return {
           timestamp: item.orderCreatedAt,
-          price: (item.currentEthPrice * 10 ** -18).toFixed(3),
+          price: (
+            (item.currentEthPrice || item.currentBasePrice) *
+            10 ** -18
+          ).toFixed(3),
           contract: item.address,
-          tokenId: item.id,
+          tokenId: item.tokenId || item.id,
           txn: undefined,
           marketplace: item.market || item.marketplace,
           looksRareId: undefined,
@@ -338,7 +341,7 @@ export const MarketplaceProvider = ({
         };
       });
     } catch {
-      listings = {};
+      listings = [];
     }
 
     setActiveListings(listings);
