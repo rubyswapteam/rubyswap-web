@@ -51,6 +51,7 @@ export default function TrendingNftCollectionTable() {
 
   function applyUpdate(collections: any, time: number, persist = true) {
     setFullTrendingCollections(collections);
+    console.log(collections);
     setTrendingCollections(
       collections.filter((collection: any) => collection.period === 'one_day'),
     );

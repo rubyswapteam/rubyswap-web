@@ -331,7 +331,7 @@ export default function AveragePriceVolumeChart(props: any) {
           props?.data.length > 0 &&
           props?.data[0]?.contract === props?.activeContract
             ? ''
-            : 'hidden') + ' relative'
+            : 'hidden') + ' relative dark:hover:bg-white/[.02]'
         }
       >
         <ErrorBoundary FallbackComponent={ErrorFallback}>

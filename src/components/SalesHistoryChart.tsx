@@ -369,7 +369,7 @@ export default function SalesHistoryChart(props: any) {
           Object.keys(activeTrades[0]).length >= 4 &&
           activeTrades[0]?.contract === props?.activeContract
             ? ''
-            : 'hidden') + ' relative'
+            : 'hidden') + ' relative dark:hover:bg-white/[.02]'
         }
       >
         <HighchartsReact

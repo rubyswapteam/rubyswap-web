@@ -12,7 +12,9 @@ export default function ListingRanksChart(props: any) {
   Boost(Highcharts);
 
   // exporting(Highcharts);
-  const [isLogarithmic, setIsLogarithmic] = useState(true);
+  const [isLogarithmic, setIsLogarithmic] = useState<boolean>(
+    !props?.settings || true,
+  );
   const [applyFilter, setApplyFilter] = useState(true);
   const [counter, setCounter] = useState(0);
   const [chartOptions, setChartOptions] = useState(undefined as any);
@@ -365,7 +367,7 @@ export default function ListingRanksChart(props: any) {
           Object.keys(activeTrades[0]).length >= 4 &&
           activeTrades[0]?.contract === props?.activeContract
             ? ''
-            : 'hidden') + ' relative'
+            : 'hidden') + ' relative dark:hover:bg-white/[.02]'
         }
       >
         <HighchartsReact
