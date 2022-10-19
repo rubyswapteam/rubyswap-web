@@ -334,7 +334,7 @@ export default function ListingDistributionChart(props: any) {
         {props?.settings ? (
           <div className="absolute top-5 left-5">
             <div className="text-sm px-2 pt-2 rounded-md mb-3 font-medium">
-              <p>Collection Listings</p>
+              <p>Listing walls</p>
             </div>
           </div>
         ) : (

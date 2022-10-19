@@ -145,12 +145,23 @@ export default function ListingRanksChart(props: any) {
     const newArr: any[] = [];
     const chunks = props?.settings?.chunks || 100;
     const arrSorted = arrIn.sort((a, b) => a.x - b.x);
+    // console.table({ arrSorted: arrSorted });
     const chunkSize = Math.floor(size / chunks);
     for (let i = 0; i < chunks; i++) {
-      const arrSlice = arrSorted.slice(i * chunkSize, i * (chunkSize + 1));
+      const arrSlice = arrSorted.slice(i * chunkSize, (i + 1) * chunkSize);
       const minVal = Math.min(...arrSlice.map((listing) => listing.y));
-      const flteredVals = arrSlice.filter((listing) => listing.y === minVal);
-      Array.prototype.push.apply(newArr, flteredVals);
+      const filteredVals = arrSlice.filter((listing) => listing.y === minVal);
+      Array.prototype.push.apply(newArr, filteredVals);
+      // if (i == 0) {
+      //   console.table({
+      //     arrSorted: arrSorted,
+      //     i: i,
+      //     chunkSize: chunkSize,
+      //     arrSlice: arrSlice,
+      //     minVal: minVal,
+      //     filteredVals: filteredVals,
+      //   });
+      // }
     }
     return newArr;
   }
@@ -160,7 +171,7 @@ export default function ListingRanksChart(props: any) {
     if (!props.data) return;
     const includeRanks = ranks && ranks?.contract == props?.activeContract;
     let listings = props.data;
-    console.table({ listings: listings });
+    // console.table({ listings: listings });
     listings = listings
       .map((listing: any) => {
         return {

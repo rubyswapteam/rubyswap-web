@@ -78,7 +78,7 @@ export const MarketplaceProvider = ({
     let sales: any[] = [];
     let purchases: any[] = [];
     const mints: any[] = [];
-    console.log(mintsResult);
+    // console.log(mintsResult);
     for (let i = 0; i < marketplaces.length; i++) {
       const marketplace = marketplaces[i];
       if (salesResult && salesResult)
@@ -99,7 +99,7 @@ export const MarketplaceProvider = ({
         chainId: 1,
       });
     });
-    console.table({ sales: sales, purchases: purchases, mints: mints });
+    // console.table({ sales: sales, purchases: purchases, mints: mints });
     return { sales: sales, purchases: purchases, mints: mints };
   }
 
@@ -316,7 +316,7 @@ export const MarketplaceProvider = ({
         }),
       });
       listings = await listingsRaw.json();
-      console.table({ rawListings: listings });
+      // console.table({ rawListings: listings });
       setTotalListings(listings.total);
       listings = listings.data.map((item: any) => {
         return {
