@@ -21,6 +21,7 @@ export default function ListingRanksChart(props: any) {
   const [activeTrades, setActiveTrades] = useState(undefined as any);
   const [isEmpty, setIsEmpty] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
+  const [hideChart, setHideChart] = useState<boolean>(false);
   const { theme } = useTheme();
   const lightTheme = {
     background: '#ffffff',
@@ -367,21 +368,53 @@ export default function ListingRanksChart(props: any) {
           Object.keys(activeTrades[0]).length >= 4 &&
           activeTrades[0]?.contract === props?.activeContract
             ? ''
-            : 'hidden') + ' relative dark:hover:bg-white/[.02]'
+            : 'hidden') + ' rounded-lg relative dark:hover:bg-white/[.02]'
         }
       >
         <HighchartsReact
           highcharts={HighCharts}
           options={chartOptions}
           updateArgs={[true]}
-          containerProps={{ style: { height: '100%', borderRadius: '10px' } }}
+          containerProps={{
+            style: {
+              height: hideChart ? '75px' : '100%',
+              opacity: hideChart ? '0%' : '100%',
+              borderRadius: '10px',
+              transitionProperty: 'all',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              transitionDuration: '200ms',
+            },
+          }}
         ></HighchartsReact>
         {props?.settings ? (
-          <div className="absolute top-5 left-5">
-            <div className="text-sm px-2 pt-2 rounded-md mb-3 font-medium">
-              <p>Price vs Rank</p>
+          <>
+            <div className="absolute top-5 left-5">
+              <div className="text-sm px-2 pt-2 rounded-md mb-3 font-medium">
+                <p>Price vs Rank</p>
+              </div>
             </div>
-          </div>
+            <div className="absolute top-5 right-5">
+              <div
+                onClick={() => setHideChart(!hideChart)}
+                className="hover:bg-white/5 cursor-pointer rounded-full items-center self-center justify-center text-sm p-2 rounded-md mb-3 font-medium"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
+                  />
+                </svg>
+              </div>
+            </div>
+          </>
         ) : (
           <div className="absolute top-8 left-10">
             <div className="px-2 pt-2 rounded-md mb-3 font-medium">

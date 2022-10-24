@@ -387,6 +387,9 @@ export const MarketplaceProvider = ({
       }
       return collection;
     } else {
+      setActiveCollection(undefined);
+      setCollectionTrades(undefined);
+      setActiveListings(undefined);
       return false;
     }
   }

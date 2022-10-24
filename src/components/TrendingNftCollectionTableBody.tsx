@@ -74,7 +74,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                   key={nftCollection.id}
                 >
                   <>
-                    <td className="py-2 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
+                    <td className="py-1 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
                       <div className="flex items-center">
                         <StarIcon />
                         {/* <StarIcon
@@ -84,7 +84,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                         /> */}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap py-2 text-sm w-[5%] self-center">
+                    <td className="whitespace-nowrap py-1 text-sm w-[5%] self-center">
                       <div className="flex items-center">
                         <img
                           className="h-8 w-8 rounded-full"
@@ -122,7 +122,7 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                           )}
                       </div>
                     </td>
-                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
+                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-1 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
                         link={
                           nftCollection.contractAddress &&
@@ -146,10 +146,10 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                         <TwitterLogo />
                       </SocialsWrapper>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
+                    <td className="whitespace-nowrap px-3 py-1 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       <EthereumIcon width={16} height={16} />
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-2 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal flex">
                           {nftCollection.osOneDayVolume.toFixed(2)}
@@ -187,12 +187,12 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                     <NftCollectionTableStandardCell
                       value={nftCollection.osOneDaySales}
                     />
-                    <td className="whitespace-nowrap w-[10%] px-3 py-2 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {nftCollection.numOwners}
                         </div>
-                        {nftCollection?.totalSupply && (
+                        {!!nftCollection?.totalSupply && (
                           <TableProgressBar
                             value={nftCollection.numOwners}
                             maxValue={nftCollection.totalSupply}

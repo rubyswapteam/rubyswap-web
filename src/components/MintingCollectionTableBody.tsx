@@ -77,12 +77,12 @@ export default function MintingCollectionTableBody(props: Props) {
                   key={row.id}
                 >
                   <>
-                    <td className="py-3 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
+                    <td className="py-1 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
                       <div className="flex items-center">
                         <StarIcon />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap py-3 text-sm w-[5%] self-center">
+                    <td className="whitespace-nowrap py-1 text-sm w-[5%] self-center">
                       <div className="flex items-center">
                         <img
                           className="h-8 w-8 rounded-full"
@@ -114,7 +114,7 @@ export default function MintingCollectionTableBody(props: Props) {
                           </div>
                         )}
                     </td>
-                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
+                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-1 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
                         link={
                           row.address &&
@@ -138,11 +138,11 @@ export default function MintingCollectionTableBody(props: Props) {
                         <TwitterLogo />
                       </SocialsWrapper>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
+                    <td className="whitespace-nowrap px-3 py-1 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       <EthereumIcon width={16} height={16} />
                     </td>
 
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.total}
@@ -167,7 +167,7 @@ export default function MintingCollectionTableBody(props: Props) {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.totalSupply || row.total + row.prevtotal}
@@ -187,7 +187,7 @@ export default function MintingCollectionTableBody(props: Props) {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-wrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-wrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.totalUniqueMinters}
@@ -198,7 +198,7 @@ export default function MintingCollectionTableBody(props: Props) {
                         />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.numOwners}
@@ -209,7 +209,7 @@ export default function MintingCollectionTableBody(props: Props) {
                         />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
+                    <td className="whitespace-nowrap px-3 py-1 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center">
                       {!row.prevRank || row.currRank < row.prevRank ? (
                         <TableChevronUp
                           class={'text-green-600 dark:text-green-300/95'}

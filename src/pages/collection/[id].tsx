@@ -117,7 +117,7 @@ export default function Collection(props: any) {
         id?.toString().toLowerCase()
     ) {
       setLoading(true);
-      getCollection(id, true).then((res: any) => {
+      getCollection(id, true).then(() => {
         setIsLoadingCollectionTrades(false);
       });
     }
@@ -422,8 +422,7 @@ export default function Collection(props: any) {
           </div>
         )
       );
-    }
-    if (tab == 'listings') {
+    } else if (tab == 'listings') {
       return (
         <>
           {/* <div className="-mt-6"> */}
@@ -488,8 +487,7 @@ export default function Collection(props: any) {
           {/* </div> */}
         </>
       );
-    }
-    if (tab == 'updates') {
+    } else if (tab == 'updates') {
       return (
         <>
           <div className="mt-6 h-inherit overflow-scroll">
@@ -502,8 +500,7 @@ export default function Collection(props: any) {
           </div>
         </>
       );
-    }
-    if (tab == 'analytics') {
+    } else if (tab == 'analytics') {
       return (
         <div className="h-inherit overflow-scroll pb-80">
           <div className="py-8 w-full">
@@ -584,8 +581,7 @@ export default function Collection(props: any) {
           )}
         </div>
       );
-    }
-    if (tab == 'holders') {
+    } else if (tab == 'holders') {
       return (
         <div className="mt-0 h-inherit overflow-scroll px-8 pb-80">
           <div className="pb-4">
@@ -606,8 +602,7 @@ export default function Collection(props: any) {
           </div>
         </div>
       );
-    }
-    if (tab == 'traits') {
+    } else if (tab == 'traits') {
       return (
         <div className="flex w-full justify-between flex-col h-full">
           <div className="flex w-full justify-between flex-row h-inherit px-8 gap-x-4">

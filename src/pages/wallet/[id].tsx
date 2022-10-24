@@ -20,6 +20,7 @@ import UserProfileHeader from '../../components/UserProfileHeader';
 import { useMarketplaceProvider } from '../../contexts/MarketplaceProviderContext';
 import { useWalletProvider } from '../../contexts/WalletProviderContext';
 import { IUserNftSummary } from '../../utils/nftUtils';
+import Link from 'next/link';
 
 export default function Collection(props: any) {
   const router = useRouter();
@@ -146,11 +147,18 @@ export default function Collection(props: any) {
     if (!tab) {
       return (
         <div className="flex w-full justify-between flex-col h-inherit">
-          <div className="px-4 sm:px-6 md:px-8">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-              {activeNfts.name}
-            </h3>
-          </div>
+          {activeNfts.nfts.length !== 0 && (
+            <div className="px-4 sm:px-6 md:px-8 flex gap-x-4">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                {activeNfts.name}
+              </h3>
+              <Link href={`/collection/${activeNfts.collection.toLowerCase()}`}>
+                <button className="text-sm bg-white/20 hover:bg-white/30 rounded-md border border-white/10 px-2 py">
+                  View Collection
+                </button>
+              </Link>
+            </div>
+          )}
           <div className="flex w-full justify-between flex-row h-inherit">
             {activeNfts.nfts.length == 0 && (
               <div className="w-full">

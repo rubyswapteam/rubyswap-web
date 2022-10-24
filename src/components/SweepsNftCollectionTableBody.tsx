@@ -78,12 +78,12 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                   key={row.id}
                 >
                   <>
-                    <td className="py-3 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
+                    <td className="py-1 pl-4 pr-7 text-sm sm:pl-6 w-[5%] self-center">
                       <div className="flex items-center">
                         <StarIcon />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap py-3 text-sm w-[5%] self-center">
+                    <td className="whitespace-nowrap py-1 text-sm w-[5%] self-center">
                       <div className="flex items-center">
                         {row.imageUrl || row.collectionImageUrl ? (
                           <img
@@ -119,7 +119,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         </div>
                       )}
                     </td>
-                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-3 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
+                    <td className="whitespace-normal flex-wrap gap-y-2 px-3 py-1 text-sm font-medium text-gray-700 dark:text-white/75 w-[10%] self-center flex gap-x-2">
                       <SocialsWrapper
                         link={
                           (row.contractAddress || row.collections[0]) &&
@@ -145,7 +145,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         <TwitterLogo />
                       </SocialsWrapper>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.numItems + ' items'}
@@ -160,7 +160,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium lg: flex">
                         <Jazzicon
                           diameter={20}
@@ -171,7 +171,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.numOwners}
@@ -182,7 +182,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[10%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[10%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <div className="pt-1 whitespace-normal">
                           {row.txnTime
@@ -191,7 +191,7 @@ export default function SweepsNftCollectionTableBody(props: Props) {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-nowrap w-[20%] px-3 py-3 self-center">
+                    <td className="whitespace-nowrap w-[20%] px-3 py-1 self-center">
                       <div className="text-gray-700 dark:text-white/90 block items-center text-sm font-medium">
                         <button
                           className="hover:bg-white/5 border-white/50 border bg-purple/30  dark:hover:bg-purple/20 px-1.5 py-1 rounded-lg"
