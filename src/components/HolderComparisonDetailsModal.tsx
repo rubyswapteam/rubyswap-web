@@ -167,7 +167,7 @@ export default function HolderComparisonDetailsModal(props: Props) {
                         </div>
                       </div>
                       <div className="font-bold">Overall:</div>
-                      <div className="bg-white/10 hover:bg-white/[.15] rounded-md px-2 py-1 w-full grid gap-x-1 gap-y-2">
+                      <div className="bg-white/10 hover:bg-white/[.15] rounded-md p-3 w-full grid gap-x-1 gap-y-2">
                         <div>{modalData?.holderComparisonData?.score}</div>
                       </div>
                       {/* Very Low, Low, Medium, High Very High*/}

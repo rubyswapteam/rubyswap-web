@@ -15,6 +15,7 @@ export async function handler(event) {
 
   const partners = {
     rubberDucks: '0xa5e25b44b01e09b7455851838c76cde68d13e29f',
+    fundaes: '0xc78cd8ab5a99e295d31da3230319ebc2f285514d',
     badInfluence: '0x54f9c72d128b4bbc7ff7564cbe0f193aba7bb146',
     wowPixies: '0xb67812ce508b9fc190740871032237c24b6896a0',
     colonist: '0x9f4df153d95a8460f6e82c21cab92719781fab84',
