@@ -60,7 +60,8 @@ export async function handler(event) {
       console.log(1);
       if (data.length == 0 || data[0].updatedAt < refreshLimit) {
         console.log(2);
-        const API_ENDPOINT = 'https://gem-public-api.herokuapp.com/collections';
+        const API_ENDPOINT =
+          'https://gem-public-api-v2.herokuapp.com/collections';
         const postBody = JSON.stringify({
           filters: {
             address: event.queryStringParameters.contract,

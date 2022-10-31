@@ -9,7 +9,7 @@ const headers = {
 };
 
 export async function handler(event) {
-  const API_ENDPOINT = 'https://gem-public-api.herokuapp.com/assets';
+  const API_ENDPOINT = 'https://gem-public-api-v2.herokuapp.com/assets';
 
   const parsedBody = JSON.parse(event.body);
   const postBody = JSON.stringify({
