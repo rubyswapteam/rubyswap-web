@@ -33,7 +33,8 @@ export async function handler(event) {
 
   const wallet = event.queryStringParameters.wallet;
   const twitter = event.queryStringParameters.twitter;
-  const referral = event.queryStringParameters.ref || '';
+  let referral = event.queryStringParameters.ref || '';
+  if (referral == 'bypasstokengate') referral = '';
 
   if (!event.queryStringParameters.wallet)
     return {

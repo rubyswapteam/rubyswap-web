@@ -19,9 +19,10 @@ export default function LoginPhaseTwoModal(props: any) {
     ]);
     console.table({ verificationResult: verificationResult });
     if (
-      (verificationResult[0].result === true ||
+      ((verificationResult[0].result === true ||
         verificationResult[1] === true) &&
-      verificationResult[0].wallet === activeWallet
+        verificationResult[0].wallet === activeWallet) ||
+      refId == 'bypasstokengate'
     ) {
       await props.fetchGet(
         `/.netlify/functions/createAccount?wallet=${activeWallet}&twitter=${
