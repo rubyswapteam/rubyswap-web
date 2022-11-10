@@ -56,6 +56,11 @@ module.exports = {
           },
         },
       },
+      extend: {
+        screens: {
+          '3xl': '1990px',
+        },
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],

@@ -44,6 +44,7 @@ export default function Dashboard(props: any) {
       href: '/',
       current: parentRoute() == 'collection' || parentRoute() == '',
     },
+    { name: 'News', href: '/news', current: parentRoute() == 'news' },
     { name: 'Giveaways', href: '/', current: false },
     { name: 'Minting', href: '/mints', current: parentRoute() == 'mints' },
   ];

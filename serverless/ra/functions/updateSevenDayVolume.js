@@ -26,7 +26,8 @@ const supabaseHeaders = {
 };
 
 export async function handler() {
-  const GEM_API_ENDPOINT = 'https://gem-api-v2-4.herokuapp.com/collections';
+  const GEM_API_ENDPOINT =
+    'https://gem-public-api-v2.herokuapp.com/collections';
 
   var gemRequestOptions = {
     method: 'POST',

@@ -7,8 +7,6 @@ const supabase = process.env.SUPABASE;
 const gemHeaders = {
   'Content-Type': 'application/json',
   'X-API-KEY': gem,
-  Origin: 'https://www.gem.xyz',
-  Referer: 'https://www.gem.xyz/',
 };
 
 const supabaseHeaders = {
@@ -26,7 +24,9 @@ const supabaseHeaders = {
 };
 
 export async function handler() {
-  const GEM_API_ENDPOINT = 'https://gem-api-v2-4.herokuapp.com/collections';
+  console.log('pre');
+  const GEM_API_ENDPOINT =
+    'https://gem-public-api-v2.herokuapp.com/collections';
 
   var gemRequestOptions = {
     method: 'POST',
@@ -70,8 +70,10 @@ export async function handler() {
     'https://mqxsyzoydluqyuigceuy.supabase.co/rest/v1/TrendingTable';
 
   try {
+    console.log('pre');
     const responseGem = await fetch(GEM_API_ENDPOINT, gemRequestOptions);
     const data = await responseGem.json();
+    console.log(data);
 
     const collections = [];
     const timestamp = Math.floor(moment().unix());
