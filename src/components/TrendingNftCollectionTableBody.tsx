@@ -11,6 +11,7 @@ import StarIcon from './StarIcon';
 import TableProgressBar from './TableProgressBar';
 import TwitterLogo from './TwitterLogo';
 import WebsiteIcon from './WebsiteIcon';
+import VerifiedBadgeIcon from '@/components/VerifiedBadgeIcon';
 
 interface Props {
   trendingCollections: any[];
@@ -99,15 +100,9 @@ export default function TrendingNftCollectionTableBody(props: Props) {
                           {nftCollection.name}
                         </div>
                         {nftCollection.osVerificationState == 'true' && (
-                          <img
-                            src="https://www.genie.xyz/svgs/verifiedBadge.svg"
-                            className="ml-1"
-                            style={{
-                              height: '16px',
-                              width: '16px',
-                            }}
-                            alt="verified badge"
-                          />
+                          <div className="ml-1">
+                            <VerifiedBadgeIcon height={16} width={16} />
+                          </div>
                         )}
                         {nftCollection.firstmint &&
                           nftCollection.firstmint > newlyMintedTimestamp && (

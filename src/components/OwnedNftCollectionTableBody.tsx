@@ -12,6 +12,7 @@ import StarIcon from './StarIcon';
 import TableProgressBar from './TableProgressBar';
 import TwitterLogo from './TwitterLogo';
 import WebsiteIcon from './WebsiteIcon';
+import VerifiedBadgeIcon from '@/components/VerifiedBadgeIcon';
 
 interface Props {
   userCollections: any[];
@@ -99,8 +100,16 @@ export default function OwnedNftCollectionTableBody(props: Props) {
                     <td className="whitespace-nowrap w-[20%] self-center lg:flex">
                       <div className="text-gray-700 dark:text-white/90 flex items-center text-sm font-medium">
                         <div>
-                          <div className="pt-1 whitespace-normal">
-                            {collection.name}
+                          <div className="flex items-center">
+                            <div className="pt-1 whitespace-normal">
+                              {collection.name}
+                            </div>
+                            {collection.safelist_request_status ==
+                              'verified' && (
+                              <div className="ml-1">
+                                <VerifiedBadgeIcon height={16} width={16} />
+                              </div>
+                            )}
                           </div>
                           <div className="text-xs text-white/70">
                             {trimHex(
@@ -108,17 +117,6 @@ export default function OwnedNftCollectionTableBody(props: Props) {
                             )}
                           </div>
                         </div>
-                        {collection.osVerificationState == 'true' && (
-                          <img
-                            src="https://www.genie.xyz/svgs/verifiedBadge.svg"
-                            className="ml-1"
-                            style={{
-                              height: '16px',
-                              width: '16px',
-                            }}
-                            alt="verified badge"
-                          />
-                        )}
                         {collection.firstmint &&
                           collection.firstmint > newlyMintedTimestamp && (
                             <div

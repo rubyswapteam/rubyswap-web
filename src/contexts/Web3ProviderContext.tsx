@@ -31,6 +31,13 @@ const onboard = Onboard({
       label: 'Ethereum Mainnet',
       rpcUrl: MAINNET_RPC_URL,
     },
+    {
+      id: '0xA', // chain ID must be in hexadecimel
+      token: 'ETH', // main chain token
+      namespace: 'evm',
+      label: 'Optimism',
+      rpcUrl: 'https://mainnet.optimism.io',
+    },
   ],
   appMetadata: {
     name: 'My App',
